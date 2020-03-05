@@ -48,8 +48,8 @@
             <div class="port"
                 @pointerdown="createCable(event, x)"
                 @pointerup="cableConnect(x)"
-                @pointerover="portHovered(x)"
-                @pointerout="portUnhovered(x)"
+                @pointerover="portHovered(event, x)"
+                @pointerout="portUnhovered"
             ></div>
             <div class="name">{{ x.name }}</div>
           </div>
@@ -62,8 +62,8 @@
             <div class="port"
                 @pointerdown="createCable(event, x)"
                 @pointerup="cableConnect(x)"
-                @pointerover="portHovered(x)"
-                @pointerout="portUnhovered(x)"
+                @pointerover="portHovered(event, x)"
+                @pointerout="portUnhovered"
             ></div>
           </div>
         </div>
@@ -76,8 +76,8 @@
           <div class="port"
               @pointerdown="createCable(event, x)"
               @pointerup="cableConnect(x)"
-              @pointerover="portHovered(x)"
-              @pointerout="portUnhovered(x)"
+              @pointerover="portHovered(event, x)"
+              @pointerout="portUnhovered"
           ></div>
         </div>
       </div>

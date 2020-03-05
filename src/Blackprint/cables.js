@@ -11,8 +11,8 @@ Space.model('cables', function(self){
 	}*/
 	self.list = [];
 
-	// Flag if cursor was hit a node port
-	self.hitNode = false;
+	// Flag if cursor was hovering a node port
+	self.hoverPort = false; // {elem:, item:}
 
 	self.recalculatePath = function(item){
 		var x1 = item.head1[0], y1 = item.head1[1];
@@ -71,10 +71,22 @@ Space.model('cables', function(self){
 			whichHead = event.target.previousElementSibling.tagName === 'circle' ? 2 : 1;
 
 		function moveCableHead(event){
-			if(whichHead === 1)
-				item.head1 = [event.layerX, event.layerY];
+			var xy;
+
+			// Let's make a magnet sensation (fixed position when hovering node port)
+			if(self.hoverPort !== false){
+				console.log(self.hoverPort.rect);
+				xy = [self.hoverPort.rect.x, self.hoverPort.rect.y];
+			}
+
+			// Follow pointer
 			else
-				item.head2 = [event.layerX, event.layerY];
+				xy = [event.layerX, event.layerY];
+
+			if(whichHead === 1)
+				item.head1 = xy;
+			else
+				item.head2 = xy;
 		}
 
 		$('vw-sketch').on('pointermove', moveCableHead).once('pointerup', function(event){

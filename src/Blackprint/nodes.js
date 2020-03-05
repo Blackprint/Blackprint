@@ -32,8 +32,6 @@ Space.component('a-node', function(self, root, item){
 		else if(self.properties.indexOf(item) !== -1)
 			pos = 'bottom';
 
-		console.log(item);
-
 		// Create cable and save the reference
 		var cable = root('cables').createCable({
 			x:e.layerX,
@@ -52,12 +50,16 @@ Space.component('a-node', function(self, root, item){
 	}
 
 	// PointerOver event handler
-	self.portHovered = function(item){
-		console.log('henlo', item);
+	self.portHovered = function(event, item){
+		root('cables').hoverPort = {
+			elem:event.target,
+			rect:event.target.getBoundingClientRect(),
+			item:item
+		};
 	}
 
 	// PointerOut event handler
-	self.portUnhovered = function(item){
-		console.log('bye', item);
+	self.portUnhovered = function(){
+		root('cables').hoverPort = false;
 	}
 });
