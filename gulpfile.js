@@ -9,7 +9,7 @@ require("scarletsframe-compiler")({
 
 		// Standalone server with BrowserSync
 		server:{
-			baseDir:'example/public/',
+			baseDir:'example/',
 			index:'index.html',
 		}
 	},
@@ -21,11 +21,11 @@ require("scarletsframe-compiler")({
 	path:{
 		// Use `default` if you're not exporting project as library/module
 		default:{
-			versioning:'example/public/index.html',
-			stripURL:'example/public/',
+			versioning:'example/index.html',
+			stripURL:'example/',
 
 			js:{
-				file:'example/public/assets/myjs.min.js',
+				file:'example/assets/myjs.min.js',
 
 				// Will be processed from the top to bottom
 				combine:[
@@ -33,11 +33,11 @@ require("scarletsframe-compiler")({
 				],
 			},
 			scss:{
-				file:'example/public/assets/mycss.min.css',
+				file:'example/assets/mycss.min.css',
 				combine:'example/src/**/*.scss',
 			},
 			html:{
-				file:'example/public/assets/myhtml.html.js',
+				file:'example/assets/myhtml.html.js',
 				combine:'example/src/**/*.html',
 
 				// Watch changes and apply changes directly without combine to one file
@@ -48,8 +48,8 @@ require("scarletsframe-compiler")({
 		// This needed if you want to maintain Blackprint's source code
 		// You can specify other property if you exporting something
 		blackprint:{
-			versioning:'example/public/index.html',
-			stripURL:'example/public/',
+			versioning:'example/index.html',
+			stripURL:'example/',
 
 			js:{
 				file:'dist/blackprint.min.js',
