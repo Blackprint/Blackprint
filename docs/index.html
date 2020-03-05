@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Home</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!-- <script src="https://cdn.jsdelivr.net/npm/scarletsframe@0.26.1"></script> -->
+	<script src="http://localhost/libraryproject/ScarletsFrame/dist/scarletsframe.min.js?31"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+</head>
+<body>
+	<!-- Assets Loader (Optional) -->
+	<script type="text/javascript">
+		var cf_cdn = 'https://cdnjs.cloudflare.com/ajax/libs';
+
+		// Register sf.dom to global
+		$ = sf.dom;
+
+		// https://www.npmjs.com/package/scarletsframe#asset-loader
+		sf.loader.css([
+			// Load Blackprint module
+			"/dist/blackprint.min.css?1583381604124",
+
+			cf_cdn+'/animate.css/3.7.0/animate.min.css',
+			"https://fonts.googleapis.com/css?family=Nunito",
+			"/assets/mycss.min.css?1583234500831",
+		]);
+
+		sf.loader.js([
+			// Load Blackprint module first
+			"/dist/blackprint.html.js?1583383109611",
+			"/dist/blackprint.min.js?1583383110846",
+
+			"/assets/myhtml.html.js?1583283207609",
+			"/assets/myjs.min.js?1583324855881",
+		]);
+	</script>
+
+	<!-- Ground -->
+	<vw-ground></vw-ground>
+</body>
+</html>

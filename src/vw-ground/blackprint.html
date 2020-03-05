@@ -1,0 +1,11 @@
+<div class="background" style="background-image: url(/assets/img/background/blackprint.jpg?1)"></div>
+
+<!-- Model on ./blackprint/header.js -->
+<sf-m name="header" class="header">
+	<div class="left">{{ message }}</div>
+	<div class="right" @click="toWorkspace">{{ description }}</div>
+</sf-m>
+
+<!-- Router handler on ./route.js -->
+<!-- We will import Blackprint/page template here -->
+<vw-sketch></vw-sketch>

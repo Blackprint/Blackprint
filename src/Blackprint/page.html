@@ -1,0 +1,86 @@
+<sf-space blackprint>
+  <!-- Put the cables behind the nodes -->
+  <sf-m name="cables" class="cables" id="test">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <svg sf-repeat-this="x in list">
+        <path
+            @pointerover="cableFocused(x)"
+            @pointerout="cableUnfocused(x)"
+            d="M {{ recalculatePath(x) || x.head1[0] + ' ' + x.head1[1] }}
+               C {{ x.linePath }},
+                 {{ recalculatePath(x) || x.head2[0] + ' ' + x.head2[1] }}"
+            stroke="{{ x.valid ? x.color : 'red' }}"
+            opacity="{{ x.valid ? 1 : 0.6 }}"
+            stroke-width="2"
+            fill="none"
+        ></path>
+
+        <circle
+            @pointerdown="cableHeadClicked(x, event)"
+            cx="{{x.head1[0]}}"
+            cy="{{x.head1[1]}}"
+            fill="{{ x.valid ? x.color : 'red' }}"
+            r="5"
+            opacity="{{ x.valid ? 1 : 0.6 }}"
+        ></circle>
+        <circle
+            @pointerdown="cableHeadClicked(x, event)"
+            cx="{{x.head2[0]}}"
+            cy="{{x.head2[1]}}"
+            fill="{{ x.valid ? x.color : 'red' }}"
+            r="5"
+            opacity="{{ x.valid ? 1 : 0.6 }}"
+        ></circle>
+      </svg>
+    </svg>
+  </sf-m>
+
+  <!-- Nodes goes here -->
+  <sf-m name="nodes" class="nodes" style="user-select:none;">
+    <!-- Handled on ./nodes.js -->
+    <a-node class="node general" style="transform: translate({{ x }}px, {{ y }}px)" sf-repeat-this="x in list">
+      <div class="title" @dragmove="moveNode">{{ title }} <div class="description">{{ description }}</div></div>
+
+      <div style="display: flow-root;margin-top: 5px;">
+        <!-- Container for input -->
+        <div class="input">
+          <div class="ports {{ x.type.name }}" sf-repeat-this="x in inputs">
+            <div class="port"
+                @pointerdown="createCable(event, x)"
+                @pointerup="cableConnect(x)"
+                @pointerover="portHovered(x)"
+                @pointerout="portUnhovered(x)"
+            ></div>
+            <div class="name">{{ x.name }}</div>
+          </div>
+        </div>
+
+        <!-- Container for output -->
+        <div class="output">
+          <div class="ports {{ x.type.name }}" sf-repeat-this="x in outputs">
+            <div class="name">{{ x.name }}</div>
+            <div class="port"
+                @pointerdown="createCable(event, x)"
+                @pointerup="cableConnect(x)"
+                @pointerover="portHovered(x)"
+                @pointerout="portUnhovered(x)"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Container for property -->
+      <div class="property">
+        <div class="ports {{ x.type.name }}" sf-repeat-this="x in properties">
+          <div class="name">{{ x.name }}</div>
+          <div class="port"
+              @pointerdown="createCable(event, x)"
+              @pointerup="cableConnect(x)"
+              @pointerover="portHovered(x)"
+              @pointerout="portUnhovered(x)"
+          ></div>
+        </div>
+      </div>
+    </a-node>
+  </sf-m>
+</sf-space>

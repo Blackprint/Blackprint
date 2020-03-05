@@ -1,0 +1,20 @@
+@keyframes scaleDown {
+	to {
+		opacity: 0;
+		transform: scale(.8);
+	}
+}
+
+@keyframes scaleUp {
+	from {
+		opacity: 0;
+		transform: scale(.8);
+	}
+}
+
+@keyframes scaleUpDown {
+	from {
+		opacity: 0;
+		transform: scale(1.2);
+	}
+}

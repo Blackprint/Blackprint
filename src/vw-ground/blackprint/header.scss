@@ -1,0 +1,22 @@
+.header{
+	position: relative;
+    background: #00000085;
+    align-items: center;
+    border-bottom: 1px solid black;
+    display: flex;
+    box-shadow: 0 0 8px 0 black;
+
+	.left {
+		border-right: 2px solid;
+		font-size: 26px;
+		padding: 0 15px 0 15px;
+		text-align: center;
+	}
+
+	.right {
+		font-size: 18px;
+		text-align: center;
+		padding: 10px;
+		cursor: pointer;
+	}
+}

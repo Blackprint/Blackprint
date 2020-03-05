@@ -1,0 +1,12 @@
+vendor/
+node_modules/
+*.log
+*.min.css
+*.min.js
+*.min.*.map
+/package-lock.json
+/pnpm-lock.yaml
+/.phpintel/
+*.lock
+*.html.js
+zef/
