@@ -96,6 +96,13 @@ Before we're getting started, let's clone this repository.
 $ git clone --depth 1 https://github.com/Blackprint/Blackprint.git .
 $ git clone --depth 1 https://github.com/Blackprint/blackprint.github.io.git ./example
 
+# Create symbolic link to Blackprint's dist folder
+# (Windows: need administrator privileges)
+$ mklink /D ".\example\dist" "..\dist"
+
+# For linux
+$ ln -s dist ./example
+
 # If you have these package on global you can skip this step
 $ npm i -g scarletsframe-compiler gulp
 

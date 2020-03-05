@@ -5,11 +5,13 @@ sf-space[blackprint] .cables {
   position: absolute; }
   sf-space[blackprint] .cables > svg {
     filter: drop-shadow(0 0 2px black);
+    backface-visibility: hidden;
     height: 100%;
     width: 100%; }
     sf-space[blackprint] .cables > svg path, sf-space[blackprint] .cables > svg circle {
       transition: 0.1s ease-in;
-      transition-property: stroke, fill; }
+      transition-property: stroke, fill;
+      backface-visibility: hidden; }
 
 sf-space[blackprint] .nodes .node {
   color: white;
@@ -19,7 +21,8 @@ sf-space[blackprint] .nodes .node {
   border: 1px solid black;
   box-shadow: 0 0 5px black;
   position: absolute;
-  background: rgba(0, 0, 0, 0.7); }
+  background: rgba(0, 0, 0, 0.7);
+  backface-visibility: hidden; }
   sf-space[blackprint] .nodes .node .title {
     text-align: left;
     padding: 2px 2px 2px 8px;
@@ -61,4 +64,4 @@ sf-space[blackprint] .nodes .node {
       sf-space[blackprint] .nodes .node .property .ports .port {
         margin: 0 auto; }
 
-/*# sourceMappingURL=blackprint.min.1583381604124.css.map */
+/*# sourceMappingURL=blackprint.min.1583403905043.css.map */

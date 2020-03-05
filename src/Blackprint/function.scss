@@ -7,12 +7,14 @@ sf-space[blackprint]{
 		> svg{
 			// Apply only on direct child of .cables
 			filter: drop-shadow(0 0 2px black);
+			backface-visibility: hidden;
 			height: 100%;
 		    width: 100%;
 
 		    path, circle{
 		    	transition: 0.1s ease-in;
 		    	transition-property: stroke, fill;
+				backface-visibility: hidden;
 		    }
 		}
 	}
@@ -27,6 +29,7 @@ sf-space[blackprint]{
 			box-shadow: 0 0 5px black;
 			position: absolute;
 			background: rgba(0,0,0,0.7);
+			backface-visibility: hidden;
 
 			.title{
 				text-align: left;
