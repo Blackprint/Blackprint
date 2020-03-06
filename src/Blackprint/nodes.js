@@ -30,7 +30,7 @@ Space.component('a-node', function(self, root, item){
 
 			for (var a = 0; a < cables.length; a++) {
 				var cable;
-				if(cables[a].owner === self)
+				if(cables[a].owner[0] === self)
 					cable = cables[a].head1;
 				else
 					cable = cables[a].head2;
@@ -41,14 +41,18 @@ Space.component('a-node', function(self, root, item){
 		}
 	}
 
+	// Determine port source
+	function getPortSource(item){
+		if(self.outputs.indexOf(item) !== -1)
+			return 'outputs';
+		else if(self.properties.indexOf(item) !== -1)
+			return 'properties';
+		return 'inputs';
+	}
+
 	// PointerDown event handler
 	self.createCable = function(e, item){
-		// Determine port position
-		var pos = 'input';
-		if(self.outputs.indexOf(item) !== -1)
-			pos = 'output';
-		else if(self.properties.indexOf(item) !== -1)
-			pos = 'property';
+		var source = getPortSource(item);
 
 		// Get size and position of the port
 		var rect = event.target.getBoundingClientRect();
@@ -59,28 +63,58 @@ Space.component('a-node', function(self, root, item){
 			x:rect.x + center,
 			y:rect.y + center,
 			type:item.type.name,
-			position:pos
-		}, self);
+			source:source
+		});
 
 		// Connect this cable into port's cable list
 		item.cables.push(cable);
 
 		// Put port reference to the cable
-		cable.connection.push(item);
+		cable.owner = [self, item];
 
 		// Default head index is "2" when creating new cable 
 		root('cables').cableHeadClicked(cable, 2);
 	}
 
+	function removeCable(cable){
+		var list = root('cables').list;
+
+		if(cable.owner){
+			var i = cable.owner[1].cables.indexOf(cable);
+			if(i !== -1)
+				cable.owner[1].cables.splice(i, 1);
+		}
+
+		if(cable.target){
+			var i = cable.target[1].cables.indexOf(cable);
+			if(i !== -1)
+				cable.target[1].cables.splice(i, 1);
+		}
+
+		list.splice(list.indexOf(cable), 1);
+		console.log('A cable was removed', cable);
+	}
+
 	// PointerUp event handler
 	self.cableConnect = function(item){
 		var cable = root('cables').currentCable;
+		var source = getPortSource(item);
+
+		// Remove cable if ...
+		if(cable.owner[0] === self // It's referencing to same node
+			|| cable.source === 'outputs' && source !== 'inputs' // Output source not connected to input
+			|| cable.source === 'inputs' && source !== 'outputs'  // Input source not connected to output
+			|| cable.source === 'properties' && source !== 'properties'  // Property source not connected to property
+		){
+			removeCable(cable);
+			return;
+		}
 
 		// Connect this cable into port's cable list
 		item.cables.push(cable);
 
 		// Put port reference to the cable
-		cable.connection.push(item);
+		cable.target = [self, item];
 		console.log('A cable was connected', item);
 	}
 

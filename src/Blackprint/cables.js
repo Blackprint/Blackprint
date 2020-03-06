@@ -28,20 +28,20 @@ Space.model('cables', function(self){
 		var x1 = item.head1[0], y1 = item.head1[1];
 		var x2 = item.head2[0], y2 = item.head2[1];
 
-		if(item.pos !== 'property'){
+		if(item.source !== 'properties'){
 			var cx = (x2-x1)/2;
 			if(cx > -50 && cx < 0)
 				cx = -50;
 			else if(cx < 50 && cx >= 0)
 				cx = 50;
 
-			if(item.pos === 'input'){
+			if(item.source === 'inputs'){
 				if(x2 < x1)
 				  item.linePath = `${x1 + cx} ${y1} ${x2 - cx} ${y2}`;
 				else
 				  item.linePath = `${x1 - cx} ${y1} ${x2 + cx} ${y2}`;
 			}
-			else if(item.pos === 'output'){
+			else if(item.source === 'outputs'){
 				if(x2 < x1)
 				  item.linePath = `${x1 - cx} ${y1} ${x2 + cx} ${y2}`;
 				else
@@ -62,13 +62,9 @@ Space.model('cables', function(self){
 		}
 	}
 
-	// Determine which cable head is clicked
+	// Move clicked cable
 	self.currentCable = void 0;
-	self.cableHeadClicked = function(item, event){
-		var whichHead = event;
-		if(event.constructor !== Number)
-			whichHead = event.target.previousElementSibling.tagName === 'circle' ? 2 : 1;
-
+	self.cableHeadClicked = function(item){
 		function moveCableHead(event){
 			var xy;
 
@@ -81,10 +77,7 @@ Space.model('cables', function(self){
 			// Follow pointer
 			else xy = [event.clientX, event.clientY];
 
-			if(whichHead === 1)
-				item.head1 = xy;
-			else
-				item.head2 = xy;
+			item.head2 = xy;
 		}
 
 		var elem = self.list.getElement(item);
@@ -95,6 +88,7 @@ Space.model('cables', function(self){
 			elem.css('pointer-events', 'none');
 		}
 
+		// Save current cable for referencing when cable connected into node's port
 		self.currentCable = item;
 		$('vw-sketch').on('pointermove', moveCableHead).once('pointerup', function(event){
 			$('vw-sketch').off('pointermove', moveCableHead);
@@ -109,16 +103,18 @@ Space.model('cables', function(self){
 		});
 	}
 
-	self.createCable = function(obj, owner){
+	self.createCable = function(obj){
 		return self.list[self.list.push({
 			head1:[obj.x, obj.y],
 			head2:[obj.x, obj.y],
 			type:obj.type,
-			pos:obj.position,
+			source:obj.source,
 			valid:true,
 			linePath:'0 0 0 0',
-			connection:[],
-			owner:owner
+
+			// Cable connection
+			owner:void 0, // head1
+			target:void 0 // head2
 		}) - 1];
 	}
 });
