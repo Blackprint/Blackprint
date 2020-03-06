@@ -12,6 +12,7 @@ class Blackprint{
 		_.set(Blackprint.nodes, namespace.split('/'), func);
 	}
 
+	// @return a-node scope
 	createNode(namespace, options){
 		var func = _.get(Blackprint.nodes, namespace.split('/'));
 		if(func === void 0)
@@ -61,6 +62,7 @@ class Blackprint{
 				if(typeof local[temp[i]] === 'function'){
 					type = local[temp[i]];
 
+					// Give default value for each data type
 					if(type === Number)
 						def = 0;
 					else if(type === Boolean)
@@ -96,6 +98,8 @@ class Blackprint{
 		node = nodes.list[nodes.list.push(node)-1];
 		if(options !== void 0)
 			Object.assign(node, options);
+
+		return node;
 	}
 }
 

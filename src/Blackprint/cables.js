@@ -24,10 +24,12 @@ Space.model('cables', function(self){
 	// Flag if cursor was hovering a node port
 	self.hoverPort = false; // {elem:, item:}
 
+	// This will run everytime the cable was moving
 	self.recalculatePath = function(item){
 		var x1 = item.head1[0], y1 = item.head1[1];
 		var x2 = item.head2[0], y2 = item.head2[1];
 
+		// Written without formula, just logic...
 		if(item.source !== 'properties'){
 			var cx = (x2-x1)/2;
 			if(cx > -50 && cx < 0)

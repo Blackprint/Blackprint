@@ -79,26 +79,30 @@ Space.component('a-node', function(self, root, item){
 	function removeCable(cable){
 		var list = root('cables').list;
 
+		// Remove from cable owner
 		if(cable.owner){
 			var i = cable.owner[1].cables.indexOf(cable);
 			if(i !== -1)
 				cable.owner[1].cables.splice(i, 1);
 		}
 
+		// Remove from connected target
 		if(cable.target){
 			var i = cable.target[1].cables.indexOf(cable);
 			if(i !== -1)
 				cable.target[1].cables.splice(i, 1);
 		}
 
+		// Remove from cable list
 		list.splice(list.indexOf(cable), 1);
 		console.log('A cable was removed', cable);
 	}
 
 	// PointerUp event handler
-	self.cableConnect = function(item){
+	self.cableConnect = function(port){
+		// Get currect cable and the port source name
 		var cable = root('cables').currentCable;
-		var source = getPortSource(item);
+		var source = getPortSource(port);
 
 		// Remove cable if ...
 		if(cable.owner[0] === self // It's referencing to same node
@@ -111,15 +115,16 @@ Space.component('a-node', function(self, root, item){
 		}
 
 		// Connect this cable into port's cable list
-		item.cables.push(cable);
+		port.cables.push(cable);
 
 		// Put port reference to the cable
-		cable.target = [self, item];
-		console.log('A cable was connected', item);
+		cable.target = [self, port];
+		console.log('A cable was connected', port);
 	}
 
 	// PointerOver event handler
 	self.portHovered = function(event, item){
+		// For magnet sensation when the cable reach the port
 		root('cables').hoverPort = {
 			elem:event.target,
 			rect:event.target.getBoundingClientRect(),
