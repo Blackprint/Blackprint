@@ -2,7 +2,7 @@ Space.model('cables', function(self){
 	/*{
 		head1:[x,y], -- Number
 		head2:[x,y], -- Number
-		color:'black',
+		type:'String',
 		curve:self.curve[..],
 		valid:true,
 
@@ -28,20 +28,20 @@ Space.model('cables', function(self){
 		var x1 = item.head1[0], y1 = item.head1[1];
 		var x2 = item.head2[0], y2 = item.head2[1];
 
-		if(item.pos !== 'bottom'){
+		if(item.pos !== 'property'){
 			var cx = (x2-x1)/2;
 			if(cx > -50 && cx < 0)
 				cx = -50;
 			else if(cx < 50 && cx >= 0)
 				cx = 50;
 
-			if(item.pos === 'left'){
+			if(item.pos === 'input'){
 				if(x2 < x1)
 				  item.linePath = `${x1 + cx} ${y1} ${x2 - cx} ${y2}`;
 				else
 				  item.linePath = `${x1 - cx} ${y1} ${x2 + cx} ${y2}`;
 			}
-			else if(item.pos === 'right'){
+			else if(item.pos === 'output'){
 				if(x2 < x1)
 				  item.linePath = `${x1 - cx} ${y1} ${x2 + cx} ${y2}`;
 				else
@@ -62,19 +62,8 @@ Space.model('cables', function(self){
 		}
 	}
 
-	// Some effect when mouse hovering / the cable was focused
-	self.cableFocused = function(item){
-		if(item.default === void 0)
-			item.default = item.color;
-
-		item.color = 'white';
-	}
-
-	self.cableUnfocused = function(item){
-		item.color = item.default;
-	}
-
 	// Determine which cable head is clicked
+	self.currentCable = void 0;
 	self.cableHeadClicked = function(item, event){
 		var whichHead = event;
 		if(event.constructor !== Number)
@@ -90,8 +79,7 @@ Space.model('cables', function(self){
 			}
 
 			// Follow pointer
-			else
-				xy = [event.clientX, event.clientY];
+			else xy = [event.clientX, event.clientY];
 
 			if(whichHead === 1)
 				item.head1 = xy;
@@ -99,19 +87,38 @@ Space.model('cables', function(self){
 				item.head2 = xy;
 		}
 
+		var elem = self.list.getElement(item);
+
+		// Let the pointer pass thru the current svg group
+		if(elem !== void 0){
+			elem = $(elem);
+			elem.css('pointer-events', 'none');
+		}
+
+		self.currentCable = item;
 		$('vw-sketch').on('pointermove', moveCableHead).once('pointerup', function(event){
 			$('vw-sketch').off('pointermove', moveCableHead);
+
+			// Add delay because it may be used for connecting port
+			setTimeout(function(){
+				self.currentCable = void 0;
+			}, 100);
+
+			if(elem !== void 0)
+				elem.css('pointer-events', '');
 		});
 	}
 
-	self.createCable = function(obj){
+	self.createCable = function(obj, owner){
 		return self.list[self.list.push({
 			head1:[obj.x, obj.y],
 			head2:[obj.x, obj.y],
-			color:obj.color,
+			type:obj.type,
 			pos:obj.position,
 			valid:true,
-			linePath:'0 0 0 0'
+			linePath:'0 0 0 0',
+			connection:[],
+			owner:owner
 		}) - 1];
 	}
 });

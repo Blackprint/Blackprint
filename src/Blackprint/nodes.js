@@ -1,11 +1,4 @@
 Space.model('nodes', function(self){
-	self.dataColor = {
-		Boolean:'#ff3636',
-		String:'white',
-		Number:'deepskyblue',
-		Object:'mediumpurple'
-	};
-
 	self.list = [];
 });
 
@@ -15,30 +8,65 @@ Space.component('a-node', function(self, root, item){
 	self.y = 50;
 
 	// Assign item value to the component
+	// Including `inputs, outputs, properties`
 	Object.assign(self, item);
 
 	// DragMove event handler
 	self.moveNode = function(e){
 		self.x += e.movementX;
 		self.y += e.movementY;
+
+		moveCables(e, self.inputs);
+		moveCables(e, self.outputs);
+		moveCables(e, self.properties);
+	}
+
+	function moveCables(e, which){
+		// Move the connected cables
+		for (var i = 0; i < which.length; i++) {
+			var cables = which[i].cables;
+			if(cables.length === 0)
+				continue;
+
+			for (var a = 0; a < cables.length; a++) {
+				var cable;
+				if(cables[a].owner === self)
+					cable = cables[a].head1;
+				else
+					cable = cables[a].head2;
+
+				cable[0] += e.movementX;
+				cable[1] += e.movementY;
+			}
+		}
 	}
 
 	// PointerDown event handler
 	self.createCable = function(e, item){
 		// Determine port position
-		var pos = 'left';
+		var pos = 'input';
 		if(self.outputs.indexOf(item) !== -1)
-			pos = 'right';
+			pos = 'output';
 		else if(self.properties.indexOf(item) !== -1)
-			pos = 'bottom';
+			pos = 'property';
+
+		// Get size and position of the port
+		var rect = event.target.getBoundingClientRect();
+		var center = rect.width/2;
 
 		// Create cable and save the reference
 		var cable = root('cables').createCable({
-			x:e.clientX,
-			y:e.clientY,
-			color:root('nodes').dataColor[item.type] || root('nodes').dataColor.Object,
+			x:rect.x + center,
+			y:rect.y + center,
+			type:item.type.name,
 			position:pos
-		});
+		}, self);
+
+		// Connect this cable into port's cable list
+		item.cables.push(cable);
+
+		// Put port reference to the cable
+		cable.connection.push(item);
 
 		// Default head index is "2" when creating new cable 
 		root('cables').cableHeadClicked(cable, 2);
@@ -46,6 +74,13 @@ Space.component('a-node', function(self, root, item){
 
 	// PointerUp event handler
 	self.cableConnect = function(item){
+		var cable = root('cables').currentCable;
+
+		// Connect this cable into port's cable list
+		item.cables.push(cable);
+
+		// Put port reference to the cable
+		cable.connection.push(item);
 		console.log('A cable was connected', item);
 	}
 

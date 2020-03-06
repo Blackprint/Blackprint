@@ -26,6 +26,7 @@ class Blackprint{
 			description:self.description || ''
 		};
 
+		// Type extract for port data type
 		function extract(which){
 			var link = node[which] = [];
 			var local = self[which];
@@ -77,7 +78,7 @@ class Blackprint{
 				else type = local[temp[i]].constructor;
 
 				// Set for the linked node
-				link.push({name:temp[i], type:type, default:def});
+				link.push({name:temp[i], type:type, default:def, cables:[]});
 
 				// Set on the local scope
 				Object.defineProperty(local, temp[i], prepare);
@@ -88,6 +89,7 @@ class Blackprint{
 		for (var i = 0; i < portType.length; i++)
 			extract(portType[i]);
 
+		// Get model scope
 		var nodes = this.scope('nodes');
 
 		// This may not return the component, but only the raw object

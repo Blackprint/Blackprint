@@ -6,6 +6,22 @@ sf-space[blackprint]{
 		display: block;
 	}
 
+	@mixin portType($type, $color) {
+		.cables > svg > g.#{$type} {
+			circle{fill: #{$color}}
+			path{stroke: #{$color}}
+		}
+
+		.nodes > .node .ports.#{$type} > .port {
+			background: #{$color};
+		}
+	}
+
+	@include portType("Number", deepskyblue);
+	@include portType("Object", mediumpurple);
+	@include portType("Boolean", #ff3636);
+	@include portType("String", white);
+
 	.cables{
 		position: absolute;
 		> svg{
@@ -18,7 +34,27 @@ sf-space[blackprint]{
 		    path, circle{
 		    	transition: 0.1s ease-in;
 		    	transition-property: stroke, fill;
-				backface-visibility: hidden;
+		    }
+
+		    circle{
+		    	r: 5;
+		    	fill: orange;
+		    }
+
+		    path{
+		    	stroke: orange;
+		    	stroke-width: 3;
+		    	fill: none;
+		    }
+
+			g.invalid{
+				circle{fill: red !important; opacity: 0.6;}
+				path{stroke: red !important; opacity: 0.6;}
+			}
+
+		    g:hover{
+		    	circle{fill: white !important;}
+		    	path{stroke: white !important;}
 		    }
 		}
 	}

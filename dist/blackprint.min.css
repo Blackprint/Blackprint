@@ -5,6 +5,30 @@ sf-space[blackprint] {
     height: 100%;
     width: 100%;
     display: block; }
+  sf-space[blackprint] .cables > svg > g.Number circle {
+    fill: deepskyblue; }
+  sf-space[blackprint] .cables > svg > g.Number path {
+    stroke: deepskyblue; }
+  sf-space[blackprint] .nodes > .node .ports.Number > .port {
+    background: deepskyblue; }
+  sf-space[blackprint] .cables > svg > g.Object circle {
+    fill: mediumpurple; }
+  sf-space[blackprint] .cables > svg > g.Object path {
+    stroke: mediumpurple; }
+  sf-space[blackprint] .nodes > .node .ports.Object > .port {
+    background: mediumpurple; }
+  sf-space[blackprint] .cables > svg > g.Boolean circle {
+    fill: #ff3636; }
+  sf-space[blackprint] .cables > svg > g.Boolean path {
+    stroke: #ff3636; }
+  sf-space[blackprint] .nodes > .node .ports.Boolean > .port {
+    background: #ff3636; }
+  sf-space[blackprint] .cables > svg > g.String circle {
+    fill: white; }
+  sf-space[blackprint] .cables > svg > g.String path {
+    stroke: white; }
+  sf-space[blackprint] .nodes > .node .ports.String > .port {
+    background: white; }
   sf-space[blackprint] .cables {
     position: absolute; }
     sf-space[blackprint] .cables > svg {
@@ -14,8 +38,24 @@ sf-space[blackprint] {
       width: 100%; }
       sf-space[blackprint] .cables > svg path, sf-space[blackprint] .cables > svg circle {
         transition: 0.1s ease-in;
-        transition-property: stroke, fill;
-        backface-visibility: hidden; }
+        transition-property: stroke, fill; }
+      sf-space[blackprint] .cables > svg circle {
+        r: 5;
+        fill: orange; }
+      sf-space[blackprint] .cables > svg path {
+        stroke: orange;
+        stroke-width: 3;
+        fill: none; }
+      sf-space[blackprint] .cables > svg g.invalid circle {
+        fill: red !important;
+        opacity: 0.6; }
+      sf-space[blackprint] .cables > svg g.invalid path {
+        stroke: red !important;
+        opacity: 0.6; }
+      sf-space[blackprint] .cables > svg g:hover circle {
+        fill: white !important; }
+      sf-space[blackprint] .cables > svg g:hover path {
+        stroke: white !important; }
   sf-space[blackprint] .nodes {
     position: unset; }
     sf-space[blackprint] .nodes .node {
@@ -69,4 +109,4 @@ sf-space[blackprint] {
           sf-space[blackprint] .nodes .node .property .ports .port {
             margin: 0 auto; }
 
-/*# sourceMappingURL=blackprint.min.1583459086144.css.map */
+/*# sourceMappingURL=blackprint.min.1583475170347.css.map */

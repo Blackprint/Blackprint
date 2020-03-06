@@ -2,32 +2,15 @@
   <!-- Put the cables behind the nodes -->
   <sf-m name="cables" class="cables" id="test">
     <svg style="transform: translate(-{{space[0]}}, -{{space[1]}}px)">
-      <g sf-repeat-this="x in list">
+      <g sf-repeat-this="x in list" class="{{ x.type }} {{ x.valid ? '' : 'invalid' }}">
         <path
-            @pointerover="cableFocused(x)"
-            @pointerout="cableUnfocused(x)"
             d="M {{ recalculatePath(x) || x.head1[0] + ' ' + x.head1[1] }}
                C {{ x.linePath }},
                  {{ recalculatePath(x) || x.head2[0] + ' ' + x.head2[1] }}"
-            stroke="{{ x.valid ? x.color : 'red' }}"
-            opacity="{{ x.valid ? 1 : 0.6 }}"
-            stroke-width="2"
-            fill="none"
         ></path>
-
-        <circle
-            @pointerdown="cableHeadClicked(x, event)"
-            transform="translate({{x.head1[0]}}, {{x.head1[1]}})"
-            fill="{{ x.valid ? x.color : 'red' }}"
-            r="5"
-            opacity="{{ x.valid ? 1 : 0.6 }}"
-        ></circle>
         <circle
             @pointerdown="cableHeadClicked(x, event)"
             transform="translate({{x.head2[0]}}, {{x.head2[1]}})"
-            fill="{{ x.valid ? x.color : 'red' }}"
-            r="5"
-            opacity="{{ x.valid ? 1 : 0.6 }}"
         ></circle>
       </g>
     </svg>
