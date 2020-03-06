@@ -34,8 +34,8 @@ Space.component('a-node', function(self, root, item){
 
 		// Create cable and save the reference
 		var cable = root('cables').createCable({
-			x:e.layerX,
-			y:e.layerY,
+			x:e.clientX,
+			y:e.clientY,
 			color:root('nodes').dataColor[item.type] || root('nodes').dataColor.Object,
 			position:pos
 		});

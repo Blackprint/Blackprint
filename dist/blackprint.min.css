@@ -1,67 +1,72 @@
 /* Blackprint, MIT Licensed */
-sf-space[blackprint] .cables {
-  height: 100%;
-  width: 100%;
+sf-space[blackprint] {
   position: absolute; }
-  sf-space[blackprint] .cables > svg {
-    filter: drop-shadow(0 0 2px black);
-    backface-visibility: hidden;
+  sf-space[blackprint], sf-space[blackprint] .nodes, sf-space[blackprint] .cables {
     height: 100%;
-    width: 100%; }
-    sf-space[blackprint] .cables > svg path, sf-space[blackprint] .cables > svg circle {
-      transition: 0.1s ease-in;
-      transition-property: stroke, fill;
+    width: 100%;
+    display: block; }
+  sf-space[blackprint] .cables {
+    position: absolute; }
+    sf-space[blackprint] .cables > svg {
+      filter: drop-shadow(0 0 2px black);
+      backface-visibility: hidden;
+      height: 100%;
+      width: 100%; }
+      sf-space[blackprint] .cables > svg path, sf-space[blackprint] .cables > svg circle {
+        transition: 0.1s ease-in;
+        transition-property: stroke, fill;
+        backface-visibility: hidden; }
+  sf-space[blackprint] .nodes {
+    position: unset; }
+    sf-space[blackprint] .nodes .node {
+      color: white;
+      font-family: Arial;
+      border-radius: 5px;
+      overflow: hidden;
+      border: 1px solid black;
+      box-shadow: 0 0 5px black;
+      position: absolute;
+      background: rgba(0, 0, 0, 0.7);
       backface-visibility: hidden; }
+      sf-space[blackprint] .nodes .node .title {
+        text-align: left;
+        padding: 2px 2px 2px 8px;
+        box-shadow: inset 0 0 3px cadetblue;
+        background-image: -webkit-gradient(linear, left top, right bottom, from(rgba(41, 184, 229, 0.7)), to(rgba(41, 184, 229, 0.2)), color-stop(0.8, rgba(32, 124, 229, 0.1))); }
+        sf-space[blackprint] .nodes .node .title .description {
+          font-size: 12px;
+          color: darkgray;
+          padding-right: 5px;
+          font-style: italic; }
+      sf-space[blackprint] .nodes .node .ports .port {
+        z-index: 200;
+        background: white;
+        height: 10px;
+        width: 10px;
+        border-radius: 100px;
+        border: 1px solid black;
+        box-shadow: 0 0 5px black; }
+      sf-space[blackprint] .nodes .node .output .ports > div, sf-space[blackprint] .nodes .node .input .ports > div {
+        display: inline-block; }
+      sf-space[blackprint] .nodes .node .output {
+        padding-left: 20px;
+        margin-right: 5px;
+        float: right; }
+        sf-space[blackprint] .nodes .node .output .name {
+          text-align: right; }
+      sf-space[blackprint] .nodes .node .input {
+        padding-right: 20px;
+        margin-left: 5px;
+        float: left; }
+      sf-space[blackprint] .nodes .node .property {
+        display: flex;
+        justify-content: center;
+        margin-top: 5px;
+        margin-bottom: 5px; }
+        sf-space[blackprint] .nodes .node .property .ports {
+          margin-right: 8px;
+          margin-left: 8px; }
+          sf-space[blackprint] .nodes .node .property .ports .port {
+            margin: 0 auto; }
 
-sf-space[blackprint] .nodes .node {
-  color: white;
-  font-family: Arial;
-  border-radius: 5px;
-  overflow: hidden;
-  border: 1px solid black;
-  box-shadow: 0 0 5px black;
-  position: absolute;
-  background: rgba(0, 0, 0, 0.7);
-  backface-visibility: hidden; }
-  sf-space[blackprint] .nodes .node .title {
-    text-align: left;
-    padding: 2px 2px 2px 8px;
-    box-shadow: inset 0 0 3px cadetblue;
-    background-image: -webkit-gradient(linear, left top, right bottom, from(rgba(41, 184, 229, 0.7)), to(rgba(41, 184, 229, 0.2)), color-stop(0.8, rgba(32, 124, 229, 0.1))); }
-    sf-space[blackprint] .nodes .node .title .description {
-      font-size: 12px;
-      color: darkgray;
-      padding-right: 5px;
-      font-style: italic; }
-  sf-space[blackprint] .nodes .node .ports .port {
-    z-index: 200;
-    background: white;
-    height: 10px;
-    width: 10px;
-    border-radius: 100px;
-    border: 1px solid black;
-    box-shadow: 0 0 5px black; }
-  sf-space[blackprint] .nodes .node .output .ports > div, sf-space[blackprint] .nodes .node .input .ports > div {
-    display: inline-block; }
-  sf-space[blackprint] .nodes .node .output {
-    padding-left: 20px;
-    margin-right: 5px;
-    float: right; }
-    sf-space[blackprint] .nodes .node .output .name {
-      text-align: right; }
-  sf-space[blackprint] .nodes .node .input {
-    padding-right: 20px;
-    margin-left: 5px;
-    float: left; }
-  sf-space[blackprint] .nodes .node .property {
-    display: flex;
-    justify-content: center;
-    margin-top: 5px;
-    margin-bottom: 5px; }
-    sf-space[blackprint] .nodes .node .property .ports {
-      margin-right: 8px;
-      margin-left: 8px; }
-      sf-space[blackprint] .nodes .node .property .ports .port {
-        margin: 0 auto; }
-
-/*# sourceMappingURL=blackprint.min.1583403905043.css.map */
+/*# sourceMappingURL=blackprint.min.1583459086144.css.map */

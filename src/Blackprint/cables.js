@@ -11,6 +11,16 @@ Space.model('cables', function(self){
 	}*/
 	self.list = [];
 
+	// Fixing viewport position
+	self.space = [0,0];
+	self.init = function(){
+		setTimeout(function(){
+			// Get sf-space element
+			var rect = self.$el[0].parentNode.getBoundingClientRect();
+			self.space = [rect.x, rect.y];
+		}, 500);
+	}
+
 	// Flag if cursor was hovering a node port
 	self.hoverPort = false; // {elem:, item:}
 
@@ -75,13 +85,13 @@ Space.model('cables', function(self){
 
 			// Let's make a magnet sensation (fixed position when hovering node port)
 			if(self.hoverPort !== false){
-				console.log(self.hoverPort.rect);
-				xy = [self.hoverPort.rect.x, self.hoverPort.rect.y];
+				var center = self.hoverPort.rect.width/2;
+				xy = [self.hoverPort.rect.x+center, self.hoverPort.rect.y+center];
 			}
 
 			// Follow pointer
 			else
-				xy = [event.layerX, event.layerY];
+				xy = [event.clientX, event.clientY];
 
 			if(whichHead === 1)
 				item.head1 = xy;

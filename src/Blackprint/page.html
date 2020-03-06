@@ -1,8 +1,8 @@
 <sf-space blackprint>
   <!-- Put the cables behind the nodes -->
   <sf-m name="cables" class="cables" id="test">
-    <svg xmlns="http://www.w3.org/2000/svg">
-      <svg sf-repeat-this="x in list">
+    <svg style="transform: translate(-{{space[0]}}, -{{space[1]}}px)">
+      <g sf-repeat-this="x in list">
         <path
             @pointerover="cableFocused(x)"
             @pointerout="cableUnfocused(x)"
@@ -17,21 +17,19 @@
 
         <circle
             @pointerdown="cableHeadClicked(x, event)"
-            cx="{{x.head1[0]}}"
-            cy="{{x.head1[1]}}"
+            transform="translate({{x.head1[0]}}, {{x.head1[1]}})"
             fill="{{ x.valid ? x.color : 'red' }}"
             r="5"
             opacity="{{ x.valid ? 1 : 0.6 }}"
         ></circle>
         <circle
             @pointerdown="cableHeadClicked(x, event)"
-            cx="{{x.head2[0]}}"
-            cy="{{x.head2[1]}}"
+            transform="translate({{x.head2[0]}}, {{x.head2[1]}})"
             fill="{{ x.valid ? x.color : 'red' }}"
             r="5"
             opacity="{{ x.valid ? 1 : 0.6 }}"
         ></circle>
-      </svg>
+      </g>
     </svg>
   </sf-m>
 

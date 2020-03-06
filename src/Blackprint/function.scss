@@ -1,9 +1,13 @@
 sf-space[blackprint]{
-	.cables{
+	position: absolute;
+	&, .nodes, .cables{
 		height: 100%;
 		width: 100%;
-		position: absolute;
+		display: block;
+	}
 
+	.cables{
+		position: absolute;
 		> svg{
 			// Apply only on direct child of .cables
 			filter: drop-shadow(0 0 2px black);
@@ -20,6 +24,7 @@ sf-space[blackprint]{
 	}
 
 	.nodes{
+		position: unset;
 		.node{
 			color: white;
 			font-family: Arial;
