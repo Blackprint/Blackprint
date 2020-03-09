@@ -1,0 +1,20 @@
+<logger-node class="node general" style="transform: translate({{ x }}px, {{ y }}px)">
+  <div class="title" @dragmove="moveNode">{{ title }} <div class="description">{{ description }}</div></div>
+
+  <div style="display: flow-root;margin-top: 5px;">
+    <textarea value=""></textarea>
+
+    <!-- Container for input -->
+    <div class="input">
+      <div class="ports {{ x.type.name }}" sf-repeat-this="x in inputs">
+        <div class="port"
+            @pointerdown="createCable(event, x)"
+            @pointerup="cableConnect(x)"
+            @pointerover="portHovered(event, x)"
+            @pointerout="portUnhovered"
+        ></div>
+        <div class="name">{{ x.name }}</div>
+      </div>
+    </div>
+  </div>
+</logger-node>

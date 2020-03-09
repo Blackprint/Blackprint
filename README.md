@@ -24,16 +24,15 @@ var sketch = new Blackprint();
 document.body.appendChild(sketch.cloneContainer());
 
 // Register a new node
-sketch.registerNode('math/multiply', function(self){
+sketch.registerNode('math/multiply', function(handle, node){
     // Give it a title
-    self.title = "Random";
+    node.title = "Random";
 
     // Give it a description
-    self.description = "Multiply something";
+    node.description = "Multiply something";
 
     // Is this node should be re-executed when running loop?
-    // 
-    self.dynamic = true;
+    node.dynamic = true;
 
     // ========= Port Format ==========
     // ... = { PortName: DataType }
@@ -41,12 +40,12 @@ sketch.registerNode('math/multiply', function(self){
 
     // Output port
     // Let's declare as variable too for easy access
-    var outputs = self.outputs = {
+    var outputs = handle.outputs = {
         Result : Number
     };
 
     // Input port
-    var inputs = self.inputs = {
+    var inputs = handle.inputs = {
         A : Number,
         B : function(data){
         	// data is the value the output port of connected node
@@ -56,12 +55,12 @@ sketch.registerNode('math/multiply', function(self){
 
     // Property port
     // This port will syncronize it's value with other node
-    var properties = self.properties = {
+    var properties = handle.properties = {
     	"Always Zero?":Boolean
     }
 
     // Run function when all inputs port are collected
-    self.run = function(){
+    node.run = function(){
     	console.log('Processing', inputs.A, inputs.B);
 
     	if(properties['Always Zero?']){

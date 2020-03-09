@@ -12,7 +12,7 @@ sf-space[blackprint]{
 			path{stroke: #{$color}}
 		}
 
-		.nodes > .node .ports.#{$type} > .port {
+		.nodes .node .ports.#{$type} > .port {
 			background: #{$color};
 		}
 	}
@@ -21,6 +21,15 @@ sf-space[blackprint]{
 	@include portType("Object", mediumpurple);
 	@include portType("Boolean", #ff3636);
 	@include portType("String", white);
+
+	logger-node textarea{
+		height: 29px;
+		margin: 0px 5px 0px 0px;
+		background: rgba(0, 0, 0, 0.63);
+		color: white;
+		border: none;
+		width: 55px;
+	}
 
 	.cables{
 		position: absolute;

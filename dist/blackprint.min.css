@@ -9,26 +9,33 @@ sf-space[blackprint] {
     fill: deepskyblue; }
   sf-space[blackprint] .cables > svg > g.Number path {
     stroke: deepskyblue; }
-  sf-space[blackprint] .nodes > .node .ports.Number > .port {
+  sf-space[blackprint] .nodes .node .ports.Number > .port {
     background: deepskyblue; }
   sf-space[blackprint] .cables > svg > g.Object circle {
     fill: mediumpurple; }
   sf-space[blackprint] .cables > svg > g.Object path {
     stroke: mediumpurple; }
-  sf-space[blackprint] .nodes > .node .ports.Object > .port {
+  sf-space[blackprint] .nodes .node .ports.Object > .port {
     background: mediumpurple; }
   sf-space[blackprint] .cables > svg > g.Boolean circle {
     fill: #ff3636; }
   sf-space[blackprint] .cables > svg > g.Boolean path {
     stroke: #ff3636; }
-  sf-space[blackprint] .nodes > .node .ports.Boolean > .port {
+  sf-space[blackprint] .nodes .node .ports.Boolean > .port {
     background: #ff3636; }
   sf-space[blackprint] .cables > svg > g.String circle {
     fill: white; }
   sf-space[blackprint] .cables > svg > g.String path {
     stroke: white; }
-  sf-space[blackprint] .nodes > .node .ports.String > .port {
+  sf-space[blackprint] .nodes .node .ports.String > .port {
     background: white; }
+  sf-space[blackprint] logger-node textarea {
+    height: 29px;
+    margin: 0px 5px 0px 0px;
+    background: rgba(0, 0, 0, 0.63);
+    color: white;
+    border: none;
+    width: 55px; }
   sf-space[blackprint] .cables {
     position: absolute; }
     sf-space[blackprint] .cables > svg {
@@ -109,4 +116,4 @@ sf-space[blackprint] {
           sf-space[blackprint] .nodes .node .property .ports .port {
             margin: 0 auto; }
 
-/*# sourceMappingURL=blackprint.min.1583475170347.css.map */
+/*# sourceMappingURL=blackprint.min.1583636829228.css.map */

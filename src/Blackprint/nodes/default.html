@@ -1,0 +1,44 @@
+<default-node class="node general" style="transform: translate({{ x }}px, {{ y }}px)">
+  <div class="title" @dragmove="moveNode(event)">{{ title }} <div class="description">{{ description }}</div></div>
+
+  <div style="display: flow-root;margin-top: 5px;">
+    <!-- Container for input -->
+    <div class="input">
+      <div class="ports {{ x.type.name }}" sf-repeat-this="x in inputs">
+        <div class="port"
+            @pointerdown="createCable(event, x)"
+            @pointerup="cableConnect(x)"
+            @pointerover="portHovered(event, x)"
+            @pointerout="portUnhovered"
+        ></div>
+        <div class="name">{{ x.name }}</div>
+      </div>
+    </div>
+
+    <!-- Container for output -->
+    <div class="output">
+      <div class="ports {{ x.type.name }}" sf-repeat-this="x in outputs">
+        <div class="name">{{ x.name }}</div>
+        <div class="port"
+            @pointerdown="createCable(event, x)"
+            @pointerup="cableConnect(x)"
+            @pointerover="portHovered(event, x)"
+            @pointerout="portUnhovered"
+        ></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Container for property -->
+  <div class="property">
+    <div class="ports {{ x.type.name }}" sf-repeat-this="x in properties">
+      <div class="name">{{ x.name }}</div>
+      <div class="port"
+          @pointerdown="createCable(event, x)"
+          @pointerup="cableConnect(x)"
+          @pointerover="portHovered(event, x)"
+          @pointerout="portUnhovered"
+      ></div>
+    </div>
+  </div>
+</default-node>

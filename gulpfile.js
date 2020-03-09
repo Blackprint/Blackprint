@@ -55,9 +55,20 @@ require("scarletsframe-compiler")({
 				file:'dist/blackprint.min.js',
 				header:"/* Blackprint \n MIT Licensed */",
 				combine:[
-					'src/Blackprint/Blackprint.js', // Start private scope from here
+					// Start private scope from here
+					'src/Blackprint/init/Blackprint.js',
+
+					// Combine all files but not recursive
+					'src/Blackprint/*.js',
+
+					// Combine files from all directory recursively except in init folder
+					'src/Blackprint/!(init)*/*.js',
+
+					// End private scope for Blackprint
+					'src/Blackprint/init/end.js',
+
+					// Fix for gulp watcher
 					'src/Blackprint/**/*.js',
-					'src/Blackprint/z_end.js', // End private scope for Blackprint
 				],
 			},
 			scss:{

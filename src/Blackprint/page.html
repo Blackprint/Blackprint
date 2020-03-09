@@ -19,49 +19,20 @@
   <!-- Nodes goes here -->
   <sf-m name="nodes" class="nodes" style="user-select:none;">
     <!-- Handled on ./nodes.js -->
-    <a-node class="node general" style="transform: translate({{ x }}px, {{ y }}px)" sf-repeat-this="x in list">
-      <div class="title" @dragmove="moveNode">{{ title }} <div class="description">{{ description }}</div></div>
+    <div sf-repeat-this="item in list">
+      {{@exec
+        var node;
 
-      <div style="display: flow-root;margin-top: 5px;">
-        <!-- Container for input -->
-        <div class="input">
-          <div class="ports {{ x.type.name }}" sf-repeat-this="x in inputs">
-            <div class="port"
-                @pointerdown="createCable(event, x)"
-                @pointerup="cableConnect(x)"
-                @pointerover="portHovered(event, x)"
-                @pointerout="portUnhovered"
-            ></div>
-            <div class="name">{{ x.name }}</div>
-          </div>
-        </div>
+        if(item.type === 'default')
+          node = $DefaultNode;
+        else{
+          console.error(item, "type not found");
+          @return null;
+        }
 
-        <!-- Container for output -->
-        <div class="output">
-          <div class="ports {{ x.type.name }}" sf-repeat-this="x in outputs">
-            <div class="name">{{ x.name }}</div>
-            <div class="port"
-                @pointerdown="createCable(event, x)"
-                @pointerup="cableConnect(x)"
-                @pointerover="portHovered(event, x)"
-                @pointerout="portUnhovered"
-            ></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Container for property -->
-      <div class="property">
-        <div class="ports {{ x.type.name }}" sf-repeat-this="x in properties">
-          <div class="name">{{ x.name }}</div>
-          <div class="port"
-              @pointerdown="createCable(event, x)"
-              @pointerup="cableConnect(x)"
-              @pointerover="portHovered(event, x)"
-              @pointerout="portUnhovered"
-          ></div>
-        </div>
-      </div>
-    </a-node>
+        // Create from Blackprint's namespace and (true = let the item become the scope)
+        @return new node(item, Blackprint.space, true); 
+      }}
+    </div>
   </sf-m>
 </sf-space>
