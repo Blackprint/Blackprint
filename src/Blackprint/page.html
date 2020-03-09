@@ -21,11 +21,10 @@
     <!-- Handled on ./nodes.js -->
     <div sf-repeat-this="item in list">
       {{@exec
-        var node;
+        var type = item.type[0].toUpperCase() + item.type.slice(1);
+        var node = window["$"+type+'Node'];
 
-        if(item.type === 'default')
-          node = $DefaultNode;
-        else{
+        if(node === void 0){
           console.error(item, "type not found");
           @return null;
         }

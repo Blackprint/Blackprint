@@ -1,5 +1,7 @@
-Space.component('logger-node', ['Blackprint/nodes/logger.html']);
-Space.component('logger-node', {extend: Blackprint.Node}, function(self, root){
+Space.component('logger-node', {
+	extend: Blackprint.Node,
+	template: 'Blackprint/nodes/logger.html'
+}, function(self, root){
 	// Property of this scope
 	/* self == {
 		x: 0,

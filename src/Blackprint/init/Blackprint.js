@@ -50,6 +50,9 @@ class Blackprint{
 
 		// RepeatedElement can from inputs, outputs, properties
 		function findPortByName(RE, name){
+			if(RE.getElement === void 0)
+				console.error("It seems the JSON was imported when sketch view haven't been loaded");
+
 			for (var i = 0; i < RE.length; i++) {
 				if(RE[i].name === name)
 					return {
@@ -105,18 +108,11 @@ class Blackprint{
 
 							// Connect cable to NodeB
 							targetNode.cableConnect(foundB.port);
-							console.log('nyam', foundA, foundB);
 						}
 					}
 				}
-
-				// cables.createCable();
-				// cables.currentCable
 			}
 		}
-
-		console.log(json);
-		console.log(inserted);
 	}
 
 	// @return node scope
@@ -126,7 +122,7 @@ class Blackprint{
 			return console.error('Node for', namespace, "was not found") && void 0;
 
 		// Processing scope is different with node scope
-		var handle = {}, node = {type:'default'};
+		var handle = {}, node = {type:'default', title:'No Title', description:''};
 		func(handle, node);
 
 		// Type extract for port data type
@@ -202,7 +198,6 @@ class Blackprint{
 
 		// Node is become the component scope
 		this.scope('nodes').list.push(node);
-		console.log(node);
 		return node;
 	}
 }

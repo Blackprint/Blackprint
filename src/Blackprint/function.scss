@@ -23,12 +23,13 @@ sf-space[blackprint]{
 	@include portType("String", white);
 
 	logger-node textarea{
-		height: 29px;
+		height: 20px;
 		margin: 0px 5px 0px 0px;
 		background: rgba(0, 0, 0, 0.63);
 		color: white;
 		border: none;
-		width: 55px;
+		margin-left: -10px;
+		width: 60px;
 	}
 
 	.cables{

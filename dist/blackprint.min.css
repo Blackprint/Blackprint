@@ -30,12 +30,13 @@ sf-space[blackprint] {
   sf-space[blackprint] .nodes .node .ports.String > .port {
     background: white; }
   sf-space[blackprint] logger-node textarea {
-    height: 29px;
+    height: 20px;
     margin: 0px 5px 0px 0px;
     background: rgba(0, 0, 0, 0.63);
     color: white;
     border: none;
-    width: 55px; }
+    margin-left: -10px;
+    width: 60px; }
   sf-space[blackprint] .cables {
     position: absolute; }
     sf-space[blackprint] .cables > svg {
@@ -116,4 +117,4 @@ sf-space[blackprint] {
           sf-space[blackprint] .nodes .node .property .ports .port {
             margin: 0 auto; }
 
-/*# sourceMappingURL=blackprint.min.1583636829228.css.map */
+/*# sourceMappingURL=blackprint.min.1583754141669.css.map */
