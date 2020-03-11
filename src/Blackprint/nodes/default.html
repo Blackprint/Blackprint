@@ -1,35 +1,61 @@
 <default-node class="node general" style="transform: translate({{ x }}px, {{ y }}px)">
-  <div class="title" @dragmove="moveNode(event)">{{ title }} <div class="description">{{ description }}</div></div>
+  <div class="header" @dragmove="moveNode(event)">
+    <div class="title"><div class="icon"></div><div class="text">{{ title }}</div></div>
+    <div class="description">{{ description }}</div>
+  </div>
 
-  <div style="display: flow-root;margin-top: 5px;">
-    <!-- Container for input -->
-    <div class="input">
-      <div class="ports {{ x.type.name }}" sf-repeat-this="x in inputs">
-        <div class="port"
+  <div class="content">
+    <div class="left-port">
+      <!-- Container for execution port -->
+      <div class="execution in">
+        <div class="port" 
             @pointerdown="createCable(event, x)"
             @pointerup="cableConnect(x)"
             @pointerover="portHovered(event, x)"
-            @pointerout="portUnhovered"
-        ></div>
-        <div class="name">{{ x.name }}</div>
+            @pointerout="portUnhovered"></div>
+        <div class="name">In</div>
+      </div>
+
+      <!-- Container for input port -->
+      <div class="input">
+        <div class="ports {{ x.type.name }}" sf-repeat-this="x in inputs">
+          <div class="port"
+              @pointerdown="createCable(event, x)"
+              @pointerup="cableConnect(x)"
+              @pointerover="portHovered(event, x)"
+              @pointerout="portUnhovered"
+          ></div>
+          <div class="name">{{ x.name }}</div>
+        </div>
       </div>
     </div>
 
-    <!-- Container for output -->
-    <div class="output">
-      <div class="ports {{ x.type.name }}" sf-repeat-this="x in outputs">
-        <div class="name">{{ x.name }}</div>
+    <div class="right-port">
+      <div class="execution out">
+        <div class="name">Out</div>
         <div class="port"
             @pointerdown="createCable(event, x)"
             @pointerup="cableConnect(x)"
             @pointerover="portHovered(event, x)"
-            @pointerout="portUnhovered"
-        ></div>
+            @pointerout="portUnhovered"></div>
+      </div>
+
+      <!-- Container for output port -->
+      <div class="output">
+        <div class="ports {{ x.type.name }}" sf-repeat-this="x in outputs">
+          <div class="name">{{ x.name }}</div>
+          <div class="port"
+              @pointerdown="createCable(event, x)"
+              @pointerup="cableConnect(x)"
+              @pointerover="portHovered(event, x)"
+              @pointerout="portUnhovered"
+          ></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Container for property -->
+  <!-- Container for property port -->
   <div class="property">
     <div class="ports {{ x.type.name }}" sf-repeat-this="x in properties">
       <div class="name">{{ x.name }}</div>

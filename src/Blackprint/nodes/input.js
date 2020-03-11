@@ -1,6 +1,6 @@
-Space.component('logger-node', {
-	extend: Blackprint.Function,
-	template: 'Blackprint/nodes/logger.html'
+Space.component('input-node', {
+	extend: Blackprint.Input,
+	template: 'Blackprint/nodes/input.html'
 }, function(self, root){
 	// Property of this scope
 	/* self == {
@@ -11,5 +11,5 @@ Space.component('logger-node', {
 		properties: [],
 	} */
 
-	self.log = '...';
+	self.log = '';
 });

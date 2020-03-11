@@ -58,6 +58,9 @@ require("scarletsframe-compiler")({
 					// Start private scope from here
 					'src/Blackprint/init/Blackprint.js',
 
+					// Import base class first
+					'src/Blackprint/extendable/Node.js',
+
 					// Combine all files but not recursive
 					'src/Blackprint/*.js',
 
