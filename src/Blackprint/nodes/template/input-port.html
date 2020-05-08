@@ -1,0 +1,12 @@
+<div class="input">
+  <div class="ports {{ val.type.name }}" sf-repeat-this="key, val in inputs">
+    <div class="port"
+    	@contextmenu.prevent="portRightClick(event, key, val)"
+        @pointerdown.left="createCable(event, key)"
+        @pointerup.left="cableConnect(key)"
+        @pointerover="portHovered(event, val)"
+        @pointerout="portUnhovered"
+    ></div>
+    <div class="name">{{ key }}</div>
+  </div>
+</div>

@@ -1,8 +1,5 @@
 <button-node class="node trigger" style="transform: translate({{ x }}px, {{ y }}px)">
-  <div class="header" @dragmove="moveNode(event)">
-    <div class="title"><div class="icon"></div><div class="text">{{ title }}</div></div>
-    <div class="description">{{ description }}</div>
-  </div>
+  <sf-template path="./template/header.html"></sf-template>
 
   <div class="content">
     <div class="button" @click="run(event)">
@@ -11,18 +8,7 @@
     </div>
 
     <div class="right-port">
-      <!-- Container for output -->
-      <div class="output">
-        <div class="ports {{ x.type.name }}" sf-repeat-this="x in outputs">
-          <div class="name">{{ x.name }}</div>
-          <div class="port"
-              @pointerdown="createCable(event, x)"
-              @pointerup="cableConnect(x)"
-              @pointerover="portHovered(event, x)"
-              @pointerout="portUnhovered"
-          ></div>
-        </div>
-      </div>
+      <sf-template path="./template/output-port.html"></sf-template>
     </div>
   </div>
 </button-node>

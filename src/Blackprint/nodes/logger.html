@@ -1,25 +1,11 @@
 <logger-node class="node function" style="transform: translate({{ x }}px, {{ y }}px)">
-  <div class="header" @dragmove="moveNode(event)">
-    <div class="title"><div class="icon"></div><div class="text">{{ title }}</div></div>
-    <div class="description">{{ description }}</div>
-  </div>
+  <sf-template path="./template/header.html"></sf-template>
 
   <div class="content">
     <textarea value="{{ log }}"></textarea>
 
     <div class="left-port">
-      <!-- Container for input -->
-      <div class="input">
-        <div class="ports {{ x.type.name }}" sf-repeat-this="x in inputs">
-          <div class="port"
-              @pointerdown="createCable(event, x)"
-              @pointerup="cableConnect(x)"
-              @pointerover="portHovered(event, x)"
-              @pointerout="portUnhovered"
-          ></div>
-          <div class="name">{{ x.name }}</div>
-        </div>
-      </div>
+      <sf-template path="./template/input-port.html"></sf-template>
     </div>
   </div>
 </logger-node>

@@ -1,70 +1,17 @@
 <default-node class="node general" style="transform: translate({{ x }}px, {{ y }}px)">
-  <div class="header" @dragmove="moveNode(event)">
-    <div class="title"><div class="icon"></div><div class="text">{{ title }}</div></div>
-    <div class="description">{{ description }}</div>
-  </div>
+  <sf-template path="./template/header.html"></sf-template>
+  <!-- <sf-template path="Blackprint/nodes/template/header.html"></sf-template> -->
 
   <div class="content">
     <div class="left-port">
-      <!-- Container for execution port -->
-      <div class="execution in">
-        <div class="port" 
-            @pointerdown="createCable(event, x)"
-            @pointerup="cableConnect(x)"
-            @pointerover="portHovered(event, x)"
-            @pointerout="portUnhovered"></div>
-        <div class="name">In</div>
-      </div>
-
-      <!-- Container for input port -->
-      <div class="input">
-        <div class="ports {{ x.type.name }}" sf-repeat-this="x in inputs">
-          <div class="port"
-              @pointerdown="createCable(event, x)"
-              @pointerup="cableConnect(x)"
-              @pointerover="portHovered(event, x)"
-              @pointerout="portUnhovered"
-          ></div>
-          <div class="name">{{ x.name }}</div>
-        </div>
-      </div>
+      <sf-template path="./template/execution-in.html"></sf-template>
+      <sf-template path="./template/input-port.html"></sf-template>
     </div>
 
     <div class="right-port">
-      <div class="execution out">
-        <div class="name">Out</div>
-        <div class="port"
-            @pointerdown="createCable(event, x)"
-            @pointerup="cableConnect(x)"
-            @pointerover="portHovered(event, x)"
-            @pointerout="portUnhovered"></div>
-      </div>
-
-      <!-- Container for output port -->
-      <div class="output">
-        <div class="ports {{ x.type.name }}" sf-repeat-this="x in outputs">
-          <div class="name">{{ x.name }}</div>
-          <div class="port"
-              @pointerdown="createCable(event, x)"
-              @pointerup="cableConnect(x)"
-              @pointerover="portHovered(event, x)"
-              @pointerout="portUnhovered"
-          ></div>
-        </div>
-      </div>
+      <sf-template path="./template/output-port.html"></sf-template>
     </div>
   </div>
 
-  <!-- Container for property port -->
-  <div class="property">
-    <div class="ports {{ x.type.name }}" sf-repeat-this="x in properties">
-      <div class="name">{{ x.name }}</div>
-      <div class="port"
-          @pointerdown="createCable(event, x)"
-          @pointerup="cableConnect(x)"
-          @pointerover="portHovered(event, x)"
-          @pointerout="portUnhovered"
-      ></div>
-    </div>
-  </div>
+  <sf-template path="./template/property-port.html"></sf-template>
 </default-node>

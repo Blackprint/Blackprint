@@ -1,0 +1,9 @@
+<div class="execution in">
+  <div class="port"
+      @contextmenu.prevent="portRightClick(event, key, val)"
+      @pointerdown.left="createCable(event, key)"
+      @pointerup.left="cableConnect(key)"
+      @pointerover="portHovered(event, x)"
+      @pointerout="portUnhovered"></div>
+  <div class="name">In</div>
+</div>
