@@ -1,12 +1,22 @@
 ;(function(){
 var root = Blackprint.space.scope;
 
-class Node{
+class Node extends CustomEvent{
+	/*
+	x = 0;
+	y = 0;
+
+	inputs = {};
+	outputs = {};
+	properties = {};
+	*/
+
 	// DragMove event handler
 	moveNode(e){
 		this.x += e.movementX;
 		this.y += e.movementY;
 
+		// Also move all cable connected to current node
 		this.moveCables(e, this.inputs);
 		this.moveCables(e, this.outputs);
 		this.moveCables(e, this.properties);
@@ -14,8 +24,8 @@ class Node{
 
 	moveCables(e, which){
 		// Move the connected cables
-		for (var i = 0; i < which.length; i++) {
-			var cables = which[i].cables;
+		for(var key in which){
+			var cables = which[key].cables;
 			if(cables.length === 0)
 				continue;
 
@@ -33,18 +43,32 @@ class Node{
 	}
 
 	// Determine port source
-	getPortSource(item){
-		if(this.outputs.indexOf(item) !== -1)
+	getPortSourceName(key){
+		if(this.outputs[key] !== void 0)
 			return 'outputs';
-		else if(this.properties.indexOf(item) !== -1)
+		else if(this.properties[key] !== void 0)
 			return 'properties';
 		return 'inputs';
 	}
 
+	getPortName(item){
+		var check = ['outputs', 'inputs', 'properties'];
+		for (var i = 0; i < check.length; i++) {
+			var ref = this[check[i]];
+
+			for(var key in ref)
+				if(ref[key] === item)
+					return key;
+		}
+	}
+
 	// PointerDown event handler
-	createCable(e, item){
-		var source = this.getPortSource(item);
+	createCable(e, key){
+		var source = this.getPortSourceName(key);
 		var isAuto = e.constructor === DOMRect;
+
+		// ex: port = this.outputs.A;
+		var port = this[source][key];
 
 		// Get size and position of the port
 		var rect = isAuto ? e : e.target.getBoundingClientRect();
@@ -54,27 +78,26 @@ class Node{
 		var cable = root('cables').createCable({
 			x:rect.x + center,
 			y:rect.y + center,
-			type:item.type === null ? 'Any' : item.type.name,
+			type:!port.type ? 'Any' : port.type.name,
 			source:source
 		});
 
 		// Connect this cable into port's cable list
-		item.cables.push(cable);
+		port.cables.push(cable);
 
 		// Put port reference to the cable
-		cable.owner = [this, item];
+		cable.owner = [this, port];
 
 		// Stop here if this function wasn't triggered by user
 		if(isAuto)
 			return cable;
 
-		// Default head index is "2" when creating new cable 
+		// Default head index is "2" when creating new cable
 		root('cables').cableHeadClicked(cable, 2);
+		this._trigger('cableCreated', cable);
 	}
 
 	removeCable(cable){
-		var list = root('cables').list;
-
 		// Remove from cable owner
 		if(cable.owner){
 			var i = cable.owner[1].cables.indexOf(cable);
@@ -89,26 +112,41 @@ class Node{
 				cable.target[1].cables.splice(i, 1);
 		}
 
+		var list = root('cables').list;
+
 		// Remove from cable list
 		list.splice(list.indexOf(cable), 1);
 		console.log('A cable was removed', cable);
 	}
 
 	// PointerUp event handler
-	cableConnect(port){
+	cableConnect(key){
 		// Get currect cable and the port source name
 		var cable = root('cables').currentCable;
-		var source = this.getPortSource(port);
+		var source = this.getPortSourceName(key);
 
 		// Remove cable if ...
 		if(cable.owner[0] === this // It's referencing to same node
-			|| cable.source === 'outputs' && source !== 'inputs' // Output source not connected to input
-			|| cable.source === 'inputs' && source !== 'outputs'  // Input source not connected to output
-			|| cable.source === 'properties' && source !== 'properties'  // Property source not connected to property
+			|| (cable.source === 'outputs' && source !== 'inputs') // Output source not connected to input
+			|| (cable.source === 'inputs' && source !== 'outputs')  // Input source not connected to output
+			|| (cable.source === 'properties' && source !== 'properties')  // Property source not connected to property
 		){
-			console.log(cable.owner[0], this);
+			console.log(cable.owner[0], this, cable.source, source);
 			this.removeCable(cable);
 			return;
+		}
+
+		// ex: port = this.outputs.A;
+		var port = this[source][key];
+		var sourceCables = cable.owner[1].cables;
+
+		// Remove cable if there are similar connection for the ports
+		for (var i = 0; i < sourceCables.length; i++) {
+			if(port.cables.includes(sourceCables[i])){
+				console.log("Duplicate connection");
+				this.removeCable(cable);
+				return;
+			}
 		}
 
 		// Connect this cable into port's cable list
@@ -117,6 +155,8 @@ class Node{
 		// Put port reference to the cable
 		cable.target = [this, port];
 		console.log('A cable was connected', port);
+
+		this._trigger('cableConnected', cable);
 	}
 
 	// PointerOver event handler
@@ -132,6 +172,30 @@ class Node{
 	// PointerOut event handler
 	portUnhovered(){
 		root('cables').hoverPort = false;
+	}
+
+	portRightClick(ev, key, val){
+		var menu = [];
+		this._trigger('portMenu', {key:key, val:val, menu:menu});
+
+		var cables = val.cables;
+		for (var i = 0; i < cables.length; i++) {
+			var target = cables[i].owner[0] === this ? cables[i].target : cables[i].owner;
+			if(target === void 0)
+				continue;
+
+			menu.push({
+				title:"Disconnect "+target[0].title+`(${key} ~ ${target[0].getPortName(target[1])})`,
+				args:[cables[i]],
+				callback:root('cables').disconnectCable
+			});
+		}
+
+		if(menu.length === 0)
+			return;
+
+		var pos = ev.target.getClientRects()[0];
+		root('dropdown').content(menu).show(pos.x, pos.y);
 	}
 }
 
