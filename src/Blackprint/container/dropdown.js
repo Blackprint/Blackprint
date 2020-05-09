@@ -1,70 +1,41 @@
 Space.model('dropdown', function(self){
-	self.visible_ = false;
-	self.posX = 0;
-	self.posY = 0;
-	self.options = []; // {i:, title:}
+	self.menus = [];
+	self.onCancel = void 0;
 
-	var callback = [];
-	self.content = function(obj){ // [[{title, callback}, {title, callback}, ...], ...]
-		callback.length = 0;
-		self.options.splice(0);
+	// options: [{title, callback}, {title, deep:[{...}]}, ...]
+	self.show = function(options, x, y){
+		options.x = x;
+		options.y = y;
+		self.menus.push(options);
 
-		if(obj[0].constructor === Object)
-			obj = [obj];
-
-		for (var i = 0; i < obj.length; i++) {
-			var temp = obj[i];
-
-			for (var a = 0; a < temp.length; a++) {
-				self.options.push({i:callback.length, title:temp[a].title});
-				callback.push(temp[a]);
-			}
-		}
-
+		manageBackdrop(true);
 		return self;
 	}
 
-	function backdropListener(ev){
-		if($(ev.target).parent('sf-m')[0] === self.$el[0]){
-			try{
-				self.clicked(sf.model.index(ev.target));
-			}catch(e){
-				console.log(e, ev.target, ev);
-			}
+	self.hide = function(){
+		for (var i = 0; i < self.menus.length; i++)
+			self.menus.getElement(i).model.deepRemove();
 
-			if($(ev.target).hasClass('.divider'))
-				return;
-		}
-
-		self.visible_ = false;
-		backdropCreated = false;
-		callback.length = 0;
-
-		self.onCancel && self.onCancel();
-	}
-
-	self.show = function(x, y){
-		var elem = self.$el[0].firstElementChild;
-
-		self.visible(true);
-
-		if(x + elem.offsetWidth > window.innerWidth)
-			x -= elem.offsetWidth;
-
-		if(y + elem.offsetHeight > window.innerHeight)
-			y -= elem.offsetHeight;
-
-		// subtract the margin/padding
-		self.posX = x - 2;
-		self.posY = y - 9;
+		self.menus.splice(0);
 	}
 
 	var backdropCreated = false;
-	self.visible = function(condition){
+	function backdropListener(ev){
+		if($(ev.target).parent('sf-m')[0] === self.$el[0])
+			return;
+
+		backdropCreated = false;
+
+		self.hide();
+		$('body').off('click', backdropListener);
+		self.onCancel && self.onCancel();
+	}
+
+	function manageBackdrop(isAdd){
 		setTimeout(function(){
-			if(condition){
+			if(isAdd){
 				if(!backdropCreated){
-					$('body').once('click', backdropListener);
+					$('body').on('click', backdropListener);
 					backdropCreated = true;
 				}
 			}
@@ -73,12 +44,5 @@ Space.model('dropdown', function(self){
 				backdropCreated = false;
 			}
 		}, 10);
-
-		self.visible_ = condition;
-	}
-
-	self.clicked = function(i){
-		callback[i].callback && callback[i].callback(callback[i].ref);
-		callback.length = 0;
 	}
 });

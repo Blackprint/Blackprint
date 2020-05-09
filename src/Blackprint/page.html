@@ -1,37 +1,56 @@
 <sf-space blackprint>
-  <!-- Put the cables behind the nodes -->
-  <sf-m name="cables" class="cables" id="test">
-    <svg style="transform: translate(-{{space[0]}}, -{{space[1]}}px)">
-      <g sf-repeat-this="x in list" class="{{ x.type }} {{ x.valid ? '' : 'invalid' }}">
-        <path
-            d="M {{ recalculatePath(x) || x.head1[0] + ' ' + x.head1[1] }}
-               C {{ x.linePath }},
-                 {{ recalculatePath(x) || x.head2[0] + ' ' + x.head2[1] }}"
-        ></path>
-        <circle
-            @pointerdown="cableHeadClicked(x, event)"
-            transform="translate({{x.head2[0]}}, {{x.head2[1]}})"
-        ></circle>
-      </g>
-    </svg>
-  </sf-m>
+  <sf-m name="container"
+    @mousewheel.ctrl.prevent="scaleContainer(event)"
+    style="
+      width: {{ size.w }}px;
+      height: {{ size.h }}px;
+      transform: translate({{ pos.x }}px, {{ pos.y }}px)
+                 scale({{ scale }})"
+  >
+    <!-- Put the cables behind the nodes -->
+    <sf-m name="cables" class="cables" id="test">
 
-  <!-- Nodes goes here -->
-  <sf-m name="nodes" class="nodes" style="user-select:none;">
-    <!-- Handled on ./nodes.js -->
-    <div sf-repeat-this="item in list">
-      {{@exec
-        var type = item.type[0].toUpperCase() + item.type.slice(1);
-        var node = window["$"+type+'Node'];
+      <!-- Put empty space event here, because this element filling the empty space -->
+      <svg style="transform: translate(-{{space[0]}}, -{{space[1]}}px)"
+        @contextmenu.stop="nodeScope.menu(event)"
+        @pointerdown.ctrl="container.moveContainer(event)"
+      >
+        <g sf-repeat-this="x in list" class="{{ x.type }} {{ x.valid ? '' : 'invalid' }}">
+          <path
+              @contextmenu.stop.capture="cableMenu(x, event)"
+              d="M {{ recalculatePath(x) || x.head1[0] + ' ' + x.head1[1] }}
+                 C {{ x.linePath }},
+                   {{ recalculatePath(x) || x.head2[0] + ' ' + x.head2[1] }}"
+          ></path>
+          <circle
+              @pointerdown="cableHeadClicked(x, event)"
+              transform="translate({{x.head2[0]}}, {{x.head2[1]}})"
+          ></circle>
+        </g>
+      </svg>
+    </sf-m>
 
-        if(node === void 0){
-          console.error(item, "type not found");
-          @return null;
-        }
+    <!-- Nodes goes here -->
+    <sf-m name="nodes" class="nodes" style="user-select:none;">
+      <!-- Handled on ./nodes.js -->
+      <div sf-repeat-this="item in list">
+        {{@exec
+          var type = item.type[0].toUpperCase() + item.type.slice(1);
+          var node = window["$"+type+'Node'];
 
-        // Create from Blackprint's namespace and (true = let the item become the scope)
-        @return new node(item, Blackprint.space, true); 
-      }}
-    </div>
+          if(node === void 0){
+            console.error(item, "type not found");
+            @return null;
+          }
+
+          // Create from Blackprint's namespace and (true = let the item become the scope)
+          @return new node(item, Blackprint.space, true);
+        }}
+      </div>
+    </sf-m>
+
+    <sf-m name="dropdown">
+      <drop-down sf-repeat-this="val in menus"></drop-down>
+    </sf-m>
   </sf-m>
 </sf-space>

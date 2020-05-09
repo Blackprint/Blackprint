@@ -1,33 +1,25 @@
 .bp-dropdown-menu {
 	margin-top: 7px;
 	background-color: rgba(255, 255, 255, 0.96);
-	box-shadow: 0 0 4px 1px white;
-	border: inherit;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 100;
-	padding: 2px 5px;
-    border-radius: 10px;
+	box-shadow: 1px 1px 11px 3px black;
+    border: inherit;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    padding: 0;
+    border-radius: 3px;
 
 	li {
 		vertical-align: baseline;
 		display: inherit !important;
+		padding: 3px 8px;
+
+		&:hover{
+			background: lightgray;
+		}
 	}
 	a {
 		cursor: pointer;
-	}
-	&.sticky {
-		margin-top: inherit;
-		margin-left: -500px;
-		margin-bottom: -700px;
-		margin-right: -20px;
-		top: inherit;
-		left: inherit;
-		display: block;
-		float: inherit;
-		position: relative;
-		opacity: 0;
-		transition: opacity 60ms ease-out;
 	}
 }
