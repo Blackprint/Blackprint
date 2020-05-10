@@ -1,5 +1,11 @@
 ;(function(){
 var root = Blackprint.space.scope;
+var container;
+
+// Run when all ready
+$(function(){
+	container = root('container');
+});
 
 class Node extends CustomEvent{
 	/*
@@ -13,8 +19,8 @@ class Node extends CustomEvent{
 
 	// DragMove event handler
 	moveNode(e){
-		this.x += e.movementX;
-		this.y += e.movementY;
+		this.x += e.movementX * container.multiplier;
+		this.y += e.movementY * container.multiplier;
 
 		// Also move all cable connected to current node
 		this.moveCables(e, this.inputs);
@@ -36,8 +42,8 @@ class Node extends CustomEvent{
 				else
 					cable = cables[a].head2;
 
-				cable[0] += e.movementX;
-				cable[1] += e.movementY;
+				cable[0] += e.movementX * container.multiplier;
+				cable[1] += e.movementY * container.multiplier;
 			}
 		}
 	}
@@ -195,7 +201,36 @@ class Node extends CustomEvent{
 			return;
 
 		var pos = ev.target.getClientRects()[0];
-		root('dropdown').content(menu).show(pos.x, pos.y);
+		root('dropdown').show(menu, pos.x, pos.y);
+	}
+
+	nodeMenu(ev){
+		var menu = [{
+			title:'Delete',
+			args:[this],
+			callback:function(node){
+				var list = root('nodes').list;
+				var i = list.indexOf(node);
+
+				if(i === -1)
+					return console.error("Node was not found on the list", node);
+
+				list.splice(i, 1);
+
+				var check = ['outputs', 'inputs', 'properties'];
+				for (var i = 0; i < check.length; i++) {
+					var portList = node[check[i]];
+					for(var port in portList){
+						var cables = portList[port].cables;
+						for (var a = cables.length - 1; a >= 0; a--)
+							node.removeCable(cables[a]);
+					}
+				}
+			}
+		}];
+
+		this._trigger('nodeMenu', {node:this, menu:menu});
+		root('dropdown').show(menu, ev.clientX, ev.clientY);
 	}
 }
 

@@ -1,4 +1,4 @@
-Space.model('cables', function(self){
+Space.model('cables', function(self, root){
 	/*{
 		head1:[x,y], -- Number
 		head2:[x,y], -- Number
@@ -10,6 +10,7 @@ Space.model('cables', function(self){
 		nodeB:Object,
 	}*/
 	self.list = [];
+	self.container = root('container');
 
 	// Fixing viewport position
 	self.space = [0,0];
@@ -103,6 +104,23 @@ Space.model('cables', function(self){
 			if(elem !== void 0)
 				elem.css('pointer-events', '');
 		});
+	}
+
+	self.disconnectCable = function(cable){
+		cable.owner[0].removeCable(cable);
+
+		cable.owner[0]._trigger('cableDisconnected', cable);
+		cable.target[0]._trigger('cableDisconnected', cable);
+	}
+
+	self.cableMenu = function(item, ev){
+		ev.stopPropagation();
+
+		root('dropdown').show([{
+			title:"Disconnect",
+			args:[item],
+			callback:self.disconnectCable
+		}], ev.clientX, ev.clientY);
 	}
 
 	self.createCable = function(obj){
