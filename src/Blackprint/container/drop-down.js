@@ -36,8 +36,8 @@ Space.component('drop-down', {template:"Blackprint/container/drop-down.html"}, f
 
 					// Initialize position once
 					var rect = ev.target.getBoundingClientRect();
-					deep.x = rect.right;
-					deep.y = rect.top - rect.height/2;
+					deep.x = rect.left + rect.width;
+					deep.y = rect.top - rect.height/2 + 7;
 
 					deep.el = currentDeepLevel = new $DropDown(deep, Blackprint.space);
 					self.$el.append(currentDeepLevel);

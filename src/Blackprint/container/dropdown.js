@@ -4,11 +4,16 @@ Space.model('dropdown', function(self){
 
 	// options: [{title, callback}, {title, deep:[{...}]}, ...]
 	self.show = function(options, x, y){
+		// Remove last dropdown if haven't been closed
+		if(self.menus.length !== 0)
+			self.menus.splice(0);
+		else
+			manageBackdrop(true);
+
 		options.x = x;
 		options.y = y;
 		self.menus.push(options);
 
-		manageBackdrop(true);
 		return self;
 	}
 

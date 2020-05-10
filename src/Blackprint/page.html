@@ -12,7 +12,7 @@
 
       <!-- Put empty space event here, because this element filling the empty space -->
       <svg style="transform: translate(-{{space[0]}}, -{{space[1]}}px)"
-        @contextmenu.stop="nodeScope.menu(event)"
+        @contextmenu.stop="container.nodeScope.menu(event)"
         @pointerdown.ctrl="container.moveContainer(event)"
       >
         <g sf-repeat-this="x in list" class="{{ x.type }} {{ x.valid ? '' : 'invalid' }}">
@@ -48,9 +48,9 @@
         }}
       </div>
     </sf-m>
+  </sf-m>
 
-    <sf-m name="dropdown">
-      <drop-down sf-repeat-this="val in menus"></drop-down>
-    </sf-m>
+  <sf-m name="dropdown">
+    <drop-down sf-repeat-this="val in menus"></drop-down>
   </sf-m>
 </sf-space>

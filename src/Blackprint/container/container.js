@@ -39,6 +39,10 @@ Space.model('container', function(self, root){
 		var delta = ev.deltaY/1000;
 		self.scale -= delta;
 
+		// ToDo: fix scaling origin
+		// self.pos.x -= ev.clientX * (1 - self.scale);
+		// self.pos.y -= ev.clientY * (1 - self.scale);
+
 		// ToDo: fix movement speed when moving nodes
 		self.multiplier += delta;
 
