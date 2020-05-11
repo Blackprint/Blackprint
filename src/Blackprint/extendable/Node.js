@@ -19,8 +19,8 @@ class Node extends CustomEvent{
 
 	// DragMove event handler
 	moveNode(e){
-		this.x += e.movementX * container.multiplier;
-		this.y += e.movementY * container.multiplier;
+		this.x += e.movementX / container.scale;
+		this.y += e.movementY / container.scale;
 
 		// Also move all cable connected to current node
 		this.moveCables(e, this.inputs);
@@ -42,8 +42,8 @@ class Node extends CustomEvent{
 				else
 					cable = cables[a].head2;
 
-				cable[0] += e.movementX * container.multiplier;
-				cable[1] += e.movementY * container.multiplier;
+				cable[0] += e.movementX / container.scale;
+				cable[1] += e.movementY / container.scale;
 			}
 		}
 	}
@@ -99,7 +99,7 @@ class Node extends CustomEvent{
 			return cable;
 
 		// Default head index is "2" when creating new cable
-		root('cables').cableHeadClicked(cable, 2);
+		root('cables').cableHeadClicked(cable, e);
 		this._trigger('cableCreated', cable);
 	}
 
@@ -137,7 +137,7 @@ class Node extends CustomEvent{
 			|| (cable.source === 'inputs' && source !== 'outputs')  // Input source not connected to output
 			|| (cable.source === 'properties' && source !== 'properties')  // Property source not connected to property
 		){
-			console.log(cable.owner[0], this, cable.source, source);
+			console.log("The cable is not suitable");
 			this.removeCable(cable);
 			return;
 		}

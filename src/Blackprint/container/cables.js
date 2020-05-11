@@ -10,7 +10,7 @@ Space.model('cables', function(self, root){
 		nodeB:Object,
 	}*/
 	self.list = [];
-	self.container = root('container');
+	var container = self.container = root('container');
 
 	// Fixing viewport position
 	self.space = [0,0];
@@ -67,20 +67,22 @@ Space.model('cables', function(self, root){
 
 	// Move clicked cable
 	self.currentCable = void 0;
-	self.cableHeadClicked = function(item){
-		function moveCableHead(event){
-			var xy;
-
+	self.cableHeadClicked = function(item, eva){
+		function moveCableHead(ev){
 			// Let's make a magnet sensation (fixed position when hovering node port)
 			if(self.hoverPort !== false){
 				var center = self.hoverPort.rect.width/2;
-				xy = [self.hoverPort.rect.x+center - self.container.pos.x, self.hoverPort.rect.y+center - self.container.pos.y];
+				item.head2 = [
+					(self.hoverPort.rect.x+center - container.pos.x) / container.scale,
+					(self.hoverPort.rect.y+center - container.pos.y) / container.scale
+				];
 			}
 
 			// Follow pointer
-			else xy = [event.clientX - self.container.pos.x, event.clientY - self.container.pos.y];
-
-			item.head2 = xy;
+			else item.head2 = [
+				(ev.clientX - container.pos.x) / container.scale,
+				(ev.clientY - container.pos.y) / container.scale
+			];
 		}
 
 		var elem = self.list.getElement(item);
@@ -93,7 +95,7 @@ Space.model('cables', function(self, root){
 
 		// Save current cable for referencing when cable connected into node's port
 		self.currentCable = item;
-		$('vw-sketch').on('pointermove', moveCableHead).once('pointerup', function(event){
+		$('vw-sketch').on('pointermove', moveCableHead).once('pointerup', function(ev){
 			$('vw-sketch').off('pointermove', moveCableHead);
 
 			// Add delay because it may be used for connecting port
@@ -125,8 +127,15 @@ Space.model('cables', function(self, root){
 
 	self.createCable = function(obj){
 		return self.list[self.list.push({
-			head1:[obj.x - self.container.pos.x, obj.y - self.container.pos.y],
-			head2:[obj.x - self.container.pos.x, obj.y - self.container.pos.y],
+			head1:[
+				(obj.x - container.pos.x) / container.scale,
+				(obj.y - container.pos.y) / container.scale
+			],
+			head2:[
+				(obj.x - container.pos.x) / container.scale,
+				(obj.y - container.pos.y) / container.scale
+			],
+
 			type:obj.type,
 			source:obj.source,
 			valid:true,

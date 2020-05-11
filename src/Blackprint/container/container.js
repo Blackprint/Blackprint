@@ -2,23 +2,28 @@ Space.model('container', function(self, root){
 	self.cableScope = root('cables');
 	self.nodeScope = root('nodes');
 
-	self.multiplier = 1;
-	self.scale = 1;
+	function onlyNegative(old, now){
+		if(now > 0) return 0;
+	}
 
-	self.pos = {x:0, y:0};
+	self.pos = {x:0, y:0,
+		// Because origin is top left, viewport height and width are increased on bottom right
+		// Force to zero if there are no more space to be panned on left side
+		on$x: onlyNegative, on$y: onlyNegative
+	};
+
+	self.scale = 1;
 	self.size = {w:window.innerWidth, h:window.innerHeight};
 	self.origSize = {w:self.size.w, h:self.size.h};
 
 	function moveContainer(ev){
 		if(!(self.pos.x >= 0 && ev.movementX > 0)){
 			self.size.w -= ev.movementX;
-			self.origSize.w = self.size.w;
 			self.pos.x += ev.movementX;
 		}
 
 		if(!(self.pos.y >= 0 && ev.movementY > 0)){
 			self.size.h -= ev.movementY;
-			self.origSize.h = self.size.h;
 			self.pos.y += ev.movementY;
 		}
 	}
@@ -39,13 +44,14 @@ Space.model('container', function(self, root){
 		var delta = ev.deltaY/100 * 0.08;
 		self.scale -= delta;
 
+		// ToDo: fix scaling, should scale with cursor as the middle scaling position
 		self.pos.x += ev.clientX * delta;
 		self.pos.y += ev.clientY * delta;
 
+		// self.pos will always negative or zero value
+		// hint on the object declaration
+
 		self.size.w = self.origSize.w / self.scale - self.pos.x;
 		self.size.h = self.origSize.h / self.scale - self.pos.y;
-
-		// ToDo: fix movement speed when moving nodes
-		self.multiplier += delta;
 	}
 });
