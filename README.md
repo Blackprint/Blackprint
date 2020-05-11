@@ -23,6 +23,8 @@ There are styles, template, and scripts that need to be loaded.
 ```
 
 ### Simple example on how to use
+> Warning: This project haven't reach it stable version
+
 ```js
 // Create Blackprint
 var sketch = new Blackprint();
@@ -130,3 +132,8 @@ The compilation process will minify your code and also run Babel transpiler to s
 ```sh
 $ gulp compile
 ```
+
+### Note
+Please support me or I will cry :(
+
+<a href='https://patreon.com/stefansarya'><img src='https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.herokuapp.com%2Fstefansarya%2Fpledges&style=for-the-badge' height='20'></a>

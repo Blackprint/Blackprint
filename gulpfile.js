@@ -6,6 +6,7 @@ require("scarletsframe-compiler")({
 		// proxy:'http://myjs.sandbox',
 		port:6789, // Accessible-> http://localhost:6789
 		ghostMode: false, // Use synchronization between browser?
+		open:false,
 
 		// Standalone server with BrowserSync
 		server:{
@@ -59,6 +60,7 @@ require("scarletsframe-compiler")({
 					'src/Blackprint/init/Blackprint.js',
 
 					// Import base class first
+					'src/Blackprint/extendable/CustomEvent.js',
 					'src/Blackprint/extendable/Node.js',
 
 					// Combine all files but not recursive
