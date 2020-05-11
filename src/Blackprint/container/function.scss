@@ -32,6 +32,10 @@ sf-space[blackprint]{
 		width: 60px;
 	}
 
+	sf-m[name="container"]{
+		transform-origin: top left;
+	}
+
 	.cables{
 		position: absolute;
 		> svg{
@@ -109,11 +113,16 @@ sf-space[blackprint]{
 				.port{
 					z-index: 200;
 					background: white;
-					min-height: 10px;
-					min-width: 10px;
+					height: 10px;
+					width: 10px;
 					border-radius: 100px;
 					border: 1px solid black;
 					box-shadow: 0 0 5px black;
+
+					&.event{
+						border-radius: 2px;
+						transform: rotate(45deg) skew(10deg, 10deg);
+					}
 				}
 			}
 

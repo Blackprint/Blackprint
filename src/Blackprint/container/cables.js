@@ -74,11 +74,11 @@ Space.model('cables', function(self, root){
 			// Let's make a magnet sensation (fixed position when hovering node port)
 			if(self.hoverPort !== false){
 				var center = self.hoverPort.rect.width/2;
-				xy = [self.hoverPort.rect.x+center, self.hoverPort.rect.y+center];
+				xy = [self.hoverPort.rect.x+center - self.container.pos.x, self.hoverPort.rect.y+center - self.container.pos.y];
 			}
 
 			// Follow pointer
-			else xy = [event.clientX, event.clientY];
+			else xy = [event.clientX - self.container.pos.x, event.clientY - self.container.pos.y];
 
 			item.head2 = xy;
 		}
@@ -125,8 +125,8 @@ Space.model('cables', function(self, root){
 
 	self.createCable = function(obj){
 		return self.list[self.list.push({
-			head1:[obj.x, obj.y],
-			head2:[obj.x, obj.y],
+			head1:[obj.x - self.container.pos.x, obj.y - self.container.pos.y],
+			head2:[obj.x - self.container.pos.x, obj.y - self.container.pos.y],
 			type:obj.type,
 			source:obj.source,
 			valid:true,

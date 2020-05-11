@@ -36,20 +36,16 @@ Space.model('container', function(self, root){
 		if(ev.deltaY < 0 && self.scale >= 2)
 			return;
 
-		var delta = ev.deltaY/1000;
+		var delta = ev.deltaY/100 * 0.08;
 		self.scale -= delta;
 
-		// ToDo: fix scaling origin
-		// self.pos.x -= ev.clientX * (1 - self.scale);
-		// self.pos.y -= ev.clientY * (1 - self.scale);
+		self.pos.x += ev.clientX * delta;
+		self.pos.y += ev.clientY * delta;
+
+		self.size.w = self.origSize.w / self.scale - self.pos.x;
+		self.size.h = self.origSize.h / self.scale - self.pos.y;
 
 		// ToDo: fix movement speed when moving nodes
 		self.multiplier += delta;
-
-		if(ev.deltaY < 0 && self.size <= 100)
-			return;
-
-		self.size.w = self.origSize.w / self.scale;
-		self.size.h = self.origSize.h / self.scale;
 	}
 });
