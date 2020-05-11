@@ -68,20 +68,22 @@ Space.model('cables', function(self, root){
 	// Move clicked cable
 	self.currentCable = void 0;
 	self.cableHeadClicked = function(item, eva){
+		var Ofst = container.offset;
+
 		function moveCableHead(ev){
 			// Let's make a magnet sensation (fixed position when hovering node port)
 			if(self.hoverPort !== false){
 				var center = self.hoverPort.rect.width/2;
 				item.head2 = [
-					(self.hoverPort.rect.x+center - container.pos.x) / container.scale,
-					(self.hoverPort.rect.y+center - container.pos.y) / container.scale + (45 + -45/container.scale)
+					(self.hoverPort.rect.x+center - container.pos.x) / container.scale + (Ofst.x + -Ofst.x/container.scale),
+					(self.hoverPort.rect.y+center - container.pos.y) / container.scale + (Ofst.y + -Ofst.y/container.scale)
 				];
 			}
 
 			// Follow pointer
 			else item.head2 = [
-				(ev.clientX - container.pos.x) / container.scale,
-				(ev.clientY - container.pos.y) / container.scale + (45 + -45/container.scale)
+				(ev.clientX - container.pos.x) / container.scale + (Ofst.x + -Ofst.x/container.scale),
+				(ev.clientY - container.pos.y) / container.scale + (Ofst.y + -Ofst.y/container.scale)
 			];
 		}
 
@@ -126,14 +128,16 @@ Space.model('cables', function(self, root){
 	}
 
 	self.createCable = function(obj){
+		var Ofst = container.offset;
+
 		return self.list[self.list.push({
 			head1:[
-				(obj.x - container.pos.x) / container.scale,
-				(obj.y - container.pos.y) / container.scale + (45 + -45/container.scale)
+				(obj.x - container.pos.x) / container.scale + (Ofst.x + -Ofst.x/container.scale),
+				(obj.y - container.pos.y) / container.scale + (Ofst.y + -Ofst.y/container.scale)
 			],
 			head2:[
-				(obj.x - container.pos.x) / container.scale,
-				(obj.y - container.pos.y) / container.scale + (45 + -45/container.scale)
+				(obj.x - container.pos.x) / container.scale + (Ofst.x + -Ofst.x/container.scale),
+				(obj.y - container.pos.y) / container.scale + (Ofst.y + -Ofst.y/container.scale)
 			],
 
 			type:obj.type,

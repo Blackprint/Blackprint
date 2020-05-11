@@ -13,8 +13,26 @@ Space.model('container', function(self, root){
 	};
 
 	self.scale = 1;
-	self.size = {w:window.innerWidth, h:window.innerHeight};
-	self.origSize = {w:self.size.w, h:self.size.h};
+	self.size = {w:0, h:0};
+	self.origSize = {w:0, h:0};
+	self.offset;
+
+	self.init = function(){
+		self.resetOffset();
+		self.size.w = self.offset.width;
+		self.size.h = self.offset.height;
+	}
+
+	self.resetOffset = function(){
+		self.$el.css({
+			width:'100%',
+			height:'100%'
+		});
+
+		self.offset = self.$el[0].getBoundingClientRect();
+		self.origSize.w = self.offset.width;
+		self.origSize.h = self.offset.height;
+	}
 
 	function moveContainer(ev){
 		if(!(self.pos.x >= 0 && ev.movementX > 0)){
