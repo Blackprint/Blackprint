@@ -23,7 +23,7 @@
                    {{ recalculatePath(x) || x.head2[0] + ' ' + x.head2[1] }}"
           ></path>
           <circle
-              @pointerdown="cableHeadClicked(x, event)"
+              @pointerdown.capture.stop="cableHeadClicked(x, event)"
               transform="translate({{x.head2[0]}}, {{x.head2[1]}})"
           ></circle>
         </g>

@@ -74,14 +74,14 @@ Space.model('cables', function(self, root){
 				var center = self.hoverPort.rect.width/2;
 				item.head2 = [
 					(self.hoverPort.rect.x+center - container.pos.x) / container.scale,
-					(self.hoverPort.rect.y+center - container.pos.y) / container.scale
+					(self.hoverPort.rect.y+center - container.pos.y) / container.scale + (45 + -45/container.scale)
 				];
 			}
 
 			// Follow pointer
 			else item.head2 = [
 				(ev.clientX - container.pos.x) / container.scale,
-				(ev.clientY - container.pos.y) / container.scale
+				(ev.clientY - container.pos.y) / container.scale + (45 + -45/container.scale)
 			];
 		}
 
@@ -129,11 +129,11 @@ Space.model('cables', function(self, root){
 		return self.list[self.list.push({
 			head1:[
 				(obj.x - container.pos.x) / container.scale,
-				(obj.y - container.pos.y) / container.scale
+				(obj.y - container.pos.y) / container.scale + (45 + -45/container.scale)
 			],
 			head2:[
 				(obj.x - container.pos.x) / container.scale,
-				(obj.y - container.pos.y) / container.scale
+				(obj.y - container.pos.y) / container.scale + (45 + -45/container.scale)
 			],
 
 			type:obj.type,
