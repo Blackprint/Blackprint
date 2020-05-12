@@ -95,15 +95,15 @@ class Blackprint{
 
 							// Create cable from NodeA
 							var rectA = getPortRect(node.outputs, portName);
-							cables.currentCable = node.createCable(rectA, portName);
+							var cable = linkPortA.createCable(rectA);
 
 							// Positioning the cable head2 into target port position from NodeB
 							var rectB = getPortRect(targetNode.inputs, target.name);
 							var center = rectB.width/2;
-							cables.currentCable.head2 = [rectB.x+center, rectB.y+center];
+							cable.head2 = [rectB.x+center, rectB.y+center];
 
 							// Connect cables.currentCable to target port on NodeB
-							targetNode.cableConnect(target.name);
+							linkPortB.connectCable(cable);
 						}
 					}
 				}
@@ -160,34 +160,10 @@ class Blackprint{
 					type = {name:'Any'};
 				else type = port.constructor;
 
-				// Set for the linked port (Handle for ScarletsFrame)
-				// ex: linkedPort = node.outputs.portName
-				let linkedPort = node[which][portName] = {type:type, default:def, cables:[]};
-				var prepare = {
-					get:function(){
-						if(linkedPort.value === void 0){
-							if(linkedPort.root === void 0)
-								return linkedPort.default;
-
-							// Run from root node and stop when reach this node
-							linkedPort.root(linkedPort);
-						}
-
-						return linkedPort.value;
-					}
-				};
-
-				// Can only obtain data when accessing input port
-				if(which !== 'inputs'){
-					prepare.set = function(val){
-						linkedPort.value = val;
-						return linkedPort.value || linkedPort.default;
-					}
-				}
-
+				var linkedPort = node[which][portName] = new Port(portName, type, def, which, node);
 
 				// Set on the localPorts scope
-				Object.defineProperty(localPorts, portName, prepare);
+				Object.defineProperty(localPorts, portName, linkedPort.createLinker());
 			}
 		}
 

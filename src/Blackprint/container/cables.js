@@ -110,44 +110,13 @@ Space.model('cables', function(self, root){
 		});
 	}
 
-	self.disconnectCable = function(cable){
-		cable.owner[0].removeCable(cable);
-
-		cable.owner[0]._trigger('cableDisconnected', cable);
-		cable.target[0]._trigger('cableDisconnected', cable);
-	}
-
-	self.cableMenu = function(item, ev){
+	self.cableMenu = function(cable, ev){
 		ev.stopPropagation();
 
 		root('dropdown').show([{
 			title:"Disconnect",
-			args:[item],
-			callback:self.disconnectCable
+			context:cable,
+			callback:Cable.prototype.destroy
 		}], ev.clientX, ev.clientY);
-	}
-
-	self.createCable = function(obj){
-		var Ofst = container.offset;
-
-		return self.list[self.list.push({
-			head1:[
-				(obj.x - container.pos.x) / container.scale + (Ofst.x + -Ofst.x/container.scale),
-				(obj.y - container.pos.y) / container.scale + (Ofst.y + -Ofst.y/container.scale)
-			],
-			head2:[
-				(obj.x - container.pos.x) / container.scale + (Ofst.x + -Ofst.x/container.scale),
-				(obj.y - container.pos.y) / container.scale + (Ofst.y + -Ofst.y/container.scale)
-			],
-
-			type:obj.type,
-			source:obj.source,
-			valid:true,
-			linePath:'0 0 0 0',
-
-			// Cable connection
-			owner:void 0, // head1
-			target:void 0 // head2
-		}) - 1];
 	}
 });

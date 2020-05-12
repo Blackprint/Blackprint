@@ -48,7 +48,7 @@ Space.component('drop-down', {template:"Blackprint/container/drop-down.html"}, f
 
 			if(options[i].callback){
 				$(options.getElement(i)).on('click', function(ev){
-					options[i].callback.apply(null, options[i].args);
+					options[i].callback.apply(options[i].context, options[i].args);
 					root('dropdown').hide();
 				});
 			}

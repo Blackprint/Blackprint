@@ -10,8 +10,4 @@ Space.component('button-node', {
 		outputs: [],
 		properties: [],
 	} */
-
-	self.run = function(){
-		console.log('yosh');
-	}
 });
