@@ -122,55 +122,14 @@ class Blackprint{
 
 		// Processing scope is different with node scope
 		var handle = {}, node = {type:'default', title:'No Title', description:''};
+
+		// Call the registered func (from this.registerNode)
 		func(handle, node);
 
-		// Type extract for port data type
-		// Create reactiveness of handle and node's ports
-		function extract(which){
-			node[which] = {}; // Handled by ScarletsFrame
+		// Create the linker between the handler and the node
+		Blackprint.Node.prepare(handle, node);
 
-			var localPorts = handle[which]; // Handled by registered node handler
-			if(localPorts === void 0)
-				return;
-
-			for(let portName in localPorts){
-				let port = localPorts[portName]; // Handled by registered node handler
-
-				// Determine type and add default value for each type
-				var type, def;
-				if(typeof port === 'function'){
-					type = port;
-
-					// Give default value for each data type
-					if(type === Number)
-						def = 0;
-					else if(type === Boolean)
-						def = false;
-					else if(type === String)
-						def = '';
-					else if(type === Array)
-						def = [];
-					else if(type === Object)
-						def = {};
-					else if(type.constructor === Function)
-						def = void 0;
-					else return console.error(type, "was unrecognized as an port data type");
-				}
-				else if(port === null)
-					type = {name:'Any'};
-				else type = port.constructor;
-
-				var linkedPort = node[which][portName] = new Port(portName, type, def, which, node);
-
-				// Set on the localPorts scope
-				Object.defineProperty(localPorts, portName, linkedPort.createLinker());
-			}
-		}
-
-		var portType = ['inputs', 'outputs', 'properties'];
-		for (var i = 0; i < portType.length; i++)
-			extract(portType[i]);
-
+		// Assign the options if exist
 		if(options !== void 0)
 			Object.assign(node, options);
 
