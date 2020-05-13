@@ -4,7 +4,15 @@
 class CustomEvent{
 	on(eventName, func){
 		if(this._event === void 0)
-			Object.defineProperty(this, '_event', {});
+			Object.defineProperty(this, '_event', {value:{}});
+
+		if(eventName.includes(' ')){
+			eventName = eventName.split(' ');
+			for (var i = 0; i < eventName.length; i++)
+				this.on(eventName[i], func);
+
+			return;
+		}
 
 		if(this._event[eventName] === void 0)
 			this._event[eventName] = [];
@@ -18,6 +26,14 @@ class CustomEvent{
 	}
 
 	off(eventName, func){
+		if(eventName.includes(' ')){
+			eventName = eventName.split(' ');
+			for (var i = 0; i < eventName.length; i++)
+				this.off(eventName[i], func);
+
+			return;
+		}
+
 		if(this._event === void 0 || this._event[eventName] === void 0)
 			return;
 
