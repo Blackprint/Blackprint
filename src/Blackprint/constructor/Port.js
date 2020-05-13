@@ -23,6 +23,9 @@ class Port{
 				var cables = port.cables;
 				for (var i = 0; i < cables.length; i++) {
 					var target = cables[i].owner === port ? cables[i].target : cables[i].owner;
+					if(target === void 0)
+						continue;
+
 					target.node.handle.inputs[target.name](port, cables[i]);
 				}
 			};
@@ -36,17 +39,21 @@ class Port{
 						return port.default;
 
 					// Flag current node is requesting value to other node
-					port.node._requsting = true;
+					port.node._requesting = true;
 
 					// Return single data
 					if(port.cables.length === 1){
 						var target = port.cables[0].owner === port ? port.cables[0].target : port.cables[0].owner;
+						if(target === void 0)
+							return;
 
 						// Request the data first
-						if(target.node.handle.request)
-							target.node.handle.request(target, port.node);
+						if(target.node.handle.request){
+							if(target.node.handle.request(target, port.node) !== false && Blackprint.settings.visualizeFlow)
+								Cable.visualizeFlow(port.cables[0]);
+						}
 
-						port.node._requsting = false;
+						port.node._requesting = false;
 						return target.value || target.default;
 					}
 
@@ -55,15 +62,19 @@ class Port{
 					var data = [];
 					for (var i = 0; i < cables.length; i++) {
 						var target = cables[i].owner === port ? cables[i].target : cables[i].owner;
+						if(target === void 0)
+							continue;
 
 						// Request the data first
-						if(target.node.handle.request)
-							target.node.handle.request(target, port.node);
+						if(target.node.handle.request){
+							if(target.node.handle.request(target, port.node) !== false && Blackprint.settings.visualizeFlow)
+								Cable.visualizeFlow(cables[i]);
+						}
 
 						data.push(target.value || target.default);
 					}
 
-					port.node._requsting = false;
+					port.node._requesting = false;
 					return data;
 				}
 
@@ -100,12 +111,22 @@ class Port{
 				var cables = port.cables;
 				for (var i = 0; i < cables.length; i++) {
 					var target = cables[i].owner === port ? cables[i].target : cables[i].owner;
+					if(target === void 0)
+						continue;
 
-					if(target.feature === Blackprint.PortListener)
+					if(target.feature === Blackprint.PortListener){
 						target._call(cables[i].owner === port ? cables[i].owner : cables[i].target, val);
 
-					if(target.node._requsting === false && target.node.handle.update)
+						if(Blackprint.settings.visualizeFlow)
+							Cable.visualizeFlow(cables[i]);
+					}
+
+					if(target.node._requesting === false && target.node.handle.update){
 						target.node.handle.update(cables[i]);
+
+						if(Blackprint.settings.visualizeFlow)
+							Cable.visualizeFlow(cables[i]);
+					}
 				}
 			}
 		}
@@ -158,6 +179,15 @@ class Port{
 			|| (cable.source === 'properties' && this.source !== 'properties')  // Property source not connected to property
 		){
 			console.log(`The cable is not suitable (${cable.source}, ${this.source})`);
+			cable.destroy();
+			return;
+		}
+
+		// Remove cable if type restriction
+		if(cable.owner.type === Function && this.type !== Function
+		   || cable.owner.type !== Function && this.type === Function
+		){
+			console.log(`The cable type is not suitable (${cable.owner.type.name}, ${this.type.name})`);
 			cable.destroy();
 			return;
 		}
