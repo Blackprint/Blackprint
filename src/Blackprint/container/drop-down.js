@@ -25,6 +25,9 @@ Space.component('drop-down', {template:"Blackprint/container/drop-down.html"}, f
 					if(currentDeepLevel !== void 0)
 						self.deepRemove();
 
+					if(options[i].hover !== void 0)
+						options[i].hover.apply(options[i].context, options[i].args);
+
 					var deep = options[i].deep;
 
 					// Use the cache instead
@@ -46,10 +49,27 @@ Space.component('drop-down', {template:"Blackprint/container/drop-down.html"}, f
 				continue;
 			}
 
+			var elem = $(options.getElement(i));
+
 			if(options[i].callback){
-				$(options.getElement(i)).on('click', function(ev){
+				elem.on('click', function(ev){
+					if(options[i].unhover !== void 0)
+						options[i].unhover.apply(options[i].context, options[i].args);
+
 					options[i].callback.apply(options[i].context, options[i].args);
 					root('dropdown').hide();
+				});
+			}
+
+			if(options[i].hover){
+				elem.on('mouseover', function(ev){
+					options[i].hover.apply(options[i].context, options[i].args);
+				});
+			}
+
+			if(options[i].unhover){
+				elem.on('mouseout', function(ev){
+					options[i].unhover.apply(options[i].context, options[i].args);
 				});
 			}
 		}

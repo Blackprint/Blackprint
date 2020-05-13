@@ -116,7 +116,19 @@ Space.model('cables', function(self, root){
 		root('dropdown').show([{
 			title:"Disconnect",
 			context:cable,
-			callback:Cable.prototype.destroy
+			callback:Cable.prototype.destroy,
+			hover:function(){
+				this.owner.node.$el.addClass('highlight');
+
+				if(this.target)
+					this.target.node.$el.addClass('highlight');
+			},
+			unhover:function(){
+				this.owner.node.$el.removeClass('highlight');
+
+				if(this.target)
+					this.target.node.$el.removeClass('highlight');
+			}
 		}], ev.clientX, ev.clientY);
 	}
 });

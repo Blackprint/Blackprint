@@ -198,22 +198,38 @@ class Port{
 		Blackprint.space.scope('cables').hoverPort = false;
 	}
 
-	portRightClick(ev, key, port){
+	portRightClick(ev){
 		var menu = [];
-		this.node._trigger('port.menu', {port:port, menu:menu});
+		this.node._trigger('port.menu', {port:this, menu:menu});
 
-		var cables = port.cables;
+		// Prepare default menu
+		var disconnect = {title:"Disconnect", deep:[]};
+
+		var cables = this.cables;
 		for (var i = 0; i < cables.length; i++) {
-			var target = cables[i].owner === port ? cables[i].target : cables[i].owner;
+			let target = cables[i].owner === this ? cables[i].target : cables[i].owner;
 			if(target === void 0)
 				continue;
 
-			menu.push({
-				title:"Disconnect "+target.node.title+`(${key} ~ ${target.name})`,
+			disconnect.deep.push({
+				title:target.node.title+`(${this.name} ~ ${target.name})`,
 				context:cables[i],
-				callback:Cable.prototype.destroy
+				callback:Cable.prototype.destroy,
+				hover:function(){
+					Blackprint.space.scope('cables').list.getElement(this).classList.add('highlight');
+
+					target.node.$el.addClass('highlight');
+				},
+				unhover:function(){
+					Blackprint.space.scope('cables').list.getElement(this).classList.remove('highlight');
+
+					target.node.$el.removeClass('highlight');
+				}
 			});
 		}
+
+		if(disconnect.deep.length !== 0)
+			menu.push(disconnect);
 
 		if(menu.length === 0)
 			return;

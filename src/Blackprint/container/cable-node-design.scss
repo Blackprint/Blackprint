@@ -26,6 +26,10 @@ sf-space[blackprint]{
 		transform-origin: top left;
 	}
 
+	.highlight{
+		filter: drop-shadow(0px 0px 15px white);
+	}
+
 	.cables{
 		position: absolute;
 		> svg{
@@ -60,6 +64,15 @@ sf-space[blackprint]{
 		    	circle{fill: white !important;}
 		    	path{stroke: white !important;}
 		    }
+
+		    g.highlight{
+		    	path{
+		    		stroke: white;
+		    	}
+		    	circle{
+		    		fill: white;
+		    	}
+		    }
 		}
 	}
 
@@ -75,6 +88,7 @@ sf-space[blackprint]{
 			position: absolute;
 			background: rgba(0,0,0,0.7);
 			backface-visibility: hidden;
+			transition: filter 0.3s ease-in-out;
 
 			.header{
 				display: block;

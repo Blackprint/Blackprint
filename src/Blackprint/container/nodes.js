@@ -17,9 +17,11 @@ Space.model('nodes', function(self, root){
 		function deep(obj, target){
 			for(var name in obj){
 				if(obj[name].constructor === Function){
-					target.push({title:name, args:[
-						strArr.length !== 0 ? strArr.join('/')+'/'+name : name
-					], callback:createNode});
+					target.push({
+						title:name,
+						args:[strArr.length !== 0 ? strArr.join('/')+'/'+name : name],
+						callback:createNode
+					});
 					continue;
 				}
 
