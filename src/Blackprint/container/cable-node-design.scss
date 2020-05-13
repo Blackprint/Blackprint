@@ -22,16 +22,6 @@ sf-space[blackprint]{
 	@include portType("Boolean", #ff3636);
 	@include portType("String", white);
 
-	.node textarea{
-		height: 20px;
-		margin: 0px 5px 0px 0px;
-		background: rgba(0, 0, 0, 0.63);
-		color: white;
-		border: none;
-		margin-left: -10px;
-		width: 60px;
-	}
-
 	sf-m[name="container"]{
 		transform-origin: top left;
 	}

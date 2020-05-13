@@ -51,7 +51,7 @@ class Node extends CustomEvent{
 				let port = localPorts[portName]; // Handled by registered node handler
 
 				// Determine type and add default value for each type
-				var type, def, isFunction;
+				var type, def, haveFeature;
 				if(typeof port === 'function'){
 					type = port;
 
@@ -67,24 +67,41 @@ class Node extends CustomEvent{
 					else if(type === Object)
 						def = {};
 					else if(type.constructor === Function){
-						isFunction = true;
+						if(type.portFeature !== void 0){
+							haveFeature = type.portFeature;
+							type = type.portType || Object;
+						}
+						else type = Function;
+
 						def = void 0;
 					}
 					else return console.error(type, "was unrecognized as an port data type");
 				}
-				else if(port === null)
+				else if(port === null){
 					type = {name:'Any'};
-				else type = port.constructor;
+					def = null;
+				}
+				else{
+					type = port.constructor;
+					def = port;
+				}
 
 				var linkedPort = node[which][portName] = new Port(portName, type, def, which, node);
+				if(haveFeature){
+					linkedPort.feature = haveFeature;
+					linkedPort._call = port;
+				}
 
 				// Set on the localPorts scope
-				if(isFunction)
-					localPorts[portName] = linkedPort.createLinker();
-				else
-					Object.defineProperty(localPorts, portName, linkedPort.createLinker());
+				if(type === Function){
+					if(which === 'outputs')
+						Object.defineProperty(localPorts, portName, {enumerable:true, writable:false, value:linkedPort.createLinker()});
+				}
+				else Object.defineProperty(localPorts, portName, linkedPort.createLinker());
 			}
 		});
+
+		Object.defineProperty(node, '_requsting', {writable:true, value:false});
 	}
 
 	// DragMove event handler
@@ -123,12 +140,8 @@ class Node extends CustomEvent{
 			}
 		}];
 
-		this._trigger('nodeMenu', {node:this, menu:menu});
+		this._trigger('node.menu', {node:this, menu:menu});
 		root('dropdown').show(menu, ev.clientX, ev.clientY);
-	}
-
-	run(){
-		console.error("The trigger handler doesn't have `run` method");
 	}
 }
 
