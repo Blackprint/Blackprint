@@ -26,6 +26,27 @@ class Cable{
 		Blackprint.space.scope('cables').list.push(this);
 	}
 
+	static visualizeFlow(cable){
+		var el = Blackprint.space.scope('cables').list.getElement(cable);
+		var className;
+
+		if(cable.owner.source === 'outputs'){
+			if(cable.head1[0] < cable.head2[0])
+				className = 'line-flow';
+			else className = 'line-flow-reverse';
+		}
+		else if(cable.owner.source === 'inputs'){
+			if(cable.head1[0] > cable.head2[0])
+				className = 'line-flow';
+			else className = 'line-flow-reverse';
+		}
+
+		el.classList.add(className);
+		setTimeout(function(){
+			el.classList.remove(className);
+		}, 1000);
+	}
+
 	destroy(){
 		// Remove from cable owner
 		if(this.owner){
