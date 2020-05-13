@@ -1,12 +1,14 @@
 ;(function(){
-var root = Blackprint.space.scope;
+
+// Private variable
 var container;
 
 // Run when all ready
 $(function(){
-	container = root('container');
+	container = Blackprint.space.scope('container');
 });
 
+// Private function
 function moveCables(node, e, which){
 	// Move the connected cables
 	for(var key in which){
@@ -27,7 +29,7 @@ function moveCables(node, e, which){
 	}
 }
 
-class Node extends CustomEvent{
+Blackprint.Node = class Node extends CustomEvent{
 	/*
 	x = 0;
 	y = 0;
@@ -120,7 +122,7 @@ class Node extends CustomEvent{
 			title:'Delete',
 			args:[this],
 			callback:function(node){
-				var list = root('nodes').list;
+				var list = Blackprint.space.scope('nodes').list;
 				var i = list.indexOf(node);
 
 				if(i === -1)
@@ -141,9 +143,8 @@ class Node extends CustomEvent{
 		}];
 
 		this._trigger('node.menu', {node:this, menu:menu});
-		root('dropdown').show(menu, ev.clientX, ev.clientY);
+		Blackprint.space.scope('dropdown').show(menu, ev.clientX, ev.clientY);
 	}
 }
 
-Blackprint.Node = Node;
 })();

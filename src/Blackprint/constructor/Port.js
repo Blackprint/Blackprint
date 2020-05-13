@@ -9,7 +9,7 @@ class Port{
 		// this.value;
 		this.default = def;
 
-		// this.feature = PortListener | PortValidator
+		// this.feature == PortListener | PortValidator
 	}
 
 	// Set for the linked port (Handle for ScarletsFrame)

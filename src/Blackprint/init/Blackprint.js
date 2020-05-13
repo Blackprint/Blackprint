@@ -1,7 +1,7 @@
 // Start private scope for Blackprint Module
 ;(function(){
 
-class Blackprint{
+var Blackprint = window.Blackprint = class Blackprint{
 	// Create new blackprint container
 	constructor(){
 		this.index = Blackprint.index++;
@@ -211,7 +211,6 @@ class Blackprint{
 	}
 }
 
-window.Blackprint = Blackprint;
 Blackprint.nodes = {};
 Blackprint.index = 0;
 Blackprint.settings = {};
