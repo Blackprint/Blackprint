@@ -30,7 +30,17 @@ require("scarletsframe-compiler")({
 
 				// Will be processed from the top to bottom
 				combine:[
+					// Start private wrapper from here
+					'example/src/init/init.js',
+
+					// Combine files from all directory recursively
 					'example/src/**/*.js',
+
+					// Remove this end wrapper from /**/* matches
+					'!example/src/init/end.js',
+
+					// End of wrapper
+					'example/src/init/end.js',
 				],
 			},
 			scss:{
@@ -56,24 +66,26 @@ require("scarletsframe-compiler")({
 				file:'dist/blackprint.min.js',
 				header:"/* Blackprint \n MIT Licensed */",
 				combine:[
-					// Start private scope from here
+					// Start private wrapper from here
 					'src/Blackprint/init/Blackprint.js',
 
-					// Import base class first
-					'src/Blackprint/extendable/CustomEvent.js',
-					'src/Blackprint/extendable/Node.js',
+					// Import classes first, or sf.component can't extend them
+					'src/Blackprint/nodes/extendable/CustomEvent.js',
+					'src/Blackprint/nodes/extendable/Node.js',
+					'src/Blackprint/nodes/extendable/*.js',
+					'src/Blackprint/constructor/*.js',
 
 					// Combine all files but not recursive
 					'src/Blackprint/*.js',
 
-					// Combine files from all directory recursively except in init folder
-					'src/Blackprint/!(init)*/*.js',
-
-					// End private scope for Blackprint
-					'src/Blackprint/init/end.js',
-
-					// Fix for gulp watcher
+					// Combine files from all directory recursively
 					'src/Blackprint/**/*.js',
+
+					// Remove this end wrapper from /**/* matches
+					'!src/Blackprint/init/end.js',
+
+					// End private wrapper for Blackprint
+					'src/Blackprint/init/end.js',
 				],
 			},
 			scss:{
