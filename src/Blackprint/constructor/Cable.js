@@ -26,10 +26,6 @@ class Cable{
 		Blackprint.space.scope('cables').list.push(this);
 	}
 
-	connectNode(port){
-
-	}
-
 	destroy(){
 		// Remove from cable owner
 		if(this.owner){
@@ -37,7 +33,7 @@ class Cable{
 			if(i !== -1)
 				this.owner.cables.splice(i, 1);
 
-			this.owner.node._trigger('cableDisconnected', this);
+			this.owner.node._trigger('cable.disconnect', this.target);
 		}
 
 		// Remove from connected target
@@ -46,7 +42,7 @@ class Cable{
 			if(i !== -1)
 				this.target.cables.splice(i, 1);
 
-			this.target.node._trigger('cableDisconnected', this);
+			this.target.node._trigger('cable.disconnect', this.owner);
 		}
 
 		var list = Blackprint.space.scope('cables').list;

@@ -2,24 +2,69 @@ class Port{
 	constructor(name, type, def, source, node){
 		this.name = name;
 		this.type = type;
-		this.def = def;
 		this.cables = [];
 		this.source = source;
 		this.node = node;
+
+		// this.value;
+		this.default = def;
+
+		// this.feature = PortListener | PortValidator
 	}
 
 	// Set for the linked port (Handle for ScarletsFrame)
 	// ex: linkedPort = node.outputs.portName
 	createLinker(){
 		var port = this;
+
+		// Only for outputs
+		if(this.type === Function)
+			return function(){
+				var cables = port.cables;
+				for (var i = 0; i < cables.length; i++) {
+					var target = cables[i].owner === port ? cables[i].target : cables[i].owner;
+					target.node.handle.inputs[target.name](port, cables[i]);
+				}
+			};
+
 		var prepare = {
+			enumerable:true,
 			get:function(){
-				if(port.value === void 0){
-					if(port.root === void 0)
+				// This port must use values from connected outputs
+				if(port.source === 'inputs'){
+					if(port.cables.length === 0)
 						return port.default;
 
-					// Run from root node and stop when reach this node
-					port.root(port);
+					// Flag current node is requesting value to other node
+					port.node._requsting = true;
+
+					// Return single data
+					if(port.cables.length === 1){
+						var target = port.cables[0].owner === port ? port.cables[0].target : port.cables[0].owner;
+
+						// Request the data first
+						if(target.node.handle.request)
+							target.node.handle.request(target, port.node);
+
+						port.node._requsting = false;
+						return target.value || target.default;
+					}
+
+					// Return multiple data as an array
+					var cables = port.cables;
+					var data = [];
+					for (var i = 0; i < cables.length; i++) {
+						var target = cables[i].owner === port ? cables[i].target : cables[i].owner;
+
+						// Request the data first
+						if(target.node.handle.request)
+							target.node.handle.request(target, port.node);
+
+						data.push(target.value || target.default);
+					}
+
+					port.node._requsting = false;
+					return data;
 				}
 
 				return port.value;
@@ -29,12 +74,39 @@ class Port{
 		// Can only obtain data when accessing input port
 		if(port.source !== 'inputs'){
 			prepare.set = function(val){
+				if(val === void 0){
+					port.value = port.default;
+					return;
+				}
+
+				// Data type validation
+				if(val.constructor !== port.type){
+					if(port.type === String || port.type === Number){
+						if(val.constructor === Number)
+							val = String(val);
+						else if(val.constructor === String){
+							if(isNaN(val) === true)
+								throw new Error(val + " is not a Number");
+
+							val = Number(val);
+						}
+						else throw new Error(JSON.stringify(val) + " can't be converted as a " + port.type.name);
+					}
+				}
+
 				port.value = val;
 
-				if(port.source === 'outputs' && port.cables.length !== 0){
-					port.cables
+				// Check all connected cables, if any node need to synchronize
+				var cables = port.cables;
+				for (var i = 0; i < cables.length; i++) {
+					var target = cables[i].owner === port ? cables[i].target : cables[i].owner;
+
+					if(target.feature === Blackprint.PortListener)
+						target._call(cables[i].owner === port ? cables[i].owner : cables[i].target, val);
+
+					if(target.node._requsting === false && target.node.handle.update)
+						target.node.handle.update(cables[i]);
 				}
-				// return port.value || port.default;
 			}
 		}
 
@@ -68,7 +140,7 @@ class Port{
 
 		// Default head index is "2" when creating new cable
 		Blackprint.space.scope('cables').cableHeadClicked(cable, e);
-		this.node._trigger('cableCreated', cable);
+		this.node._trigger('cable.created', cable);
 	}
 
 	connectCable(cable){
@@ -103,11 +175,12 @@ class Port{
 
 		// Put port reference to the cable
 		cable.target = this;
-		console.log('A cable was connected', this);
 
 		// Connect this cable into port's cable list
 		this.cables.push(cable);
-		this.node._trigger('cableConnected', cable);
+
+		this.node._trigger('cable.connect', cable);
+		cable.owner.node._trigger('cable.connect', cable, true);
 	}
 
 	// PointerOver event handler
@@ -127,7 +200,7 @@ class Port{
 
 	portRightClick(ev, key, port){
 		var menu = [];
-		this.node._trigger('portMenu', {key:key, port:port, menu:menu});
+		this.node._trigger('port.menu', {port:port, menu:menu});
 
 		var cables = port.cables;
 		for (var i = 0; i < cables.length; i++) {
@@ -148,12 +221,11 @@ class Port{
 		var pos = ev.target.getClientRects()[0];
 		Blackprint.space.scope('dropdown').show(menu, pos.x, pos.y);
 	}
-
-	disconnectCable(){
-
-	}
-
-	disconnectNode(){
-
-	}
 }
+
+$(function(){
+	Port.requestable = [
+		Blackprint.Function,
+		Blackprint.Node,
+	];
+});
