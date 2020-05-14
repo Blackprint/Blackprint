@@ -11,19 +11,21 @@
     <sf-m name="cables" class="cables" id="test">
 
       <!-- Put empty space event here, because this element filling the empty space -->
+      <!-- recalculatePath: ./container/cables.js -->
+      <!-- list: ./container/nodes.js -->
       <svg style="transform: translate(-{{space[0]}}, -{{space[1]}}px)"
         @contextmenu.stop="container.nodeScope.menu(event)"
         @pointerdown="container.moveContainer(event)"
       >
         <g sf-repeat-this="x in list" class="{{ x.type }} {{ x.valid ? '' : 'invalid' }}">
           <path
-              @contextmenu.stop.capture="cableMenu(x, event)"
+              @contextmenu.stop.capture="x.cableMenu(event)"
               d="M {{ recalculatePath(x) || x.head1[0] + ' ' + x.head1[1] }}
                  C {{ x.linePath }},
                    {{ recalculatePath(x) || x.head2[0] + ' ' + x.head2[1] }}"
           ></path>
           <circle
-              @pointerdown.capture.stop="cableHeadClicked(x, event)"
+              @pointerdown.capture.stop="x.cableHeadClicked(event)"
               transform="translate({{x.head2[0]}}, {{x.head2[1]}})"
           ></circle>
         </g>

@@ -1,0 +1,6 @@
+[submodule "intepreter-js"]
+	path = intepreter-js
+	url = https://github.com/Blackprint/intepreter-js
+[submodule "example"]
+	path = example
+	url = https://github.com/Blackprint/blackprint.github.io

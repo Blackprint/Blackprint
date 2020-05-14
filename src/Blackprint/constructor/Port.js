@@ -26,6 +26,9 @@ class Port{
 					if(target === void 0)
 						continue;
 
+					if(Blackprint.settings.visualizeFlow)
+						Cable.visualizeFlow(cables[i]);
+
 					target.node.handle.inputs[target.name](port, cables[i]);
 				}
 			};
@@ -53,7 +56,7 @@ class Port{
 								Cable.visualizeFlow(port.cables[0]);
 						}
 
-						port.node._requesting = false;
+						port.node._requesting = void 0;
 						return target.value || target.default;
 					}
 
@@ -74,7 +77,7 @@ class Port{
 						data.push(target.value || target.default);
 					}
 
-					port.node._requesting = false;
+					port.node._requesting = void 0;
 					return data;
 				}
 
@@ -121,7 +124,7 @@ class Port{
 							Cable.visualizeFlow(cables[i]);
 					}
 
-					if(target.node._requesting === false && target.node.handle.update){
+					if(target.node._requesting === void 0 && target.node.handle.update){
 						target.node.handle.update(cables[i]);
 
 						if(Blackprint.settings.visualizeFlow)
@@ -160,7 +163,7 @@ class Port{
 			return cable;
 
 		// Default head index is "2" when creating new cable
-		Blackprint.space.scope('cables').cableHeadClicked(cable, e);
+		cable.cableHeadClicked(e);
 		this.node._trigger('cable.created', cable);
 	}
 
