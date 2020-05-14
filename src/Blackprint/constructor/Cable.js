@@ -1,5 +1,7 @@
-class Cable{
-	constructor(obj){
+class Cable extends Blackprint.Interpreter.Cable{
+	constructor(obj, port){
+		super(port);
+
 		var container = Blackprint.space.scope('container');
 		var Ofst = container.offset;
 
@@ -13,30 +15,26 @@ class Cable{
 			(obj.y - container.pos.y) / container.scale + (Ofst.y + -Ofst.y/container.scale)
 		];
 
-		this.type = obj.type;
-		this.source = obj.source;
+		this.type = !port.type ? 'Any' : port.type.name
+		this.source = port.source;
 		this.valid = true;
 		this.linePath = '0 0 0 0';
-
-		// Cable connection, this will save the port
-		this.owner = void 0; // head1
-		this.target = void 0; // head2
 
 		// Push to cable list
 		Blackprint.space.scope('cables').list.push(this);
 	}
 
-	static visualizeFlow(cable){
-		var el = Blackprint.space.scope('cables').list.getElement(cable);
+	visualizeFlow(){
+		var el = Blackprint.space.scope('cables').list.getElement(this);
 		var className;
 
-		if(cable.owner.source === 'outputs'){
-			if(cable.head1[0] < cable.head2[0])
+		if(this.owner.source === 'outputs'){
+			if(this.head1[0] < this.head2[0])
 				className = 'line-flow';
 			else className = 'line-flow-reverse';
 		}
-		else if(cable.owner.source === 'inputs'){
-			if(cable.head1[0] > cable.head2[0])
+		else if(this.owner.source === 'inputs'){
+			if(this.head1[0] > this.head2[0])
 				className = 'line-flow';
 			else className = 'line-flow-reverse';
 		}

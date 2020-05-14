@@ -1,5 +1,6 @@
 // Start private scope for Blackprint Module
 ;(function(){
+var backup = window.Blackprint;
 
 var Blackprint = window.Blackprint = class Blackprint{
 	// Create new blackprint container
@@ -22,11 +23,11 @@ var Blackprint = window.Blackprint = class Blackprint{
 	// - handle = Blackprint binding
 	// - node = ScarletsFrame binding <~> element
 	registerNode(namespace, func){
-		_.set(Blackprint.nodes, namespace.split('/'), func);
+		deepProperty(Blackprint.nodes, namespace.split('/'), func);
 	}
 
 	// Register new node type
-	registerElement(nodeType, options, func){
+	registerInterface(nodeType, options, func){
 		if(/[^\w\-]/.test(nodeType) !== false)
 			return console.error("nodeType can only contain character a-zA-Z0-9 and dashes");
 
@@ -58,14 +59,12 @@ var Blackprint = window.Blackprint = class Blackprint{
 
 			// Every nodes that using this namespace name
 			for (var a = 0; a < nodes.length; a++)
-				inserted[nodes[a].id] = this.createNode(namespace, {
-					x:nodes[a].x,
-					y:nodes[a].y
-				}, handlers);
+				inserted[nodes[a].id] = this.createNode(namespace,
+					Object.assign({
+						x:nodes[a].x,
+						y:nodes[a].y
+					}, nodes[a].options), handlers);
 		}
-
-		// Get cable model
-		var cables = Blackprint.space.scope('cables');
 
 		// Create cable only from outputs and properties
 		// > Important to be separated from above, so the cable can reference to loaded nodes
@@ -180,7 +179,7 @@ var Blackprint = window.Blackprint = class Blackprint{
 	// Create new node that will be inserted to the container
 	// @return node scope
 	createNode(namespace, options, handlers){
-		var func = _.get(Blackprint.nodes, namespace.split('/'));
+		var func = deepProperty(Blackprint.nodes, namespace.split('/'));
 		if(func === void 0)
 			return console.error('Node for', namespace, "was not found, maybe .registerNode() haven't being called?") && void 0;
 
@@ -192,8 +191,19 @@ var Blackprint = window.Blackprint = class Blackprint{
 		// Call the registered func (from this.registerNode)
 		func(handle, node);
 
+		if(Blackprint.Interpreter.Node === void 0){
+			throw new Error("Blackprint.Interpreter was not found, please load it first before creating new node");
+		}
+
 		// Create the linker between the handler and the node
-		Blackprint.Node.prepare(handle, node);
+		Blackprint.Interpreter.Node.prepare(handle, node);
+
+		// Replace port prototype (intepreter port -> visual port)
+		['inputs', 'outputs', 'properties'].forEach(function(which){
+			var localPorts = node[which];
+			for(var portName in localPorts)
+				Object.setPrototypeOf(localPorts[portName], Port.prototype);
+		});
 
 		// Assign the options if exist
 		if(options !== void 0)
@@ -209,6 +219,12 @@ var Blackprint = window.Blackprint = class Blackprint{
 
 		return node;
 	}
+}
+
+// Combine other plugin if exist
+if(backup !== void 0){
+	Object.assign(Blackprint, backup);
+	backup = void 0;
 }
 
 Blackprint.nodes = {};
