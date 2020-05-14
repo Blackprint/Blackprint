@@ -70,7 +70,6 @@ require("scarletsframe-compiler")({
 					'src/Blackprint/init/Blackprint.js',
 
 					// Import classes first, or sf.component can't extend them
-					'src/Blackprint/nodes/extendable/CustomEvent.js',
 					'src/Blackprint/nodes/extendable/Node.js',
 					'src/Blackprint/nodes/extendable/*.js',
 					'src/Blackprint/constructor/*.js',
@@ -98,6 +97,30 @@ require("scarletsframe-compiler")({
 				header:"/* Blackprint \n MIT Licensed */",
 				prefix:'Blackprint',
 				combine:['src/Blackprint/**/*.html'],
+			}
+		},
+
+		// Compiler for Blackprint Interpreter
+		'interpreter-js':{
+			versioning:'example/index.html',
+			stripURL:'example/',
+
+			js:{
+				file:'dist/interpreter.min.js',
+				header:"/* Blackprint \n MIT Licensed */",
+				combine:[
+					// Start private wrapper
+					'interpreter-js/src/init/begin.js',
+
+					// Combine files from all directory recursively
+					'interpreter-js/src/**/*.js',
+
+					// Remove this end wrapper from /**/* matches
+					'!interpreter-js/src/init/end.js',
+
+					// End private wrapper
+					'interpreter-js/src/init/end.js',
+				],
 			}
 		}
 	},
