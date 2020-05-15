@@ -20,9 +20,10 @@ There are styles, template, and scripts that need to be loaded.
 
 ```html
 <!-- Must be loaded first -->
-<script src="https://cdn.jsdelivr.net/gh/blackprint/interpreter-js/dist/interpreter.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blackprint-interpreter@latest/dist/interpreter.min.js"></script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/blackprint/blackprint/dist/blackprint.min.css">
+<script src="https://cdn.jsdelivr.net/npm/scarletsframe@0.28.5/dist/scarletsframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/blackprint/blackprint/dist/blackprint.html.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/blackprint/blackprint/dist/blackprint.min.js"></script>
 ```
