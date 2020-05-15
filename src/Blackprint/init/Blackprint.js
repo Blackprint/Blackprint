@@ -70,12 +70,17 @@ Blackprint.Sketch = class Sketch{
 			var nodes = json[namespace];
 
 			// Every nodes that using this namespace name
-			for (var a = 0; a < nodes.length; a++)
-				inserted[nodes[a].id] = this.createNode(namespace,
-					Object.assign({
-						x:nodes[a].x,
-						y:nodes[a].y
-					}, nodes[a].options), handlers);
+			for (var a = 0; a < nodes.length; a++){
+				var nodeOpt = {
+					x:nodes[a].x,
+					y:nodes[a].y
+				};
+
+				if(nodes[a].options !== void 0)
+					nodeOpt.options = nodes[a].options;
+
+				inserted[nodes[a].id] = this.createNode(namespace, nodeOpt, handlers);
+			}
 		}
 
 		// Create cable only from outputs and properties
@@ -209,13 +214,13 @@ Blackprint.Sketch = class Sketch{
 		var handle = {}, node = {type:'default', title:'No Title', description:''};
 		node.handle = handle;
 		node.namespace = namespace;
+		node.importing = true;
 
 		// Call the registered func (from this.registerNode)
 		func(handle, node);
 
-		if(Blackprint.Interpreter.Node === void 0){
+		if(Blackprint.Interpreter.Node === void 0)
 			throw new Error("Blackprint.Interpreter was not found, please load it first before creating new node");
-		}
 
 		// Create the linker between the handler and the node
 		Blackprint.Interpreter.Node.prepare(handle, node);
@@ -227,12 +232,25 @@ Blackprint.Sketch = class Sketch{
 				Object.setPrototypeOf(localPorts[portName], Port.prototype);
 		});
 
-		// Assign the options if exist
+		Blackprint.Node.prepare(handle, node);
+
+		var savedOpt = options.options;
+		delete options.options;
+
+		// Assign the node options if exist
 		if(options !== void 0)
 			Object.assign(node, options);
 
 		// Node is become the component scope
+		// equal to calling registerInterface's registered function
 		this.scope('nodes').list.push(node);
+
+		// Assign the saved options if exist
+		if(savedOpt !== void 0)
+			Object.assign(node.options, savedOpt);
+
+		node.importing = false;
+		handle.imported && handle.imported();
 
 		if(handlers !== void 0)
 			handlers.push(handle);

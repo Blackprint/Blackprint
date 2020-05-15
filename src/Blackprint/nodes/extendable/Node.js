@@ -39,6 +39,12 @@ Blackprint.Node = class Node extends Blackprint.Interpreter.CustomEvent{
 	properties = {};
 	*/
 
+	static prepare(handle, node){
+		// Default Node properties
+		node.x = 0;
+		node.y = 0;
+	}
+
 	// DragMove event handler
 	moveNode(e){
 		this.x += e.movementX / container.scale;
