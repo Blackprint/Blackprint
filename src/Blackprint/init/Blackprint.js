@@ -137,14 +137,18 @@ Blackprint.Sketch = class Sketch{
 		return inserted;
 	}
 
-	exportJSON(){
+	exportJSON(options){
 		var nodes = Blackprint.space.scope('nodes').list;
 		var json = {};
+		var exclude = options.exclude || [];
 
 		for (var i = 0; i < nodes.length; i++) {
 			var node = nodes[i];
-			if(json[node._namespace] === void 0)
-				json[node._namespace] = [];
+			if(exclude.includes(node.namespace))
+				continue;
+
+			if(json[node.namespace] === void 0)
+				json[node.namespace] = [];
 
 			var data = {
 				id:i,
@@ -172,9 +176,13 @@ Blackprint.Sketch = class Sketch{
 						if(target === void 0)
 							continue;
 
+						var id = nodes.indexOf(target.node);
+						if(exclude.includes(nodes[id].namespace))
+							continue;
+
 						haveValue = true;
 						outputs[name].push({
-							id:nodes.indexOf(target.node),
+							id:id,
 							name:target.name
 						});
 					}
@@ -184,7 +192,7 @@ Blackprint.Sketch = class Sketch{
 					delete data.outputs;
 			}
 
-			json[node._namespace].push(data);
+			json[node.namespace].push(data);
 		}
 
 		return JSON.stringify(json);
@@ -200,7 +208,7 @@ Blackprint.Sketch = class Sketch{
 		// Processing scope is different with node scope
 		var handle = {}, node = {type:'default', title:'No Title', description:''};
 		node.handle = handle;
-		node._namespace = namespace;
+		node.namespace = namespace;
 
 		// Call the registered func (from this.registerNode)
 		func(handle, node);

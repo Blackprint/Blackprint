@@ -17,9 +17,8 @@
         @contextmenu.stop="container.nodeScope.menu(event)"
         @pointerdown="container.moveContainer(event)"
       >
-        <g sf-repeat-this="x in list" class="{{ x.type }} {{ x.valid ? '' : 'invalid' }}">
+        <g sf-repeat-this="x in list" class="{{ x.type }} {{ x.valid ? '' : 'invalid' }}" @contextmenu.stop.capture="x.cableMenu(event)">
           <path
-              @contextmenu.stop.capture="x.cableMenu(event)"
               d="M {{ recalculatePath(x) || x.head1[0] + ' ' + x.head1[1] }}
                  C {{ x.linePath }},
                    {{ recalculatePath(x) || x.head2[0] + ' ' + x.head2[1] }}"

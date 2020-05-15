@@ -96,7 +96,7 @@ class Cable extends Blackprint.Interpreter.Cable{
 		ev.stopPropagation();
 
 		Blackprint.space.scope('dropdown').show([{
-			title:"Disconnect",
+			title:this.target ? "Disconnect" : "Delete",
 			context:this,
 			callback:Cable.prototype.destroy,
 			hover:function(){
