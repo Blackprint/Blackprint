@@ -8,12 +8,12 @@
     <a href='https://github.com/Blackprint/Blackprint/blob/master/LICENSE'><img src='https://img.shields.io/badge/License-MIT-brightgreen.svg' height='20'></a>
 </p>
 
-This library built using ScarletsFrame to maintain it's [performance](https://krausest.github.io/js-framework-benchmark/current.html) and [simplicity](https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example). If you want to start new project it's better to use the [template](https://github.com/StefansArya/scarletsframe-default) because it also have the [compiler](https://github.com/StefansArya/scarletsframe-compiler).
+This library built using ScarletsFrame to maintain it's [performance](https://krausest.github.io/js-framework-benchmark/current.html) and [simplicity](https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example). If you want to start new project with the framework, it's better to use the [template](https://github.com/StefansArya/scarletsframe-default) because it also have the [compiler](https://github.com/StefansArya/scarletsframe-compiler).
 
 ## Using on your project
 This library is depend on ScarletsFrame to control every elements, template, namespace, and event listener. Please follow [this link](https://github.com/ScarletsFiction/ScarletsFrame/wiki/Installation) to get the minified js link.
 
-To use it on NodeJS or browserless implementation, [interpreter-js](https://github.com/Blackprint/interpreter-js) is still being developed. If you want and can help writing interpreter for other programming language like Python, Golang, or C, please fill an issue.
+To use it on NodeJS, Deno, or other JavaScript runtime, [interpreter-js](https://github.com/Blackprint/interpreter-js) is still being developed. If you want and can help writing an interpreter for other programming language like Rust, Python, Golang, PHP, or C, please fill an issue.
 
 ### Load Blackprint required files
 There are styles, template, and scripts that need to be loaded.
@@ -29,8 +29,7 @@ There are styles, template, and scripts that need to be loaded.
 ```
 
 ## Documentation
-> Warning: This project haven't reach it stable version (semantic versioning at v1.0.0)<br>
-> And the file structure still being modified for supporting standalone interpreter.
+> Warning: This project haven't reach it stable version<br>
 > If you use this on your project please put a link or information to this repository.<br>
 > Don't be too stingy to share..<br>
 > Maybe someone skilled like you interested to improve this open source project.<br>
@@ -38,7 +37,7 @@ There are styles, template, and scripts that need to be loaded.
 
 ```js
 // Create Blackprint, `sketch` in this documentation will refer to this
-var sketch = new Blackprint();
+var sketch = new Blackprint.Sketch();
 
 // Get the container and attach it into the DOM (If you're not using sf-views for routing)
 document.body.appendChild(sketch.cloneContainer());
@@ -260,6 +259,17 @@ Blackprint does expose model and components through `sketch.scope('modelName')`.
 ```js
 var nodeList = sketch.scope('nodes').list;
 var connectionList = sketch.scope('cables').list;
+```
+
+### Blackprint options
+Currently the available options still limited
+
+|name|value|
+|---|---|
+|visualizeFlow|`true/false`|
+
+```js
+sketch.settings(name, value);
 ```
 
 ### Export Blackprint nodes
