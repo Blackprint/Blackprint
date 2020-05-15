@@ -1,8 +1,20 @@
 // Start private scope for Blackprint Module
-;(function(){
-var backup = window.Blackprint;
+;(function(global, factory){
+  if(typeof exports === 'object' && typeof module !== 'undefined')
+  	return module.exports = factory(global);
+  factory(global);
+}(typeof window !== "undefined" ? window : this, (function(window){
 
-var Blackprint = window.Blackprint = class Blackprint{
+if(window.Blackprint === void 0)
+	window.Blackprint = {
+		settings:function(which, val){
+			Blackprint.settings[which] = val;
+		}
+	};
+
+var Blackprint = window.Blackprint;
+
+Blackprint.Sketch = class Sketch{
 	// Create new blackprint container
 	constructor(){
 		this.index = Blackprint.index++;
@@ -140,6 +152,9 @@ var Blackprint = window.Blackprint = class Blackprint{
 				y:node.y,
 			};
 
+			if(node.options !== void 0)
+				data.options = node.options;
+
 			if(node.outputs !== void 0){
 				var outputs = data.outputs = {};
 				var outputs_ = node.outputs;
@@ -172,7 +187,6 @@ var Blackprint = window.Blackprint = class Blackprint{
 			json[node._namespace].push(data);
 		}
 
-		console.log(nodes);
 		return JSON.stringify(json);
 	}
 
@@ -221,15 +235,8 @@ var Blackprint = window.Blackprint = class Blackprint{
 	}
 }
 
-// Combine other plugin if exist
-if(backup !== void 0){
-	Object.assign(Blackprint, backup);
-	backup = void 0;
-}
-
 Blackprint.nodes = {};
 Blackprint.index = 0;
-Blackprint.settings = {};
 Blackprint.template = {
 	outputPort:'Blackprint/nodes/template/output-port.html'
 };
