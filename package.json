@@ -1,6 +1,6 @@
 {
   "name": "Blackprint",
-  "version":"0.0.1",
+  "version":"0.0.2",
   "scripts": {
   	"start":"gulp",
   	"compile":"gulp compile"
@@ -8,6 +8,6 @@
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/preset-env": "^7.7.1",
-    "scarletsframe-compiler":"^0.0.9"
+    "scarletsframe-compiler":"^0.0.10"
   }
 }

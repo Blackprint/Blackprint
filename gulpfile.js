@@ -17,6 +17,7 @@ require("scarletsframe-compiler")({
 
 	// Optional if you want to remove source map on production mode
 	includeSourceMap: process.env.production || true,
+	timestampSourceMap: false,
 
 	// ===== Modify me, add slash as last character if it's directory =====
 	path:{

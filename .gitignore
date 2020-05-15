@@ -5,8 +5,7 @@ node_modules/
 /pnpm-lock.yaml
 /.phpintel/
 *.lock
-*.map
 example/
 interpreter-js/
 zef/
-dist/interpreter.min.js
+dist/interpreter.min.*
