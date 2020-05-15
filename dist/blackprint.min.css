@@ -29,14 +29,10 @@ sf-space[blackprint] {
     stroke: white; }
   sf-space[blackprint] .nodes .node .ports.String > .port {
     background: white; }
-  sf-space[blackprint] .node textarea {
-    height: 20px;
-    margin: 0px 5px 0px 0px;
-    background: rgba(0, 0, 0, 0.63);
-    color: white;
-    border: none;
-    margin-left: -10px;
-    width: 60px; }
+  sf-space[blackprint] sf-m[name="container"] {
+    transform-origin: top left; }
+  sf-space[blackprint] .highlight {
+    filter: drop-shadow(0px 0px 15px white); }
   sf-space[blackprint] .cables {
     position: absolute; }
     sf-space[blackprint] .cables > svg {
@@ -54,16 +50,24 @@ sf-space[blackprint] {
         stroke: orange;
         stroke-width: 3;
         fill: none; }
-      sf-space[blackprint] .cables > svg g.invalid circle {
+      sf-space[blackprint] .cables > svg .invalid circle {
         fill: red !important;
         opacity: 0.6; }
-      sf-space[blackprint] .cables > svg g.invalid path {
+      sf-space[blackprint] .cables > svg .invalid path {
         stroke: red !important;
         opacity: 0.6; }
       sf-space[blackprint] .cables > svg g:hover circle {
         fill: white !important; }
       sf-space[blackprint] .cables > svg g:hover path {
         stroke: white !important; }
+      sf-space[blackprint] .cables > svg .highlight path {
+        stroke: white; }
+      sf-space[blackprint] .cables > svg .highlight circle {
+        fill: white; }
+      sf-space[blackprint] .cables > svg g.line-flow path {
+        stroke: url(#bp-pathline); }
+      sf-space[blackprint] .cables > svg g.line-flow-reverse path {
+        stroke: url(#bp-pathline-reverse); }
   sf-space[blackprint] .nodes {
     position: unset; }
     sf-space[blackprint] .nodes .node {
@@ -75,7 +79,8 @@ sf-space[blackprint] {
       box-shadow: 0 0 5px black;
       position: absolute;
       background: rgba(0, 0, 0, 0.7);
-      backface-visibility: hidden; }
+      backface-visibility: hidden;
+      transition: filter 0.3s ease-in-out; }
       sf-space[blackprint] .nodes .node .header {
         display: block;
         text-align: left;
@@ -93,35 +98,29 @@ sf-space[blackprint] {
       sf-space[blackprint] .nodes .node .ports .port {
         z-index: 200;
         background: white;
-        min-height: 10px;
-        min-width: 10px;
+        height: 10px;
+        width: 10px;
         border-radius: 100px;
         border: 1px solid black;
         box-shadow: 0 0 5px black; }
-      sf-space[blackprint] .nodes .node .execution {
-        height: 20px;
-        margin-bottom: 5px; }
-        sf-space[blackprint] .nodes .node .execution.in {
-          left: 3px;
-          display: flex; }
-          sf-space[blackprint] .nodes .node .execution.in .name {
-            margin-left: 5px; }
-        sf-space[blackprint] .nodes .node .execution.out {
-          display: inline-flex;
-          right: 0px; }
-          sf-space[blackprint] .nodes .node .execution.out .name {
-            margin-right: 5px; }
-        sf-space[blackprint] .nodes .node .execution .name {
+        sf-space[blackprint] .nodes .node .ports .port.event {
+          border-radius: 2px;
+          transform: rotate(45deg) skew(10deg, 10deg); }
+      sf-space[blackprint] .nodes .node .ports.Function {
+        height: 20px; }
+        sf-space[blackprint] .nodes .node .ports.Function .name {
           line-height: 20px; }
-        sf-space[blackprint] .nodes .node .execution .port {
-          background: url(/assets/img/icon/exec-flow.png?4);
+        sf-space[blackprint] .nodes .node .ports.Function .port {
+          background: url("/assets/img/icon/exec-flow.png?4");
           background-size: 20px;
           width: 20px;
           box-shadow: none;
           height: 20px;
           border: none; }
-      sf-space[blackprint] .nodes .node .output .ports > div, sf-space[blackprint] .nodes .node .input .ports > div {
-        display: inline-block; }
+      sf-space[blackprint] .nodes .node .output, sf-space[blackprint] .nodes .node .input {
+        margin-top: 1px; }
+        sf-space[blackprint] .nodes .node .output .ports > div, sf-space[blackprint] .nodes .node .input .ports > div {
+          display: inline-block; }
       sf-space[blackprint] .nodes .node .left-port {
         float: left; }
       sf-space[blackprint] .nodes .node .right-port {
@@ -132,9 +131,17 @@ sf-space[blackprint] {
         margin-right: 5px; }
         sf-space[blackprint] .nodes .node .output .name {
           text-align: right; }
+        sf-space[blackprint] .nodes .node .output .Function .port {
+          float: right;
+          margin-left: 2px;
+          margin-right: -5px; }
       sf-space[blackprint] .nodes .node .input {
         padding-right: 20px;
         margin-left: 5px; }
+        sf-space[blackprint] .nodes .node .input .Function .port {
+          float: left;
+          margin-left: -2px;
+          margin-right: 4px; }
       sf-space[blackprint] .nodes .node .property {
         display: flex;
         justify-content: center;
@@ -146,4 +153,25 @@ sf-space[blackprint] {
           sf-space[blackprint] .nodes .node .property .ports .port {
             margin: 0 auto; }
 
-/*# sourceMappingURL=blackprint.min.1583848285735.css.map */
+.bp-dropdown-menu {
+  margin-top: 7px;
+  background-color: rgba(255, 255, 255, 0.96);
+  box-shadow: 1px 1px 11px 3px black;
+  border: inherit;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  padding: 0;
+  border-radius: 3px;
+  overflow: hidden; }
+  .bp-dropdown-menu li {
+    vertical-align: baseline;
+    display: inherit !important;
+    padding: 3px 8px; }
+    .bp-dropdown-menu li:hover {
+      background: lightgray; }
+  .bp-dropdown-menu a {
+    cursor: pointer; }
+
+/*# sourceMappingURL=blackprint.min.1589404532542.css.map */

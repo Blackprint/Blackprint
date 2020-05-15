@@ -9,3 +9,4 @@ node_modules/
 example/
 interpreter-js/
 zef/
+dist/interpreter.min.js
