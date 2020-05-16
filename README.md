@@ -13,7 +13,11 @@ This library built using ScarletsFrame to maintain it's [performance](https://kr
 ## Using on your project
 This library is depend on ScarletsFrame to control every elements, template, namespace, and event listener. Please follow [this link](https://github.com/ScarletsFiction/ScarletsFrame/wiki/Installation) to get the minified js link.
 
-To use it on NodeJS, Deno, or other JavaScript runtime, [interpreter-js](https://github.com/Blackprint/interpreter-js) is still being developed. If you want and can help writing an interpreter for other programming language like Rust, Python, Golang, PHP, or C, please fill an issue.
+To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSON and use [interpreter-js](https://github.com/Blackprint/interpreter-js#example). If you want and can help writing an interpreter for other programming language like Rust, Python, Golang, PHP, or C, please fill an issue.
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/11073373/82104644-e9d5e900-9741-11ea-9689-fc01ddfa81ab.gif">
+</p>
 
 ### Load Blackprint required files
 There are styles, template, and scripts that need to be loaded.
