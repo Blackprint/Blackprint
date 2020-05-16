@@ -122,19 +122,23 @@ sketch.registerNode('math/multiply', function(handle, node){
 ```
 
 ### Reserved handler property
-|property|description|
+`handle` here is the Blackprint flow handler from the example above.
+
+|Property|Description|
 |---|---|
-|inputs|Input port registration|
-|outputs|Output port registration|
-|properties|Property port registration `Still draft feature`|
+|inputs|An array of input port registration|
+|outputs|An array of output port registration|
+|properties|An array of node property registration `Still draft feature`|
+|importing|A boolean indicating if this node is being imported/created|
 
 Below are reserved property that filled with function/callback
 
-|property|arguments|description|
-|---|---|
+|Property|Arguments|Description|
+|---|---|---|
 |init|`()`|Callback function to be run after the handle and the node was initialized|
 |request|`(targetPort, sourceNode)`|Callback when other node's input port are requesting current node's output value|
 |update|`(Cable)`|Callback when current input value are updated from the other node's output port|
+|imported|()|`Deprecated` use init instead, this is a callback after node was created|
 
 For the detailed example you can see from [this repository](https://github.com/Blackprint/blackprint.github.io/blob/master/src/js/register-handler.js).
 
@@ -194,6 +198,7 @@ To register a callback for an event you need to call `node.on('event.name', func
 |port.menu|`({port:Port, menu:DropDowns})`|Trigger when port menu is going to be created|
 |node.menu|`({node:Node, menu:DropDowns})`|Trigger when node menu is going to be created|
 
+Arguments on the table above with `{...}` is a single object.<br>
 `DropDowns` is an array, and you can push a callback or nested menu inside it.
 
 ```js
