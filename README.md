@@ -13,7 +13,7 @@ This library built using ScarletsFrame to maintain it's [performance](https://kr
 ## Using on your project
 This library is depend on ScarletsFrame to control every elements, template, namespace, and event listener. Please follow [this link](https://github.com/ScarletsFiction/ScarletsFrame/wiki/Installation) to get the minified js link.
 
-To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSON and use [interpreter-js](https://github.com/Blackprint/interpreter-js#example). If you want and can help writing an interpreter for other programming language like Rust, Python, Golang, PHP, or C, please fill an issue.
+To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSON and use [interpreter-js](https://github.com/Blackprint/interpreter-js#example). If you want and can help writing an interpreter for other programming language like Rust, Python, PHP, or C, please fill an issue.
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/11073373/82104644-e9d5e900-9741-11ea-9689-fc01ddfa81ab.gif">
@@ -135,10 +135,10 @@ Below are reserved property that filled with function/callback
 
 |Property|Arguments|Description|
 |---|---|---|
-|init|`()`|Callback function to be run after the handle and the node was initialized|
+|init|`()`|Callback function to be run after current handle and all node was initialized|
 |request|`(targetPort, sourceNode)`|Callback when other node's input port are requesting current node's output value|
 |update|`(Cable)`|Callback when current input value are updated from the other node's output port|
-|imported|()|`Deprecated` use init instead, this is a callback after node was created|
+|imported|()|This is a callback after node was created|
 
 For the detailed example you can see from [this repository](https://github.com/Blackprint/blackprint.github.io/blob/master/src/js/register-handler.js).
 
