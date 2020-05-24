@@ -39,11 +39,18 @@ class Cable extends Blackprint.Interpreter.Cable{
 			else className = 'line-flow-reverse';
 		}
 
-		el.classList.add(className);
+		if(this._timer === void 0)
+			Blackprint.space.scope('container').showCableAnim();
 
+		el.classList.add(className);
 		clearTimeout(this._timer);
+
+		var that = this;
 		this._timer = setTimeout(function(){
+			that._timer = void 0;
+
 			el.classList.remove(className);
+			Blackprint.space.scope('container').hideCableAnim();
 		}, 1000);
 	}
 
