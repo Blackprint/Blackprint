@@ -10,8 +10,6 @@ Space.model('nodes', function(self, root){
 		ev.preventDefault();
 		menuEv = ev;
 
-		var namespaces = Blackprint.nodes;
-
 		var menu = [];
 		var strArr = [];
 		function deep(obj, target){
@@ -34,7 +32,7 @@ Space.model('nodes', function(self, root){
 			}
 		}
 
-		deep(namespaces, menu);
+		deep(Blackprint.availableNode, menu);
 		root('dropdown').show(menu, ev.clientX, ev.clientY);
 	}
 });

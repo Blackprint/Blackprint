@@ -7,13 +7,16 @@ Space.component('drop-down', {template:"Blackprint/container/drop-down.html"}, f
 
 	var currentDeepLevel;
 	self.init = function(){
-		var elem = self.$el[0].firstElementChild;
+		// Check position when the element rendered
+		requestAnimationFrame(function(){
+			var elem = self.$el[0].firstElementChild;
 
-		if(self.x + elem.offsetWidth > window.innerWidth)
-			self.x -= elem.offsetWidth;
+			if(self.x + elem.offsetWidth > window.innerWidth)
+				self.x -= elem.offsetWidth;
 
-		if(self.y + elem.offsetHeight > window.innerHeight)
-			self.y -= elem.offsetHeight;
+			if(self.y + elem.offsetHeight > window.innerHeight)
+				self.y -= elem.offsetHeight;
+		});
 
 		self.visible = true;
 
