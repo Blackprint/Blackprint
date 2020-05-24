@@ -40,7 +40,9 @@ class Cable extends Blackprint.Interpreter.Cable{
 		}
 
 		el.classList.add(className);
-		setTimeout(function(){
+
+		clearTimeout(this._timer);
+		this._timer = setTimeout(function(){
 			el.classList.remove(className);
 		}, 1000);
 	}
