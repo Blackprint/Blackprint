@@ -151,8 +151,11 @@ Blackprint.Sketch = class Sketch{
 				y: Math.round(node.y),
 			};
 
-			if(node.options !== void 0)
-				data.options = node.options;
+			if(node.options !== void 0){
+				data.options = {};
+
+				deepCopy(data.options, node.options);
+			}
 
 			if(node.outputs !== void 0){
 				var outputs = data.outputs = {};
@@ -191,6 +194,11 @@ Blackprint.Sketch = class Sketch{
 		}
 
 		return JSON.stringify(json);
+	}
+
+	clearNodes(){
+		sketch.scope('nodes').list.splice(0);
+		sketch.scope('cables').list.splice(0);
 	}
 
 	// Create new node that will be inserted to the container
