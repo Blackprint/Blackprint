@@ -244,13 +244,10 @@ Blackprint.Sketch = class Sketch{
 		// Node is become the component scope
 		// equal to calling registerInterface's registered function
 		this.scope('nodes').list.push(node);
-
-		// Assign the saved options if exist
-		if(savedOpt !== void 0)
-			Object.assign(node.options, savedOpt);
-
 		node.importing = false;
-		handle.imported && handle.imported();
+
+		node.imported && node.imported(savedOpt);
+		handle.imported && handle.imported(savedOpt);
 
 		if(handlers !== void 0)
 			handlers.push(handle);
