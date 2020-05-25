@@ -2,7 +2,7 @@
   <div class="ports {{ val.type.name }}" sf-repeat-this="key, val in inputs">
     <div class="port"
     	@contextmenu.stop="val.portRightClick(event)"
-        @pointerdown.left="val.createCable(event)"
+        @pointerdown.left.stop="val.createCable(event)"
         @pointerup.left="val.connectCable()"
         @pointerover="val.portHovered(event)"
         @pointerout="val.portUnhovered(event)"

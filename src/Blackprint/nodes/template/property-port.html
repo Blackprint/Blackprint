@@ -3,7 +3,7 @@
     <div class="name">{{ key }}</div>
     <div class="port"
         @contextmenu.stop="val.portRightClick(event)"
-        @pointerdown.left="val.createCable(event)"
+        @pointerdown.left.stop="val.createCable(event)"
         @pointerup.left="val.connectCable()"
         @pointerover="val.portHovered(event)"
         @pointerout="val.portUnhovered(event)"

@@ -114,11 +114,20 @@ sf-space[blackprint]{
 					padding-right: 5px;
 					font-style: italic;
 				}
+
+				&.small{
+				    position: absolute;
+				    height: 100%;
+				}
 			}
 
 			.content{
-				display: flow-root;
+				display: inline-block;
 				margin-top: 2px;
+
+				&.header-small{
+					margin-left: 32px;
+				}
 			}
 
 			.ports{
