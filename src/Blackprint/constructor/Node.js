@@ -45,6 +45,12 @@ Blackprint.Node = class Node extends Blackprint.Interpreter.CustomEvent{
 		node.y = 0;
 	}
 
+	newPort(portName, type, def, which, node){
+		var temp = new Blackprint.Interpreter.Port(portName, type, def, which, node);
+		Object.setPrototypeOf(temp, Port.prototype);
+		return temp;
+	}
+
 	// DragMove event handler
 	moveNode(e){
 		this.x += e.movementX / container.scale;
@@ -81,7 +87,7 @@ Blackprint.Node = class Node extends Blackprint.Interpreter.CustomEvent{
 			}
 		}];
 
-		this._trigger('node.menu', {node:this, menu:menu});
+		this._trigger('node.menu', menu);
 		Blackprint.space.scope('dropdown').show(menu, ev.clientX, ev.clientY);
 	}
 }

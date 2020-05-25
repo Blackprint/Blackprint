@@ -206,6 +206,8 @@ Blackprint.Sketch = class Sketch{
 		node.namespace = namespace;
 		node.importing = true;
 
+		Object.setPrototypeOf(node, Blackprint.Node.prototype);
+
 		// Call the registered func (from this.registerNode)
 		func(handle, node);
 
