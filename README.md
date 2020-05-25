@@ -66,6 +66,7 @@ document.body.appendChild(sketch.cloneContainer());
 An interface is designed for communicate the node handler with the HTML elements. Blackprint is using ScarletsFrame to help control the element templating system.
 
 ```js
+// -> (node identifier, options, callback)
 Blackprint.registerInterface('button', {
     // `self` will extend from Blackprint.Node
     extend: Blackprint.Node,
@@ -92,6 +93,7 @@ Blackprint.registerInterface('button', {
 });
 
 // Small example for using registered element above
+// -> (namespace, callback)
 Blackprint.registerNode('myspace/button', function(handle, node){
     // Use node handler from sketch.registerInterface('button')
     node.type = 'button';
@@ -112,6 +114,7 @@ Just let the `node` control your `handle`.
 
 ```js
 // Register a new node
+// -> (namespace, callback)
 Blackprint.registerNode('math/multiply', function(handle, node){
     // handle = Blackprint flow handler
     // node = ScarletsFrame element handler
@@ -150,7 +153,7 @@ Below are reserved property that filled with function/callback
 |init|`()`|Callback function to be run after current handle and all node was initialized|
 |request|`(targetPort, sourceNode)`|Callback when other node's input port are requesting current node's output value|
 |update|`(Cable)`|Callback when current input value are updated from the other node's output port|
-|imported|()|This is a callback after node was created|
+|imported|`(options)`|This is a callback after node was created, imported options should be handled here|
 
 For the detailed example you can see from [this repository](https://github.com/Blackprint/blackprint.github.io/blob/master/src/js/register-handler.js).
 
@@ -208,7 +211,7 @@ To register a callback for an event you need to call `node.on('event.name', func
 |cable.disconnect|`(Cable)`|Trigger when a cable was disconnected from a port|
 |cable.created|`(Cable)`|Trigger when a cable was created from a port|
 |port.menu|`({port:Port, menu:DropDowns})`|Trigger when port menu is going to be created|
-|node.menu|`({node:Node, menu:DropDowns})`|Trigger when node menu is going to be created|
+|node.menu|`(DropDowns)`|Trigger when node menu is going to be created|
 
 Arguments on the table above with `{...}` is a single object.<br>
 `DropDowns` is an array, and you can push a callback or nested menu inside it.

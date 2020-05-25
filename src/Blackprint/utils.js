@@ -28,3 +28,24 @@ function deepProperty(obj, path, value){
 
 	return obj;
 }
+
+function deepCopy(target, source){
+	for(var key in source){
+		// Skip any character that contain $ or _
+		// Because it's marked as private property
+		if(key.includes('$') || key.includes('_'))
+			continue;
+
+		if(typeof source[key] === 'object'){
+			if(source[key] instanceof Array)
+				target[key] = [];
+			else
+				target[key] = {};
+
+			deepCopy(target[key], source[key]);
+			continue;
+		}
+
+		target[key] = source[key];
+	}
+}
