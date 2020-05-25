@@ -6,6 +6,9 @@ node_modules/
 /.phpintel/
 *.lock
 example/
-interpreter-js/
+interpreter-*/
+interpreter/
 zef/
 dist/interpreter.min.*
+addons/
+dist/
