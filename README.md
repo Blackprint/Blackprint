@@ -10,14 +10,26 @@
 
 This library built using ScarletsFrame to maintain it's [performance](https://krausest.github.io/js-framework-benchmark/current.html) and [simplicity](https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example). If you want to start new project with the framework, it's better to use the [template](https://github.com/StefansArya/scarletsframe-default) because it also have the [compiler](https://github.com/StefansArya/scarletsframe-compiler).
 
-## Using on your project
-This library is depend on ScarletsFrame to control every elements, template, namespace, and event listener. Please follow [this link](https://github.com/ScarletsFiction/ScarletsFrame/wiki/Installation) to get the minified js link.
-
-To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSON and use [interpreter-js](https://github.com/Blackprint/interpreter-js#example). If you want and can help writing an interpreter for other programming language like Rust, Python, PHP, or C, please fill an issue.
-
 <p align="center">
   <img src="https://user-images.githubusercontent.com/11073373/82104644-e9d5e900-9741-11ea-9689-fc01ddfa81ab.gif">
 </p>
+
+## Using on your project
+This library is depend on ScarletsFrame to control every elements, template, namespace, and event listener. Please follow [this link](https://github.com/ScarletsFiction/ScarletsFrame/wiki/Installation) to get the minified js link.
+
+To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSON and use [interpreter-js](https://github.com/Blackprint/interpreter-js#example). But it doesn't mean exporting is just like a magic, you also need to write `registerNode` and `registerInterface` on the target interpreter. But if this project is still alive, Blackprint may have a package manager where developer can port their nodes to another available interpreter.
+
+Below are the list of programming language where Blackprint can run.
+
+- [JavaScript Interpreter](https://github.com/Blackprint/interpreter-js)
+- [PHP Interpreter](https://github.com/Blackprint/interpreter-php)
+- [C++ Interpreter](https://github.com/Blackprint/interpreter-cpp) `Unfinished`
+- Rust Interpreter `Still being planned, waiting C++`
+- Python Interpreter `Still being planned, waiting C++`
+- Vlang Interpreter `Still being planned, waiting C++`
+- C++ in PHP Interpreter `Still being planned, waiting C++`
+
+Instead of using interpreter, the JavaScript version may be possible to be converted into the target language itself using [TypeScript Compiler API](https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API). But compiled and interpreted node will have different use cases, for the example if you compiled it into C you will need to recompile and restart your program to while interpreted node doesn't need to be compiled or restarted.
 
 ### Load Blackprint required files
 There are styles, template, and scripts that need to be loaded.
@@ -54,7 +66,7 @@ document.body.appendChild(sketch.cloneContainer());
 An interface is designed for communicate the node handler with the HTML elements. Blackprint is using ScarletsFrame to help control the element templating system.
 
 ```js
-sketch.registerInterface('button', {
+Blackprint.registerInterface('button', {
     // `self` will extend from Blackprint.Node
     extend: Blackprint.Node,
 
@@ -80,7 +92,7 @@ sketch.registerInterface('button', {
 });
 
 // Small example for using registered element above
-sketch.registerNode('myspace/button', function(handle, node){
+Blackprint.registerNode('myspace/button', function(handle, node){
     // Use node handler from sketch.registerInterface('button')
     node.type = 'button';
     node.title = "My simple button";
@@ -100,7 +112,7 @@ Just let the `node` control your `handle`.
 
 ```js
 // Register a new node
-sketch.registerNode('math/multiply', function(handle, node){
+Blackprint.registerNode('math/multiply', function(handle, node){
     // handle = Blackprint flow handler
     // node = ScarletsFrame element handler
 
@@ -296,7 +308,7 @@ $ git clone --depth 1 https://github.com/Blackprint/blackprint.github.io.git ./e
 $ git clone --depth 1 https://github.com/Blackprint/interpreter-js.git ./interpreter-js
 
 # Create symbolic link to Blackprint's dist folder
-# (Windows: need administrator privileges)
+# (Windows: may need administrator privileges)
 $ mklink /D ".\example\dist" "..\dist"
 
 # For linux

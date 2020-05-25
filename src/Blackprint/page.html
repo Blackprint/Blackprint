@@ -36,7 +36,20 @@
       <!-- Handled on ./nodes.js -->
       <div sf-repeat-this="item in list">
         {{@exec
-          var type = item.type[0].toUpperCase() + item.type.slice(1);
+          var type;
+
+          // Capitalize each word
+          if(item.type.includes('-')){
+            type = item.type.split('-');
+
+            for (var i = 0; i < type.length; i++)
+              type[i] = type[i][0].toUpperCase() + type[i].slice(1);
+
+            type = type.join('');
+          }
+          else
+            type = item.type[0].toUpperCase() + item.type.slice(1);
+
           var node = window["$"+type+'Node'];
 
           if(node === void 0){

@@ -71,8 +71,7 @@ require("scarletsframe-compiler")({
 					'src/Blackprint/init/Blackprint.js',
 
 					// Import classes first, or sf.component can't extend them
-					'src/Blackprint/nodes/extendable/Node.js',
-					'src/Blackprint/nodes/extendable/*.js',
+					'src/Blackprint/constructor/Node.js',
 					'src/Blackprint/constructor/*.js',
 
 					// Combine all files but not recursive
@@ -123,6 +122,62 @@ require("scarletsframe-compiler")({
 					'interpreter-js/src/init/end.js',
 				],
 			}
-		}
+		},
+
+		// Compiler for UI controls Addons
+		'addons-ui-control':{
+			versioning:'example/index.html',
+			stripURL:'example/',
+
+			js:{
+				file:'dist/bpao-ui-control.min.js',
+				header:"/* Blackprint \n MIT Licensed */",
+				combine:[
+					'addons/ui-control/src/init/begin.js',
+					'addons/ui-control/src/**/*.js',
+					'!addons/ui-control/src/init/end.js',
+					'addons/ui-control/src/init/end.js',
+				],
+			},
+			scss:{
+				file:'dist/bpao-ui-control.min.css',
+				header:"/* Blackprint, MIT Licensed */",
+				combine:['addons/ui-control/src/**/*.scss'],
+			},
+			html:{
+				file:'dist/bpao-ui-control.html.js',
+				header:"/* Blackprint \n MIT Licensed */",
+				prefix:'BPAO/Control',
+				combine:['addons/ui-control/src/**/*.html'],
+			}
+		},
+
+		// Compiler for WebAudio Addons
+		'addons-webaudio':{
+			versioning:'example/index.html',
+			stripURL:'example/',
+
+			js:{
+				file:'dist/bpao-webaudio.min.js',
+				header:"/* Blackprint \n MIT Licensed */",
+				combine:[
+					'addons/webaudio/src/init/begin.js',
+					'addons/webaudio/src/**/*.js',
+					'!addons/webaudio/src/init/end.js',
+					'addons/webaudio/src/init/end.js',
+				],
+			},
+			scss:{
+				file:'dist/bpao-webaudio.min.css',
+				header:"/* Blackprint, MIT Licensed */",
+				combine:['addons/webaudio/src/**/*.scss'],
+			},
+			html:{
+				file:'dist/bpao-webaudio.html.js',
+				header:"/* Blackprint \n MIT Licensed */",
+				prefix:'BPAO/Audio',
+				combine:['addons/webaudio/src/**/*.html'],
+			}
+		},
 	},
 }, require('gulp'));

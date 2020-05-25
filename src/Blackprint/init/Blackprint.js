@@ -27,30 +27,17 @@ Blackprint.Sketch = class Sketch{
 
 	// Clone current container index
 	cloneContainer(index){
-		return Blackprint.space.getHTML(index || Blackprint.index);
+		return Blackprint.space.createHTML(index || Blackprint.index);
 	}
 
-	// Register node handler
-	// Callback function will get handle and node
-	// - handle = Blackprint binding
-	// - node = ScarletsFrame binding <~> element
-	registerNode(namespace, func){
-		deepProperty(Blackprint.nodes, namespace.split('/'), func);
+	registerInterface(){
+		console.warn("Please use 'Blackprint.registerInterface' instead.");
+		Blackprint.registerInterface.apply(null, arguments);
 	}
 
-	// Register new node type
-	registerInterface(nodeType, options, func){
-		if(/[^\w\-]/.test(nodeType) !== false)
-			return console.error("nodeType can only contain character a-zA-Z0-9 and dashes");
-
-		if(options.extend === void 0 || options.template === void 0)
-			throw new Error("Please define the node template and the extend options");
-
-		if(!(options.extend.prototype instanceof Blackprint.Node))
-			throw new Error(options.extend.constructor.name+" must be instance of Blackprint.Node");
-
-		// Just like how we do it on ScarletsFrame component with namespace feature
-		Blackprint.space.component(nodeType+'-node', options, func);
+	registerNode(){
+		console.warn("Please use 'Blackprint.registerNode' instead.");
+		Blackprint.registerNode.apply(null, arguments);
 	}
 
 	// Import node positions and cable connection from JSON
@@ -145,7 +132,10 @@ Blackprint.Sketch = class Sketch{
 	exportJSON(options){
 		var nodes = Blackprint.space.scope('nodes').list;
 		var json = {};
-		var exclude = options.exclude || [];
+		var exclude = [];
+
+		if(options && options.exclude)
+			exclude = options.exclude;
 
 		for (var i = 0; i < nodes.length; i++) {
 			var node = nodes[i];
@@ -157,8 +147,8 @@ Blackprint.Sketch = class Sketch{
 
 			var data = {
 				id:i,
-				x:node.x,
-				y:node.y,
+				x: Math.round(node.x),
+				y: Math.round(node.y),
 			};
 
 			if(node.options !== void 0)
@@ -261,7 +251,37 @@ Blackprint.Sketch = class Sketch{
 	}
 }
 
+// Register node handler
+// Callback function will get handle and node
+// - handle = Blackprint binding
+// - node = ScarletsFrame binding <~> element
+Blackprint.registerNode = function(namespace, func){
+	deepProperty(Blackprint.nodes, namespace.split('/'), func);
+}
+
+var NOOP = function(){};
+
+// Register new node type
+Blackprint.registerInterface = function(nodeType, options, func){
+	if(/[^\w\-]/.test(nodeType) !== false)
+		return console.error("nodeType can only contain character a-zA-Z0-9 and dashes");
+
+	if(options.extend === void 0 || options.template === void 0)
+		throw new Error("Please define the node template and the extend options");
+
+	if(options.extend !== Blackprint.Node
+	   && !(options.extend.prototype instanceof Blackprint.Node))
+		throw new Error(options.extend.constructor.name+" must be instance of Blackprint.Node");
+
+	if(func === void 0)
+		func = NOOP;
+
+	// Just like how we do it on ScarletsFrame component with namespace feature
+	Blackprint.space.component(nodeType+'-node', options, func);
+}
+
 Blackprint.nodes = {};
+Blackprint.availableNode = Blackprint.nodes; // To display for available dropdown nodes
 Blackprint.index = 0;
 Blackprint.template = {
 	outputPort:'Blackprint/nodes/template/output-port.html'
