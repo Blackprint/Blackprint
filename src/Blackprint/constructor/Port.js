@@ -74,6 +74,8 @@ class Port extends Blackprint.Interpreter.Port{
 
 		this.node._trigger('cable.connect', cable);
 		cable.owner.node._trigger('cable.connect', cable, true);
+
+		cable.connected = true;
 	}
 
 	// PointerOver event handler

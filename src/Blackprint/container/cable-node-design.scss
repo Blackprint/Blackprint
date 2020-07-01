@@ -44,6 +44,10 @@ sf-space[blackprint]{
 		    	transition-property: stroke, fill;
 		    }
 
+		    .connected circle{
+		    	display: none;
+		    }
+
 		    circle{
 		    	r: 5;
 		    	fill: orange;

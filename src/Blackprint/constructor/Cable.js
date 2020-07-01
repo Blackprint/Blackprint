@@ -1,4 +1,8 @@
 class Cable extends Blackprint.Interpreter.Cable{
+	connected = false;
+	valid = true;
+	linePath = '0 0 0 0';
+
 	constructor(obj, port){
 		super(port);
 
@@ -17,15 +21,13 @@ class Cable extends Blackprint.Interpreter.Cable{
 
 		this.type = !port.type ? 'Any' : port.type.name
 		this.source = port.source;
-		this.valid = true;
-		this.linePath = '0 0 0 0';
 
 		// Push to cable list
 		Blackprint.space.scope('cables').list.push(this);
 	}
 
 	visualizeFlow(){
-		var el = Blackprint.space.scope('cables').list.getElement(this);
+		var el = $(Blackprint.space.scope('cables').list.getElement(this));
 		var className;
 
 		if(this.owner.source === 'outputs'){
@@ -42,14 +44,14 @@ class Cable extends Blackprint.Interpreter.Cable{
 		if(this._timer === void 0)
 			Blackprint.space.scope('container').showCableAnim();
 
-		el.classList.add(className);
+		el.addClass(className);
 		clearTimeout(this._timer);
 
 		var that = this;
 		this._timer = setTimeout(function(){
 			that._timer = void 0;
 
-			el.classList.remove(className);
+			el.removeClass(className);
 			Blackprint.space.scope('container').hideCableAnim();
 		}, 1000);
 	}
