@@ -90,8 +90,10 @@ class Cable extends Blackprint.Interpreter.Cable{
 
 		// Save current cable for referencing when cable connected into node's port
 		cablesModel.currentCable = cable;
-		$('vw-sketch').on('pointermove', moveCableHead).once('pointerup', function(ev){
-			$('vw-sketch').off('pointermove', moveCableHead);
+
+		var space = $(elem).parent('sf-space');
+		space.on('pointermove', moveCableHead).once('pointerup', function(ev){
+			space.off('pointermove', moveCableHead);
 
 			// Add delay because it may be used for connecting port
 			setTimeout(function(){
