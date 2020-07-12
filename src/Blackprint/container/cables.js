@@ -22,7 +22,25 @@ Space.model('cables', function(self, root){
 
 	// This will run everytime the cable was moving
 	// used on: ../page.html
+	var pendingCable = new Set();
+	var recalculatePending = false;
 	self.recalculatePath = function(item){
+		// Reduce multiple redraw when x and y are changed in separated time
+		if(pendingCable.has(item)) return;
+		pendingCable.add(item);
+
+		if(recalculatePending) return;
+		requestAnimationFrame(recalculatePath_);
+		recalculatePending = true;
+	}
+
+	function recalculatePath_(){
+		recalculatePending = false;
+		pendingCable.forEach(recalculatePath);
+		pendingCable.clear();
+	}
+
+	function recalculatePath(item){
 		var x1 = item.head1[0], y1 = item.head1[1];
 		var x2 = item.head2[0], y2 = item.head2[1];
 
