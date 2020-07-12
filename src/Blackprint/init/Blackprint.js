@@ -30,16 +30,6 @@ Blackprint.Sketch = class Sketch{
 		return Blackprint.space.createHTML(index || Blackprint.index);
 	}
 
-	registerInterface(){
-		console.warn("Please use 'Blackprint.registerInterface' instead.");
-		Blackprint.registerInterface.apply(null, arguments);
-	}
-
-	registerNode(){
-		console.warn("Please use 'Blackprint.registerNode' instead.");
-		Blackprint.registerNode.apply(null, arguments);
-	}
-
 	// Import node positions and cable connection from JSON
 	importJSON(json){
 		if(json.constructor === String)
@@ -130,7 +120,7 @@ Blackprint.Sketch = class Sketch{
 	}
 
 	exportJSON(options){
-		var nodes = Blackprint.space.scope('nodes').list;
+		var nodes = this.scope('nodes').list;
 		var json = {};
 		var exclude = [];
 
@@ -209,12 +199,10 @@ Blackprint.Sketch = class Sketch{
 			return console.error('Node for', namespace, "was not found, maybe .registerNode() haven't being called?") && void 0;
 
 		// Processing scope is different with node scope
-		var handle = {}, node = {type:'default', title:'No Title', description:''};
+		var handle = {}, node = new Blackprint.Node(this);
 		node.handle = handle;
 		node.namespace = namespace;
 		node.importing = true;
-
-		Object.setPrototypeOf(node, Blackprint.Node.prototype);
 
 		// Call the registered func (from this.registerNode)
 		func(handle, node);

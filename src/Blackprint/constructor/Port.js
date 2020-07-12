@@ -1,4 +1,5 @@
 class Port extends Blackprint.Interpreter.Port{
+	_scope = null;
 	createCable(e){
 		var isAuto = e.constructor === DOMRect;
 
@@ -29,7 +30,7 @@ class Port extends Blackprint.Interpreter.Port{
 
 	connectCable(cable){
 		if(cable === void 0)
-			cable = Blackprint.space.scope('cables').currentCable;
+			cable = this._scope('cables').currentCable;
 
 		// It's not a cable might
 		if(cable === void 0)
@@ -81,7 +82,7 @@ class Port extends Blackprint.Interpreter.Port{
 	// PointerOver event handler
 	portHovered(event){
 		// For magnet sensation when the cable reach the port
-		Blackprint.space.scope('cables').hoverPort = {
+		this._scope('cables').hoverPort = {
 			elem:event.target,
 			rect:event.target.getBoundingClientRect(),
 			item:this
@@ -90,10 +91,11 @@ class Port extends Blackprint.Interpreter.Port{
 
 	// PointerOut event handler
 	portUnhovered(){
-		Blackprint.space.scope('cables').hoverPort = false;
+		this._scope('cables').hoverPort = false;
 	}
 
 	portRightClick(ev){
+		var scope = this._scope;
 		var menu = [];
 		this.node._trigger('port.menu', {port:this, menu:menu});
 
@@ -111,12 +113,12 @@ class Port extends Blackprint.Interpreter.Port{
 				context:cables[i],
 				callback:Cable.prototype.destroy,
 				hover:function(){
-					Blackprint.space.scope('cables').list.getElement(this).classList.add('highlight');
+					scope('cables').list.getElement(this).classList.add('highlight');
 
 					target.node.$el.addClass('highlight');
 				},
 				unhover:function(){
-					Blackprint.space.scope('cables').list.getElement(this).classList.remove('highlight');
+					scope('cables').list.getElement(this).classList.remove('highlight');
 
 					target.node.$el.removeClass('highlight');
 				}
@@ -130,6 +132,6 @@ class Port extends Blackprint.Interpreter.Port{
 			return;
 
 		var pos = ev.target.getClientRects()[0];
-		Blackprint.space.scope('dropdown').show(menu, pos.x, pos.y);
+		scope('dropdown').show(menu, pos.x, pos.y);
 	}
 }

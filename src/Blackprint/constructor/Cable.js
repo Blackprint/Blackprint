@@ -3,10 +3,12 @@ class Cable extends Blackprint.Interpreter.Cable{
 	valid = true;
 	linePath = '0 0 0 0';
 
+	#scope;
 	constructor(obj, port){
 		super(port);
+		this.#scope = port._scope;
 
-		var container = Blackprint.space.scope('container');
+		var container = port._scope('container');
 		var Ofst = container.offset;
 
 		this.head1 = [
@@ -23,11 +25,11 @@ class Cable extends Blackprint.Interpreter.Cable{
 		this.source = port.source;
 
 		// Push to cable list
-		Blackprint.space.scope('cables').list.push(this);
+		port._scope('cables').list.push(this);
 	}
 
 	visualizeFlow(){
-		var el = $(Blackprint.space.scope('cables').list.getElement(this));
+		var el = $(this.#scope('cables').list.getElement(this));
 		var className;
 
 		if(this.owner.source === 'outputs'){
@@ -42,7 +44,7 @@ class Cable extends Blackprint.Interpreter.Cable{
 		}
 
 		if(this._timer === void 0)
-			Blackprint.space.scope('container').showCableAnim();
+			this.#scope('container').showCableAnim();
 
 		el.addClass(className);
 		clearTimeout(this._timer);
@@ -52,13 +54,13 @@ class Cable extends Blackprint.Interpreter.Cable{
 			that._timer = void 0;
 
 			el.removeClass(className);
-			Blackprint.space.scope('container').hideCableAnim();
+			that.#scope('container').hideCableAnim();
 		}, 1000);
 	}
 
 	cableHeadClicked(ev){
-		var container = Blackprint.space.scope('container');
-		var cablesModel = Blackprint.space.scope('cables');
+		var container = this.#scope('container');
+		var cablesModel = this.#scope('cables');
 
 		var Ofst = container.offset;
 		var cable = this;
@@ -108,7 +110,7 @@ class Cable extends Blackprint.Interpreter.Cable{
 	cableMenu(ev){
 		ev.stopPropagation();
 
-		Blackprint.space.scope('dropdown').show([{
+		this.#scope('dropdown').show([{
 			title:this.target ? "Disconnect" : "Delete",
 			context:this,
 			callback:Cable.prototype.destroy,
@@ -146,7 +148,7 @@ class Cable extends Blackprint.Interpreter.Cable{
 			this.target.node._trigger('cable.disconnect', this.owner);
 		}
 
-		var list = Blackprint.space.scope('cables').list;
+		var list = this.#scope('cables').list;
 
 		// Remove from cable list
 		list.splice(list.indexOf(this), 1);
