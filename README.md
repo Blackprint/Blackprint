@@ -19,27 +19,34 @@ This library is depend on ScarletsFrame to control every elements, template, nam
 
 To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSON and use [interpreter-js](https://github.com/Blackprint/interpreter-js#example). But it doesn't mean exporting is just like a magic, you also need to write `registerNode` and `registerInterface` on the target interpreter. But if this project is still alive, Blackprint may have a package manager where developer can port their nodes to another available interpreter.
 
-Below are the list of programming language where Blackprint can run.
+Below are the list of programming language where Blackprint that's being planned.
 
 - [JavaScript Interpreter](https://github.com/Blackprint/interpreter-js)
 - [PHP Interpreter](https://github.com/Blackprint/interpreter-php)
-- [C++ Interpreter](https://github.com/Blackprint/interpreter-cpp) `Unfinished`
-- Rust Interpreter `Still being planned, waiting C++`
-- Python Interpreter `Still being planned, waiting C++`
-- Vlang Interpreter `Still being planned, waiting C++`
-- C++ in PHP Interpreter `Still being planned, waiting C++`
+- Python Interpreter
+- Crystal
 
-Instead of using interpreter, the JavaScript version may be possible to be converted into the target language itself using [TypeScript Compiler API](https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API). But compiled and interpreted node will have different use cases, for the example if you compiled it into C you will need to recompile and restart your program to while interpreted node doesn't need to be compiled or restarted.
+To be considered:
+- Java Interpreter (I'm curious how much memory it would take)
+- C# Interpreter (I think it's better to make the code generation?)
+- Rust (I need time to consider this)
+
+> Because some limitation, C++ are removed from interpreter list. It's possible to build the interpreter but it would take long time to finish. Maybe it can be used by combining with a framework and code generation on the future.
+
+Planned Code Generation:
+- Nginx Config
+- Dockerfile
 
 ### Load Blackprint required files
-There are styles, template, and scripts that need to be loaded.
+There are styles, template, and scripts that need to be loaded.<br>
+Blackprint only giving support on modern browser, because it's designed for the future.
 
 ```html
 <!-- Must be loaded first -->
 <script src="https://cdn.jsdelivr.net/npm/blackprint-interpreter@latest/dist/interpreter.min.js"></script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/blackprint/blackprint/dist/blackprint.min.css">
-<script src="https://cdn.jsdelivr.net/npm/scarletsframe@0.28.5/dist/scarletsframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/scarletsframe@0.28.9/dist/scarletsframe.es6.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/blackprint/blackprint/dist/blackprint.html.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/blackprint/blackprint/dist/blackprint.min.js"></script>
 ```
@@ -338,6 +345,13 @@ The compilation process will minify your code and also run Babel transpiler to s
 ```sh
 $ gulp compile
 ```
+
+## Motivation
+Actually I was never use UE4 Blueprint (and I haven't ever use it yet), but I ever use UDK Kismet. Developing a visual script by connecting nodes is my unfinished project since 2014 with Action Script (Adobe Flash). Well, it's not professional to tell a story about my very young age with programming. But the time was passed and I have a feeling like I can continue my old project with my current skill. The main target of the project is to help developers to modify their program's logic while the program is still running. With proper custom script it can be used to manage IoT, Docker container connections, or virtual cable for electrical stuff.
+
+Some of the interface design is inpired by UE4 Blueprint, it could be modified by CSS and I will modify it after the project was or almost finished.
+
+The secondary target of this project is - developers can create new custom node and design the node easily (with [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/)), so everyone can share their nodes and import it for their project. Different from other framework, [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/) is designed to handle performance [pressure](https://krausest.github.io/js-framework-benchmark/current.html) while giving many simplicity to the developers (like hot reload) on the browser. You will see some feature that was exist on Blackprint, and it was implemented with very little effort.
 
 ### Note
 Please support me or I will cry :(
