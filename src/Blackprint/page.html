@@ -36,7 +36,7 @@
       <div sf-repeat-this="item in list">
         {{@exec
           // Capitalize each word
-          var name= item.interface.split('.html')[0].toLowerCase().split('/');
+          var name= item.interface.split('.html')[0].replace(/-/g, '/').toLowerCase().split('/');
 
           for (var i = 0; i < name.length; i++)
             name[i] = name[i][0].toUpperCase() + name[i].slice(1);

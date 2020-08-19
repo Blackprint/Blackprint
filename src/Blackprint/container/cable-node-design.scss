@@ -14,6 +14,7 @@ sf-space[blackprint]{
 
 		.nodes .node .ports.#{$type} > .port {
 			background: #{$color};
+			color: #{$color};
 		}
 	}
 
@@ -21,6 +22,20 @@ sf-space[blackprint]{
 	@include portType("Object", mediumpurple);
 	@include portType("Boolean", #ff3636);
 	@include portType("String", white);
+
+
+	.nodes .node .ports.Array > .port {
+		background: none;
+		font-family: "Font Awesome 5 Free";
+	    font-weight: 900;
+	    font-size: 12px;
+
+	    &:before{
+	    	content: "\f00a";
+	    	margin-top: -1px;
+	    	position: absolute;
+	    }
+	}
 
 	sf-m[name="container"]{
 		transform-origin: top left;

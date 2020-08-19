@@ -136,7 +136,7 @@ class Cable extends Blackprint.Interpreter.Cable{
 			if(i !== -1)
 				this.owner.cables.splice(i, 1);
 
-			this.owner.node._trigger('cable.disconnect', this.target);
+			this.owner.node._trigger('cable.disconnect', this.owner, this.target);
 		}
 
 		// Remove from connected target
@@ -145,13 +145,13 @@ class Cable extends Blackprint.Interpreter.Cable{
 			if(i !== -1)
 				this.target.cables.splice(i, 1);
 
-			this.target.node._trigger('cable.disconnect', this.owner);
+			this.target.node._trigger('cable.disconnect', this.target, this.owner);
 		}
 
 		var list = this.#scope('cables').list;
 
 		// Remove from cable list
 		list.splice(list.indexOf(this), 1);
-		console.log('A cable was removed', this);
+		// console.log('A cable was removed', this);
 	}
 }
