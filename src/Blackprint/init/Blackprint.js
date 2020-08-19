@@ -257,12 +257,13 @@ Blackprint.registerNode = function(namespace, func){
 var NOOP = function(){};
 
 // Register new node type
-Blackprint.registerInterface = function(nodeType, options, func){
-	if(/[^\w\-]/.test(nodeType) !== false)
-		return console.error("nodeType can only contain character a-zA-Z0-9 and dashes");
+Blackprint.registerInterface = function(templatePath, options, func){
+	if(options.constructor === Function){
+		func = options;
+		options = {extend:Blackprint.Node};
+	}
 
-	if(options.extend === void 0 || options.template === void 0)
-		throw new Error("Please define the node template and the extend options");
+	options.template = templatePath+'.html';
 
 	if(options.extend !== Blackprint.Node
 	   && !(options.extend.prototype instanceof Blackprint.Node))
@@ -271,8 +272,11 @@ Blackprint.registerInterface = function(nodeType, options, func){
 	if(func === void 0)
 		func = NOOP;
 
+	var nodeName = templatePath.replace(/[\\/]/g, '-').toLowerCase();
+	nodeName = nodeName.split('.html')[0];
+
 	// Just like how we do it on ScarletsFrame component with namespace feature
-	Blackprint.space.component(nodeType+'-node', options, func);
+	Blackprint.space.component(nodeName, options, func);
 }
 
 Blackprint.nodes = {};

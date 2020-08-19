@@ -10,7 +10,7 @@ Blackprint.Node = class Node extends Blackprint.Interpreter.CustomEvent{
 
 	static _ports = ['inputs', 'outputs', 'properties'];
 
-	type = 'default';
+	interface = 'bp/default';
 	title = 'No Title';
 	description = '';
 

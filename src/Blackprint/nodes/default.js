@@ -1,4 +1,4 @@
-Space.component('default-node', {
+Space.component('bp-default', {
 	extend: Blackprint.Node,
 	template:'Blackprint/nodes/default.html'
 }, function(self, root){
