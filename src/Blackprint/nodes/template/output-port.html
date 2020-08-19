@@ -1,12 +1,12 @@
 <div class="output">
-  <div class="ports {{ val.type.name }}" sf-repeat-this="key, val in outputs">
-    <div class="name">{{ key }}</div>
-    <div class="port"
+  <div sf-repeat-this="key, val in outputs"
+        class="ports {{ val.type.name + val.classAdd }}"
         @contextmenu.stop="val.portRightClick(event)"
         @pointerdown.left.stop="val.createCable(event)"
         @pointerup.left="val.connectCable()"
         @pointerover="val.portHovered(event)"
-        @pointerout="val.portUnhovered(event)"
-    ></div>
+        @pointerout="val.portUnhovered(event)">
+    <div class="name">{{ key }}</div>
+    <div class="port"></div>
   </div>
 </div>

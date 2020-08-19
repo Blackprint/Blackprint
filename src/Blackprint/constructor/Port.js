@@ -1,10 +1,19 @@
 class Port extends Blackprint.Interpreter.Port{
 	_scope = null;
+
+	findPortElement(el){
+		if(!el.classList.contains('ports'))
+			el = el.parentNode;
+
+		return el.querySelector('.port');
+	}
+
 	createCable(e){
 		var isAuto = e.constructor === DOMRect;
 
 		// Get size and position of the port
-		var rect = isAuto ? e : e.target.getBoundingClientRect();
+		var rect = isAuto ? e : this.findPortElement(e.target).getBoundingClientRect();
+
 		var center = rect.width/2;
 
 		// Create cable and save the reference
@@ -25,7 +34,7 @@ class Port extends Blackprint.Interpreter.Port{
 
 		// Default head index is "2" when creating new cable
 		cable.cableHeadClicked(e);
-		this.node._trigger('cable.created', cable);
+		this.node._trigger('cable.created', this, cable);
 	}
 
 	connectCable(cable){
@@ -46,6 +55,14 @@ class Port extends Blackprint.Interpreter.Port{
 			cable.destroy();
 			return;
 		}
+
+		if(cable.owner.source === 'outputs')
+			if(this.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(this.type, cable.owner.type))
+				return cable.destroy();
+
+		else if(this.source === 'outputs')
+			if(cable.owner.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(cable.owner.type, this.type))
+				return cable.destroy();
 
 		// Remove cable if type restriction
 		if(cable.owner.type === Function && this.type !== Function
@@ -73,18 +90,20 @@ class Port extends Blackprint.Interpreter.Port{
 		// Connect this cable into port's cable list
 		this.cables.push(cable);
 
-		this.node._trigger('cable.connect', cable);
-		cable.owner.node._trigger('cable.connect', cable, true);
+		this.node._trigger('cable.connect', cable.target, cable.owner, cable);
+		cable.owner.node._trigger('cable.connect', cable.owner, cable.target, cable);
 
 		cable.connected = true;
 	}
 
 	// PointerOver event handler
 	portHovered(event){
+		var portElem = this.findPortElement(event.target);
+
 		// For magnet sensation when the cable reach the port
 		this._scope('cables').hoverPort = {
-			elem:event.target,
-			rect:event.target.getBoundingClientRect(),
+			elem:portElem,
+			rect:portElem.getBoundingClientRect(),
 			item:this
 		};
 	}
@@ -97,7 +116,7 @@ class Port extends Blackprint.Interpreter.Port{
 	portRightClick(ev){
 		var scope = this._scope;
 		var menu = [];
-		this.node._trigger('port.menu', {port:this, menu:menu});
+		this.node._trigger('port.menu', this, menu);
 
 		// Prepare default menu
 		var disconnect = {title:"Disconnect", deep:[]};
@@ -131,7 +150,7 @@ class Port extends Blackprint.Interpreter.Port{
 		if(menu.length === 0)
 			return;
 
-		var pos = ev.target.getClientRects()[0];
+		var pos = this.findPortElement(ev.target).getClientRects()[0];
 		scope('dropdown').show(menu, pos.x, pos.y);
 	}
 }
