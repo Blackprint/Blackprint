@@ -260,13 +260,18 @@ var NOOP = function(){};
 Blackprint.registerInterface = function(templatePath, options, func){
 	if(options.constructor === Function){
 		func = options;
-		options = {extend:Blackprint.Node};
+		options = {};
 	}
 
-	options.template = templatePath+'.html';
+	if(options.extend === void 0)
+		options.extend = Blackprint.Node;
 
-	if(options.extend !== Blackprint.Node
-	   && !(options.extend.prototype instanceof Blackprint.Node))
+	if(options.template === void 0)
+		options.template = templatePath+'.html';
+	else
+		options.template += '.html';
+
+	if(options.extend !== Blackprint.Node && !(options.extend.prototype instanceof Blackprint.Node))
 		throw new Error(options.extend.constructor.name+" must be instance of Blackprint.Node");
 
 	if(func === void 0)

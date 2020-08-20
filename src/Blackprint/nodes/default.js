@@ -1,6 +1,6 @@
 Space.component('bp-default', {
 	extend: Blackprint.Node,
-	template:'Blackprint/nodes/default.html'
+	template: 'Blackprint/nodes/default.html'
 }, function(self, root){
 	// Property of this scope
 	/* self == {

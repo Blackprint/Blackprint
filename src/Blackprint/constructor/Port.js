@@ -57,12 +57,16 @@ class Port extends Blackprint.Interpreter.Port{
 		}
 
 		if(cable.owner.source === 'outputs')
-			if(this.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(this.type, cable.owner.type))
+			if(this.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(this.type, cable.owner.type)){
+				console.log(this.node.title+"> Port from '"+cable.owner.node.title + " - " + cable.owner.name+"' was not an "+this.type.name);
 				return cable.destroy();
+			}
 
 		else if(this.source === 'outputs')
-			if(cable.owner.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(cable.owner.type, this.type))
+			if(cable.owner.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(cable.owner.type, this.type)){
+				console.log(this.node.title+"> Port from '"+this.node.title + " - " + this.name+"' was not an "+cable.owner.type.name);
 				return cable.destroy();
+			}
 
 		// Remove cable if type restriction
 		if(cable.owner.type === Function && this.type !== Function
@@ -90,10 +94,11 @@ class Port extends Blackprint.Interpreter.Port{
 		// Connect this cable into port's cable list
 		this.cables.push(cable);
 
-		this.node._trigger('cable.connect', cable.target, cable.owner, cable);
-		cable.owner.node._trigger('cable.connect', cable.owner, cable.target, cable);
+		if(cable.owner.feature === Blackprint.PortAwait)
+			return cable.awaiting(cable.owner.default);
 
 		cable.connected = true;
+		cable.triggerConnected();
 	}
 
 	// PointerOver event handler
