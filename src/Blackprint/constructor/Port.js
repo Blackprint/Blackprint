@@ -34,7 +34,7 @@ class Port extends Blackprint.Interpreter.Port{
 
 		// Default head index is "2" when creating new cable
 		cable.cableHeadClicked(e);
-		this.node._trigger('cable.created', this, cable);
+		this.iface._trigger('cable.created', this, cable);
 	}
 
 	connectCable(cable){
@@ -58,13 +58,13 @@ class Port extends Blackprint.Interpreter.Port{
 
 		if(cable.owner.source === 'outputs')
 			if(this.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(this.type, cable.owner.type)){
-				console.log(this.node.title+"> Port from '"+cable.owner.node.title + " - " + cable.owner.name+"' was not an "+this.type.name);
+				console.log(this.iface.title+"> Port from '"+cable.owner.iface.title + " - " + cable.owner.name+"' was not an "+this.type.name);
 				return cable.destroy();
 			}
 
 		else if(this.source === 'outputs')
 			if(cable.owner.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(cable.owner.type, this.type)){
-				console.log(this.node.title+"> Port from '"+this.node.title + " - " + this.name+"' was not an "+cable.owner.type.name);
+				console.log(this.iface.title+"> Port from '"+this.iface.title + " - " + this.name+"' was not an "+cable.owner.type.name);
 				return cable.destroy();
 			}
 
@@ -126,7 +126,7 @@ class Port extends Blackprint.Interpreter.Port{
 	portRightClick(ev){
 		var scope = this._scope;
 		var menu = [];
-		this.node._trigger('port.menu', this, menu);
+		this.iface._trigger('port.menu', this, menu);
 
 		// Prepare default menu
 		var disconnect = {title:"Disconnect", deep:[]};
@@ -138,18 +138,18 @@ class Port extends Blackprint.Interpreter.Port{
 				continue;
 
 			disconnect.deep.push({
-				title:target.node.title+`(${this.name} ~ ${target.name})`,
+				title:target.iface.title+`(${this.name} ~ ${target.name})`,
 				context:cables[i],
 				callback:Cable.prototype.destroy,
 				hover:function(){
 					scope('cables').list.getElement(this).classList.add('highlight');
 
-					target.node.$el.addClass('highlight');
+					target.iface.$el.addClass('highlight');
 				},
 				unhover:function(){
 					scope('cables').list.getElement(this).classList.remove('highlight');
 
-					target.node.$el.removeClass('highlight');
+					target.iface.$el.removeClass('highlight');
 				}
 			});
 		}
@@ -165,7 +165,7 @@ class Port extends Blackprint.Interpreter.Port{
 	}
 
 	insertComponent(beforeSelector, compName, item, callback, _repeat){
-		var portList = this.node[this.source];
+		var portList = this.iface[this.source];
 		if(portList.getElement === void 0){
 			var that = this;
 			return setTimeout(function(){

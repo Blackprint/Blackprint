@@ -164,7 +164,7 @@ Blackprint.Sketch = class Sketch{
 						if(target === void 0)
 							continue;
 
-						var id = nodes.indexOf(target.node);
+						var id = nodes.indexOf(target.iface);
 						if(exclude.includes(nodes[id].namespace))
 							continue;
 
@@ -199,50 +199,50 @@ Blackprint.Sketch = class Sketch{
 			return console.error('Node for', namespace, "was not found, maybe .registerNode() haven't being called?") && void 0;
 
 		// Processing scope is different with node scope
-		var handle = {}, node = new Blackprint.Node(this);
-		node.handle = handle;
-		node.namespace = namespace;
-		node.importing = true;
+		var node = {}, iface = new Blackprint.Node(this);
+		iface.node = node;
+		iface.namespace = namespace;
+		iface.importing = true;
 
 		// Call the registered func (from this.registerNode)
-		func(handle, node);
+		func(node, iface);
 
 		if(Blackprint.Interpreter.Node === void 0)
 			throw new Error("Blackprint.Interpreter was not found, please load it first before creating new node");
 
-		// Create the linker between the handler and the node
-		Blackprint.Interpreter.Node.prepare(handle, node);
+		// Create the linker between the node and the iface
+		Blackprint.Interpreter.Node.prepare(node, iface);
 
 		// Replace port prototype (intepreter port -> visual port)
 		['inputs', 'outputs', 'properties'].forEach(function(which){
-			var localPorts = node[which];
+			var localPorts = iface[which];
 			for(var portName in localPorts)
 				Object.setPrototypeOf(localPorts[portName], Port.prototype);
 		});
 
-		Blackprint.Node.prepare(handle, node);
+		Blackprint.Node.prepare(node, iface);
 
 		var savedOpt = options.options;
 		delete options.options;
 
-		// Assign the node options if exist
+		// Assign the iface options if exist
 		if(options !== void 0)
-			Object.assign(node, options);
+			Object.assign(iface, options);
 
 		// Node is become the component scope
 		// equal to calling registerInterface's registered function
-		this.scope('nodes').list.push(node);
-		node.importing = false;
+		this.scope('nodes').list.push(iface);
+		iface.importing = false;
 
+		iface.imported && iface.imported(savedOpt);
 		node.imported && node.imported(savedOpt);
-		handle.imported && handle.imported(savedOpt);
 
 		if(handlers !== void 0)
-			handlers.push(handle);
-		else if(handle.init !== void 0)
-			handle.init();
+			handlers.push(node);
+		else if(node.init !== void 0)
+			node.init();
 
-		return node;
+		return iface;
 	}
 }
 

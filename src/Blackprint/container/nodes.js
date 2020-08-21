@@ -4,10 +4,10 @@ Space.model('nodes', function(self, root){
 			resetCablePosition(items[i].target.model);
 	});
 
-	function resetCablePosition(node){
+	function resetCablePosition(iface){
 		var ports = Blackprint.Node._ports;
 		for(var i=0; i < ports.length; i++){
-			var which = node[ports[i]];
+			var which = iface[ports[i]];
 			if(which === void 0)
 				continue;
 
@@ -21,7 +21,7 @@ Space.model('nodes', function(self, root){
 
 				var cable;
 				for (var a = 0; a < cables.length; a++) {
-					if(cables[a].owner.node === node)
+					if(cables[a].owner.iface === iface)
 						cable = cables[a].head1;
 					else
 						cable = cables[a].head2;

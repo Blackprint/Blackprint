@@ -115,16 +115,16 @@ class Cable extends Blackprint.Interpreter.Cable{
 			context:this,
 			callback:Cable.prototype.destroy,
 			hover:function(){
-				this.owner.node.$el.addClass('highlight');
+				this.owner.iface.$el.addClass('highlight');
 
 				if(this.target)
-					this.target.node.$el.addClass('highlight');
+					this.target.iface.$el.addClass('highlight');
 			},
 			unhover:function(){
-				this.owner.node.$el.removeClass('highlight');
+				this.owner.iface.$el.removeClass('highlight');
 
 				if(this.target)
-					this.target.node.$el.removeClass('highlight');
+					this.target.iface.$el.removeClass('highlight');
 			}
 		}], ev.clientX, ev.clientY);
 	}

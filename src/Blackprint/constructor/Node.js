@@ -1,4 +1,4 @@
-Blackprint.Node = class Node extends Blackprint.Interpreter.CustomEvent{
+Blackprint.Node = class NodeInteface extends Blackprint.Interpreter.CustomEvent{
 	/*
 	x = 0;
 	y = 0;
@@ -22,14 +22,14 @@ Blackprint.Node = class Node extends Blackprint.Interpreter.CustomEvent{
 		this.#container = sketch.scope('container');
 	}
 
-	static prepare(handle, node){
+	static prepare(node, iface){
 		// Default Node properties
-		node.x = 0;
-		node.y = 0;
+		iface.x = 0;
+		iface.y = 0;
 	}
 
-	newPort(portName, type, def, which, node){
-		var temp = new Blackprint.Interpreter.Port(portName, type, def, which, node);
+	newPort(portName, type, def, which, iface){
+		var temp = new Blackprint.Interpreter.Port(portName, type, def, which, iface);
 		temp._scope = this.#scope;
 		Object.setPrototypeOf(temp, Port.prototype);
 		return temp;
@@ -42,7 +42,7 @@ Blackprint.Node = class Node extends Blackprint.Interpreter.CustomEvent{
 		this.x += e.movementX / scale;
 		this.y += e.movementY / scale;
 
-		// Also move all cable connected to current node
+		// Also move all cable connected to current iface
 		var ports = Blackprint.Node._ports;
 		for(var i=0; i<ports.length; i++){
 			var which = this[ports[i]];
@@ -54,7 +54,7 @@ Blackprint.Node = class Node extends Blackprint.Interpreter.CustomEvent{
 
 				var cable;
 				for (var a = 0; a < cables.length; a++) {
-					if(cables[a].owner.node === this)
+					if(cables[a].owner.iface === this)
 						cable = cables[a].head1;
 					else
 						cable = cables[a].head2;
@@ -71,18 +71,18 @@ Blackprint.Node = class Node extends Blackprint.Interpreter.CustomEvent{
 		var menu = [{
 			title:'Delete',
 			args:[this],
-			callback:function(node){
+			callback:function(iface){
 				var list = scope('nodes').list;
-				var i = list.indexOf(node);
+				var i = list.indexOf(iface);
 
 				if(i === -1)
-					return console.error("Node was not found on the list", node);
+					return console.error("Node was not found on the list", iface);
 
 				list.splice(i, 1);
 
 				var check = ['outputs', 'inputs', 'properties'];
 				for (var i = 0; i < check.length; i++) {
-					var portList = node[check[i]];
+					var portList = iface[check[i]];
 					for(var port in portList){
 						var cables = portList[port].cables;
 						for (var a = cables.length - 1; a >= 0; a--)
