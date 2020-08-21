@@ -7,6 +7,6 @@
         @pointerover="val.portHovered(event)"
         @pointerout="val.portUnhovered(event)">
     <div class="name">{{ key }}</div>
-    <div class="port"></div>
+    <div class="port" title="{{ val.type.name + val.classAdd }}"></div>
   </div>
 </div>

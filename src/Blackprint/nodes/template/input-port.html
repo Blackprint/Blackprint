@@ -6,7 +6,7 @@
         @pointerup.left="val.connectCable()"
         @pointerover="val.portHovered(event)"
         @pointerout="val.portUnhovered(event)">
-    <div class="port"></div>
+    <div class="port" title="{{ val.type.name + val.classAdd }}"></div>
     <div class="name">{{ key }}</div>
   </div>
 </div>
