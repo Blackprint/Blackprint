@@ -3,7 +3,7 @@ class Port extends Blackprint.Interpreter.Port{
 
 	findPortElement(el){
 		if(!el.classList.contains('ports'))
-			el = el.parentNode;
+			el = el.closest('.ports');
 
 		return el.querySelector('.port');
 	}
@@ -82,7 +82,7 @@ class Port extends Blackprint.Interpreter.Port{
 		// Remove cable if there are similar connection for the ports
 		for (var i = 0; i < sourceCables.length; i++) {
 			if(this.cables.includes(sourceCables[i])){
-				console.log("Duplicate connection");
+				// console.log("Duplicate connection");
 				cable.destroy();
 				return;
 			}
@@ -91,13 +91,18 @@ class Port extends Blackprint.Interpreter.Port{
 		// Put port reference to the cable
 		cable.target = this;
 
+		// Remove old cable if the port not support array
+		if(this.feature !== Blackprint.PortArrayOf && this.type !== Function){
+			var removal = cable.target.source === 'inputs' ? cable.target : cable.owner;
+
+			if(removal.cables.length !== 0){
+				removal.cables.pop().destroy();
+				// console.log("Cable was replaced because input doesn't support array");
+			}
+		}
+
 		// Connect this cable into port's cable list
 		this.cables.push(cable);
-
-		if(cable.owner.feature === Blackprint.PortAwait)
-			return cable.awaiting(cable.owner.default);
-
-		cable.connected = true;
 		cable.triggerConnected();
 	}
 
@@ -157,5 +162,30 @@ class Port extends Blackprint.Interpreter.Port{
 
 		var pos = this.findPortElement(ev.target).getClientRects()[0];
 		scope('dropdown').show(menu, pos.x, pos.y);
+	}
+
+	insertComponent(beforeSelector, compName, item, callback, _repeat){
+		var portList = this.node[this.source];
+		if(portList.getElement === void 0){
+			var that = this;
+			return setTimeout(function(){
+				if(_repeat === void 0)
+					that.insertComponent(beforeSelector, compName, item, callback, true)
+			}, 100);
+		}
+
+		compName = compName.split('-');
+		for (var i = 0; i < compName.length; i++)
+			compName[i] = compName[i][0].toUpperCase() + compName[i].slice(1);
+
+		var el = new window['$'+compName.join('')](item, Blackprint.space, true);
+
+		var beforeEl = portList.getElement(this.name);
+		if(beforeSelector !== null)
+			beforeEl.insertBefore(item.$el[0], beforeEl.querySelector(beforeSelector));
+		else
+			beforeEl.appendChild(item.$el[0]);
+
+		callback && callback(item);
 	}
 }
