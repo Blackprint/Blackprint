@@ -21,21 +21,22 @@ To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSO
 
 Below are the list of programming language where Blackprint that's being planned.
 
+> Current priority is JavaScript Interpreter<br>
+> Some breaking changes may happen to make it perfect and suitable for every language
+
 - [JavaScript Interpreter](https://github.com/Blackprint/interpreter-js)
 - [PHP Interpreter](https://github.com/Blackprint/interpreter-php)
 - Python Interpreter
-- Crystal
+- Crystal Interpreter
 
-To be considered:
-- Java Interpreter (I'm curious how much memory it would take)
-- C# Interpreter (I think it's better to make the code generation?)
-- Rust (I need time to consider this)
-
-> Because some limitation, C++ are removed from interpreter list. It's possible to build the interpreter but it would take long time to finish. Maybe it can be used by combining with a framework and code generation on the future.
+Blackprint Interpreter that being considered:
+- Java (I'm curious how much memory it would take)
+- C# (I think it's better to make the code generation?)
 
 Planned Code Generation:
-- Nginx Config
+- Abstract Syntax Tree
 - Dockerfile
+- Nginx Config
 
 ### Load Blackprint required files
 There are styles, template, and scripts that need to be loaded.<br>
@@ -46,7 +47,7 @@ Blackprint only giving support on modern browser, because it's designed for the 
 <script src="https://cdn.jsdelivr.net/npm/blackprint-interpreter@latest/dist/interpreter.min.js"></script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/blackprint/blackprint/dist/blackprint.min.css">
-<script src="https://cdn.jsdelivr.net/npm/scarletsframe@0.28.9/dist/scarletsframe.es6.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/scarletsframe@0.29.4/dist/scarletsframe.es6.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/blackprint/blackprint/dist/blackprint.html.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/blackprint/blackprint/dist/blackprint.min.js"></script>
 ```
@@ -54,9 +55,10 @@ Blackprint only giving support on modern browser, because it's designed for the 
 ## Documentation
 > Warning: This project haven't reach it stable version<br>
 > If you use this on your project please put a link or information to this repository.<br>
-> Don't be too stingy to share..<br>
 > Maybe someone skilled like you interested to improve this open source project.<br>
 > And because of their contribution, you can enjoy the improved Blackprint :)
+
+If something isn't working please fill an issue but don't create an duplicate issue, thanks..
 
 ```js
 // Create Blackprint, `sketch` in this documentation will refer to this
@@ -73,41 +75,39 @@ document.body.appendChild(sketch.cloneContainer());
 An interface is designed for communicate the node handler with the HTML elements. Blackprint is using ScarletsFrame to help control the element templating system.
 
 ```js
-// -> (node identifier, options, callback)
-Blackprint.registerInterface('button', {
-    // `self` will extend from Blackprint.Node
+// -> (HTML template path, options, callback)
+// Path in window.templates
+Blackprint.registerInterface('Blackprint/nodes/default', {
+    // `iface` will extend from Blackprint.Node (Optional)
     extend: Blackprint.Node,
-
-    // Path in window.templates
-    template:'Blackprint/nodes/default.html'
-}, function(self){
-    // self = ScarletsFrame component handler (that control the HTML element)
+}, function(iface){
+    // iface = ScarletsFrame component handler (that control the HTML element)
 
     // If the element would have value that can be exported to JSON
     // It must being set inside options object
-    self.options = {};
+    iface.options = {};
 
     // Run after this component was initialized
-    self.init = function(){
+    iface.init = function(){
         // You can use it like jQuery
-        self.$el('.button').on('click', function(ev){
+        iface.$el('.button').on('click', function(ev){
 
             // We call the node handler that using this component
             // `handle` from sketch.registerNode('', (handle, node)=>{})
-            self.handle.onclicked(ev);
+            iface.handle.onclicked(ev);
         });
     }
 });
 
 // Small example for using registered element above
 // -> (namespace, callback)
-Blackprint.registerNode('myspace/button', function(handle, node){
-    // Use node handler from sketch.registerInterface('button')
-    node.type = 'button';
-    node.title = "My simple button";
+Blackprint.registerNode('myspace/button', function(node, iface){
+    // Use node handler from sketch.registerInterface('Blackprint/nodes/default')
+    iface.interface = 'Blackprint/nodes/default';
+    iface.title = "My simple button";
 
     // Called after `.button` have been clicked
-    handle.onclicked = function(ev){
+    node.onclicked = function(ev){
         console.log("Henlo", ev);
     }
 });
@@ -122,29 +122,29 @@ Just let the `node` control your `handle`.
 ```js
 // Register a new node
 // -> (namespace, callback)
-Blackprint.registerNode('math/multiply', function(handle, node){
-    // handle = Blackprint flow handler
-    // node = ScarletsFrame element handler
+Blackprint.registerNode('math/multiply', function(node, iface){
+    // node = Blackprint flow handler
+    // iface = ScarletsFrame element handler
 
     // Give it a title
-    node.title = "Random";
+    iface.title = "Random";
 
     // Give it a description
-    node.description = "Multiply something";
+    iface.description = "Multiply something";
 
     // If the node would have value that can be exported to JSON
     // It must being set inside options object
-    node.options = {};
+    iface.options = {};
 
     //> We will use `default` node type, so let this empty or undefined
-    // node.type = undefined;
+    // iface.interface = 'bp/default';
 
     // ... Other information below ...
 });
 ```
 
 ### Reserved handler property
-`handle` here is the Blackprint flow handler from the example above.
+`node` here is the Blackprint flow handler from the example above.
 
 |Property|Description|
 |---|---|
@@ -165,66 +165,72 @@ Below are reserved property that filled with function/callback
 For the detailed example you can see from [this repository](https://github.com/Blackprint/blackprint.github.io/blob/master/src/js/register-handler.js).
 
 ## Node port registration
-The port must be registered on the `handle` and Blackprint will create internal control with ScarletsFrame so the port can being used for sending or obtaining data from other node's port.
+The port must be registered on the `node` and Blackprint will create internal control with ScarletsFrame so the port can being used for sending or obtaining data from other node's port.
 
 ```js
 // ========= Port Format ==========
 // ... = { PortName: DataType }
 
 // Output port
-handle.outputs = {
+node.outputs = {
     // Declare Result as a output with Number data type
     Result : Number,
 
     // Declare Finish for trigger to other connected port's input callback
     Finish : Function
+
+    // Output can have many connection into the related input data type
 };
 
 // Input port
 // Let's declare as `inputs` variable too, for easy access
-var inputs = handle.inputs = {
+var inputs = node.inputs = {
     // Declare A and validate this input as Number data type
-    A : Number,
+    A : Number, // Primitive type can only have one cable connected
 
     // Declare B that will being called if any value
     // on connected output port was updated
-    B : Blackprint.PortListener(Number, function(Port){
-        // Port.value
+    B : Blackprint.PortListener(Number, function(value, Port){
+        // value === Port.value
     }),
 
     // Declare Start as a callback to start the multiplication
+    // Can have many cable connected
     Start : function(/* arguments */){
         // arguments are passed from the caller/output port of connected node
 
         // Let's call declared function below
         startMultiply();
     },
+
+    // Accept Array of Number, can have many cable connected
+    C : Blackprint.PortArrayOf(Number),
 };
 
 function startMultiply(){
-    handle.outputs.Result = inputs.A * inputs.B;
+    node.outputs.Result = inputs.A * inputs.B;
 
-    handle.outputs.Finish("We can send", "arguments too");
+    node.outputs.Finish("We can send", "arguments too");
 }
 ```
 
 ## Node event
-Node event can be registered after the handle was initialized.<br>
+Node event can be registered after the node was initialized.<br>
 To register a callback for an event you need to call `node.on('event.name', function(args){})`.
 
 |Event Name|Arguments|Description|
 |---|---|---|
-|cable.connect|`(Cable, isOwner)`|Trigger when a cable was connected to a port, isOwner is boolean indicating if it was created from current node|
-|cable.disconnect|`(Cable)`|Trigger when a cable was disconnected from a port|
-|cable.created|`(Cable)`|Trigger when a cable was created from a port|
-|port.menu|`({port:Port, menu:DropDowns})`|Trigger when port menu is going to be created|
+|cable.connect|`(Port, OtherPort, Cable)`|Trigger when a cable was connected to a port, isOwner is boolean indicating if it was created from current node|
+|cable.disconnect|`(Port, OtherPort, Cable)`|Trigger when a cable was disconnected from a port|
+|cable.created|`(Port, OtherPort, Cable)`|Trigger when a cable was created from a port|
+|port.menu|`(Port, DropDowns})`|Trigger when port menu is going to be created|
 |node.menu|`(DropDowns)`|Trigger when node menu is going to be created|
 
 Arguments on the table above with `{...}` is a single object.<br>
 `DropDowns` is an array, and you can push a callback or nested menu inside it.
 
 ```js
-node.on('port.menu', function(data){
+iface.on('port.menu', function(data){
     data.menu.push({
         title:"With callback",
         callback:function(){...}
@@ -268,7 +274,7 @@ If you have exported Blackprint into JSON, then you can easily import it like be
 ```js
 // After imported it will automatically appended into the DOM container
 var nodes = sketch.importJSON('{...}');
-// nodes = [node, node, ...]
+// nodes = [iface, iface, ...]
 ```
 
 ### Create single Blackprint node
@@ -280,9 +286,9 @@ Options is a value for the registered node element from `sketch.registerInterfac
 
 ```js
 // Create the node to the view
-var node = sketch.createNode('math/multiply', {x:20, y:20});
-// node = ScarletsFrame component
-// node.handle == the node handler
+var iface = sketch.createNode('math/multiply', {x:20, y:20});
+// iface = ScarletsFrame component
+// iface.node == the node handler
 ```
 
 ### Get created node list
@@ -316,6 +322,7 @@ Before we're getting started, let's clone this repository.
 $ git clone --depth 1 https://github.com/Blackprint/Blackprint.git .
 $ git clone --depth 1 https://github.com/Blackprint/blackprint.github.io.git ./example
 $ git clone --depth 1 https://github.com/Blackprint/interpreter-js.git ./interpreter-js
+$ git clone --depth 1 https://github.com/Blackprint/nodes.git ./nodes
 
 # Create symbolic link to Blackprint's dist folder
 # (Windows: may need administrator privileges)
@@ -352,6 +359,9 @@ Actually I was never use UE4 Blueprint (and I haven't ever use it yet), but I ev
 Some of the interface design is inpired by UE4 Blueprint, it could be modified by CSS and I will modify it after the project was or almost finished.
 
 The secondary target of this project is - developers can create new custom node and design the node easily (with [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/)), so everyone can share their nodes and import it for their project. Different from other framework, [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/) is designed to handle performance [pressure](https://krausest.github.io/js-framework-benchmark/current.html) while giving many simplicity to the developers (like hot reload) on the browser. You will see some feature that was exist on Blackprint, and it was implemented with very little effort.
+
+## License
+MIT
 
 ### Note
 Please support me or I will cry :(
