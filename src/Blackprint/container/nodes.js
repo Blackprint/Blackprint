@@ -36,10 +36,10 @@ Space.model('nodes', function(self, root){
 	self.list = [];
 	self.on$list = {
 		create:function(el){
-			sizeObserve.observe(el.querySelector('.node'))
+			sizeObserve.observe(el.querySelector('.node'));
 		},
 		remove:function(el){
-			sizeObserve.unobserve(el.querySelector('.node'))
+			sizeObserve.unobserve(el.querySelector('.node'));
 		},
 	};
 
