@@ -45,9 +45,11 @@ class Port extends Blackprint.Interpreter.Port{
 		if(cable === void 0)
 			return;
 
+		if(cable.owner === this) // It's referencing to same port
+			return cable.destroy();
+
 		// Remove cable if ...
-		if(cable.owner === this // It's referencing to same port
-			|| (cable.source === 'outputs' && this.source !== 'inputs') // Output source not connected to input
+		if((cable.source === 'outputs' && this.source !== 'inputs') // Output source not connected to input
 			|| (cable.source === 'inputs' && this.source !== 'outputs')  // Input source not connected to output
 			|| (cable.source === 'properties' && this.source !== 'properties')  // Property source not connected to property
 		){
@@ -82,7 +84,7 @@ class Port extends Blackprint.Interpreter.Port{
 		// Remove cable if there are similar connection for the ports
 		for (var i = 0; i < sourceCables.length; i++) {
 			if(this.cables.includes(sourceCables[i])){
-				// console.log("Duplicate connection");
+				console.log("Duplicated cable removed");
 				cable.destroy();
 				return;
 			}
@@ -95,15 +97,24 @@ class Port extends Blackprint.Interpreter.Port{
 		if(this.feature !== Blackprint.PortArrayOf && this.type !== Function){
 			var removal = cable.target.source === 'inputs' ? cable.target : cable.owner;
 
-			if(removal.cables.length !== 0){
-				removal.cables.pop().destroy();
-				// console.log("Cable was replaced because input doesn't support array");
+			if(removal === cable.owner){
+				if(removal.cables.length !== 1){
+					removal.cables.shift().destroy();
+					removal = true;
+				}
 			}
+			else if(removal.cables.length !== 0){ // when cable not owned
+				removal.cables.pop().destroy();
+				removal = true;
+			}
+
+			if(removal === true)
+				console.log("Cable was replaced because input doesn't support array");
 		}
 
 		// Connect this cable into port's cable list
 		this.cables.push(cable);
-		cable.triggerConnected();
+		cable.connecting();
 	}
 
 	// PointerOver event handler

@@ -2,7 +2,7 @@ Space.model('container', function(self, root){
 	self.cableScope = root('cables');
 	self.nodeScope = root('nodes');
 
-	function onlyNegative(old, now){
+	function onlyNegative(now){
 		if(now > 0) return 0;
 	}
 
@@ -68,7 +68,7 @@ Space.model('container', function(self, root){
 	}
 
 	self.moveContainer = function(ev){
-		self.$el.on('pointermove', moveContainer).on('pointerup', function(){
+		self.$el.on('pointermove', moveContainer).once('pointerup', function(){
 			self.$el.off('pointermove', moveContainer);
 		});
 	}
