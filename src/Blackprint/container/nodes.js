@@ -47,6 +47,22 @@ Space.model('nodes', function(self, root){
 		sketch.createNode(namespace, {x:menuEv.layerX, y:menuEv.layerY});
 	}
 
+	self.checkNodeClick = function(ev){
+		if(ev.target.closest('.ports'))
+			return;
+
+		var node = ev.target.closest('.node');
+		if(node === null)
+			return;
+
+		// Check if he dropped the cable behind current node
+		var cable = root('cables').currentCable;
+		if(cable){
+			var rect = node.getBoundingClientRect();
+			cable.head2[1] = rect.bottom + 15; // Put it on bottom of node
+		}
+	}
+
 	var menuEv;
 	self.menu = function(ev){
 		ev.preventDefault();

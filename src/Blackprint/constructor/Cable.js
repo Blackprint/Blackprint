@@ -93,7 +93,7 @@ class Cable extends Blackprint.Interpreter.Cable{
 		// Save current cable for referencing when cable connected into node's port
 		cablesModel.currentCable = cable;
 
-		var space = $(elem).parent('sf-space');
+		var space = $(ev.target.closest('sf-space'));
 		space.on('pointermove', moveCableHead).once('pointerup', function(ev){
 			space.off('pointermove', moveCableHead);
 

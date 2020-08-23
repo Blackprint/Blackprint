@@ -33,10 +33,10 @@
     <!-- Nodes goes here -->
     <sf-m name="nodes" class="nodes" style="user-select:none;">
       <!-- Handled on ./nodes.js -->
-      <div sf-repeat-this="item in list">
+      <div sf-repeat-this="item in list" @pointerup="checkNodeClick(event)">
         {{@exec
           // Capitalize each word
-          var name= item.interface.split('.html')[0].replace(/-/g, '/').toLowerCase().split('/');
+          var name = item.interface.split('.html')[0].replace(/-/g, '/').toLowerCase().split('/');
 
           for (var i = 0; i < name.length; i++)
             name[i] = name[i][0].toUpperCase() + name[i].slice(1);
