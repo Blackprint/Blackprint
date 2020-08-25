@@ -15,8 +15,6 @@ This library built using ScarletsFrame to maintain it's [performance](https://kr
 </p>
 
 ## Using on your project
-This library is depend on ScarletsFrame to control every elements, template, namespace, and event listener. Please follow [this link](https://github.com/ScarletsFiction/ScarletsFrame/wiki/Installation) to get the minified js link.
-
 To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSON and use [interpreter-js](https://github.com/Blackprint/interpreter-js#example). But it doesn't mean exporting is just like a magic, you also need to write `registerNode` and `registerInterface` on the target interpreter. But if this project is still alive, Blackprint may have a package manager where developer can port their nodes to another available interpreter.
 
 Below are the list of programming language where Blackprint that's being planned.
@@ -27,11 +25,12 @@ Below are the list of programming language where Blackprint that's being planned
 - [JavaScript Interpreter](https://github.com/Blackprint/interpreter-js)
 - [PHP Interpreter](https://github.com/Blackprint/interpreter-php)
 - Python Interpreter
+- C# Interpreter
 - Crystal Interpreter
 
 Blackprint Interpreter that being considered:
-- Java (I'm curious how much memory it would take)
-- C# (I think it's better to make the code generation?)
+- Java (I'm curious how much memory it would take, Gradle? oh no..)
+- Rust (Uhh,yeah.. Aww.. let's unwrap this later..)
 
 Planned Code Generation:
 - Abstract Syntax Tree
@@ -354,9 +353,9 @@ $ gulp compile
 ```
 
 ## Motivation
-Actually I was never use UE4 Blueprint (and I haven't ever use it yet), but I ever use UDK Kismet. Developing a visual script by connecting nodes is my unfinished project since 2014 with Action Script (Adobe Flash). Well, it's not professional to tell a story about my very young age with programming. But the time was passed and I have a feeling like I can continue my old project with my current skill. The main target of the project is to help developers to modify their program's logic while the program is still running. With proper custom script it can be used to manage IoT, Docker container connections, or virtual cable for electrical stuff.
+Actually I was never use UE4 Blueprint (and I haven't ever use it yet because of potato computer), but I ever use UDK Kismet. Developing a visual script by connecting nodes was my unfinished project since 2014 with ActionScript (Adobe Flash). Well, it's not professional to tell a story about my very young age with programming. But the time was passed and I have a feeling like I can continue my old project with my current skill. The main target of the project is to help developers to modify their program's logic while the program is still running. With proper custom script it can be used to manage IoT, Docker container connections, or virtual cable for electrical stuff.
 
-Some of the interface design is inpired by UE4 Blueprint, it could be modified by CSS and I will modify it after the project was or almost finished.
+Some of the interface design is inpired by UE4 Blueprint (I found it on Google Images), it could be modified by CSS and I will redesign it after the project reach final stage.
 
 The secondary target of this project is - developers can create new custom node and design the node easily (with [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/)), so everyone can share their nodes and import it for their project. Different from other framework, [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/) is designed to handle performance [pressure](https://krausest.github.io/js-framework-benchmark/current.html) while giving many simplicity to the developers (like hot reload) on the browser. You will see some feature that was exist on Blackprint, and it was implemented with very little effort.
 
@@ -364,6 +363,9 @@ The secondary target of this project is - developers can create new custom node 
 MIT
 
 ### Note
-Please support me or I will cry :(
+This project is free to use, because I bring this for the future.<br>
+But I also need support for my another project.<br>
+If you use this commercially, please.. or I will cry with my potato :(
+Maybe I could also buy your product that built with Blackprint.
 
 <a href='https://patreon.com/stefansarya'><img src='https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.herokuapp.com%2Fstefansarya%2Fpledges&style=for-the-badge' height='20'></a>
