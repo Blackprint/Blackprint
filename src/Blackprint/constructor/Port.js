@@ -58,17 +58,21 @@ class Port extends Blackprint.Interpreter.Port{
 			return;
 		}
 
-		if(cable.owner.source === 'outputs')
-			if(this.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(this.type, cable.owner.type)){
+		if(cable.owner.source === 'outputs'){
+			if((this.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(this.type, cable.owner.type))
+			   || (this.feature === Blackprint.PortUnion && !Blackprint.PortUnion.validate(this.type, cable.owner.type))){
 				console.log(this.iface.title+"> Port from '"+cable.owner.iface.title + " - " + cable.owner.name+"' was not an "+this.type.name);
 				return cable.destroy();
 			}
+		}
 
-		else if(this.source === 'outputs')
-			if(cable.owner.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(cable.owner.type, this.type)){
+		else if(this.source === 'outputs'){
+			if((cable.owner.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(cable.owner.type, this.type))
+			   || (cable.owner.feature === Blackprint.PortUnion && !Blackprint.PortUnion.validate(cable.owner.type, this.type))){
 				console.log(this.iface.title+"> Port from '"+this.iface.title + " - " + this.name+"' was not an "+cable.owner.type.name);
 				return cable.destroy();
 			}
+		}
 
 		// Remove cable if type restriction
 		if(cable.owner.type === Function && this.type !== Function
