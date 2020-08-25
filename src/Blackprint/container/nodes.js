@@ -6,6 +6,8 @@ Space.model('nodes', function(self, root){
 
 	function resetCablePosition(iface){
 		var container = root('container');
+		var Ofst = container.offset;
+
 		var ports = Blackprint.Node._ports;
 		for(var i=0; i < ports.length; i++){
 			var which = iface[ports[i]];
@@ -27,8 +29,9 @@ Space.model('nodes', function(self, root){
 					else
 						cable = cables[a].head2;
 
-					cable[0] = (rect.x + (rect.width/2) - container.pos.x + self.offset.width)/container.scale;
-					cable[1] = (rect.y + (rect.height/2) - container.pos.y + self.offset.height)/container.scale;
+					var center = rect.width/2;
+					cable[0] = (rect.x+center - container.pos.x) / container.scale + (Ofst.x + -Ofst.x/container.scale);
+					cable[1] = (rect.y+center - container.pos.y) / container.scale + (Ofst.y + -Ofst.y/container.scale);
 				}
 			}
 		}
@@ -45,7 +48,11 @@ Space.model('nodes', function(self, root){
 	};
 
 	function createNode(namespace){
-		sketch.createNode(namespace, {x:menuEv.layerX, y:menuEv.layerY});
+		var container = root('container');
+		sketch.createNode(namespace, {
+			x:menuEv.offsetX-container.offset.x,
+			y:menuEv.offsetY-container.offset.y
+		});
 	}
 
 	self.checkNodeClick = function(ev){
