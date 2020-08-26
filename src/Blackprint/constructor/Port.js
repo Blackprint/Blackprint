@@ -14,12 +14,20 @@ class Port extends Blackprint.Interpreter.Port{
 		// Get size and position of the port
 		var rect = isAuto ? e : this.findPortElement(e.target).getBoundingClientRect();
 
+		var container = this._scope('container');
+
+		var Ofst = {x:0, y:0};
+		if(!isAuto && e.target.closest('sf-space') !== container.$el[0].closest('sf-space')){
+			Ofst = container.offset;
+		}
+
+
 		var center = rect.width/2;
 
 		// Create cable and save the reference
 		var cable = new Cable({
-			x:rect.x + center,
-			y:rect.y + center
+			x:rect.x + center + Ofst.x,
+			y:rect.y + center + Ofst.y
 		}, this);
 
 		// Connect this cable into port's cable list

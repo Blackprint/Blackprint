@@ -30,8 +30,8 @@ Space.model('nodes', function(self, root){
 						cable = cables[a].head2;
 
 					var center = rect.width/2;
-					cable[0] = (rect.x+center - container.pos.x) / container.scale + (Ofst.x + -Ofst.x/container.scale);
-					cable[1] = (rect.y+center - container.pos.y) / container.scale + (Ofst.y + -Ofst.y/container.scale);
+					cable[0] = (rect.x+center - container.pos.x - Ofst.x) / container.scale;
+					cable[1] = (rect.y+center - container.pos.y - Ofst.y) / container.scale;
 				}
 			}
 		}

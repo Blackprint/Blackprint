@@ -12,7 +12,7 @@
       <!-- Put empty space event here, because this element filling the empty space -->
       <!-- recalculatePath: ./container/cables.js -->
       <!-- list: ./container/nodes.js -->
-      <svg style="transform: translate(-{{space[0]}}, -{{space[1]}}px)"
+      <svg
         @contextmenu.stop="container.nodeScope.menu(event)"
         @pointerdown="container.moveContainer(event)"
       >

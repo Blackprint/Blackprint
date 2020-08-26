@@ -12,13 +12,13 @@ class Cable extends Blackprint.Interpreter.Cable{
 		var Ofst = container.offset;
 
 		this.head1 = [
-			(obj.x - container.pos.x) / container.scale + (Ofst.x + -Ofst.x/container.scale),
-			(obj.y - container.pos.y) / container.scale + (Ofst.y + -Ofst.y/container.scale)
+			(obj.x - container.pos.x - Ofst.x) / container.scale,
+			(obj.y - container.pos.y - Ofst.y) / container.scale
 		];
 
 		this.head2 = [
-			(obj.x - container.pos.x) / container.scale + (Ofst.x + -Ofst.x/container.scale),
-			(obj.y - container.pos.y) / container.scale + (Ofst.y + -Ofst.y/container.scale)
+			(obj.x - container.pos.x - Ofst.x) / container.scale,
+			(obj.y - container.pos.y - Ofst.y) / container.scale
 		];
 
 		this.type = !port.type ? 'Any' : port.type.name
@@ -62,7 +62,7 @@ class Cable extends Blackprint.Interpreter.Cable{
 		var container = this.#scope('container');
 		var cablesModel = this.#scope('cables');
 
-		var Ofst = container.offset;
+		var Ofst = ev.target.closest('sf-space').getBoundingClientRect();
 		var cable = this;
 
 		function moveCableHead(ev){
@@ -70,15 +70,15 @@ class Cable extends Blackprint.Interpreter.Cable{
 			if(cablesModel.hoverPort !== false){
 				var center = cablesModel.hoverPort.rect.width/2;
 				cable.head2 = [
-					(cablesModel.hoverPort.rect.x+center - container.pos.x) / container.scale + (Ofst.x + -Ofst.x/container.scale),
-					(cablesModel.hoverPort.rect.y+center - container.pos.y) / container.scale + (Ofst.y + -Ofst.y/container.scale)
+					(cablesModel.hoverPort.rect.x+center - container.pos.x - Ofst.x) / container.scale,
+					(cablesModel.hoverPort.rect.y+center - container.pos.y - Ofst.y) / container.scale
 				];
 			}
 
 			// Follow pointer
 			else cable.head2 = [
-				(ev.clientX - container.pos.x) / container.scale + (Ofst.x + -Ofst.x/container.scale),
-				(ev.clientY - container.pos.y) / container.scale + (Ofst.y + -Ofst.y/container.scale)
+				(ev.clientX - container.pos.x - Ofst.x) / container.scale,
+				(ev.clientY - container.pos.y - Ofst.y) / container.scale
 			];
 		}
 
