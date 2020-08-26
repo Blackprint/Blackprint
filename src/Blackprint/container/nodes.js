@@ -63,11 +63,13 @@ Space.model('nodes', function(self, root){
 		if(node === null)
 			return;
 
+		var container = root('container');
+
 		// Check if he dropped the cable behind current node
 		var cable = root('cables').currentCable;
 		if(cable){
 			var rect = node.getBoundingClientRect();
-			cable.head2[1] = rect.bottom + 15; // Put it on bottom of node
+			cable.head2[1] = -container.pos.y + rect.bottom + 15; // Put it on bottom of node
 		}
 	}
 
