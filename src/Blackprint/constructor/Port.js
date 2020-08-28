@@ -21,7 +21,6 @@ class Port extends Blackprint.Interpreter.Port{
 			Ofst = container.offset;
 		}
 
-
 		var center = rect.width/2;
 
 		// Create cable and save the reference
@@ -85,6 +84,7 @@ class Port extends Blackprint.Interpreter.Port{
 		// Remove cable if type restriction
 		if(cable.owner.type === Function && this.type !== Function
 		   || cable.owner.type !== Function && this.type === Function
+		   || (cable.owner.type !== this.type && !(cable.owner.type instanceof this.type))
 		){
 			console.log(`The cable type is not suitable (${cable.owner.type.name}, ${this.type.name})`);
 			cable.destroy();
@@ -201,13 +201,18 @@ class Port extends Blackprint.Interpreter.Port{
 		for (var i = 0; i < compName.length; i++)
 			compName[i] = compName[i][0].toUpperCase() + compName[i].slice(1);
 
-		var el = new window['$'+compName.join('')](item, Blackprint.space, true);
+		var comp = window['$'+compName.join('')];
+		var beforeEl = portList.getElements(this.name);
+		for (var i = 0; i < beforeEl.length; i++) {
+			var before = beforeEl[i];
 
-		var beforeEl = portList.getElement(this.name);
-		if(beforeSelector !== null)
-			beforeEl.insertBefore(item.$el[0], beforeEl.querySelector(beforeSelector));
-		else
-			beforeEl.appendChild(item.$el[0]);
+			var el = new comp(item, Blackprint.space, true);
+
+			if(beforeSelector !== null)
+				before.insertBefore(el, before.querySelector(beforeSelector));
+			else
+				before.appendChild(el);
+		}
 
 		callback && callback(item);
 	}
