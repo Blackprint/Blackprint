@@ -81,11 +81,18 @@ class Port extends Blackprint.Interpreter.Port{
 			}
 		}
 
+		var isInstanceOf = false;
+		if(cable.owner.type === this.type
+		   || this.type.name === 'Any'
+		   || cable.owner.name === 'Any')
+			isInstanceOf = true;
+		else isInstanceOf = cable.owner.type instanceof this.type;
+
 		// Remove cable if type restriction
-		if(cable.owner.type === Function && this.type !== Function
+		if(!isInstanceOf && (
+		      cable.owner.type === Function && this.type !== Function
 		   || cable.owner.type !== Function && this.type === Function
-		   || (cable.owner.type !== this.type && !(cable.owner.type instanceof this.type))
-		){
+		)){
 			console.log(`The cable type is not suitable (${cable.owner.type.name}, ${this.type.name})`);
 			cable.destroy();
 			return;
