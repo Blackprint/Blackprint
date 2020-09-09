@@ -81,17 +81,16 @@ class Port extends Blackprint.Interpreter.Port{
 			}
 		}
 
-		var isInstanceOf = false;
-		if(cable.owner.type === this.type
-		   || this.type.name === 'Any'
-		   || cable.owner.name === 'Any')
-			isInstanceOf = true;
-		else isInstanceOf = cable.owner.type instanceof this.type;
+		var isInstance = true;
+		if(cable.owner.type !== this.type
+		   && cable.owner.type.constructor === Function
+		   && this.type.constructor === Function)
+			isInstance = cable.owner.type instanceof this.type || this.type instanceof cable.owner.type;
 
 		// Remove cable if type restriction
-		if(!isInstanceOf && (
-		      cable.owner.type === Function && this.type !== Function
-		   || cable.owner.type !== Function && this.type === Function
+		if(!isInstance || (
+			   cable.owner.type === Function && this.type !== Function
+			|| cable.owner.type !== Function && this.type === Function
 		)){
 			console.log(`The cable type is not suitable (${cable.owner.type.name}, ${this.type.name})`);
 			cable.destroy();
@@ -194,33 +193,63 @@ class Port extends Blackprint.Interpreter.Port{
 		scope('dropdown').show(menu, pos.x, pos.y);
 	}
 
-	insertComponent(beforeSelector, compName, item, callback, _repeat){
+	insertComponent(beforeSelector, compName, item, callback, _repeat, _reinit){
 		var portList = this.iface[this.source];
+		var that = this;
+
 		if(portList.getElement === void 0){
-			var that = this;
 			return setTimeout(function(){
 				if(_repeat === void 0)
 					that.insertComponent(beforeSelector, compName, item, callback, true)
 			}, 100);
 		}
 
-		compName = compName.split('-');
-		for (var i = 0; i < compName.length; i++)
-			compName[i] = compName[i][0].toUpperCase() + compName[i].slice(1);
+		if(_reinit === void 0){
+			var reinitClone = false;
+			if(this.iface.initClone === void 0)
+				reinitClone = true;
+			else if(this.iface.initClone.bp$insertComponent === void 0)
+				reinitClone = this.iface.initClone;
+
+			if(reinitClone){
+				var reinitList = [];
+				this.iface.initClone = function(a,b,c){
+					reinitClone !== true && reinitClone(a,b,c);
+
+					for (var i = 0; i < reinitList.length; i++)
+						reinitList[i]();
+				}
+
+				this.iface.initClone.bp$insertComponent = reinitList;
+			}
+
+			this.iface.initClone.bp$insertComponent.push(function(){
+				that.insertComponent(beforeSelector, compName, item, callback, true, true);
+			});
+		}
+
+		if(compName.constructor === String){
+			compName = compName.split('-');
+			for (var i = 0; i < compName.length; i++)
+				compName[i] = compName[i][0].toUpperCase() + compName[i].slice(1);
+		}
 
 		var comp = window['$'+compName.join('')];
 		var beforeEl = portList.getElements(this.name);
 		for (var i = 0; i < beforeEl.length; i++) {
 			var before = beforeEl[i];
+			if(before.bp$insertItem === item)
+				continue;
 
+			before.bp$insertItem = item;
 			var el = new comp(item, Blackprint.space, true);
 
 			if(beforeSelector !== null)
 				before.insertBefore(el, before.querySelector(beforeSelector));
 			else
 				before.appendChild(el);
-		}
 
-		callback && callback(item);
+			callback && callback(item, el);
+		}
 	}
 }

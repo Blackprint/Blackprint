@@ -40,7 +40,13 @@ Space.model('nodes', function(self, root){
 	self.list = [];
 	self.on$list = {
 		create:function(el){
-			sizeObserve.observe(el.querySelector('.node'));
+			var node = el.querySelector('.node');
+			if(!node){
+				console.error("It seems '"+el.firstChild.tagName.toLowerCase()+"' HTML was unable to load", el);
+				return;
+			}
+
+			sizeObserve.observe(node);
 		},
 		remove:function(el){
 			sizeObserve.unobserve(el.querySelector('.node'));
@@ -99,6 +105,8 @@ Space.model('nodes', function(self, root){
 				strArr.pop();
 			}
 		}
+
+		menu.event = ev;
 
 		deep(Blackprint.availableNode, menu);
 		root('dropdown').show(menu, ev.clientX, ev.clientY);
