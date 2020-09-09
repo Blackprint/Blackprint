@@ -10,6 +10,8 @@ Space.model('dropdown', function(self){
 		else
 			manageBackdrop(true);
 
+		// options.event == currentEvent
+
 		options.x = x;
 		options.y = y;
 		self.menus.push(options);
@@ -32,7 +34,7 @@ Space.model('dropdown', function(self){
 		backdropCreated = false;
 
 		self.hide();
-		$('body').off('click', backdropListener);
+		$(sf.window).off('click', backdropListener);
 		self.onCancel && self.onCancel();
 	}
 
@@ -40,12 +42,12 @@ Space.model('dropdown', function(self){
 		setTimeout(function(){
 			if(isAdd){
 				if(!backdropCreated){
-					$('body').on('click', backdropListener);
+					$(sf.window).on('click', backdropListener);
 					backdropCreated = true;
 				}
 			}
 			else{
-				$('body').off('click', backdropListener);
+				$(sf.window).off('click', backdropListener);
 				backdropCreated = false;
 			}
 		}, 10);

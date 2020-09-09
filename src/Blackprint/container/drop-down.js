@@ -7,9 +7,13 @@ Space.component('drop-down', {template:"Blackprint/container/drop-down.html"}, f
 
 	var currentDeepLevel;
 	self.init = function(){
+		var el = sf.window.source(self.$el, $item.event);
+		if(el === null) return;
+		var $el = $(el);
+
 		// Check position when the element rendered
 		requestAnimationFrame(function(){
-			var elem = self.$el[0].firstElementChild;
+			var elem = $el[0].firstElementChild;
 
 			if(self.x + elem.offsetWidth > window.innerWidth)
 				self.x -= elem.offsetWidth;
@@ -22,21 +26,24 @@ Space.component('drop-down', {template:"Blackprint/container/drop-down.html"}, f
 
 		// Find nested options and add event listener on mouse hover
 		var options = self.options;
-		for (let i = 0; i < options.length; i++) {
-			if(options[i].deep !== void 0){
-				$(options.getElement(i)).on('mouseover', function(ev){
+		for (var i = 0; i < options.length; i++) {
+			let opt = options[i];
+
+			if(opt.deep !== void 0){
+				$(options.getElements(i)).on('mouseover', function(ev){
 					if(currentDeepLevel !== void 0)
 						self.deepRemove();
 
-					if(options[i].hover !== void 0)
-						options[i].hover.apply(options[i].context, options[i].args);
+					if(opt.hover !== void 0)
+						opt.hover.apply(opt.context, opt.args);
 
-					var deep = options[i].deep;
+					var deep = opt.deep;
+					deep.event = ev;
 
 					// Use the cache instead
 					if(deep.el !== void 0){
 						currentDeepLevel = deep.el;
-						self.$el.append(deep.el);
+						$el.append(deep.el);
 						return;
 					}
 
@@ -46,33 +53,35 @@ Space.component('drop-down', {template:"Blackprint/container/drop-down.html"}, f
 					deep.y = rect.top - rect.height/2 + 7;
 
 					deep.el = currentDeepLevel = new $DropDown(deep, Blackprint.space);
-					self.$el.append(currentDeepLevel);
+					$el.append(currentDeepLevel);
 				});
 
 				continue;
 			}
 
-			var elem = $(options.getElement(i));
+			if(!opt.callback && !opt.hover && !opt.unhover)
+				continue;
 
-			if(options[i].callback){
+			var elem = $(options.getElements(i));
+			if(opt.callback){
 				elem.on('click', function(ev){
-					if(options[i].unhover !== void 0)
-						options[i].unhover.apply(options[i].context, options[i].args);
+					if(opt.unhover !== void 0)
+						opt.unhover.apply(opt.context, opt.args);
 
-					options[i].callback.apply(options[i].context, options[i].args);
+					opt.callback.apply(opt.context, opt.args);
 					root('dropdown').hide();
 				});
 			}
 
-			if(options[i].hover){
+			if(opt.hover){
 				elem.on('mouseover', function(ev){
-					options[i].hover.apply(options[i].context, options[i].args);
+					opt.hover.apply(opt.context, opt.args);
 				});
 			}
 
-			if(options[i].unhover){
+			if(opt.unhover){
 				elem.on('mouseout', function(ev){
-					options[i].unhover.apply(options[i].context, options[i].args);
+					opt.unhover.apply(opt.context, opt.args);
 				});
 			}
 		}
