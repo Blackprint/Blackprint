@@ -23,6 +23,21 @@ sf-space[blackprint]{
 	@include portType("Boolean", #ff3636);
 	@include portType("String", white);
 
+	.glow-cable{
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	.bp-dot-glow{
+		position: absolute;
+		width: 8px;
+		height: 8px;
+		border-radius: 5px;
+		box-shadow: 0 0 10px yellow;
+		background: yellow;
+		visibility: hidden;
+	}
 
 	.nodes .node .ports.Array > .port {
 		background: none;
@@ -42,8 +57,26 @@ sf-space[blackprint]{
 		backface-visibility: hidden;
 	}
 
-	.highlight .node{
-		filter: drop-shadow(0px 0px 15px white);
+	.nodes{
+		.node:before{
+			left: -1px;
+			z-index: -1;
+			content: '';
+			box-shadow: 0px 0px 20px white;
+			background: #ffffff12;
+			width: 100%;
+			border-radius: 6px;
+			border: 1px solid black;
+			height: 100%;
+			top: -1px;
+			position: absolute;
+			opacity: 0;
+			transition: opacity 0.3s ease-in;
+		}
+
+		.highlight .node:before{
+			opacity: 1;
+		}
 	}
 
 	.cables{
@@ -114,18 +147,17 @@ sf-space[blackprint]{
 			color: white;
 			font-family: Arial;
 			border-radius: 5px;
-			overflow: hidden;
 			border: 1px solid black;
 			box-shadow: 0 0 5px black;
 			position: absolute;
 			background: rgba(0,0,0,0.7);
 			backface-visibility: hidden;
-			transition: filter 0.3s ease-in-out;
 
 			.header{
 				display: block;
 				text-align: left;
 				padding: 3px 5px 2px 5px;
+				border-radius: 5px 5px 0 0;
 				box-shadow: inset 0 0 3px cadetblue;
 				background-image: -webkit-gradient(
 					linear, left top, right bottom, from(rgba(41,184,229,0.7)),
@@ -141,7 +173,8 @@ sf-space[blackprint]{
 
 				&.small{
 				    position: absolute;
-				    height: 100%;
+				    height: 96%;
+				    border-radius: 5px 0 0 5px;
 				}
 			}
 
