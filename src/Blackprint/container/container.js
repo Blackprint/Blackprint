@@ -68,7 +68,9 @@ Space.model('container', function(self, root){
 	}
 
 	self.moveContainer = function(ev){
-		self.$el.on('pointermove', moveContainer).once('pointerup', function(){
+		self.$el.on('pointermove', moveContainer);
+
+		$(sf.window).once('pointerup', function(){
 			self.$el.off('pointermove', moveContainer);
 		});
 	}
