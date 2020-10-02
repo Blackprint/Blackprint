@@ -263,6 +263,8 @@ Blackprint.registerInterface = function(templatePath, options, func){
 		options = {};
 	}
 
+	options.keepTemplate = true;
+
 	if(options.extend === void 0)
 		options.extend = Blackprint.Node;
 
@@ -292,6 +294,6 @@ Blackprint.template = {
 };
 
 // Let's define `Space` that handle model and component as global variable on our private scope
-var Space = Blackprint.space = sf.space('blackprint', {
+var Space = Blackprint.space = new sf.space('blackprint', {
 	templatePath:'Blackprint/page.html'
 });

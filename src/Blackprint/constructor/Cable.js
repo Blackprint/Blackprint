@@ -1,3 +1,6 @@
+var dotGlow = document.createElement('div');
+dotGlow.classList.add('bp-dot-glow');
+
 class Cable extends Blackprint.Interpreter.Cable{
 	connected = false;
 	valid = true;
@@ -25,37 +28,84 @@ class Cable extends Blackprint.Interpreter.Cable{
 		this.source = port.source;
 
 		// Push to cable list
-		port._scope('cables').list.push(this);
+		var list = port._scope('cables').list;
+		list.push(this);
+
+		// Get SVG Path element
+		this.pathEl = list.getElement(this).firstElementChild;
 	}
 
 	visualizeFlow(){
-		var el = $(this.#scope('cables').list.getElement(this));
-		var className;
+		if(this.animating)
+			return;
 
-		if(this.owner.source === 'outputs'){
-			if(this.head1[0] < this.head2[0])
-				className = 'line-flow';
-			else className = 'line-flow-reverse';
-		}
-		else if(this.owner.source === 'inputs'){
-			if(this.head1[0] > this.head2[0])
-				className = 'line-flow';
-			else className = 'line-flow-reverse';
+		this.animating = true;
+		var glowContainer = this.#scope('cables').$el('.glow-cable');
+
+		var anim = this.animPlayer;
+		if(anim === void 0){
+			anim = this.animPlayer = Timeplate.parallel(1000);
+			anim.el = new WeakMap();
 		}
 
-		if(this._timer === void 0)
-			this.#scope('container').showCableAnim();
+		function r(a, b){return Math.round(Math.random()*(b-a)*1000)/1000+a}
 
-		el.addClass(className);
-		clearTimeout(this._timer);
+		var offsetPath = `path('${this.pathEl.getAttribute('d')}')`;
+		var first = {offset:0, offsetPath, offsetDistance:'1%'};
+		var last = {offset: 1, translate: 0, offsetPath, scale: 1, offsetDistance: '100%'};
 
+		var els = new Array(glowContainer.length);
+		for (var z = 0; z < glowContainer.length; z++) {
+			var data = anim.el.get(glowContainer[z]);
+			if(data === void 0){
+				data = [dotGlow.cloneNode(), dotGlow.cloneNode(), dotGlow.cloneNode()];
+				anim.el.set(glowContainer[z], data);
+			}
+
+			for (var i = 0; i < data.length; i++) {
+				var ref = els[i];
+				if(ref === void 0)
+					ref = els[i] = $(new Array(glowContainer.length));
+
+				ref[z] = data[i];
+			}
+
+			$(glowContainer[z]).append(data);
+		}
+
+		var timeline = new Array(3); // 3 glow element
+		for (var i = 0; i < timeline.length; i++) {
+			var keyframes = new Array(4);
+
+			var o = 1/(keyframes.length+3);
+			for (var a = 0; a < keyframes.length; a++) {
+				keyframes[a] = {
+					offset: o*(a+i+1),
+					translate: [r(-15, 15)+'px', r(-15, 15)+'px'],
+					scale: r(0.5, 1.6),
+				};
+			}
+
+			keyframes[0].visibility = 'visible';
+			keyframes.unshift(first, {offset:0.02, visibility: 'hidden'});
+			keyframes.push(last);
+
+			timeline[i] = Timeplate.for(els[i], keyframes, {delay: i*100});
+		}
+
+		anim.timeline = timeline;
+
+		// Put on DOM tree and play it
+		anim.restart();
+
+		// Remove from DOM tree
 		var that = this;
-		this._timer = setTimeout(function(){
-			that._timer = void 0;
+		anim.once('finish', function(){
+			that.animating = false;
 
-			el.removeClass(className);
-			that.#scope('container').hideCableAnim();
-		}, 1000);
+			for (var i = 0; i < els.length; i++)
+				els[i].remove();
+		});
 	}
 
 	cableHeadClicked(ev){
@@ -104,6 +154,12 @@ class Cable extends Blackprint.Interpreter.Cable{
 
 			if(elem !== void 0)
 				elem.css('pointer-events', '');
+		});
+
+		// Hide it if haven't move after it first creation
+		elem.css('display', 'none');
+		$(sf.window).once('pointermove', function(){
+			elem.css('display', '');
 		});
 	}
 

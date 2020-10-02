@@ -35,6 +35,7 @@ sf-space[blackprint]{
 		height: 8px;
 		border-radius: 5px;
 		box-shadow: 0 0 10px yellow;
+		transform: translate(-5px, -5px); // Hide it first on out of bound container
 		background: yellow;
 		visibility: hidden;
 	}
