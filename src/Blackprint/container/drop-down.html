@@ -2,7 +2,7 @@
   display: {{visible ? 'block' : 'none'}};
   transform: translate({{ x }}px, {{ y }}px);
 ">
-  <li sf-repeat-this="x in options" :class="{{!x.title ? 'divider' : ''}}">
+  <li sf-each="x in options" :class="{{!x.title ? 'divider' : ''}}">
     {{@if x.title:
       {[ <a>{{x.title}}</a> ]}
     }}

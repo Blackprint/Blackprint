@@ -1,5 +1,5 @@
 <div class="input">
-  <div sf-repeat-this="key, val in inputs"
+  <div sf-each="key, val in inputs"
         class="ports {{ val.type.name + val.classAdd }}"
         @contextmenu.stop="val.portRightClick(event)"
         @pointerdown.left.stop="val.createCable(event)"

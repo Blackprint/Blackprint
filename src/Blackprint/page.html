@@ -16,7 +16,7 @@
         @contextmenu.stop="container.nodeScope.menu(event)"
         @pointerdown="container.moveContainer(event)"
       >
-        <g sf-repeat-this="x in list" class="
+        <g sf-each="x in list" class="
           {{ x.type }}
           {{ x.valid ? '' : 'invalid' }}
           {{ x.connected ? 'connected' : ''}}
@@ -39,7 +39,7 @@
     <!-- Nodes goes here -->
     <sf-m name="nodes" class="nodes" style="user-select:none;">
       <!-- Handled on ./nodes.js -->
-      <div sf-repeat-this="item in list" @pointerup="checkNodeClick(event)">
+      <div sf-each="item in list" @pointerup="checkNodeClick(event)">
         {{@exec
           // Capitalize each word
           var name = item.interface.split('.html')[0].replace(/-/g, '/').toLowerCase().split('/');
@@ -82,6 +82,6 @@
   </defs></svg>
 
   <sf-m name="dropdown">
-    <drop-down sf-repeat-this="val in menus"></drop-down>
+    <drop-down sf-each="val in menus"></drop-down>
   </sf-m>
 </sf-space>
