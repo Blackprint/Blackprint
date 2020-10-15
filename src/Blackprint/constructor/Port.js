@@ -87,8 +87,15 @@ class Port extends Blackprint.Interpreter.Port{
 		   && this.type.constructor === Function)
 			isInstance = cable.owner.type instanceof this.type || this.type instanceof cable.owner.type;
 
+		var valid = false;
+		if(cable.owner.type.portFeature === Blackprint.PortValidator
+			|| this.type.portFeature === Blackprint.PortValidator
+		){
+			isInstance = valid = true;
+		}
+
 		// Remove cable if type restriction
-		if(!isInstance || (
+		if(!isInstance || !valid && (
 			   cable.owner.type === Function && this.type !== Function
 			|| cable.owner.type !== Function && this.type === Function
 		)){
