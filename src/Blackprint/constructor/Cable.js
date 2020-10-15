@@ -36,7 +36,7 @@ class Cable extends Blackprint.Interpreter.Cable{
 	}
 
 	visualizeFlow(){
-		if(this.animating)
+		if(this.animating || window.Timeplate === void 0)
 			return;
 
 		this.animating = true;
