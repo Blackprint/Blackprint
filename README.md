@@ -4,7 +4,6 @@
 <p align="center">A node to node visual scripting.</p>
 
 <p align="center">
-    <a href='https://patreon.com/stefansarya'><img src='https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.herokuapp.com%2Fstefansarya%2Fpledges&style=for-the-badge' height='20'></a>
     <a href='https://github.com/Blackprint/Blackprint/blob/master/LICENSE'><img src='https://img.shields.io/badge/License-MIT-brightgreen.svg' height='20'></a>
 </p>
 
@@ -46,7 +45,7 @@ Blackprint only giving support on modern browser, because it's designed for the 
 <script src="https://cdn.jsdelivr.net/npm/blackprint-interpreter@latest/dist/interpreter.min.js"></script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/blackprint/blackprint/dist/blackprint.min.css">
-<script src="https://cdn.jsdelivr.net/npm/scarletsframe@0.29.4/dist/scarletsframe.es6.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/scarletsframe@0.31.0/dist/scarletsframe.es6.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/blackprint/blackprint/dist/blackprint.html.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/blackprint/blackprint/dist/blackprint.min.js"></script>
 ```
@@ -353,11 +352,11 @@ $ gulp compile
 ```
 
 ## Motivation
-Actually I was never use UE4 Blueprint (and I haven't ever use it yet because of potato computer), but I ever use UDK Kismet. Developing a visual script by connecting nodes was my unfinished project since 2014 with ActionScript (Adobe Flash). Well, it's not professional to tell a story about my very young age with programming. But the time was passed and I have a feeling like I can continue my old project with my current skill. The main target of the project is to help developers to modify their program's logic while the program is still running. With proper custom script it can be used to manage IoT, Docker container connections, or virtual cable for electrical stuff.
+Actually I was never use UE4 Blueprint (and I haven't ever use it yet because of my potato computer), but I have some experience with UDK Kismet. Developing a visual script by connecting nodes was my unfinished project since 2014 with ActionScript (Adobe Flash). Well, it's not professional to tell a story about my very young age with programming. But the time was passed and I have a feeling like I can continue my old project with my current skill. The main target of the project is to help developers to modify their program's logic while the program is still running. With proper custom script it can be used to manage IoT, Docker container connections, or virtual cable for electrical stuff. Well, it may feel like a dream but it can be turned into the reality.
 
 Some of the interface design is inpired by UE4 Blueprint (I found it on Google Images), it could be modified by CSS and I will redesign it after the project reach final stage.
 
-The secondary target of this project is - developers can create new custom node and design the node easily (with [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/)), so everyone can share their nodes and import it for their project. Different from other framework, [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/) is designed to handle performance [pressure](https://krausest.github.io/js-framework-benchmark/current.html) while giving many simplicity to the developers (like hot reload) on the browser. You will see some feature that was exist on Blackprint, and it was implemented with very little effort.
+The secondary target of this project is - developers can create new custom node and design the node easily (with [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/)), so everyone can share their nodes and import it for their project. Different from other framework, [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/) is designed to handle performance [pressure](https://krausest.github.io/js-framework-benchmark/current.html) while giving many simplicity to the developers (like hot reload) on the browser. You will see some feature that was exist on Blackprint, and it was being implemented with very little effort. But you may find it confusing since I haven't use ES6 modules, sorry about that.. my old potato got roasted any my current potato hate slow compilation (>﹏<).
 
 ## License
 MIT
@@ -368,4 +367,7 @@ But I also need support for my another project.<br>
 If you use this commercially, please.. or I will cry with my potato :(
 Maybe I could also buy your product that built with Blackprint.
 
-<a href='https://patreon.com/stefansarya'><img src='https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.herokuapp.com%2Fstefansarya%2Fpledges&style=for-the-badge' height='20'></a>
+But if you use Blackprint for creating another free open source project<br>
+it may be awesome (๑˃ᴗ˂)ﻭ
+
+<a href="https://paypal.me/stefansarya/"><img src="blue.svg" height="40"></a>
