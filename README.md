@@ -19,7 +19,8 @@ To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSO
 Below are the list of programming language where Blackprint that's being planned.
 
 > Current priority is JavaScript Interpreter<br>
-> Some breaking changes may happen to make it perfect and suitable for every language
+> Some breaking changes may happen to make it suitable for every language
+> If you use the interpreter make sure to specify the version instead of 'latest'
 
 - [JavaScript Interpreter](https://github.com/Blackprint/interpreter-js)
 - [PHP Interpreter](https://github.com/Blackprint/interpreter-php)
@@ -28,8 +29,8 @@ Below are the list of programming language where Blackprint that's being planned
 - Crystal Interpreter
 
 Blackprint Interpreter that being considered:
-- Java (I'm curious how much memory it would take, Gradle? oh no..)
-- Rust (Uhh,yeah.. Aww.. let's unwrap this later..)
+- Java (I'm curious how much memory it would take)
+- Rust (Maybe)
 
 Planned Code Generation:
 - Abstract Syntax Tree
@@ -56,7 +57,7 @@ Blackprint only giving support on modern browser, because it's designed for the 
 > Maybe someone skilled like you interested to improve this open source project.<br>
 > And because of their contribution, you can enjoy the improved Blackprint :)
 
-If something isn't working please fill an issue but don't create an duplicate issue, thanks..
+If something isn't working feel free to open an issue, but don't create an duplicate issue.
 
 ```js
 // Create Blackprint, `sketch` in this documentation will refer to this

@@ -1,12 +1,15 @@
 process.stdout.write("Loading scarletsframe-compiler\r");
 
+var notifier = require('node-notifier');
+
 require("scarletsframe-compiler")({
 	// Start the server
 	browserSync:{
 		// proxy:'http://myjs.sandbox',
-		port:6789, // Accessible-> http://localhost:6789
+		port: process.env.PORT || 6789, // Accessible-> http://localhost:6789
 		ghostMode: false, // Use synchronization between browser?
-		open:false,
+		ui: false,
+		open: false,
 
 		// Standalone server with BrowserSync
 		server:{
@@ -18,6 +21,18 @@ require("scarletsframe-compiler")({
 	// Optional if you want to remove source map on production mode
 	includeSourceMap: process.env.production || true,
 	timestampSourceMap: false,
+	hotReload:{
+		html: true,
+		js: true,
+		scss: true
+	},
+
+	onCompiled: function(which){
+		notifier.notify({
+			title: 'Gulp Compilation',
+			message: which+' was finished!'
+		});
+	},
 
 	// ===== Modify me, add slash as last character if it's directory =====
 	path:{
@@ -124,59 +139,143 @@ require("scarletsframe-compiler")({
 			}
 		},
 
-		// Compiler for UI controls Addons
-		'addons-ui-control':{
+		// Compiler for Input Addons
+		'nodes-input':{
 			versioning:'example/index.html',
 			stripURL:'example/',
 
 			js:{
-				file:'dist/bpao-ui-control.min.js',
+				file:'dist/nodes-input.min.js',
 				header:"/* Blackprint \n MIT Licensed */",
 				combine:[
-					'addons/ui-control/src/init/begin.js',
-					'addons/ui-control/src/**/*.js',
-					'!addons/ui-control/src/init/end.js',
-					'addons/ui-control/src/init/end.js',
+					'nodes/input/_wrapper/begin.js',
+					'nodes/input/**/*.js',
+					'!nodes/input/_wrapper/end.js',
+					'nodes/input/_wrapper/end.js',
 				],
 			},
 			scss:{
-				file:'dist/bpao-ui-control.min.css',
+				file:'dist/nodes-input.min.css',
 				header:"/* Blackprint, MIT Licensed */",
-				combine:['addons/ui-control/src/**/*.scss'],
+				combine:['nodes/input/**/*.scss'],
 			},
 			html:{
-				file:'dist/bpao-ui-control.html.js',
+				file:'dist/nodes-input.html.js',
 				header:"/* Blackprint \n MIT Licensed */",
-				prefix:'BPAO/Control',
-				combine:['addons/ui-control/src/**/*.html'],
+				prefix:'BPAO/Input',
+				combine:['nodes/input/**/*.html'],
 			}
 		},
 
 		// Compiler for WebAudio Addons
-		'addons-webaudio':{
+		'nodes-webaudio':{
 			versioning:'example/index.html',
 			stripURL:'example/',
 
 			js:{
-				file:'dist/bpao-webaudio.min.js',
+				file:'dist/nodes-webaudio.min.js',
 				header:"/* Blackprint \n MIT Licensed */",
 				combine:[
-					'addons/webaudio/src/init/begin.js',
-					'addons/webaudio/src/**/*.js',
-					'!addons/webaudio/src/init/end.js',
-					'addons/webaudio/src/init/end.js',
+					'nodes/webaudio/_wrapper/begin.js',
+					'nodes/webaudio/**/*.js',
+					'!nodes/webaudio/_wrapper/end.js',
+					'nodes/webaudio/_wrapper/end.js',
 				],
 			},
 			scss:{
-				file:'dist/bpao-webaudio.min.css',
+				file:'dist/nodes-webaudio.min.css',
 				header:"/* Blackprint, MIT Licensed */",
-				combine:['addons/webaudio/src/**/*.scss'],
+				combine:['nodes/webaudio/**/*.scss'],
 			},
 			html:{
-				file:'dist/bpao-webaudio.html.js',
+				file:'dist/nodes-webaudio.html.js',
 				header:"/* Blackprint \n MIT Licensed */",
-				prefix:'BPAO/Audio',
-				combine:['addons/webaudio/src/**/*.html'],
+				prefix:'BPAO/WebAudio',
+				combine:['nodes/webaudio/**/*.html'],
+			}
+		},
+
+		// Compiler for WebAnimation Addons
+		'nodes-webanimation':{
+			versioning:'example/index.html',
+			stripURL:'example/',
+
+			js:{
+				file:'dist/nodes-webanimation.min.js',
+				header:"/* Blackprint \n MIT Licensed */",
+				combine:[
+					'nodes/webanimation/_wrapper/begin.js',
+					'nodes/webanimation/**/*.js',
+					'!nodes/webanimation/_wrapper/end.js',
+					'nodes/webanimation/_wrapper/end.js',
+				],
+			},
+			scss:{
+				file:'dist/nodes-webanimation.min.css',
+				header:"/* Blackprint, MIT Licensed */",
+				combine:['nodes/webanimation/**/*.scss'],
+			},
+			html:{
+				file:'dist/nodes-webanimation.html.js',
+				header:"/* Blackprint \n MIT Licensed */",
+				prefix:'BPAO/WebAnimation',
+				combine:['nodes/webanimation/**/*.html'],
+			}
+		},
+
+		// Compiler for WebAnimation Addons
+		'nodes-graphics':{
+			versioning:'example/index.html',
+			stripURL:'example/',
+
+			js:{
+				file:'dist/nodes-graphics.min.js',
+				header:"/* Blackprint \n MIT Licensed */",
+				combine:[
+					'nodes/graphics/_wrapper/begin.js',
+					'nodes/graphics/**/*.js',
+					'!nodes/graphics/_wrapper/end.js',
+					'nodes/graphics/_wrapper/end.js',
+				],
+			},
+			scss:{
+				file:'dist/nodes-graphics.min.css',
+				header:"/* Blackprint, MIT Licensed */",
+				combine:['nodes/graphics/**/*.scss'],
+			},
+			html:{
+				file:'dist/nodes-graphics.html.js',
+				header:"/* Blackprint \n MIT Licensed */",
+				prefix:'BPAO/Graphics',
+				combine:['nodes/graphics/**/*.html'],
+			}
+		},
+
+		// Compiler for WebAnimation Addons
+		'nodes-decoration':{
+			versioning:'example/index.html',
+			stripURL:'example/',
+
+			js:{
+				file:'dist/nodes-decoration.min.js',
+				header:"/* Blackprint \n MIT Licensed */",
+				combine:[
+					'nodes/decoration/_wrapper/begin.js',
+					'nodes/decoration/**/*.js',
+					'!nodes/decoration/_wrapper/end.js',
+					'nodes/decoration/_wrapper/end.js',
+				],
+			},
+			scss:{
+				file:'dist/nodes-decoration.min.css',
+				header:"/* Blackprint, MIT Licensed */",
+				combine:['nodes/decoration/**/*.scss'],
+			},
+			html:{
+				file:'dist/nodes-decoration.html.js',
+				header:"/* Blackprint \n MIT Licensed */",
+				prefix:'BPAO/Decoration',
+				combine:['nodes/decoration/**/*.html'],
 			}
 		},
 	},
