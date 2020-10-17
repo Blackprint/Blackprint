@@ -43,7 +43,7 @@ Blackprint only giving support on modern browser, because it's designed for the 
 
 ```html
 <!-- Must be loaded first -->
-<script src="https://cdn.jsdelivr.net/npm/blackprint-interpreter@latest/dist/interpreter.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blackprint-interpreter@latest/dist/interpreter.js"></script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/blackprint-sketch@latest/dist/blackprint.min.css">
 <script src="https://cdn.jsdelivr.net/npm/scarletsframe@0.31.0/dist/scarletsframe.es6.js"></script>
@@ -373,4 +373,4 @@ Maybe I could also buy your product that built with Blackprint.
 But if you use Blackprint for creating another free open source project<br>
 it may be awesome (๑˃ᴗ˂)ﻭ
 
-<a href="https://paypal.me/stefansarya/"><img src="blue.svg" height="40"></a>
+<a href="https://paypal.me/stefansarya/"><img src="https://github.com/andreostrovsky/donate-with-paypal/raw/master/blue.svg" height="40"></a>
