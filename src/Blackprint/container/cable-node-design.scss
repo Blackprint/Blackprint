@@ -131,14 +131,6 @@ sf-space[blackprint]{
 		    		fill: white;
 		    	}
 		    }
-
-		    g.line-flow path{
-		    	stroke: url(#bp-pathline)
-		    }
-
-		    g.line-flow-reverse path{
-		    	stroke: url(#bp-pathline-reverse)
-		    }
 		}
 	}
 

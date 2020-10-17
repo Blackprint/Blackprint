@@ -17,31 +17,10 @@ Space.model('container', function(self, root){
 	self.origSize = {w:0, h:0};
 	self.offset;
 
-	var cableAnim = [];
 	self.init = function(){
 		self.resetOffset();
 		self.size.w = self.offset.width;
 		self.size.h = self.offset.height;
-
-		// When the container was cloned this function will being called again
-		// So we will only avoid cableAnim being replaced with nothing
-		if(cableAnim[0] === void 0){
-			// Fix SVG performance that causes layout invalidation
-			cableAnim[0] = $('#bp-pathline animate', self.$el[0].parentNode);
-			cableAnim[1] = $('#bp-pathline-reverse animate', self.$el[0].parentNode);
-		}
-
-		self.hideCableAnim();
-	}
-
-	self.hideCableAnim = function(){
-		cableAnim[0].remove();
-		cableAnim[1].remove();
-	}
-
-	self.showCableAnim = function(){
-		$('#bp-pathline', self.$el[0].parentNode).append(cableAnim[0]);
-		$('#bp-pathline-reverse', self.$el[0].parentNode).append(cableAnim[1]);
 	}
 
 	self.resetOffset = function(){

@@ -44,7 +44,8 @@ Space.model('cables', function(self, root){
 		var x1 = item.head1[0], y1 = item.head1[1];
 		var x2 = item.head2[0], y2 = item.head2[1];
 
-		// Written without formula, just logic...
+		// If you use this code as reference please support this project
+		// by put link on your code to this repository :3
 		if(item.source !== 'properties'){
 			var cx = (x2-x1)/2;
 			if(cx > -50 && cx < 0)
