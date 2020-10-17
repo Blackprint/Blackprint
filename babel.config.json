@@ -1,0 +1,14 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env", {
+        "targets": {
+          "chrome": "80"
+        },
+        "modules": false,
+        "loose": false,
+        "shippedProposals": true
+      }
+    ]
+  ]
+}

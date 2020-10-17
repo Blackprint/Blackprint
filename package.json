@@ -1,15 +1,16 @@
 {
-  "name": "Blackprint",
-  "version": "0.1.0",
+  "name": "blackprint-sketch",
+  "version": "0.1.1",
   "scripts": {
     "start": "gulp",
     "compile": "gulp compile"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.4",
-    "@babel/parser": "^7.10.4",
-    "@babel/preset-env": "^7.10.4",
-    "scarletsframe-compiler": "0.1.5"
+    "@babel/core": "^7.12.3",
+    "@babel/parser": "^7.12.3",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "scarletsframe-compiler": "^0.2.2"
   },
   "dependencies": {
     "node-notifier": "^8.0.0"

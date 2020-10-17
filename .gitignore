@@ -12,3 +12,5 @@ zef/
 dist/interpreter.min.*
 addons/
 dist/
+# dist/
+*.npmignore

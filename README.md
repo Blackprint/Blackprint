@@ -45,10 +45,10 @@ Blackprint only giving support on modern browser, because it's designed for the 
 <!-- Must be loaded first -->
 <script src="https://cdn.jsdelivr.net/npm/blackprint-interpreter@latest/dist/interpreter.min.js"></script>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/blackprint/blackprint/dist/blackprint.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/blackprint-sketch@latest/dist/blackprint.min.css">
 <script src="https://cdn.jsdelivr.net/npm/scarletsframe@0.31.0/dist/scarletsframe.es6.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/blackprint/blackprint/dist/blackprint.html.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/blackprint/blackprint/dist/blackprint.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blackprint-sketch@latest/dist/blackprint.html.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/blackprint-sketch@latest/dist/blackprint.min.js"></script>
 ```
 
 ## Documentation
@@ -189,7 +189,7 @@ var inputs = node.inputs = {
 
     // Declare B that will being called if any value
     // on connected output port was updated
-    B : Blackprint.PortListener(Number, function(value, Port){
+    B : Blackprint.PortValidator(Number, function(value, Port){
         // value === Port.value
     }),
 
@@ -336,9 +336,11 @@ $ npm i -g scarletsframe-compiler gulp
 # It could be installed locally without `-g`
 ```
 
-## Starting the server
+## Starting the server and the compiler
 ```sh
 $ gulp
+
+# The compiled interpreter-js and nodes will be placed on ./dist folder
 ```
 
 ## Modifying the code

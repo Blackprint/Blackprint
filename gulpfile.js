@@ -1,6 +1,7 @@
 process.stdout.write("Loading scarletsframe-compiler\r");
 
-var notifier = require('node-notifier');
+// var notifier = require('node-notifier'); // For other OS
+var notifier = new require('node-notifier/notifiers/balloon')(); // For Windows
 
 require("scarletsframe-compiler")({
 	// Start the server
@@ -18,6 +19,11 @@ require("scarletsframe-compiler")({
 		}
 	},
 
+	// Recompile some files before being watched on startup
+	// You may want to check if the git history was changed
+	// And then set this to true with JavaScript
+	startupCompile: false,
+
 	// Optional if you want to remove source map on production mode
 	includeSourceMap: process.env.production || true,
 	timestampSourceMap: false,
@@ -30,7 +36,8 @@ require("scarletsframe-compiler")({
 	onCompiled: function(which){
 		notifier.notify({
 			title: 'Gulp Compilation',
-			message: which+' was finished!'
+			message: which+' was finished!',
+			timeout: 4, time: 4,
 		});
 	},
 
