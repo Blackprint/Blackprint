@@ -364,7 +364,7 @@ The main target of the project is to help developers to modify their program's l
 
 Some of the interface design is inpired by UE4 Blueprint (I found it on Google Images), it could be modified by CSS and I will redesign it after the project reach final stage.
 
-The other target of this project is - developers can create new custom node and design the node easily (with [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/)), so everyone can share their nodes and import it for their project. [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/) is designed to handle performance [pressure](https://krausest.github.io/js-framework-benchmark/current.html) while giving many simplicity to the developers (like hot reload) on the browser. You will see some feature that was exist on Blackprint, and it was being implemented with very little effort. But you may find it confusing since I haven't use ES6 modules. Currently I haven't develop this with ES6 module because my PC's was pretty slow for doing compilation.
+The other target of this project is - developers can create new custom node and design the node easily (with [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/)), so everyone can share their nodes and import it for their project. [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/) is designed to handle performance [pressure](https://krausest.github.io/js-framework-benchmark/current.html) while giving many simplicity to the developers (like hot reload) on the browser. You will see some feature that was exist on Blackprint, and it was being implemented with very little effort. But you may find it confusing since I haven't use ES6 modules, I will change it on the future.
 
 ## License
 MIT
