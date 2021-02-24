@@ -13,7 +13,7 @@
       <!-- recalculatePath: ./container/cables.js -->
       <!-- list: ./container/nodes.js -->
       <svg
-        @contextmenu.stop="container.nodeScope.menu(event)"
+        @contextmenu.stop.prevent="container.nodeScope.menu(event)"
         @pointerdown="container.moveContainer(event)"
       >
         <g sf-each="x in list" class="
@@ -21,7 +21,7 @@
           {{ x.valid ? '' : 'invalid' }}
           {{ x.connected ? 'connected' : ''}}
           {{ x.await ? 'await' : ''}}
-        " @contextmenu.stop.capture="x.cableMenu(event)">
+        " @contextmenu.stop.capture.prevent="x.cableMenu(event)">
           <path
               d="M {{ recalculatePath(x) || x.head1[0] + ' ' + x.head1[1] }}
                  C {{ x.linePath }},

@@ -1,7 +1,9 @@
 process.stdout.write("Loading scarletsframe-compiler\r");
 
-// var notifier = require('node-notifier'); // For other OS
-var notifier = new require('node-notifier/notifiers/balloon')(); // For Windows
+var os = require('os');
+var notifier = os.platform() === 'win32'
+	? new require('node-notifier/notifiers/balloon')() // For Windows
+	: require('node-notifier'); // For other OS
 
 require("scarletsframe-compiler")({
 	// Start the server
@@ -24,11 +26,18 @@ require("scarletsframe-compiler")({
 	// And then set this to true with JavaScript
 	startupCompile: false,
 
+	// Choose your default editor
+	// You must register "subl" or "code" to the PATH environment variable.
+	// https://www.sublimetext.com/docs/command_line.html
+	//
+	// https://code.visualstudio.com/docs/editor/command-line#_code-is-not-recognized-as-an-internal-or-external-command
+	editor: 'sublime', // only 'sublime' or 'vsc' that currently supported
+
 	// Optional if you want to remove source map on production mode
 	includeSourceMap: process.env.production || true,
-	timestampSourceMap: false,
 	hotReload:{
 		html: true,
+		sf: true,
 		js: true,
 		scss: true
 	},
@@ -90,35 +99,41 @@ require("scarletsframe-compiler")({
 				header:"/* Blackprint \n MIT Licensed */",
 				combine:[
 					// Start private wrapper from here
-					'src/Blackprint/init/Blackprint.js',
+					'src/init/Blackprint.js',
 
 					// Import classes first, or sf.component can't extend them
-					'src/Blackprint/constructor/Node.js',
-					'src/Blackprint/constructor/*.js',
+					'src/constructor/Node.js',
+					'src/constructor/*.js',
 
 					// Combine all files but not recursive
-					'src/Blackprint/*.js',
+					'src/*.js',
 
 					// Combine files from all directory recursively
-					'src/Blackprint/**/*.js',
+					'src/**/*.js',
 
 					// Remove this end wrapper from /**/* matches
-					'!src/Blackprint/init/end.js',
+					'!src/init/end.js',
 
 					// End private wrapper for Blackprint
-					'src/Blackprint/init/end.js',
+					'src/init/end.js',
 				],
 			},
 			scss:{
 				file:'dist/blackprint.min.css',
 				header:"/* Blackprint, MIT Licensed */",
-				combine:['src/Blackprint/**/*.scss'],
+				combine:'src/**/*.scss',
 			},
 			html:{
 				file:'dist/blackprint.html.js',
 				header:"/* Blackprint \n MIT Licensed */",
 				prefix:'Blackprint',
-				combine:['src/Blackprint/**/*.html'],
+				combine:'src/**/*.html',
+			},
+			sf:{
+				file:'dist/blackprint.sf',
+				header:"/* Blackprint \n MIT Licensed */",
+				prefix:'Blackprint',
+				combine:'src/**/*.sf',
 			}
 		},
 
@@ -164,13 +179,19 @@ require("scarletsframe-compiler")({
 			scss:{
 				file:'dist/nodes-input.min.css',
 				header:"/* Blackprint, MIT Licensed */",
-				combine:['nodes/input/**/*.scss'],
+				combine:'nodes/input/**/*.scss',
 			},
 			html:{
 				file:'dist/nodes-input.html.js',
 				header:"/* Blackprint \n MIT Licensed */",
 				prefix:'BPAO/Input',
-				combine:['nodes/input/**/*.html'],
+				combine:'nodes/input/**/*.html',
+			},
+			sf:{
+				file:'dist/nodes-input.sf',
+				header:"/* Blackprint \n MIT Licensed */",
+				prefix:'BPAO/Input',
+				combine:'nodes/input/**/*.sf',
 			}
 		},
 
@@ -192,13 +213,19 @@ require("scarletsframe-compiler")({
 			scss:{
 				file:'dist/nodes-webaudio.min.css',
 				header:"/* Blackprint, MIT Licensed */",
-				combine:['nodes/webaudio/**/*.scss'],
+				combine:'nodes/webaudio/**/*.scss',
 			},
 			html:{
 				file:'dist/nodes-webaudio.html.js',
 				header:"/* Blackprint \n MIT Licensed */",
 				prefix:'BPAO/WebAudio',
-				combine:['nodes/webaudio/**/*.html'],
+				combine:'nodes/webaudio/**/*.html',
+			},
+			sf:{
+				file:'dist/nodes-webaudio.sf',
+				header:"/* Blackprint \n MIT Licensed */",
+				prefix:'BPAO/WebAudio',
+				combine:'nodes/webaudio/**/*.sf',
 			}
 		},
 
@@ -220,13 +247,19 @@ require("scarletsframe-compiler")({
 			scss:{
 				file:'dist/nodes-webanimation.min.css',
 				header:"/* Blackprint, MIT Licensed */",
-				combine:['nodes/webanimation/**/*.scss'],
+				combine:'nodes/webanimation/**/*.scss',
 			},
 			html:{
 				file:'dist/nodes-webanimation.html.js',
 				header:"/* Blackprint \n MIT Licensed */",
 				prefix:'BPAO/WebAnimation',
-				combine:['nodes/webanimation/**/*.html'],
+				combine:'nodes/webanimation/**/*.html',
+			},
+			sf:{
+				file:'dist/nodes-webanimation.sf',
+				header:"/* Blackprint \n MIT Licensed */",
+				prefix:'BPAO/WebAnimation',
+				combine:'nodes/webanimation/**/*.sf',
 			}
 		},
 
@@ -248,13 +281,19 @@ require("scarletsframe-compiler")({
 			scss:{
 				file:'dist/nodes-graphics.min.css',
 				header:"/* Blackprint, MIT Licensed */",
-				combine:['nodes/graphics/**/*.scss'],
+				combine:'nodes/graphics/**/*.scss',
 			},
 			html:{
 				file:'dist/nodes-graphics.html.js',
 				header:"/* Blackprint \n MIT Licensed */",
 				prefix:'BPAO/Graphics',
-				combine:['nodes/graphics/**/*.html'],
+				combine:'nodes/graphics/**/*.html',
+			},
+			sf:{
+				file:'dist/nodes-graphics.sf',
+				header:"/* Blackprint \n MIT Licensed */",
+				prefix:'BPAO/Graphics',
+				combine:'nodes/graphics/**/*.sf',
 			}
 		},
 
@@ -276,13 +315,19 @@ require("scarletsframe-compiler")({
 			scss:{
 				file:'dist/nodes-decoration.min.css',
 				header:"/* Blackprint, MIT Licensed */",
-				combine:['nodes/decoration/**/*.scss'],
+				combine:'nodes/decoration/**/*.scss',
 			},
 			html:{
 				file:'dist/nodes-decoration.html.js',
 				header:"/* Blackprint \n MIT Licensed */",
 				prefix:'BPAO/Decoration',
-				combine:['nodes/decoration/**/*.html'],
+				combine:'nodes/decoration/**/*.html',
+			},
+			sf:{
+				file:'dist/nodes-decoration.sf',
+				header:"/* Blackprint \n MIT Licensed */",
+				prefix:'BPAO/Decoration',
+				combine:'nodes/decoration/**/*.sf',
 			}
 		},
 	},

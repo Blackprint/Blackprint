@@ -1,12 +1,12 @@
-<div class="input">
-  <div sf-each="key, val in inputs"
+<div class="output">
+  <div sf-each="key, val in outputs"
         class="ports {{ val.type.name + val.classAdd }}"
-        @contextmenu.stop="val.portRightClick(event)"
+        @contextmenu.stop.prevent="val.portRightClick(event)"
         @pointerdown.left.stop="val.createCable(event)"
         @pointerup.left="val.connectCable()"
         @pointerover="val.portHovered(event)"
         @pointerout="val.portUnhovered(event)">
-    <div class="port" title="{{ val.type.name + val.classAdd }}"></div>
     <div class="name">{{ key }}</div>
+    <div class="port" title="{{ val.type.name + val.classAdd }}"></div>
   </div>
 </div>

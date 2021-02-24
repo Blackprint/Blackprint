@@ -158,7 +158,7 @@ class Cable extends Blackprint.Interpreter.Cable{
 
 		// Hide it if haven't move after it first creation
 		elem.css('display', 'none');
-		$(sf.window).once('pointermove', function(){
+		$(sf.Window).once('pointermove', function(){
 			elem.css('display', '');
 		});
 	}

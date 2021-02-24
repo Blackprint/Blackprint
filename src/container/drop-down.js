@@ -7,7 +7,7 @@ Space.component('drop-down', {template:"Blackprint/container/drop-down.html"}, f
 
 	var currentDeepLevel;
 	self.init = function(){
-		var el = sf.window.source(self.$el, $item.event);
+		var el = sf.Window.source(self.$el, $item.event);
 		if(el === null) return;
 		var $el = $(el);
 

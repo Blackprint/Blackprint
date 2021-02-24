@@ -294,6 +294,6 @@ Blackprint.template = {
 };
 
 // Let's define `Space` that handle model and component as global variable on our private scope
-var Space = Blackprint.space = new sf.space('blackprint', {
+var Space = Blackprint.space = new sf.Space('blackprint', {
 	templatePath:'Blackprint/page.html'
 });

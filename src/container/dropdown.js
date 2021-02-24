@@ -34,7 +34,7 @@ Space.model('dropdown', function(self){
 		backdropCreated = false;
 
 		self.hide();
-		$(sf.window).off('click', backdropListener);
+		$(sf.Window).off('click', backdropListener);
 		self.onCancel && self.onCancel();
 	}
 
@@ -42,12 +42,12 @@ Space.model('dropdown', function(self){
 		setTimeout(function(){
 			if(isAdd){
 				if(!backdropCreated){
-					$(sf.window).on('click', backdropListener);
+					$(sf.Window).on('click', backdropListener);
 					backdropCreated = true;
 				}
 			}
 			else{
-				$(sf.window).off('click', backdropListener);
+				$(sf.Window).off('click', backdropListener);
 				backdropCreated = false;
 			}
 		}, 10);
