@@ -7,10 +7,12 @@
     <a href='https://github.com/Blackprint/Blackprint/blob/master/LICENSE'><img src='https://img.shields.io/badge/License-MIT-brightgreen.svg' height='20'></a>
 </p>
 
-Blackprint editor is built using ScarletsFrame to deliver better [performance](https://krausest.github.io/js-framework-benchmark/current.html) and [features](https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example).
-
 <p align="center">
   <img src="https://user-images.githubusercontent.com/11073373/82104644-e9d5e900-9741-11ea-9689-fc01ddfa81ab.gif">
+</p>
+
+<p align="center">
+    Blackprint Editor is built using ScarletsFrame to deliver better <a href="https://krausest.github.io/js-framework-benchmark/current.html">performance</a> and <a href="https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example">features</a>. The standalone Blackprint Interpreter is distributed separately.
 </p>
 
 ## Documentation
@@ -22,7 +24,7 @@ Blackprint editor is built using ScarletsFrame to deliver better [performance](h
 Please visit the [Wiki](https://github.com/Blackprint/Blackprint/wiki) for the documentation.
 
 ## Some Note
-Please note that each interpreter may have different node compatibilities.<br>
+Each interpreter may have different node compatibilities.<br>
 For the example:
  - WebAudio related node **only compatible** in the browser.
  - Web server related node is **not compatible** in the browser.
@@ -50,7 +52,6 @@ Blackprint Interpreter that being considered:
 Planned Code Generation:
 - Abstract Syntax Tree
 - Dockerfile
-- Nginx Config
 
 ## Motivation
 <details>
@@ -60,20 +61,15 @@ Planned Code Generation:
 
 The main target of the project is to help developers to modify their program's logic while the program is still running. With proper custom script it can be used to manage IoT, Docker container connections, or virtual cable for electrical stuff. Well, it may feel like a dream but it can be turned into the reality.
 
-Some of the interface design is inpired by UE4 Blueprint, it was designed and could be modified with CSS. I will redesign it after the project reach final stage.
-
-The other target of this project is - developers can create new custom node and design the node easily (with [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/)), so everyone can share their nodes and import it for their project. [ScarletsFrame](https://github.com/ScarletsFiction/ScarletsFrame/) is designed to deliver [better performance](https://krausest.github.io/js-framework-benchmark/current.html) while giving some features for the developers. You will see some feature that was exist on Blackprint, and it was being implemented with very little effort. But you may find it confusing since I haven't use ES6 modules, I will change it on the future.
+Some of the interface design is inpired by UE4 Blueprint, it was designed and could be modified with CSS. I will redesign it after the project reach final stage. Currently this haven't being developed with ES6 modules because the hot node reload mechanism is little different.
 
 ## License
 MIT
 
 ### Note
 This project is free to use, because I bring this for our future.<br>
-But I also need your support for the another project.<br>
-If you use this commercially, please.. or I will cry with my potato :(
-Maybe I could also buy your product that built with Blackprint.
+If you use this for commercial project, please consider sponsoring<br>
+the people who work behind the Blackprint project.
 
 But if you use Blackprint for creating another free open source project<br>
-it would be awesome (๑˃ᴗ˂)ﻭ
-
-<a href="https://paypal.me/stefansarya/"><img src="https://github.com/andreostrovsky/donate-with-paypal/raw/master/blue.svg" height="40"></a>
+it may be awesome (๑˃ᴗ˂)ﻭ
