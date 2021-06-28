@@ -6,9 +6,10 @@ node_modules/
 /.phpintel/
 *.lock
 example/
-interpreter-*/
-interpreter/
+engine-*/
+engine/
 zef/
 addons/
 dist/
 *.npmignore
+nodes/
