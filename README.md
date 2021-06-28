@@ -27,15 +27,38 @@ Please visit the [Wiki](https://github.com/Blackprint/Blackprint/wiki) for the d
 ## Blackprint Roadmap
 Engine = Blackprint's engine
 
-- [ ] Javascript Engine
-  - [ ] Browser
-  - [ ] Node.js
-  - [ ] Deno
-- [ ] Blackprint Editor
+This roadmap could be changed on the future
+- [x] [JavaScript Engine](https://github.com/Blackprint/engine-js)
+  - Browser Nodes [Collection](https://github.com/Blackprint/nodes)
+    - [x] [Minimal example](https://github.com/Blackprint/blackprint.github.io/blob/master/src/js/register-handler.js)
+    - [x] [SFMediaStream](https://github.com/ScarletsFiction/SFMediaStream/)
+    - [ ] [Pixi.js](https://www.pixijs.com/)
+    - [ ] [Babylon.js](https://www.babylonjs.com/)
+    - [ ] [Ethers.js](https://docs.ethers.io/v5/)
+  - Node.js Nodes
+    - [x] [Minimal example](https://github.com/Blackprint/engine-js/tree/master/example)
+    - [ ] [Express](http://expressjs.com/)
+  - Deno Nodes
+    - [x] [Minimal example](https://github.com/Blackprint/engine-js/tree/master/example)
+- Blackprint Editor
+  - [x] Basic nodes editor
+  - [x] Hot Reload
+  - [x] Detachable window (with ScarletsFrame)
+  - [x] Demo [Repository](https://github.com/Blackprint/blackprint.github.io)/[Online Editor](https://blackprint.github.io)
+  - [ ] Node list editor (currently with right click)
+  - [ ] Error/log popup or overlay
+  - [ ] Multiple workspaces
   - [ ] Importable editor for different project
-- [ ] PHP Engine
-- [ ] Marketplace or Package Manager (to make it easier for developer to import their nodes to another available engine).
+- [ ] [PHP Engine](https://github.com/Blackprint/engine-php)
+  - [x] [Minimal example](https://github.com/Blackprint/engine-php/tree/master/example)
+- [ ] Python Engine
+  - [ ] Minimal example
+- [ ] Better documentation or website
+- [ ] Tutorial and samples
+- [ ] Nodes Marketplace or Package Manager
 - [ ] Engine's performance benchmark
+
+Feel free to request feature or report an issue
 
 ---
 
@@ -45,18 +68,15 @@ When you're using Blackprint, make sure you specify the fixed version on your pa
 
 Blackprint will follow semantic versioning after reach v1.0.0. Currently if the version number **v0.\*.0** have increased it may have **breaking changes**, while **v0.0.\*** increment may have **new feature or bug fixes**.
 
-## Blackprint Engine
-- [JavaScript Engine](https://github.com/Blackprint/engine-js)
-- [PHP Engine](https://github.com/Blackprint/engine-php)
-- Python Engine
-
-Blackprint Engine that being considered:
+## Other possible plan
+Blackprint Engine:
 - C#
 - Java
 - Rust
 
 Planned Code Generation:
 - Dockerfile
+- Create a compiler for compiling 1 Blackprint file into different engine easily
 
 ## Some Note
 Each engine may have different node compatibilities.<br>
