@@ -1,7 +1,7 @@
 var dotGlow = document.createElement('div');
 dotGlow.classList.add('bp-dot-glow');
 
-class Cable extends Blackprint.Interpreter.Cable{
+class Cable extends Blackprint.Engine.Cable{
 	connected = false;
 	valid = true;
 	linePath = '0 0 0 0';
@@ -192,6 +192,6 @@ class Cable extends Blackprint.Interpreter.Cable{
 		list.splice(list.indexOf(this), 1);
 		// console.log('A cable was removed', this);
 
-		Blackprint.Interpreter.Cable.prototype.destroy.call(this);
+		Blackprint.Engine.Cable.prototype.destroy.call(this);
 	}
 }

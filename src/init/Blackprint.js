@@ -19,6 +19,7 @@ Blackprint.Sketch = class Sketch{
 	constructor(){
 		this.index = Blackprint.index++;
 		this.scope = Blackprint.space.getScope(this.index);
+		Blackprint.space.sketch = this;
 	}
 
 	settings(which, val){
@@ -187,8 +188,8 @@ Blackprint.Sketch = class Sketch{
 	}
 
 	clearNodes(){
-		sketch.scope('nodes').list.splice(0);
-		sketch.scope('cables').list.splice(0);
+		this.scope('nodes').list.splice(0);
+		this.scope('cables').list.splice(0);
 	}
 
 	// Create new node that will be inserted to the container
@@ -207,11 +208,11 @@ Blackprint.Sketch = class Sketch{
 		// Call the registered func (from this.registerNode)
 		func(node, iface);
 
-		if(Blackprint.Interpreter.Node === void 0)
-			throw new Error("Blackprint.Interpreter was not found, please load it first before creating new node");
+		if(Blackprint.Engine.Node === void 0)
+			throw new Error("Blackprint.Engine was not found, please load it first before creating new node");
 
 		// Create the linker between the node and the iface
-		Blackprint.Interpreter.Node.prepare(node, iface);
+		Blackprint.Engine.Node.prepare(node, iface);
 
 		// Replace port prototype (intepreter port -> visual port)
 		['inputs', 'outputs', 'properties'].forEach(function(which){
@@ -247,16 +248,16 @@ Blackprint.Sketch = class Sketch{
 }
 
 // Register node handler
-// Callback function will get handle and node
-// - handle = Blackprint binding
-// - node = ScarletsFrame binding <~> element
+// Callback function will get node and iface
+// - node = Blackprint binding
+// - iface = ScarletsFrame binding <~> element
 Blackprint.registerNode = function(namespace, func){
 	deepProperty(Blackprint.nodes, namespace.split('/'), func);
 }
 
 var NOOP = function(){};
 
-// Register new node type
+// Register new iface type
 Blackprint.registerInterface = function(templatePath, options, func){
 	if(options.constructor === Function){
 		func = options;
@@ -268,10 +269,12 @@ Blackprint.registerInterface = function(templatePath, options, func){
 	if(options.extend === void 0)
 		options.extend = Blackprint.Node;
 
-	if(options.template === void 0)
-		options.template = templatePath+'.html';
-	else
-		options.template += '.html';
+	if(options.html === void 0){
+		if(options.template === void 0)
+			options.template = templatePath+'.sf';
+		else
+			options.template += '.sf';
+	}
 
 	if(options.extend !== Blackprint.Node && !(options.extend.prototype instanceof Blackprint.Node))
 		throw new Error(options.extend.constructor.name+" must be instance of Blackprint.Node");
@@ -280,7 +283,7 @@ Blackprint.registerInterface = function(templatePath, options, func){
 		func = NOOP;
 
 	var nodeName = templatePath.replace(/[\\/]/g, '-').toLowerCase();
-	nodeName = nodeName.split('.html')[0];
+	nodeName = nodeName.split('.sf')[0];
 
 	// Just like how we do it on ScarletsFrame component with namespace feature
 	Blackprint.space.component(nodeName, options, func);

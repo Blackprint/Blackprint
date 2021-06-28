@@ -1,11 +1,12 @@
 process.stdout.write("Loading scarletsframe-compiler\r");
 
+var Gulp = require('gulp');
 var os = require('os');
 var notifier = os.platform() === 'win32'
 	? new require('node-notifier/notifiers/balloon')() // For Windows
 	: require('node-notifier'); // For other OS
 
-require("scarletsframe-compiler")({
+let SFC = require("scarletsframe-compiler")({
 	// Start the server
 	browserSync:{
 		// proxy:'http://myjs.sandbox',
@@ -42,7 +43,7 @@ require("scarletsframe-compiler")({
 		scss: true
 	},
 
-	onCompiled: function(which){
+	onCompiled(which){
 		notifier.notify({
 			title: 'Gulp Compilation',
 			message: which+' was finished!',
@@ -137,26 +138,26 @@ require("scarletsframe-compiler")({
 			}
 		},
 
-		// Compiler for Blackprint Interpreter
-		'interpreter-js':{
+		// Compiler for Blackprint Engine
+		'engine-js':{
 			versioning:'example/index.html',
 			stripURL:'example/',
 
 			js:{
-				file:'dist/interpreter.min.js',
+				file:'dist/engine.min.js',
 				header:"/* Blackprint \n MIT Licensed */",
 				combine:[
 					// Start private wrapper
-					'interpreter-js/src/init/begin.js',
+					'engine-js/src/init/begin.js',
 
 					// Combine files from all directory recursively
-					'interpreter-js/src/**/*.js',
+					'engine-js/src/**/*.js',
 
 					// Remove this end wrapper from /**/* matches
-					'!interpreter-js/src/init/end.js',
+					'!engine-js/src/init/end.js',
 
 					// End private wrapper
-					'interpreter-js/src/init/end.js',
+					'engine-js/src/init/end.js',
 				],
 			}
 		},
@@ -331,4 +332,27 @@ require("scarletsframe-compiler")({
 			}
 		},
 	},
-}, require('gulp'));
+
+	dynamicPath:{
+		path: "nodes/**/*/blackprint.config.js",
+		onLoad(config){
+			console.log(111, config);
+		}
+	}
+}, Gulp);
+
+let configWatch = Gulp.watch("nodes/**/*/blackprint.config.js");
+configWatch.on('all', (event, path) => {
+	console.log(event, path);
+
+	if(event === 'removed'){
+		SFC.removeConfig(path);
+		return;
+	}
+
+	// When config updated/created
+	SFC.importConfig({
+		root: 'nodes/',
+		path: path
+	});
+});

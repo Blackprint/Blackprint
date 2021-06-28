@@ -1,4 +1,4 @@
-class Port extends Blackprint.Interpreter.Port{
+class Port extends Blackprint.Engine.Port{
 	_scope = null;
 
 	findPortElement(el){

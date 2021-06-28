@@ -13,46 +13,62 @@
 </p>
 
 <p align="center">
-    Blackprint Editor is built using ScarletsFrame to deliver better <a href="https://krausest.github.io/js-framework-benchmark/current.html">performance</a> and <a href="https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example">features</a>. The standalone Blackprint Interpreter is distributed separately.
+    Blackprint Editor is built using ScarletsFrame to deliver better <a href="https://krausest.github.io/js-framework-benchmark/current.html">performance</a> and <a href="https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example">features</a>. Blackprint Engine is distributed separately. Please use WebKit based browser like Chromium or Safari for better Blackprint Editor's performance.
 </p>
 
 ## Documentation
 > Warning: This project haven't reach it stable version<br>
-> If you use this on your project please put a link or information to this repository.<br>
+> Please share this project with your friend.<br>
 > Maybe someone skilled like you interested to improve this open source project.<br>
 > And because of their contribution, you can enjoy the improved Blackprint :)
 
 Please visit the [Wiki](https://github.com/Blackprint/Blackprint/wiki) for the documentation.
 
-## Some Note
-Each interpreter may have different node compatibilities.<br>
-For the example:
- - WebAudio related node **only compatible** in the browser.
- - Web server related node is **not compatible** in the browser.
+## Blackprint Roadmap
+Engine = Blackprint's engine
 
-Currently Blackprint will act as interface for each interpreter. Because Blackprint can't transform your code that you have write in a programming language into different programming language, you will need to write code on how to handle Blackprint node with your library in different programming language.
+- [ ] Javascript Engine
+  - [ ] Browser
+  - [ ] Node.js
+  - [ ] Deno
+- [ ] Blackprint Editor
+  - [ ] Importable editor for different project
+- [ ] PHP Engine
+- [ ] Marketplace or Package Manager (to make it easier for developer to import their nodes to another available engine).
+- [ ] Engine's performance benchmark
 
-To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSON and use [interpreter-js](https://github.com/Blackprint/interpreter-js#example). But it doesn't mean exporting is just like a magic, you also need to write `registerNode` and `registerInterface` on the target interpreter. Except if someone already write the interface on target interpreter you can easily plug and play. Blackprint is planning to have a package manager where developer can import their nodes to another available interpreter.
+---
 
-Below are the list of programming language where Blackprint that's being planned.
+The JS and PHP engine is already usable. JavaScript engine and the editor for browser currently is the main focus. PHP, Node.js, and Deno engine could have some changes on the future.
 
-> Current priority is JavaScript Interpreter<br>
-> Some breaking changes may happen to make it suitable for every language
-> If you use the interpreter make sure to specify the version instead of 'latest'
+When you're using Blackprint, make sure you specify the fixed version on your packages.json or CDN link to avoid breaking changes.
 
-- [JavaScript Interpreter](https://github.com/Blackprint/interpreter-js)
-- [PHP Interpreter](https://github.com/Blackprint/interpreter-php)
-- Python Interpreter
-- C# Interpreter (Still need some sample)
+Blackprint will follow semantic versioning after reach v1.0.0. Currently if the version number **v0.\*.0** have increased it may have **breaking changes**, while **v0.0.\*** increment may have **new feature or bug fixes**.
 
-Blackprint Interpreter that being considered:
-- Java (I'm curious how much memory it would take)
-- Rust (Maybe)
-- Crystal (I rarely see this used somewhere)
+## Blackprint Engine
+- [JavaScript Engine](https://github.com/Blackprint/engine-js)
+- [PHP Engine](https://github.com/Blackprint/engine-php)
+- Python Engine
+
+Blackprint Engine that being considered:
+- C#
+- Java
+- Rust
 
 Planned Code Generation:
-- Abstract Syntax Tree
 - Dockerfile
+
+## Some Note
+Each engine may have different node compatibilities.<br>
+For the example:
+ - WebAudio is **only compatible** in the browser.
+ - Web server is **not compatible** in the browser.
+
+---
+
+Currently Blackprint will act as an interface for each engine. You will need to write code on how to handle Blackprint node with your library in different programming language.
+
+To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSON and use [engine-js](https://github.com/Blackprint/engine-js#example). But it doesn't mean exporting is just like a magic, you also need to write `registerNode` and `registerInterface` on the target engine. Except if someone already write the interface on target engine you can easily plug and play.
 
 ## Motivation
 <details>

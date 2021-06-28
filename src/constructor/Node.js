@@ -1,4 +1,4 @@
-Blackprint.Node = class NodeInteface extends Blackprint.Interpreter.CustomEvent{
+Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 	/*
 	x = 0;
 	y = 0;
@@ -29,7 +29,7 @@ Blackprint.Node = class NodeInteface extends Blackprint.Interpreter.CustomEvent{
 	}
 
 	newPort(portName, type, def, which, iface){
-		var temp = new Blackprint.Interpreter.Port(portName, type, def, which, iface);
+		var temp = new Blackprint.Engine.Port(portName, type, def, which, iface);
 		temp._scope = this.#scope;
 		Object.setPrototypeOf(temp, Port.prototype);
 		return temp;
