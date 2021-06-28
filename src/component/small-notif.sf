@@ -1,0 +1,138 @@
+Small Notification
+
+```js
+// You can call this from anywhere
+Blackprint.space.model('small.notif').add('message', 'color', /* delay in ms*/);
+```
+
+
+This will be appended to HTML body
+## html.append-to-body
+<sf-m name="small.notif">
+	<div class="notify-container right-top">
+		<div sf-each="x in list" class="notify-base notify-{{ x.color }}">
+			<span>{{ x.message }}</span>
+			<button @click="close(x)" class="close">×</button>
+		</div>
+	</div>
+</sf-m>
+
+
+## js-global
+Blackprint.space.model('small.notif', function(My){
+	const $ = sf.$;
+
+	My.list = [];
+	My.on$list = {
+		create(el){
+			$(el).animateKey('fadeInUp');
+		},
+		remove(el, remove){
+			$(el).animateKey('fadeOutUp', remove);
+			setTimeout(remove, 500); // To make sure it's removed
+			return true;
+		}
+	};
+
+	My.add = function(message, color, delay){
+		var item = {message, color:color || 'yellow'};
+		My.list.push(item);
+
+		setTimeout(()=> {
+			My.list.splice(My.list.indexOf(item), 1);
+		}, delay || 5000);
+	}
+
+	My.close = function(item){
+		My.list.splice(My.list.indexOf(item), 1);
+	}
+});
+
+## scss-global
+
+@mixin notify-color($name, $txt, $bg, $border){
+  .notify-#{$name}{
+    color: #{$txt};
+    background-color: #{$bg};
+    border-color: #{$border};
+    box-shadow: 0 0 5px 0px #{$border};
+  }
+}
+
+.notify-container{
+  max-width: 95%;
+  position: fixed;
+  z-index: 9999;
+
+  .notify-base{
+    font-weight: bold;
+    padding: 8px 18px 8px 14px;
+    color: #222;
+    // text-shadow: 0 0 rgba(0, 0, 0, 0.5);
+    background-color: rgba(255, 255, 255, 0.97);
+    border: 1px solid;
+    border-color: rgba(255, 255, 255, 0.97);
+    box-shadow: 0 0 7px 0px rgba(255, 255, 255, 0.97);
+    border-radius: 4px;
+    min-width: 51%;
+    word-break: break-word;
+    position: relative;
+    max-width: 300px;
+    margin: 10px 10px 0 10px;
+    display: flex;
+    align-items: center;
+
+    @include notify-color('red', #B94A48, rgba(242, 222, 222, 0.97), #EED3D7);
+    @include notify-color('yellow', #C09853, rgba(252, 248, 227, 0.97), #FBEED5);
+    @include notify-color('blue', #3A87AD, rgba(217, 237, 247, 0.97), #BCE8F1);
+    @include notify-color('green', #468847, rgba(223, 240, 216, 0.97), #D6E9C6);
+
+    span{
+      white-space: pre-line;
+    }
+
+    button {
+      outline: none;
+      &.close {
+          appearance: none;
+          padding: 0;
+          cursor: pointer;
+          background: 0 0;
+          border: 0;
+          width: inherit;
+      }
+    }
+
+    .close {
+      float: right;
+      font-size: 27px;
+      font-weight: 700;
+      line-height: 0.8;
+      right: 6px;
+      position: absolute;
+      color: #000;
+      text-shadow: 0 1px 0 #fff;
+      opacity: .2;
+    }
+  }
+
+
+  &.right-top{
+    right: 0;
+    top: 0;
+
+    .notify-base{
+      float: right;
+      margin: 10px 10px 0 0;
+    }
+  }
+  &.left-top{
+    left: 0;
+    top: 0;
+
+    .notify-base{
+      float: left;
+      margin: 10px 0 0 10px;
+    }
+  }
+}

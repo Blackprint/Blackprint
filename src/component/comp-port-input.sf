@@ -1,0 +1,34 @@
+## html
+<comp-port-input>
+	(<input @pointerdown="click" @pointerup="click" sf-bind="default">)
+</comp-port-input>
+
+
+## js-global
+Blackprint.space.component('comp-port-input', {
+	template: #this.path // 'Blackprint/component/comp-port-input.sf'
+}, function(My, include){
+	var whichBind = My.which;
+	My.default = My.obj[whichBind];
+
+	My.v2m$default = My.whenChanged || function(now){
+		My.obj[whichBind] = now;
+	}
+
+	My.click = function(ev){
+		ev.stopPropagation();
+	}
+});
+
+
+## scss-global
+sf-space[blackprint]{
+	comp-port-input{
+		input{
+			max-width: 30px;
+			background: #000000a8;
+			color: white;
+			border: none;
+		}
+	}
+}

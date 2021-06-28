@@ -1,0 +1,296 @@
+## comment, This will be used for sf-each for above element
+## html
+<drop-down class="bp-dropdown-menu {{hidden}}" style="
+    display: {{visible ? 'block' : 'none'}};
+    transform: translate({{ x }}px, {{ y }}px);
+  ">
+  <div class="first" style="display: {{ !title && 'none' }}">{{ title }}</div>
+  <ul>
+    <li sf-each="x in options" :class="{{x.divider ? 'divider' : ''}}">
+      {{@if x.title:
+        {[ <a>{{x.title}}</a> ]}
+      }}
+    </li>
+  </ul>
+</drop-down>
+
+## scss-global
+sf-space[blackprint]{
+	.bp-dropdown-menu {
+		z-index: 10000;
+		opacity: 0.9;
+
+		margin-top: 7px;
+		background-color: rgba(255, 255, 255, 0.96);
+		box-shadow: 1px 1px 11px 3px black;
+	    border: inherit;
+	    position: fixed;
+	    top: 0;
+	    left: 0;
+	    padding: 0;
+	    border-radius: 3px;
+	    background: white;
+
+	    // transition: 0.3s ease-out;
+	    // transition-property: visibility, opacity;
+	    &.bp-hidden{
+			visibility: hidden;
+			opacity: 0;
+	    }
+	    ul{
+	    	overflow-x: hidden;
+	    	overflow-y: auto;
+	    	max-height: 300px;
+	    }
+
+		li {
+			vertical-align: baseline;
+			display: inherit !important;
+			padding: 8px;
+			min-width: 100px;
+			border-bottom: 1px dashed darkgray;
+			font-size: 16px;
+
+			&:hover{
+				background: lightgray;
+			}
+		}
+		a {
+			cursor: pointer;
+	    	color: black;
+		}
+	}
+
+	.ground-backdrop{
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,.4);
+		z-index: 10000;
+		visibility: hidden;
+		opacity: 0;
+		-webkit-transition-duration: .4s;
+		transition-duration: .4s;
+
+		&.show{
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+
+	drop-down{
+		&> .first {
+			display: block;
+			padding: 5px 10px;
+			text-align: center;
+			font-weight: bold;
+			font-size: 16px;
+			text-transform: capitalize;
+			letter-spacing: 1px;
+			color: white;
+			background: #ba2f63;
+			box-shadow: 0 0 5px #d12867;
+		}
+		ul{
+			margin: 0;
+			padding: 0;
+		}
+	}
+}
+
+## js-global
+// =====================================================================
+// ============== Model <sf-m name="dropdown"></sf-m> ==================
+// =====================================================================
+Blackprint.space.model('dropdown', function(My){
+	My.menus = [];
+	My.onCancel = void 0;
+
+	// options: [{title, callback}, {title, deep:[{...}]}, ...]
+	My.show = function(options, x, y, title){
+		// Remove last dropdown if haven't been closed
+		if(My.menus.length !== 0)
+			My.menus.splice(0);
+		else
+			addBackdrop();
+
+		if(y && y.constructor === String){
+			title = y;
+			y = void 0;
+		}
+
+		options.title = title;
+
+		if(x !== void 0){
+			if(x.constructor === Number){
+				options.x = x;
+				options.y = y;
+			}
+			else{
+				options.x = x.x;
+				options.y = x.y;
+				options.event = x;
+			}
+		}
+
+		My.menus.push(options);
+		return My;
+	}
+
+	My.hide = function(){
+		for (var i = 0; i < My.menus.length; i++)
+			My.menus.getElement(i).model.deepRemove();
+
+		My.menus.splice(0);
+		removeBackdrop();
+	}
+
+	var backdropCreated = false;
+	function backdropListener(ev){
+		if($(ev.target).parent('sf-m')[0] === My.$el[0])
+			return;
+
+		removeBackdrop();
+
+		My.hide();
+		My.onCancel && My.onCancel();
+	}
+
+	var backdrop = $('<div class="ground-backdrop"></div>');
+	function addBackdrop(){
+		if(backdropCreated) return;
+
+		backdrop.insertBefore(My.$el[0]);
+		setTimeout(function(){
+			backdrop.addClass('show');
+			$(sf.Window).on('pointerdown', backdropListener);
+			$(sf.Window).once('contextmenu', function(ev){ev.preventDefault()});
+			backdropCreated = true;
+		}, 10);
+	}
+
+	function removeBackdrop(){
+		backdropCreated = false;
+		backdrop.removeClass('show');
+
+		setTimeout(()=> {
+			backdrop.remove();
+		}, 500);
+
+		$(sf.Window).off('pointerdown', backdropListener);
+	}
+});
+
+// =====================================================================
+// ============== Component <drop-down></drop-down> ====================
+// =====================================================================
+Blackprint.space.component('drop-down', {template: #this.path}, function(My, root, $item){
+	My.visible = false;
+	My.hidden = 'bp-hidden'; // We also need to hide it before repaint
+
+	My.options = $item;
+	My.x = $item.x;
+	My.y = $item.y;
+
+	// First dropdown title
+	My.title = $item.title;
+
+	var currentDeepLevel, $el;
+	My.init = function(){
+		if($item.event !== void 0){
+			var el = sf.Window.source(My.$el, $item.event);
+			if(el === null) return;
+			$el = $(el);
+		}
+		else $el = My.$el;
+
+		My.visible = true;
+
+		// Check position when the element rendered
+		var ulElem = $el[0].querySelector('ul');
+		requestAnimationFrame(function(){
+			setTimeout(function(){
+				if(My.x + ulElem.offsetWidth > window.innerWidth)
+					My.x -= ulElem.offsetWidth;
+
+				if(My.y + ulElem.offsetHeight > window.innerHeight)
+					My.y -= ulElem.offsetHeight;
+
+				My.hidden = '';
+			}, 0);
+		});
+
+		// Find nested options and add event listener on mouse hover
+		var options = My.options;
+		for (var i = 0; i < options.length; i++) {
+			let opt = options[i];
+			const elem = $(options.getElements(i));
+
+			if(opt.deep !== void 0){
+				elem.on('mouseover', function(ev){
+					if(currentDeepLevel !== void 0)
+						My.deepRemove();
+
+					if(opt.hover !== void 0)
+						opt.hover.apply(opt.context, opt.args);
+
+					var deep = opt.deep;
+					deep.event = ev;
+
+					// Use the cache instead
+					if(deep.el !== void 0){
+						currentDeepLevel = deep.el;
+						$el.append(deep.el);
+						return;
+					}
+
+					// Initialize position once
+					var rect = ev.target.getBoundingClientRect();
+					deep.x = ulElem.offsetWidth;
+					deep.y = ev.target.offsetTop - 7;
+
+					// Create dropdown in current sf-space
+					deep.el = currentDeepLevel = new $DropDown(deep, My.$space);
+					$el.append(currentDeepLevel);
+				});
+
+				continue;
+			}
+
+			elem.on('mouseover', function(ev){
+				if(currentDeepLevel !== void 0){
+					My.deepRemove();
+					currentDeepLevel = void 0;
+				}
+
+				opt.hover && opt.hover.apply(opt.context, opt.args);
+			});
+
+			if(opt.callback){
+				elem.on('click', function(ev){
+					if(opt.unhover !== void 0)
+						opt.unhover.apply(opt.context, opt.args);
+
+					opt.callback.apply(opt.context, opt.args);
+					root('dropdown').hide();
+				});
+			}
+
+			if(opt.unhover){
+				elem.on('mouseout', function(ev){
+					opt.unhover.apply(opt.context, opt.args);
+				});
+			}
+		}
+	}
+
+	My.deepRemove = function(){
+		if(currentDeepLevel === void 0)
+			return;
+
+		currentDeepLevel.remove();
+		currentDeepLevel.model.deepRemove();
+	}
+});
