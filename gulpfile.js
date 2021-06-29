@@ -83,9 +83,6 @@ let SFC = require("scarletsframe-compiler")({
 			html:{
 				file:'example/assets/myhtml.html.js',
 				combine:'example/src/**/*.html',
-
-				// Watch changes and apply changes directly without combine to one file
-				// static:['resources/plate/**/*.php', 'resources/views/**/*.php'],
 			}
 		},
 
@@ -177,17 +174,6 @@ let SFC = require("scarletsframe-compiler")({
 					'nodes/input/_wrapper/end.js',
 				],
 			},
-			scss:{
-				file:'dist/nodes-input.min.css',
-				header:"/* Blackprint, MIT Licensed */",
-				combine:'nodes/input/**/*.scss',
-			},
-			html:{
-				file:'dist/nodes-input.html.js',
-				header:"/* Blackprint \n MIT Licensed */",
-				prefix:'BPAO/Input',
-				combine:'nodes/input/**/*.html',
-			},
 			sf:{
 				file:'dist/nodes-input.sf',
 				header:"/* Blackprint \n MIT Licensed */",
@@ -210,17 +196,6 @@ let SFC = require("scarletsframe-compiler")({
 					'!nodes/webaudio/_wrapper/end.js',
 					'nodes/webaudio/_wrapper/end.js',
 				],
-			},
-			scss:{
-				file:'dist/nodes-webaudio.min.css',
-				header:"/* Blackprint, MIT Licensed */",
-				combine:'nodes/webaudio/**/*.scss',
-			},
-			html:{
-				file:'dist/nodes-webaudio.html.js',
-				header:"/* Blackprint \n MIT Licensed */",
-				prefix:'BPAO/WebAudio',
-				combine:'nodes/webaudio/**/*.html',
 			},
 			sf:{
 				file:'dist/nodes-webaudio.sf',
@@ -245,17 +220,6 @@ let SFC = require("scarletsframe-compiler")({
 					'nodes/webanimation/_wrapper/end.js',
 				],
 			},
-			scss:{
-				file:'dist/nodes-webanimation.min.css',
-				header:"/* Blackprint, MIT Licensed */",
-				combine:'nodes/webanimation/**/*.scss',
-			},
-			html:{
-				file:'dist/nodes-webanimation.html.js',
-				header:"/* Blackprint \n MIT Licensed */",
-				prefix:'BPAO/WebAnimation',
-				combine:'nodes/webanimation/**/*.html',
-			},
 			sf:{
 				file:'dist/nodes-webanimation.sf',
 				header:"/* Blackprint \n MIT Licensed */",
@@ -279,17 +243,6 @@ let SFC = require("scarletsframe-compiler")({
 					'nodes/graphics/_wrapper/end.js',
 				],
 			},
-			scss:{
-				file:'dist/nodes-graphics.min.css',
-				header:"/* Blackprint, MIT Licensed */",
-				combine:'nodes/graphics/**/*.scss',
-			},
-			html:{
-				file:'dist/nodes-graphics.html.js',
-				header:"/* Blackprint \n MIT Licensed */",
-				prefix:'BPAO/Graphics',
-				combine:'nodes/graphics/**/*.html',
-			},
 			sf:{
 				file:'dist/nodes-graphics.sf',
 				header:"/* Blackprint \n MIT Licensed */",
@@ -312,17 +265,6 @@ let SFC = require("scarletsframe-compiler")({
 					'!nodes/decoration/_wrapper/end.js',
 					'nodes/decoration/_wrapper/end.js',
 				],
-			},
-			scss:{
-				file:'dist/nodes-decoration.min.css',
-				header:"/* Blackprint, MIT Licensed */",
-				combine:'nodes/decoration/**/*.scss',
-			},
-			html:{
-				file:'dist/nodes-decoration.html.js',
-				header:"/* Blackprint \n MIT Licensed */",
-				prefix:'BPAO/Decoration',
-				combine:'nodes/decoration/**/*.html',
 			},
 			sf:{
 				file:'dist/nodes-decoration.sf',
