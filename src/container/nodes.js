@@ -1,11 +1,11 @@
-Space.model('nodes', function(self, root){
+Space.model('nodes', function(My, include){
 	var sizeObserve = new ResizeObserver(function(items){
 		for (var i = 0; i < items.length; i++)
 			resetCablePosition(items[i].target.model);
 	});
 
 	function resetCablePosition(iface){
-		var container = root('container');
+		var container = include('container');
 		var Ofst = container.offset;
 
 		var ports = Blackprint.Node._ports;
@@ -37,8 +37,8 @@ Space.model('nodes', function(self, root){
 		}
 	}
 
-	self.list = [];
-	self.on$list = {
+	My.list = [];
+	My.on$list = {
 		create:function(el){
 			var node = el.querySelector('.node');
 			if(!node){
@@ -54,14 +54,14 @@ Space.model('nodes', function(self, root){
 	};
 
 	function createNode(namespace){
-		var container = root('container');
+		var container = include('container');
 		Space.sketch.createNode(namespace, {
 			x:menuEv.offsetX-container.offset.x,
 			y:menuEv.offsetY-container.offset.y
 		});
 	}
 
-	self.checkNodeClick = function(ev){
+	My.checkNodeClick = function(ev){
 		if(ev.target.closest('.ports'))
 			return;
 
@@ -69,10 +69,10 @@ Space.model('nodes', function(self, root){
 		if(node === null)
 			return;
 
-		var container = root('container');
+		var container = include('container');
 
 		// Check if he dropped the cable behind current node
-		var cable = root('cables').currentCable;
+		var cable = include('cables').currentCable;
 		if(cable){
 			var rect = node.getBoundingClientRect();
 			cable.head2[1] = -container.pos.y + rect.bottom + 15; // Put it on bottom of node
@@ -80,7 +80,7 @@ Space.model('nodes', function(self, root){
 	}
 
 	var menuEv;
-	self.menu = function(ev){
+	My.menu = function(ev){
 		ev.preventDefault();
 		menuEv = ev;
 
@@ -109,6 +109,6 @@ Space.model('nodes', function(self, root){
 		menu.event = ev;
 
 		deep(Blackprint.availableNode, menu);
-		root('dropdown').show(menu, ev.clientX, ev.clientY);
+		include('dropdown').show(menu, ev.clientX, ev.clientY);
 	}
 });
