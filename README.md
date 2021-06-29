@@ -16,13 +16,15 @@
     Blackprint Editor is built using ScarletsFrame to deliver better <a href="https://krausest.github.io/js-framework-benchmark/current.html">performance</a> and <a href="https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example">features</a>. Blackprint Engine is distributed separately. Please use WebKit based browser like Chromium or Safari for better Blackprint Editor's performance.
 </p>
 
+> Some feature still breaking right now, still on progress to fix it
+
 ## Documentation
 > Warning: This project haven't reach it stable version<br>
 > Please share this project with your friend.<br>
 > Maybe someone skilled like you interested to improve this open source project.<br>
 > And because of their contribution, you can enjoy the improved Blackprint :)
 
-Please visit the [Wiki](https://github.com/Blackprint/Blackprint/wiki) for the documentation.
+Please go to this [link](http://stefansarya.gitbook.io/blackprint) for the documentation.
 
 ## Blackprint Roadmap
 Engine = Blackprint's engine
@@ -48,7 +50,8 @@ This roadmap could be changed on the future
   - [ ] Node list editor (currently with right click)
   - [ ] Error/log popup or overlay
   - [ ] Multiple workspaces
-  - [ ] Importable editor for different project
+  - [ ] Importable minimal editor for different project
+  - [ ] Pausable node execution
 - [ ] [PHP Engine](https://github.com/Blackprint/engine-php)
   - [x] [Minimal example](https://github.com/Blackprint/engine-php/tree/master/example)
 - [ ] Python Engine
