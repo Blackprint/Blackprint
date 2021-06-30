@@ -214,6 +214,10 @@ Blackprint.Sketch = class Sketch{
 		// Create the linker between the node and the iface
 		Blackprint.Engine.Node.prepare(node, iface);
 
+		iface.inputs ??= {};
+		iface.outputs ??= {};
+		iface.properties ??= {};
+
 		// Replace port prototype (intepreter port -> visual port)
 		['inputs', 'outputs', 'properties'].forEach(function(which){
 			var localPorts = iface[which];
