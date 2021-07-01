@@ -6,6 +6,79 @@ var notifier = os.platform() === 'win32'
 	? new require('node-notifier/notifiers/balloon')() // For Windows
 	: require('node-notifier'); // For other OS
 
+function onInit(){
+	let configWatch = Gulp.watch("nodes/**/blackprint.config.js", {ignoreInitial: false});
+
+	function convertCWD(paths, dirPath){
+		dirPath += '/';
+
+		if(paths.constructor === String){
+			if(paths.includes('@cwd'))
+				return paths.replace('@cwd', __dirname);
+			else return dirPath + paths;
+		}
+		else if(paths.constructor === Array){
+			paths = JSON.parse(JSON.stringify(paths));
+
+			for (var i = 0; i < paths.length; i++) {
+				let temp = paths[i];
+				if(temp.includes('@cwd'))
+					paths[i] = temp.replace('@cwd', __dirname);
+				else
+					paths[i] = dirPath + temp;
+			}
+
+			return paths;
+		}
+	}
+
+	configWatch.on('all', function(event, path){
+		path = path.split('\\').join('/');
+		if(path.includes('/_template/')) return;
+
+		if(event === 'removed'){
+			// SFC.removeConfig(path);
+			return;
+		}
+		else if(event !== 'add' && event !== 'change')
+			return;
+		// else => When config updated/created
+
+		let dirPath = path.slice(0, path.lastIndexOf('/'));
+		let config = require('./'+path);
+
+		['html', 'sf'].forEach(v => {
+			let that = config[v];
+			if(that){
+				that.header = config.header;
+				that.prefix = config.templatePrefix;
+			}
+		});
+
+		['js', 'scss', 'html', 'sf'].forEach(v => {
+			let that = config[v];
+			if(that){
+				that.header = config.header;
+				that.file = convertCWD(that.file, dirPath);
+
+				if(that.combine)
+					that.combine = convertCWD(that.combine, dirPath);
+			}
+		});
+
+		config.versioning ='example/index.html';
+		config.stripURL = 'example/';
+
+		if(event === 'add'){
+			SFC.importConfig(config.name, config);
+			console.log(`[Blackprint] "${config.name}" config was added`);
+		}
+		else { // on change
+
+		}
+	});
+}
+
 let SFC = require("scarletsframe-compiler")({
 	// Start the server
 	browserSync:{
@@ -50,6 +123,8 @@ let SFC = require("scarletsframe-compiler")({
 			timeout: 4, time: 4,
 		});
 	},
+
+	onInit: onInit,
 
 	// ===== Modify me, add slash as last character if it's directory =====
 	path:{
@@ -158,143 +233,5 @@ let SFC = require("scarletsframe-compiler")({
 				],
 			}
 		},
-
-		// Compiler for Input Addons
-		'nodes-input':{
-			versioning:'example/index.html',
-			stripURL:'example/',
-
-			js:{
-				file:'dist/nodes-input.min.js',
-				header:"/* Blackprint \n MIT Licensed */",
-				combine:[
-					'nodes/input/_wrapper/begin.js',
-					'nodes/input/**/*.js',
-					'!nodes/input/_wrapper/end.js',
-					'nodes/input/_wrapper/end.js',
-				],
-			},
-			sf:{
-				file:'dist/nodes-input.sf',
-				header:"/* Blackprint \n MIT Licensed */",
-				prefix:'BPAO/Input',
-				combine:'nodes/input/**/*.sf',
-			}
-		},
-
-		// Compiler for WebAudio Addons
-		'nodes-webaudio':{
-			versioning:'example/index.html',
-			stripURL:'example/',
-
-			js:{
-				file:'dist/nodes-webaudio.min.js',
-				header:"/* Blackprint \n MIT Licensed */",
-				combine:[
-					'nodes/webaudio/_wrapper/begin.js',
-					'nodes/webaudio/**/*.js',
-					'!nodes/webaudio/_wrapper/end.js',
-					'nodes/webaudio/_wrapper/end.js',
-				],
-			},
-			sf:{
-				file:'dist/nodes-webaudio.sf',
-				header:"/* Blackprint \n MIT Licensed */",
-				prefix:'BPAO/WebAudio',
-				combine:'nodes/webaudio/**/*.sf',
-			}
-		},
-
-		// Compiler for WebAnimation Addons
-		'nodes-webanimation':{
-			versioning:'example/index.html',
-			stripURL:'example/',
-
-			js:{
-				file:'dist/nodes-webanimation.min.js',
-				header:"/* Blackprint \n MIT Licensed */",
-				combine:[
-					'nodes/webanimation/_wrapper/begin.js',
-					'nodes/webanimation/**/*.js',
-					'!nodes/webanimation/_wrapper/end.js',
-					'nodes/webanimation/_wrapper/end.js',
-				],
-			},
-			sf:{
-				file:'dist/nodes-webanimation.sf',
-				header:"/* Blackprint \n MIT Licensed */",
-				prefix:'BPAO/WebAnimation',
-				combine:'nodes/webanimation/**/*.sf',
-			}
-		},
-
-		// Compiler for WebAnimation Addons
-		'nodes-graphics':{
-			versioning:'example/index.html',
-			stripURL:'example/',
-
-			js:{
-				file:'dist/nodes-graphics.min.js',
-				header:"/* Blackprint \n MIT Licensed */",
-				combine:[
-					'nodes/graphics/_wrapper/begin.js',
-					'nodes/graphics/**/*.js',
-					'!nodes/graphics/_wrapper/end.js',
-					'nodes/graphics/_wrapper/end.js',
-				],
-			},
-			sf:{
-				file:'dist/nodes-graphics.sf',
-				header:"/* Blackprint \n MIT Licensed */",
-				prefix:'BPAO/Graphics',
-				combine:'nodes/graphics/**/*.sf',
-			}
-		},
-
-		// Compiler for WebAnimation Addons
-		'nodes-decoration':{
-			versioning:'example/index.html',
-			stripURL:'example/',
-
-			js:{
-				file:'dist/nodes-decoration.min.js',
-				header:"/* Blackprint \n MIT Licensed */",
-				combine:[
-					'nodes/decoration/_wrapper/begin.js',
-					'nodes/decoration/**/*.js',
-					'!nodes/decoration/_wrapper/end.js',
-					'nodes/decoration/_wrapper/end.js',
-				],
-			},
-			sf:{
-				file:'dist/nodes-decoration.sf',
-				header:"/* Blackprint \n MIT Licensed */",
-				prefix:'BPAO/Decoration',
-				combine:'nodes/decoration/**/*.sf',
-			}
-		},
-	},
-
-	dynamicPath:{
-		path: "nodes/**/*/blackprint.config.js",
-		onLoad(config){
-			console.log(111, config);
-		}
 	}
 }, Gulp);
-
-let configWatch = Gulp.watch("nodes/**/*/blackprint.config.js");
-configWatch.on('all', (event, path) => {
-	console.log(event, path);
-
-	if(event === 'removed'){
-		SFC.removeConfig(path);
-		return;
-	}
-
-	// When config updated/created
-	SFC.importConfig({
-		root: 'nodes/',
-		path: path
-	});
-});
