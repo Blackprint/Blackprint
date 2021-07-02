@@ -59,7 +59,6 @@ This roadmap could be changed on the future
   - [ ] Minimal example
 - Simplify node development for new developer
   - [x] Auto `blackprint.config.js` import
-  - [ ] Auto load new node `.sf` and `.js` on development mode
   - [ ] Support ES6 node development
 - [ ] Better documentation or website
 - [ ] Tutorial and samples

@@ -1,8 +1,9 @@
 process.stdout.write("Loading scarletsframe-compiler\r");
 
-var Gulp = require('gulp');
-var os = require('os');
-var notifier = os.platform() === 'win32'
+let Gulp = require('gulp');
+let os = require('os');
+let resolvePath = require('path').resolve;
+let notifier = os.platform() === 'win32'
 	? new require('node-notifier/notifiers/balloon')() // For Windows
 	: require('node-notifier'); // For other OS
 
@@ -15,7 +16,9 @@ function onInit(){
 		if(paths.constructor === String){
 			if(paths.includes('@cwd'))
 				return paths.replace('@cwd', __dirname);
-			else return dirPath + paths;
+			if(paths.slice(0,1) === '!')
+				return '!' + dirPath + paths.slice(1);
+			return dirPath + paths;
 		}
 		else if(paths.constructor === Array){
 			paths = JSON.parse(JSON.stringify(paths));
@@ -24,6 +27,8 @@ function onInit(){
 				let temp = paths[i];
 				if(temp.includes('@cwd'))
 					paths[i] = temp.replace('@cwd', __dirname);
+				else if(temp.slice(0,1) === '!')
+					paths[i] =  '!' + dirPath + temp.slice(1);
 				else
 					paths[i] = dirPath + temp;
 			}
@@ -32,20 +37,26 @@ function onInit(){
 		}
 	}
 
+	let oldConfig = {};
 	configWatch.on('all', function(event, path){
 		path = path.split('\\').join('/');
 		if(path.includes('/_template/')) return;
 
-		if(event === 'removed'){
-			// SFC.removeConfig(path);
+		if(event !== 'add' && event !== 'change' && event !== 'removed')
 			return;
-		}
-		else if(event !== 'add' && event !== 'change')
-			return;
-		// else => When config updated/created
 
 		let dirPath = path.slice(0, path.lastIndexOf('/'));
-		let config = require('./'+path);
+		let _path = './'+path;
+		let config = require(_path);
+		delete require.cache[resolvePath(_path)];
+
+		if(config.js && config.js.combine){
+			let temp = config.js.combine;
+			if(temp.constructor === String)
+				config.js.combine = [temp, '!blackprint.config.js'];
+			else
+				temp.push('!blackprint.config.js');
+		}
 
 		['html', 'sf'].forEach(v => {
 			let that = config[v];
@@ -66,16 +77,44 @@ function onInit(){
 			}
 		});
 
-		config.versioning ='example/index.html';
-		config.stripURL = 'example/';
+		config.versioning = 'example/index.html';
+		config.autoGenerate = 'url+"/dist/**",'
+		// config.stripURL = 'example/';
+
+		if(event === 'removed'){
+			if(oldConfig[_path] === void 0) return;
+
+			SFC.deleteConfig(oldConfig[_path]);
+			console.log(`[Blackprint] "${config.name}" config was removed`);
+			return;
+		}
+		// else => When config updated/created
 
 		if(event === 'add'){
+			if(config.disabled) return;
+
 			SFC.importConfig(config.name, config);
 			console.log(`[Blackprint] "${config.name}" config was added`);
 		}
-		else { // on change
+		else { // on changed
+			if(oldConfig[_path] === void 0){
+				SFC.importConfig(config.name, config);
+				console.log(`[Blackprint] "${config.name}" config was enabled`);
+			}
+			else{
+				SFC.deleteConfig(oldConfig[_path]);
+				if(config.disabled){
+					delete oldConfig[_path];
+					console.log(`[Blackprint] "${config.name}" config was disabled`);
+					return;
+				}
 
+				SFC.importConfig(config.name, config);
+				console.log(`[Blackprint] "${config.name}" config reloaded`);
+			}
 		}
+
+		oldConfig[_path] = config;
 	});
 }
 
@@ -125,6 +164,9 @@ let SFC = require("scarletsframe-compiler")({
 	},
 
 	onInit: onInit,
+	beforeInit(){
+		SFC.clearGenerateImport('example/index.html');
+	},
 
 	// ===== Modify me, add slash as last character if it's directory =====
 	path:{
@@ -165,7 +207,7 @@ let SFC = require("scarletsframe-compiler")({
 		// You can specify other property if you exporting something
 		blackprint:{
 			versioning:'example/index.html',
-			stripURL:'example/',
+			// stripURL:'example/',
 
 			js:{
 				file:'dist/blackprint.min.js',
@@ -213,7 +255,7 @@ let SFC = require("scarletsframe-compiler")({
 		// Compiler for Blackprint Engine
 		'engine-js':{
 			versioning:'example/index.html',
-			stripURL:'example/',
+			// stripURL:'example/',
 
 			js:{
 				file:'dist/engine.min.js',
