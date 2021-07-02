@@ -4,8 +4,8 @@
 <p align="center">A general purpose node to node visual scripting interface for lowering programming language's steep learning curve, and introduce an easy way to experimenting with your beautiful project for other developer.</p>
 
 <p align="center">
-    <a href='https://github.com/Blackprint/Blackprint/blob/master/LICENSE'><img src='https://img.shields.io/badge/License-MIT-brightgreen.svg' height='20'></a>
-    <a href='https://discord.gg/cNrBnCFy7q'><img src='https://img.shields.io/discord/840593315157245972.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2' height='20'></a>
+  <a href='https://github.com/Blackprint/Blackprint/blob/master/LICENSE'><img src='https://img.shields.io/badge/License-MIT-brightgreen.svg' height='20'></a>
+  <a href='https://discord.gg/cNrBnCFy7q'><img src='https://img.shields.io/discord/840593315157245972.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2' height='20'></a>
 </p>
 
 <p align="center">
@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-    Blackprint Editor is built using ScarletsFrame to deliver better <a href="https://krausest.github.io/js-framework-benchmark/current.html">performance</a> and <a href="https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example">features</a>. Blackprint Engine is distributed separately. Please use WebKit based browser like Chromium or Safari for better Blackprint Editor's performance.
+  Blackprint Editor is built using ScarletsFrame to deliver better <a href="https://krausest.github.io/js-framework-benchmark/current.html">performance</a> and <a href="https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example">features</a>. Blackprint Engine is distributed separately. Please use WebKit based browser like Chromium or Safari for better Blackprint Editor's performance.
 </p>
 
 > Some feature still breaking right now, still on progress to fix it
@@ -47,6 +47,7 @@ This roadmap could be changed on the future
   - [x] Hot Reload
   - [x] Detachable window (with ScarletsFrame)
   - [x] Demo [Repository](https://github.com/Blackprint/blackprint.github.io)/[Online Editor](https://blackprint.github.io)
+  - [ ] Add live beginner guide
   - [ ] Node list editor (currently with right click)
   - [ ] Error/log popup or overlay
   - [ ] Multiple workspaces
@@ -56,6 +57,10 @@ This roadmap could be changed on the future
   - [x] [Minimal example](https://github.com/Blackprint/engine-php/tree/master/example)
 - [ ] Python Engine
   - [ ] Minimal example
+- Simplify node development for new developer
+  - [x] Auto `blackprint.config.js` import
+  - [ ] Auto load new node `.sf` and `.js` on development mode
+  - [ ] Support ES6 node development
 - [ ] Better documentation or website
 - [ ] Tutorial and samples
 - [ ] Nodes Marketplace or Package Manager
