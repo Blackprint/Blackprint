@@ -270,15 +270,17 @@ Blackprint.registerInterface = function(templatePath, options, func){
 
 	options.keepTemplate = true;
 
-	if(options.extend === void 0)
-		options.extend = Blackprint.Node;
-
 	if(options.html === void 0){
 		if(options.template === void 0)
-			options.template = templatePath+'.sf';
-		else
-			options.template += '.sf';
+			options.template = templatePath;
+
+		if(window.templates[`${options.template}.html`] !== void 0)
+			options.template += '.html';
+		else options.template += '.sf';
 	}
+
+	if(options.extend === void 0)
+		options.extend = Blackprint.Node;
 
 	if(options.extend !== Blackprint.Node && !(options.extend.prototype instanceof Blackprint.Node))
 		throw new Error(options.extend.constructor.name+" must be instance of Blackprint.Node");
@@ -287,7 +289,7 @@ Blackprint.registerInterface = function(templatePath, options, func){
 		func = NOOP;
 
 	var nodeName = templatePath.replace(/[\\/]/g, '-').toLowerCase();
-	nodeName = nodeName.split('.sf')[0];
+	nodeName = nodeName.replace(/\.\w+$/, '');
 
 	// Just like how we do it on ScarletsFrame component with namespace feature
 	Blackprint.space.component(nodeName, options, func);
@@ -297,10 +299,10 @@ Blackprint.nodes = {};
 Blackprint.availableNode = Blackprint.nodes; // To display for available dropdown nodes
 Blackprint.index = 0;
 Blackprint.template = {
-	outputPort:'Blackprint/nodes/template/output-port.html'
+	outputPort:'Blackprint/nodes/template/output-port.sf'
 };
 
 // Let's define `Space` that handle model and component as global variable on our private scope
 var Space = Blackprint.space = new sf.Space('blackprint', {
-	templatePath:'Blackprint/page.html'
+	templatePath:'Blackprint/page.sf'
 });

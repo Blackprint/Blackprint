@@ -21,7 +21,7 @@ Space.model('cables', function(self, root){
 	self.currentCable = void 0;
 
 	// This will run everytime the cable was moving
-	// used on: ../page.html
+	// used on: ../page.sf
 	var pendingCable = new Set();
 	var recalculatePending = false;
 	self.recalculatePath = function(item){

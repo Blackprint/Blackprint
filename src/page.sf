@@ -1,3 +1,4 @@
+## html
 <sf-space blackprint>
   <sf-m name="container"
     @mousewheel.prevent="scaleContainer(event)"
@@ -42,7 +43,7 @@
       <div sf-each="item in list" @pointerup="checkNodeClick(event)">
         {{@exec
           // Capitalize each word
-          var name = item.interface.split('.html')[0].replace(/-/g, '/').toLowerCase().split('/');
+          var name = item.interface.split('.sf')[0].replace(/-/g, '/').toLowerCase().split('/');
 
           for (var i = 0; i < name.length; i++)
             name[i] = name[i][0].toUpperCase() + name[i].slice(1);
