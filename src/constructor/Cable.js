@@ -170,13 +170,13 @@ class Cable extends Blackprint.Engine.Cable{
 			title:this.target ? "Disconnect" : "Delete",
 			context:this,
 			callback:Cable.prototype.destroy,
-			hover:function(){
+			hover(){
 				this.owner.iface.$el.addClass('highlight');
 
 				if(this.target)
 					this.target.iface.$el.addClass('highlight');
 			},
-			unhover:function(){
+			unhover(){
 				this.owner.iface.$el.removeClass('highlight');
 
 				if(this.target)

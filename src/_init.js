@@ -1,7 +1,7 @@
 // ToDo: Export as module instead to window
 if(window.Blackprint === void 0)
 	window.Blackprint = {
-		settings:function(which, val){
+		settings(which, val){
 			Blackprint.settings[which] = val;
 		}
 	};
@@ -275,8 +275,13 @@ Blackprint.registerInterface = function(templatePath, options, func){
 		}
 	}
 
-	if(options.extend === void 0)
-		options.extend = Blackprint.Node;
+	if(options.extend === void 0){
+		if(func !== void 0 && Object.getPrototypeOf(func) !== Function.prototype){
+			options.extend = func;
+			func = NOOP;
+		}
+		else options.extend = Blackprint.Node;
+	}
 
 	if(options.extend !== Blackprint.Node && !(options.extend.prototype instanceof Blackprint.Node))
 		throw new Error(options.extend.constructor.name+" must be instance of Blackprint.Node");

@@ -39,7 +39,7 @@ Space.model('nodes', function(My, include){
 
 	My.list = [];
 	My.on$list = {
-		create:function(el){
+		create(el){
 			var node = el.querySelector('.node');
 			if(!node){
 				console.error("It seems '"+el.firstChild.tagName.toLowerCase()+"' HTML was unable to load", el);
@@ -48,7 +48,7 @@ Space.model('nodes', function(My, include){
 
 			sizeObserve.observe(node);
 		},
-		remove:function(el){
+		remove(el){
 			sizeObserve.unobserve(el.querySelector('.node'));
 		},
 	};

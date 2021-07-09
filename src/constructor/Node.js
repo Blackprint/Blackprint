@@ -71,7 +71,7 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 		var menu = [{
 			title:'Delete',
 			args:[this],
-			callback:function(iface){
+			callback(iface){
 				var list = scope('nodes').list;
 				var i = list.indexOf(iface);
 

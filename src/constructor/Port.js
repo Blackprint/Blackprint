@@ -177,12 +177,12 @@ class Port extends Blackprint.Engine.Port{
 				title:target.iface.title+`(${this.name} ~ ${target.name})`,
 				context:cables[i],
 				callback:Cable.prototype.destroy,
-				hover:function(){
+				hover(){
 					scope('cables').list.getElement(this).classList.add('highlight');
 
 					target.iface.$el.addClass('highlight');
 				},
-				unhover:function(){
+				unhover(){
 					scope('cables').list.getElement(this).classList.remove('highlight');
 
 					target.iface.$el.removeClass('highlight');
