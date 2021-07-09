@@ -42,11 +42,11 @@ This roadmap could be changed on the future
     - [ ] [Express](http://expressjs.com/)
   - Deno Nodes
     - [x] [Minimal example](https://github.com/Blackprint/engine-js/tree/master/example)
-- Blackprint Editor
+- [ ] Blackprint Editor
   - [x] Basic nodes editor
   - [x] Hot Reload
   - [x] Detachable window (with ScarletsFrame)
-  - [x] Demo [Repository](https://github.com/Blackprint/blackprint.github.io)/[Online Editor](https://blackprint.github.io)
+  - [x] [Demo](https://blackprint.github.io) ([Repository](https://github.com/Blackprint/blackprint.github.io))
   - [ ] Add live beginner guide
   - [ ] Node list editor (currently with right click)
   - [ ] Error/log popup or overlay
@@ -57,7 +57,7 @@ This roadmap could be changed on the future
   - [x] [Minimal example](https://github.com/Blackprint/engine-php/tree/master/example)
 - [ ] Python Engine
   - [ ] Minimal example
-- Simplify node development for new developer
+- [ ] Simplify node development for new developer
   - [x] Auto `blackprint.config.js` import
   - [ ] Support ES6 node development
 - [ ] Better documentation or website

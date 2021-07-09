@@ -1,10 +1,4 @@
-// Start private scope for Blackprint Module
-;(function(global, factory){
-  if(typeof exports === 'object' && typeof module !== 'undefined')
-  	return module.exports = factory(global);
-  factory(global);
-}(typeof window !== "undefined" ? window : this, (function(window){
-
+// ToDo: Export as module instead to window
 if(window.Blackprint === void 0)
 	window.Blackprint = {
 		settings:function(which, val){
@@ -274,9 +268,11 @@ Blackprint.registerInterface = function(templatePath, options, func){
 		if(options.template === void 0)
 			options.template = templatePath;
 
-		if(window.templates[`${options.template}.html`] !== void 0)
-			options.template += '.html';
-		else options.template += '.sf';
+		if(!/\.(html|sf)$/.test(options.template)){
+			if(window.templates[`${options.template}.html`] !== void 0)
+				options.template += '.html';
+			else options.template += '.sf';
+		}
 	}
 
 	if(options.extend === void 0)

@@ -70,26 +70,13 @@ let SFC = require("scarletsframe-compiler")({
 
 				// Will be processed from the top to bottom
 				combine:[
-					// Start private wrapper from here
-					'example/src/init/init.js',
-
 					// Combine files from all directory recursively
 					'example/src/**/*.js',
-
-					// Remove this end wrapper from /**/* matches
-					'!example/src/init/end.js',
-
-					// End of wrapper
-					'example/src/init/end.js',
 				],
 			},
 			scss:{
 				file:'example/assets/mycss.min.css',
 				combine:'example/src/**/*.scss',
-			},
-			html:{
-				file:'example/assets/myhtml.html.js',
-				combine:'example/src/**/*.html',
 			},
 			sf:{
 				file:'example/assets/custom.sf',
@@ -105,10 +92,11 @@ let SFC = require("scarletsframe-compiler")({
 
 			js:{
 				file:'dist/blackprint.min.js',
+				wrapped: true,
 				header:"/* Blackprint \n MIT Licensed */",
 				combine:[
 					// Start private wrapper from here
-					'src/init/Blackprint.js',
+					'src/_init.js',
 
 					// Import classes first, or sf.component can't extend them
 					'src/constructor/Node.js',
@@ -119,24 +107,7 @@ let SFC = require("scarletsframe-compiler")({
 
 					// Combine files from all directory recursively
 					'src/**/*.js',
-
-					// Remove this end wrapper from /**/* matches
-					'!src/init/end.js',
-
-					// End private wrapper for Blackprint
-					'src/init/end.js',
 				],
-			},
-			scss:{
-				file:'dist/blackprint.min.css',
-				header:"/* Blackprint, MIT Licensed */",
-				combine:'src/**/*.scss',
-			},
-			html:{
-				file:'dist/blackprint.html.js',
-				header:"/* Blackprint \n MIT Licensed */",
-				prefix:'Blackprint',
-				combine:'src/**/*.html',
 			},
 			sf:{
 				file:'dist/blackprint.sf',
@@ -153,19 +124,14 @@ let SFC = require("scarletsframe-compiler")({
 
 			js:{
 				file:'dist/engine.min.js',
+				wrapped: true,
 				header:"/* Blackprint \n MIT Licensed */",
 				combine:[
 					// Start private wrapper
-					'engine-js/src/init/begin.js',
+					'engine-js/src/_init.js',
 
 					// Combine files from all directory recursively
 					'engine-js/src/**/*.js',
-
-					// Remove this end wrapper from /**/* matches
-					'!engine-js/src/init/end.js',
-
-					// End private wrapper
-					'engine-js/src/init/end.js',
 				],
 			}
 		},
