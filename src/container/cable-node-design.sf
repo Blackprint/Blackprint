@@ -286,3 +286,13 @@ sf-space[blackprint]{
 		}
 	}
 }
+
+body.fast-blackprint sf-space[blackprint]{
+	.cables > svg{
+		filter: none;
+		transform: translateZ(1px);
+	}
+	.nodes .node{
+		box-shadow: none;
+	}
+}
