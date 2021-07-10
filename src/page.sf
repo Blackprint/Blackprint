@@ -22,14 +22,14 @@
           {{ x.valid ? '' : 'invalid' }}
           {{ x.connected ? 'connected' : ''}}
           {{ x.await ? 'await' : ''}}
-        " @contextmenu.stop.capture.prevent="x.cableMenu(event)">
+        " @contextmenu.capture.prevent="x.cableMenu(event)">
           <path
               d="M {{ recalculatePath(x) || x.head1[0] + ' ' + x.head1[1] }}
                  C {{ x.linePath }},
                    {{ recalculatePath(x) || x.head2[0] + ' ' + x.head2[1] }}"
           ></path>
           <circle
-              @pointerdown.capture.stop="x.cableHeadClicked(event)"
+              @pointerdown.capture="x.cableHeadClicked(event)"
               transform="translate({{ x.head2[0] }}, {{ x.head2[1] }})"
           ></circle>
         </g>

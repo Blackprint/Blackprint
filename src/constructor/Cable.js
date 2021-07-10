@@ -109,6 +109,8 @@ class Cable extends Blackprint.Engine.Cable{
 	}
 
 	cableHeadClicked(ev, isCreating){
+		ev.stopPropagation();
+
 		var container = this.#scope('container');
 		var cablesModel = this.#scope('cables');
 
