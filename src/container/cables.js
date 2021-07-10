@@ -41,8 +41,8 @@ Space.model('cables', function(self, root){
 	}
 
 	function recalculatePath(item){
-		var x1 = item.head1[0], y1 = item.head1[1];
-		var x2 = item.head2[0], y2 = item.head2[1];
+		const [x1, y1] = item.head1;
+		const [x2, y2] = item.head2;
 
 		// If you use this code as reference please support this project
 		// by put link on your code to this repository :3

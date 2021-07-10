@@ -40,7 +40,7 @@ class Port extends Blackprint.Engine.Port{
 			return cable;
 
 		// Default head index is "2" when creating new cable
-		cable.cableHeadClicked(e);
+		cable.cableHeadClicked(e, true);
 		this.iface._trigger('cable.created', this, cable);
 	}
 

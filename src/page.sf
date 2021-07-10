@@ -30,7 +30,7 @@
           ></path>
           <circle
               @pointerdown.capture.stop="x.cableHeadClicked(event)"
-              transform="translate({{x.head2[0]}}, {{x.head2[1]}})"
+              transform="translate({{ x.head2[0] }}, {{ x.head2[1] }})"
           ></circle>
         </g>
       </svg>

@@ -108,7 +108,7 @@ class Cable extends Blackprint.Engine.Cable{
 		});
 	}
 
-	cableHeadClicked(ev){
+	cableHeadClicked(ev, isCreating){
 		var container = this.#scope('container');
 		var cablesModel = this.#scope('cables');
 
@@ -156,11 +156,12 @@ class Cable extends Blackprint.Engine.Cable{
 				elem.css('pointer-events', '');
 		});
 
-		// Hide it if haven't move after it first creation
-		elem.css('display', 'none');
-		$(sf.Window).once('pointermove', function(){
-			elem.css('display', '');
-		});
+		if(isCreating){
+			cable.head2 = [
+				(ev.clientX - container.pos.x - Ofst.x) / container.scale,
+				(ev.clientY - container.pos.y - Ofst.y) / container.scale
+			];
+		}
 	}
 
 	cableMenu(ev){
