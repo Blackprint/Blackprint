@@ -1,81 +1,82 @@
-Space.model('container', function(self, root){
-	self.cableScope = root('cables');
-	self.nodeScope = root('nodes');
+Space.model('container', function(My, include){
+	My.cableScope = include('cables');
+	My.nodeScope = include('nodes');
 
 	function onlyNegative(now){
 		if(now > 0) return 0;
 	}
 
-	self.pos = {x:0, y:0,
+	My.pos = {x:0, y:0,
 		// Because origin is top left, viewport height and width are increased on bottom right
 		// Force to zero if there are no more space to be panned on left side
 		on$x: onlyNegative, on$y: onlyNegative
 	};
 
-	self.scale = 1;
-	self.size = {w:0, h:0};
-	self.origSize = {w:0, h:0};
-	self.offset;
+	My.scale = 1;
+	My.size = {w:0, h:0};
+	My.origSize = {w:0, h:0};
+	My.offset;
 
-	self.init = function(){
-		self.resetOffset();
-		self.size.w = self.offset.width;
-		self.size.h = self.offset.height;
+	My.init = async function(){
+		await My.resetOffset();
+		My.size.w = My.offset.width;
+		My.size.h = My.offset.height;
 	}
 
-	self.resetOffset = function(){
-		self.$el.css({
+	My.resetOffset = async function(){
+		My.$el.css({
 			width:'100%',
 			height:'100%'
 		});
 
-		self.offset = self.$el[0].getBoundingClientRect();
-		self.origSize.w = self.offset.width;
-		self.origSize.h = self.offset.height;
+		await $.afterRepaint();
+		My.offset = My.$el[0].getBoundingClientRect();
+		My.origSize.w = My.offset.width;
+		My.origSize.h = My.offset.height;
 	}
 
 	function moveContainer(ev){
-		if(!(self.pos.x >= 0 && ev.movementX > 0)){
-			self.size.w -= ev.movementX;
-			self.pos.x += ev.movementX;
+		if(!(My.pos.x >= 0 && ev.movementX > 0)){
+			My.size.w -= ev.movementX;
+			My.pos.x += ev.movementX;
 		}
 
-		if(!(self.pos.y >= 0 && ev.movementY > 0)){
-			self.size.h -= ev.movementY;
-			self.pos.y += ev.movementY;
+		if(!(My.pos.y >= 0 && ev.movementY > 0)){
+			My.size.h -= ev.movementY;
+			My.pos.y += ev.movementY;
 		}
 	}
 
-	self.moveContainer = function(ev){
-		self.$el.on('pointermove', moveContainer);
+	My.moveContainer = function(ev){
+		My.$el.on('pointermove', moveContainer);
 
 		$(sf.Window).once('pointerup', function(){
-			self.$el.off('pointermove', moveContainer);
+			My.$el.off('pointermove', moveContainer);
 		});
 	}
 
-	// self.onScale = callback
+	// My.onScale = callback
 
-	self.scaleContainer = function(ev){
-		if(ev.deltaY > 0 && self.scale < 0.21)
+	My.scaleContainer = function(ev){
+		if(ev.deltaY > 0 && My.scale < 0.21)
 			return;
 
-		if(ev.deltaY < 0 && self.scale > 1.98)
+		if(ev.deltaY < 0 && My.scale > 1.98)
 			return;
 
 		var delta = ev.deltaY/100 * 0.08;
-		self.scale -= delta;
+		My.scale -= delta;
 
 		// ToDo: fix scaling, should scale with cursor as the middle scaling position
-		self.pos.x += Math.round(ev.clientX * delta);
-		self.pos.y += Math.round(ev.clientY * delta);
+		My.pos.x += Math.round(ev.clientX * delta);
+		My.pos.y += Math.round(ev.clientY * delta);
 
-		// self.pos will always negative or zero value
+		// My.pos will always negative or zero value
 		// hint on the object declaration
 
-		self.size.w = self.origSize.w / self.scale - self.pos.x;
-		self.size.h = self.origSize.h / self.scale - self.pos.y;
+		My.size.w = My.origSize.w / My.scale - My.pos.x;
+		My.size.h = My.origSize.h / My.scale - My.pos.y;
 
-		self.onScale && self.onScale(self.scale);
+		My.onScale && My.onScale(My.scale);
 	}
 });
