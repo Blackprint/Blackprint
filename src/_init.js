@@ -26,7 +26,7 @@ Blackprint.Sketch = class Sketch{
 	}
 
 	// Import node positions and cable connection from JSON
-	importJSON(json){
+	async importJSON(json){
 		if(json.constructor === String)
 			json = JSON.parse(json);
 
@@ -54,6 +54,8 @@ Blackprint.Sketch = class Sketch{
 				inserted[nodes[a].id] = this.createNode(namespace, nodeOpt, handlers);
 			}
 		}
+
+		let cableConnects = [];
 
 		// Create cable only from outputs and properties
 		// > Important to be separated from above, so the cable can reference to loaded nodes
@@ -90,21 +92,35 @@ Blackprint.Sketch = class Sketch{
 								continue;
 							}
 
-							// Create cable from NodeA
-							var rectA = getPortRect(node.outputs, portName);
-							var cable = linkPortA.createCable(rectA);
-
-							// Positioning the cable head2 into target port position from NodeB
-							var rectB = getPortRect(targetNode.inputs, target.name);
-							var center = rectB.width/2;
-							cable.head2 = [rectB.x+center, rectB.y+center];
-
-							// Connect cables.currentCable to target port on NodeB
-							linkPortB.connectCable(cable);
+							cableConnects.push({
+								outputs: node.outputs,
+								inputs: targetNode.inputs,
+								target,
+								portName,
+								linkPortA,
+								linkPortB
+							});
 						}
 					}
 				}
 			}
+		}
+
+		await $.afterRepaint();
+		for (var i = 0; i < cableConnects.length; i++) {
+			let {outputs, portName, linkPortA, inputs, target, linkPortB} = cableConnects[i];
+
+			// Create cable from NodeA
+			var rectA = getPortRect(outputs, portName);
+			var cable = linkPortA.createCable(rectA);
+
+			// Positioning the cable head2 into target port position from NodeB
+			var rectB = getPortRect(inputs, target.name);
+			var center = rectB.width/2;
+			cable.head2 = [rectB.x+center, rectB.y+center];
+
+			// Connect cables.currentCable to target port on NodeB
+			linkPortB.connectCable(cable);
 		}
 
 		// Call handler init after creation processes was finished
