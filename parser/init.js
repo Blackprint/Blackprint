@@ -1,35 +1,35 @@
 var parser = exports;
 
-function nyam(){
+function ttest(){
 console.clear();
 
 var code = `
-Register('name/spaced/node', function(handle, node){
-	node.title = "Abc";
+Register('name/spaced/node', function(node, iface){
+  iface.title = "Abc";
 
-	var output = handle.output = {
-	    Result: i8
-	};
+  var output = node.output = {
+      Result: i8
+  };
 
-	var input = handle.input = {
-	    A: i8,
-	    B: i8,
-	};
+  var input = node.input = {
+      A: i8,
+      B: i8,
+  };
 
-	handle.init = function(){
-		node.on('cable.connect', function(cable){
-			console.log(\`Cable connected from \${cable.owner.node.title} (\${cable.owner.name})\`);
-		});
-	}
+  node.init = function(){
+    iface.on('cable.connect', function(cable){
+      console.log(\`Cable connected from \${cable.owner.iface.title} (\${cable.owner.name}) to \${cable.target.iface.title} (\${cable.target.name})\`);
+    });
+  }
 
-	function multiply(){
-	    console.log('Multiplying', output.A, 'with', input.B);
-	    return input.A * input.B;
-	}
+  function multiply(){
+      console.log('Multiplying', output.A, 'with', input.B);
+      return input.A * input.B;
+  }
 
-	handle.update = function(Cable){
-	    output.Result = multiply();
-	}
+  node.update = function(Cable){
+      output.Result = multiply();
+  }
 });`;
 
   function cleaner(obj){
@@ -51,7 +51,7 @@ Register('name/spaced/node', function(handle, node){
 
   // Find namespace and get handle/node var name
   var namespace = '', body;
-  for(var i=0; i<ast.length; i++){
+  for(var i = 0; i < ast.length; i++){
     var current = ast[i].expression;
     if(current.type !== 'CallExpression' || current.callee.name !== 'Register')
       continue;
