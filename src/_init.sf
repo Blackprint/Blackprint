@@ -1,0 +1,6 @@
+## js-global
+var NOOP = function(){};
+
+let { $ } = sf; // sQuery shortcut
+var Blackprint = window.Blackprint;
+var Space = Blackprint.space;

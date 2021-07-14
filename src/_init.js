@@ -6,6 +6,7 @@ if(window.Blackprint === void 0)
 		}
 	};
 
+let { $ } = sf; // sQuery shortcut
 var Blackprint = window.Blackprint;
 
 Blackprint.Sketch = class Sketch{
