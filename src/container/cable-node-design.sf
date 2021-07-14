@@ -294,5 +294,6 @@ body.fast-blackprint sf-space[blackprint]{
 	}
 	.nodes .node{
 		box-shadow: none;
+		transition: none;
 	}
 }

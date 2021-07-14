@@ -1,30 +1,30 @@
-Space.model('cables', function(self, root){
+Space.model('cables', function(My, include){
 	// any item will be: ../constructor/Cable.js
-	self.list = [];
+	My.list = [];
 
-	self.container = root('container');
+	My.container = include('container');
 
 	// Fixing viewport position
-	self.space = [0,0];
-	self.init = function(){
+	My.space = [0,0];
+	My.init = function(){
 		setTimeout(function(){
 			// Get sf-space element
-			var rect = self.$el[0].parentNode.getBoundingClientRect();
-			self.space = [rect.x, rect.y];
+			var rect = My.$el[0].parentNode.getBoundingClientRect();
+			My.space = [rect.x, rect.y];
 		}, 500);
 	}
 
 	// Flag if cursor was hovering a node port
-	self.hoverPort = false; // {elem:, item:}
+	My.hoverPort = false; // {elem:, item:}
 
 	// Move clicked cable
-	self.currentCable = void 0;
+	My.currentCable = void 0;
 
 	// This will run everytime the cable was moving
 	// used on: ../page.sf
 	var pendingCable = new Set();
 	var recalculatePending = false;
-	self.recalculatePath = function(item){
+	My.recalculatePath = function(item){
 		// Reduce multiple redraw when x and y are changed in separated time
 		if(pendingCable.has(item)) return;
 		pendingCable.add(item);
