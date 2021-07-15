@@ -1,0 +1,4 @@
+## html
+<div class="header small" @contextmenu.stopAll.prevent="nodeMenu(event)" @dragmove="moveNode(event)">
+  <div class="icon"></div>
+</div>
