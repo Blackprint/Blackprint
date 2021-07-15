@@ -1,0 +1,32 @@
+## html
+<div class="node general" style="transform: translate({{ x }}px, {{ y }}px)">
+  <sf-template path="Blackprint/nodes/template/header.sf"></sf-template>
+
+  <div class="content">
+    <div class="left-port">
+      <sf-template path="Blackprint/nodes/template/input-port.sf"></sf-template>
+    </div>
+
+    <!-- <sf-template path="Blackprint/nodes/template/property-port.sf"></sf-template> -->
+
+    <div class="right-port">
+      <sf-template path="Blackprint/nodes/template/output-port.sf"></sf-template>
+    </div>
+  </div>
+</div>
+
+## js-global
+Blackprint.space.component('bp-default', {
+	extend: Blackprint.Node,
+	keepTemplate: true,
+	template: 'Blackprint/nodes/default.sf'
+}, function(self, root){
+	// Property of this scope
+	/* self == {
+		x: 0,
+		y: 0,
+		inputs: {},
+		outputs: {},
+		properties: {},
+	} */
+});
