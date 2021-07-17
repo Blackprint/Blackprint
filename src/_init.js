@@ -10,11 +10,17 @@ let { $ } = sf; // sQuery shortcut
 var Blackprint = window.Blackprint;
 
 Blackprint.Sketch = class Sketch{
+	iface = {};
+	ifaceList = [];
+
 	// Create new blackprint container
 	constructor(){
 		this.index = Blackprint.index++;
 		this.scope = Blackprint.space.getScope(this.index);
 		Blackprint.space.sketch = this;
+
+		this.getNode = Blackprint.Engine.getNode;
+		this.getNodes = Blackprint.Engine.getNodes;
 	}
 
 	settings(which, val){
@@ -28,13 +34,16 @@ Blackprint.Sketch = class Sketch{
 
 	// Import node positions and cable connection from JSON
 	async importJSON(json){
+		if(window.sf && window.sf.loader)
+			await window.sf.loader.task;
+
 		if(json.constructor === String)
 			json = JSON.parse(json);
 
 		var version = json.version;
 		delete json.version;
 
-		var inserted = [];
+		var inserted = this.ifaceList;
 		var handlers = [];
 
 		// Prepare all nodes depend on the namespace
@@ -44,15 +53,14 @@ Blackprint.Sketch = class Sketch{
 
 			// Every nodes that using this namespace name
 			for (var a = 0; a < nodes.length; a++){
-				var nodeOpt = {
-					x:nodes[a].x,
-					y:nodes[a].y
-				};
-
-				if(nodes[a].options !== void 0)
-					nodeOpt.options = nodes[a].options;
-
-				inserted[nodes[a].id] = this.createNode(namespace, nodeOpt, handlers);
+				let temp = nodes[a];
+				this.createNode(namespace, {
+					x: temp.x,
+					y: temp.y,
+					id: temp.id, // Named ID (if exist)
+					i: temp.i, // List Index
+					data: temp.data, // if exist
+				}, handlers);
 			}
 		}
 
@@ -65,7 +73,7 @@ Blackprint.Sketch = class Sketch{
 
 			// Every nodes that using this namespace name
 			for (var a = 0; a < nodes.length; a++){
-				var node = inserted[nodes[a].id];
+				var node = inserted[nodes[a].i];
 
 				// If have outputs connection
 				if(nodes[a].outputs !== void 0){
@@ -84,7 +92,7 @@ Blackprint.Sketch = class Sketch{
 						// Current outputs's available targets
 						for (var k = 0; k < port.length; k++) {
 							var target = port[k];
-							var targetNode = inserted[target.id];
+							var targetNode = inserted[target.i];
 
 							// Outputs can only meet input port
 							var linkPortB = targetNode.inputs[target.name];
@@ -153,10 +161,10 @@ Blackprint.Sketch = class Sketch{
 				y: Math.round(node.y),
 			};
 
-			if(node.options !== void 0){
-				data.options = {};
+			if(node.data !== void 0){
+				data.data = {};
 
-				deepCopy(data.options, node.options);
+				deepCopy(data.data, node.data);
 			}
 
 			if(node.outputs !== void 0){
@@ -212,6 +220,7 @@ Blackprint.Sketch = class Sketch{
 
 		// Processing scope is different with node scope
 		var node = {}, iface = new Blackprint.Node(this);
+
 		iface.node = node;
 		iface.namespace = namespace;
 		iface.importing = true;
@@ -238,20 +247,27 @@ Blackprint.Sketch = class Sketch{
 
 		Blackprint.Node.prepare(node, iface);
 
-		var savedOpt = options.options;
-		delete options.options;
+		var savedData = options.data;
+		delete options.data;
 
-		// Assign the iface options if exist
-		if(options !== void 0)
-			Object.assign(iface, options);
+		// Assign the iface options (x, y, id, ...)
+		Object.assign(iface, options);
 
 		// Node is become the component scope
 		// equal to calling registerInterface's registered function
 		this.scope('nodes').list.push(iface);
 		iface.importing = false;
 
-		iface.imported && iface.imported(savedOpt);
-		node.imported && node.imported(savedOpt);
+		iface.imported && iface.imported(savedData);
+
+		if(iface.id !== void 0)
+			this.iface[iface.id] = iface;
+
+		if(iface.i !== void 0)
+			this.ifaceList[iface.i] = iface;
+		else this.ifaceList.push(iface);
+
+		node.imported && node.imported(savedData);
 
 		if(handlers !== void 0)
 			handlers.push(node);
