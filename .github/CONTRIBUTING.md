@@ -1,6 +1,6 @@
 ## Contributing to Blackprint
 First of all, thanks for taking the time to contribute!<br>
-To keep this project maintainable, we have developed some guidelines for our contributors.
+To help you contribute to this project we have created some guidelines for our contributors.
 
 ### Table of Content
  - [Terms](#terms)
@@ -11,6 +11,7 @@ To keep this project maintainable, we have developed some guidelines for our con
  - [Bundled file location](#bundled-file-location)
  - [Blackprint Node and Interface Naming Conventions](#blackprint-node-and-interface-naming-conventions)
  - [Version Conventions](#version-conventions)
+ - [Financial Contribution](#financial-contribution)
 
 ---
 
@@ -23,9 +24,13 @@ Here are some terms that we will use in this repo:
 ---
 
 ### What Contribution Do We Accept?
+Any well-intentioned contribution is welcomed, for the example:
 1. Bug fixes
 2. New feature (please create issue with the use case to be reviewed first)
 3. Improve documentation or guidelines
+4. Financial contribution
+5. Promote and spread the words about Blackprint
+6. Joining the community and help other people
 
 ---
 
@@ -107,7 +112,15 @@ Blackprint haven't follow semantic versioning before v1.0.0, you will need to sp
 The version naming follows the rules of given a version number v**MAJOR.MINOR.PATCH**, increment the:
 
 **MAJOR version** will stay 0 until all roadmap has been completed.<br>
-**MINOR version** may has new feature or possible breaking changes, and<br>
+**MINOR version** may has new feature or possible breaking changes.<br>
 **PATCH version** when you add functionality and bug fixes that backwards compatible.<br>
 
-A new release will be published when new feature are added or a bug was fixed.
+A new release will be published when new feature are added or a bug was fixed. If the minor version is updated, please see the [CHANGELOG.md](https://github.com/Blackprint/Blackprint/blob/master/CHANGELOG.md) to make sure the breaking changes doesn't affect your project.
+
+---
+
+### Financial Contribution
+Blackprint is a MIT licensed open source project and completely free to use.<br>
+However, the amount of effort needed to maintain and develop new features for the project is not sustainable without proper financial backing.
+
+You can support Blackprint development financially from the link on repository's **Sponsor** button.
