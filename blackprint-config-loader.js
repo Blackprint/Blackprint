@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 module.exports = function(SFC, Gulp){
 	let resolvePath = require('path').resolve;
 	let configWatch = Gulp.watch("nodes/**/blackprint.config.js", {ignoreInitial: false});
@@ -45,9 +47,9 @@ module.exports = function(SFC, Gulp){
 		if(config.js && config.js.combine){
 			let temp = config.js.combine;
 			if(temp.constructor === String)
-				config.js.combine = [temp, '!blackprint.config.js'];
+				config.js.combine = [temp, '!blackprint.config.js', '!dist/'];
 			else
-				temp.push('!blackprint.config.js');
+				temp.push('!blackprint.config.js', '!dist/');
 		}
 
 		['html', 'sf'].forEach(v => {
@@ -63,6 +65,36 @@ module.exports = function(SFC, Gulp){
 			if(that){
 				that.header = config.header;
 				that.file = convertCWD(that.file, dirPath);
+
+				if(that.hardlinkTo !== void 0){
+					let dir = that.hardlinkTo.replace(/\\/g, '/').split('/');
+
+					if(dir[0] === '.'){
+						dir.shift();
+						dir = dirPath + '/' + dir.join('/');
+					}
+					else dir = dir.join('/');
+
+					let fileName = that.file.slice(that.file.lastIndexOf('/') + 1);
+					that.onFinish = function(){
+                		fs.mkdirSync(dir, {recursive: true});
+                		let filePath = dir + "/" + fileName;
+
+                		fs.lstat(that.file, function(err, stats1){
+                			if(err){
+								console.error(err, that.file);
+                				return;
+                			}
+
+                			fs.lstat(filePath, function(err, stats2){
+                				if(!err && stats1.ino === stats2.ino)
+                					return;
+
+								fs.link(that.file, filePath, ()=>{});
+                			});
+                		});
+					}
+				}
 
 				if(that.combine)
 					that.combine = convertCWD(that.combine, dirPath);
