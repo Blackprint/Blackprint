@@ -1,6 +1,3 @@
-[submodule "nodes"]
-	path = nodes
-	url = https://github.com/Blackprint/nodes
 [submodule "example"]
 	path = example
 	url = https://github.com/Blackprint/blackprint.github.io
