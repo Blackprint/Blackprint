@@ -47,9 +47,9 @@ module.exports = function(SFC, Gulp){
 		if(config.js && config.js.combine){
 			let temp = config.js.combine;
 			if(temp.constructor === String)
-				config.js.combine = [temp, '!blackprint.config.js', '!dist/'];
+				config.js.combine = [temp, '!blackprint.config.js', '!dist/**/*'];
 			else
-				temp.push('!blackprint.config.js', '!dist/');
+				temp.push('!blackprint.config.js', '!dist/**/*');
 		}
 
 		['html', 'sf'].forEach(v => {
@@ -60,14 +60,15 @@ module.exports = function(SFC, Gulp){
 			}
 		});
 
-		['js', 'scss', 'html', 'sf'].forEach(v => {
-			let that = config[v];
+		['js', 'scss', 'html', 'sf'].forEach(which => {
+			let that = config[which];
 			if(that){
 				that.header = config.header;
 				that.file = convertCWD(that.file, dirPath);
 
-				if(that.hardlinkTo !== void 0){
-					let dir = that.hardlinkTo.replace(/\\/g, '/').split('/');
+				if(config.hardlinkTo !== void 0){
+					let _path = that.file; // String must be copied
+					let dir = config.hardlinkTo.replace(/\\/g, '/').split('/');
 
 					if(dir[0] === '.'){
 						dir.shift();
@@ -75,23 +76,42 @@ module.exports = function(SFC, Gulp){
 					}
 					else dir = dir.join('/');
 
-					let fileName = that.file.slice(that.file.lastIndexOf('/') + 1);
+					let fileName = _path.slice(_path.lastIndexOf('/') + 1);
+					let hardlinkList = (which === 'sf' ? ['.js', '.css'] : ['']);
+
 					that.onFinish = function(){
                 		fs.mkdirSync(dir, {recursive: true});
-                		let filePath = dir + "/" + fileName;
 
-                		fs.lstat(that.file, function(err, stats1){
-                			if(err){
-								console.error(err, that.file);
-                				return;
-                			}
+                		hardlinkList.forEach(v => {
+	                		let filePath = dir + "/" + fileName + v;
+	                		let oriPath = _path + v;
 
-                			fs.lstat(filePath, function(err, stats2){
-                				if(!err && stats1.ino === stats2.ino)
-                					return;
+	                		fs.lstat(oriPath, function(err, stats1){
+	                			if(err)
+									return console.error(err, oriPath);
 
-								fs.link(that.file, filePath, ()=>{});
-                			});
+	                			fs.lstat(filePath, function(err, stats2){
+	                				if(!err && stats1.ino === stats2.ino)
+	                					return;
+
+									fs.link(oriPath, filePath, ()=>{});
+	                			});
+
+		                		// Also hardlink the sourcemap
+		                		let m_path = oriPath+'.map';
+		                		let m_filePath = filePath+'.map';
+		                		fs.lstat(m_path, function(err, stats1){
+		                			if(err)
+										return console.error(err, m_path);
+
+		                			fs.lstat(m_filePath, function(err, stats2){
+		                				if(!err && stats1.ino === stats2.ino)
+		                					return;
+
+										fs.link(m_path, m_filePath, ()=>{});
+		                			});
+		                		});
+	                		});
                 		});
 					}
 				}
