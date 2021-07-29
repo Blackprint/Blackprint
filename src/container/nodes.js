@@ -55,7 +55,7 @@ Space.model('nodes', function(My, include){
 
 	function createNode(namespace){
 		var container = include('container');
-		Space.sketch.createNode(namespace, {
+		My.$space.sketch.createNode(namespace, {
 			x:menuEv.offsetX-container.offset.x,
 			y:menuEv.offsetY-container.offset.y
 		});
