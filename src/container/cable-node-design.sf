@@ -287,7 +287,7 @@ sf-space[blackprint]{
 	}
 }
 
-body.fast-blackprint sf-space[blackprint]{
+body.blackprint-no-vfx sf-space[blackprint]{
 	.cables > svg{
 		filter: none;
 		transform: translateZ(1px);
