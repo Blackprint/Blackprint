@@ -17,10 +17,70 @@ Space.model('container', function(My, include){
 	My.origSize = {w:0, h:0};
 	My.offset;
 
+	My.config = {
+		move: true,
+		scale: true
+	};
+
+	// Check if this categorized as minimap from the sf.Space id
+	// If yes, then make it auto scale on width/height changes
+	let isMinimap = My.$space.id.includes('+mini');
+	if(isMinimap){
+		let mainSpace = Blackprint.space.list[My.$space.id.replace('+mini', '')];
+
+		mainSpace('container').onNodeMove = function(e){
+			if(e.type === "pointerup")
+				recalculateScale();
+		};
+
+		My.config.move = false;
+		My.config.scale = false;
+	}
+
+	function recalculateScale(){
+		let nodes = My.nodeScope.list;
+		let maxX = 0, maxY = 0;
+		let W = 0, H = 0;
+
+		for (var i = 0; i < nodes.length; i++) {
+			let node = nodes[i];
+			if(maxX < node.x){
+				maxX = node.x;
+				W = node.w;
+			}
+
+			if(maxY < node.y){
+				maxY = node.y;
+				H = node.h;
+			}
+		}
+
+		maxX += W;
+		maxY += H;
+
+		My.size.w = maxX;
+		My.size.h = maxY;
+
+		let A = My.origSize.w / maxX;
+		let B = My.origSize.h / maxY;
+
+		My.scale = A < B ? A : B;
+	}
+
+	let reinit = false;
 	My.init = async function(){
 		await My.resetOffset();
 		My.size.w = My.offset.width;
 		My.size.h = My.offset.height;
+
+		if(My.offset.width === 0 && reinit === false){
+			setTimeout(async function(){
+				reinit = true;
+				await My.init();
+
+				recalculateScale();
+			}, 1000);
+		}
 	}
 
 	My.resetOffset = async function(){
@@ -48,16 +108,22 @@ Space.model('container', function(My, include){
 	}
 
 	My.moveContainer = function(ev){
+		if(My.config.move === false) return;
 		My.$el.on('pointermove', moveContainer);
 
 		$(sf.Window).once('pointerup', function(){
 			My.$el.off('pointermove', moveContainer);
+
+			// Fix incorrect scaling when the movement was too fast
+			My.size.w = My.origSize.w / My.scale - My.pos.x;
+			My.size.h = My.origSize.h / My.scale - My.pos.y;
 		});
 	}
 
 	// My.onScale = callback
 
 	My.scaleContainer = function(ev){
+		if(My.config.scale === false) return;
 		if(ev.deltaY > 0 && My.scale < 0.21)
 			return;
 

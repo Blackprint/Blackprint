@@ -193,8 +193,8 @@ class Cable extends Blackprint.Engine.Cable{
 
 		// Remove from cable list
 		list.splice(list.indexOf(this), 1);
-		// console.log('A cable was removed', this);
-
 		Blackprint.Engine.Cable.prototype.destroy.call(this);
+
+		// console.log('A cable was removed', this);
 	}
 }
