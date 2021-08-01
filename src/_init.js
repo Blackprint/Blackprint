@@ -19,8 +19,8 @@ Blackprint.Sketch = class Sketch{
 		this.scope = Blackprint.space.getScope(this.index);
 		this.scope.sketch = this;
 
-		this.getNode = Blackprint.Engine.getNode;
-		this.getNodes = Blackprint.Engine.getNodes;
+		this.getNode = Blackprint.Engine.prototype.getNode;
+		this.getNodes = Blackprint.Engine.prototype.getNodes;
 	}
 
 	settings(which, val){
@@ -28,8 +28,8 @@ Blackprint.Sketch = class Sketch{
 	}
 
 	// Clone current container index
-	cloneContainer(){
-		return Blackprint.space.createHTML(this.index);
+	cloneContainer(minimap){
+		return Blackprint.space.createHTML(this.index + (minimap ? '+mini' : ''));
 	}
 
 	// Import node positions and cable connection from JSON
