@@ -39,8 +39,14 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 	moveNode(e){
 		var container = this.#container;
 		var scale = container.scale;
-		this.x += e.movementX / scale;
-		this.y += e.movementY / scale;
+		var x = e.movementX / scale;
+		var y = e.movementY / scale;
+
+		this.x += x;
+		this.y += y;
+
+		if(container.onNodeMove !== void 0)
+			container.onNodeMove(e, this);
 
 		// Also move all cable connected to current iface
 		var ports = Blackprint.Node._ports;
@@ -59,8 +65,8 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 					else
 						cable = cables[a].head2;
 
-					cable[0] += e.movementX / container.scale;
-					cable[1] += e.movementY / container.scale;
+					cable[0] += x;
+					cable[1] += y;
 				}
 			}
 		}
@@ -69,8 +75,8 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 	nodeMenu(ev){
 		var scope = this.#scope;
 		var menu = [{
-			title:'Delete',
-			args:[this],
+			title: 'Delete',
+			args: [this],
 			callback(iface){
 				var list = scope('nodes').list;
 				var i = list.indexOf(iface);
@@ -78,9 +84,10 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 				if(i === -1)
 					return console.error("Node was not found on the list", iface);
 
+				scope.$destroyed = true;
 				list.splice(i, 1);
 
-				var check = ['outputs', 'inputs', 'properties'];
+				var check = Blackprint.Node._ports;
 				for (var i = 0; i < check.length; i++) {
 					var portList = iface[check[i]];
 					for(var port in portList){

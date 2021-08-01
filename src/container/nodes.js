@@ -1,10 +1,14 @@
 Space.model('nodes', function(My, include){
 	var sizeObserve = new ResizeObserver(function(items){
 		for (var i = 0; i < items.length; i++)
-			resetCablePosition(items[i].target.model);
+			resetCablePosition(items[i]);
 	});
 
-	function resetCablePosition(iface){
+	function resetCablePosition(resized){
+		var iface = resized.target.model;
+		iface.h = resized.contentRect.height;
+		iface.w = resized.contentRect.width;
+
 		var container = include('container');
 		var Ofst = container.offset;
 
@@ -37,7 +41,16 @@ Space.model('nodes', function(My, include){
 		}
 	}
 
-	My.list = [];
+	// Check if this categorized as minimap from the sf.Space id
+	// If yes, then copy the Array reference from the original Space
+	// If not, then create new array list
+	let isMinimap = My.$space.id.includes('+mini');
+	if(isMinimap === true){
+		let mainSpace = Blackprint.space.list[My.$space.id.replace('+mini', '')];
+		My.list = mainSpace('nodes').list;
+	}
+	else My.list = [];
+
 	My.on$list = {
 		create(el){
 			var node = el.querySelector('.node');
