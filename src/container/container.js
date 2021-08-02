@@ -55,8 +55,8 @@ Space.model('container', function(My, include){
 			}
 		}
 
-		maxX += W;
-		maxY += H;
+		maxX += W + 50;
+		maxY += H + 50;
 
 		My.size.w = maxX;
 		My.size.h = maxY;
@@ -74,12 +74,16 @@ Space.model('container', function(My, include){
 		My.size.h = My.offset.height;
 
 		if(My.offset.width === 0 && reinit === false){
+			My.scale = 1;
 			setTimeout(async function(){
+				await $.afterRepaint();
+
 				reinit = true;
 				await My.init();
 
+				reinit = false;
 				recalculateScale();
-			}, 1000);
+			});
 		}
 	}
 
