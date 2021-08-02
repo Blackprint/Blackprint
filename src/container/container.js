@@ -27,6 +27,7 @@ Space.model('container', function(My, include){
 	let isMinimap = My.$space.id.includes('+mini');
 	if(isMinimap){
 		let mainSpace = Blackprint.space.list[My.$space.id.replace('+mini', '')];
+		mainSpace('cables').minimapCableScope = My.cableScope;
 
 		mainSpace('container').onNodeMove = function(e){
 			if(e.type === "pointerup")

@@ -40,7 +40,11 @@ class Cable extends Blackprint.Engine.Cable{
 			return;
 
 		this.animating = true;
-		var glowContainer = this.#scope('cables').$el('.glow-cable');
+		let cableScope = this.#scope('cables');
+		var glowContainer = cableScope.$el('.glow-cable');
+
+		if(cableScope.minimapCableScope !== void 0)
+			glowContainer = [glowContainer, ...cableScope.minimapCableScope.$el('.glow-cable')];
 
 		var anim = this.animPlayer;
 		if(anim === void 0){
