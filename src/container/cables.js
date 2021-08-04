@@ -1,14 +1,11 @@
 Space.model('cables', function(My, include){
 	My.container = include('container');
 
-	// Check if this categorized as minimap from the sf.Space id
+	// Check if the container was a minimap
 	// If yes, then copy the Array reference from the original Space
 	// If not, then create new array list
-	let isMinimap = My.$space.id.includes('+mini');
-	if(isMinimap === true){
-		let mainSpace = Blackprint.space.list[My.$space.id.replace('+mini', '')];
-		My.list = mainSpace('cables').list;
-	}
+	if(My.container.isMinimap)
+		My.list = My.container.minimapSource.cableScope.list;
 	// any item will be: ../constructor/Cable.js
 	else My.list = [];
 
