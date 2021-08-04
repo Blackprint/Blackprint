@@ -8,7 +8,25 @@
   <ul>
     <li sf-each="x in options" :class="{{x.divider ? 'divider' : ''}}">
       {{@if x.title:
-        {[ <a>{{x.title}}</a> ]}
+      	{[ <a> ]} // Begin
+
+      	// Icon on the left
+      	if(x.icon !== void 0){
+      		if(x.icon.includes('//'))
+      			{[ <img class="icon" :src="{{x.icon}}"> ]};
+      		else
+      			{[ <i class="{{x.icon}}"></i> ]};
+      	}
+
+      	// Always use { [ enclosed template ]} to avoid vulnerability
+      	// like the text being parsed as HTML
+      	{[ <span>{{ x.title }}</span> ]} // Content
+
+      	// Add icon if the has deep menu
+      	if(x.deep !== void 0)
+      		{[ <i class="{{ root.icon.more }} has-deep"></i> ]};
+
+      	{[ </a> ]} // End
       }}
     </li>
   </ul>
@@ -44,6 +62,7 @@ sf-space[blackprint]{
 	    }
 
 		li {
+			position: relative;
 			vertical-align: baseline;
 			display: inherit !important;
 			padding: 8px;
@@ -59,6 +78,10 @@ sf-space[blackprint]{
 			cursor: pointer;
 	    	color: black;
 		}
+	}
+
+	drop-down.bp-dropdown-menu drop-down{
+		opacity: 1;
 	}
 
 	.ground-backdrop{
@@ -78,6 +101,12 @@ sf-space[blackprint]{
 			opacity: 1;
 			visibility: visible;
 		}
+	}
+
+	ul li .has-deep{
+		top: 11px;
+		position: absolute;
+		right: 5px;
 	}
 
 	drop-down{
@@ -107,6 +136,10 @@ sf-space[blackprint]{
 Blackprint.space.model('dropdown', function(My){
 	My.menus = [];
 	My.onCancel = void 0;
+
+	My.icon = {
+		more: 'fa fa-chevron-right'
+	};
 
 	// options: [{title, callback}, {title, deep:[{...}]}, ...]
 	My.show = function(options, x, y, title){
@@ -186,13 +219,14 @@ Blackprint.space.model('dropdown', function(My){
 // =====================================================================
 // ============== Component <drop-down></drop-down> ====================
 // =====================================================================
-Blackprint.space.component('drop-down', {template: #this.path}, function(My, root, $item){
+Blackprint.space.component('drop-down', {template: #this.path}, function(My, include, $item){
 	My.visible = false;
 	My.hidden = 'bp-hidden'; // We also need to hide it before repaint
 
 	My.options = $item;
 	My.x = $item.x;
 	My.y = $item.y;
+	My.root = include('dropdown');
 
 	// First dropdown title
 	My.title = $item.title;
@@ -274,7 +308,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, roo
 						opt.unhover.apply(opt.context, opt.args);
 
 					opt.callback.apply(opt.context, opt.args);
-					root('dropdown').hide();
+					My.root.hide();
 				});
 			}
 
