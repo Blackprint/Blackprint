@@ -1,4 +1,11 @@
 Space.model('container', function(My, include){
+	let spaceID = My.$space.id;
+
+	if(My.isMinimap = spaceID.includes('+mini')){
+		let mainSpace = Blackprint.space.list[spaceID.replace('+mini', '')];
+		My.minimapSource = mainSpace('container');
+	}
+
 	My.cableScope = include('cables');
 	My.nodeScope = include('nodes');
 
@@ -24,11 +31,7 @@ Space.model('container', function(My, include){
 
 	// Check if this categorized as minimap from the sf.Space id
 	// If yes, then make it auto scale on width/height changes
-	let spaceID = My.$space.id;
-	if(My.isMinimap = spaceID.includes('+mini')){
-		let mainSpace = Blackprint.space.list[spaceID.replace('+mini', '')];
-		My.minimapSource = mainSpace('container');
-
+	if(My.isMinimap){
 		My.minimapSource.cableScope.minimapCableScope = My.cableScope;
 		My.minimapSource.onNodeMove = function(e){
 			if(e.type === "pointerup")
@@ -99,8 +102,10 @@ Space.model('container', function(My, include){
 
 		let w = 0, h = 0;
 		let elements = My.$el;
+		My.offset = elements[0].getBoundingClientRect();
+
 		for (var i = 0; i < elements.length; i++) {
-			let rect = My.offset = elements[i].getBoundingClientRect();
+			let rect = elements[i].getBoundingClientRect();
 
 			if(rect.width > w)
 				w = rect.width;
