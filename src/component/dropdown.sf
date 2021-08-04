@@ -4,10 +4,10 @@
     display: {{visible ? 'block' : 'none'}};
     transform: translate({{ x }}px, {{ y }}px);
   ">
-  <div class="first" style="display: {{ !title && 'none' }}">{{ title }}</div>
+  <div class="first" style="display: {{ !title && 'none' }}">{{ title || '' }}</div>
   <ul>
     <li sf-each="x in options" :class="{{x.divider ? 'divider' : ''}}">
-      {{@if x.title:
+      {{@if x.title !== undefined:
       	{[ <a> ]} // Begin
 
       	// Icon on the left
@@ -224,9 +224,11 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 	My.hidden = 'bp-hidden'; // We also need to hide it before repaint
 
 	My.options = $item;
+	My._parent = $item._parent;
 	My.x = $item.x;
 	My.y = $item.y;
 	My.root = include('dropdown');
+	My.width = 0;
 
 	// First dropdown title
 	My.title = $item.title;
@@ -244,16 +246,26 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 
 		// Check position when the element rendered
 		var ulElem = $el[0].querySelector('ul');
-		requestAnimationFrame(function(){
-			setTimeout(function(){
-				if(My.x + ulElem.offsetWidth > window.innerWidth)
-					My.x -= ulElem.offsetWidth;
+		$.afterRepaint().then(function(){
+			let x = 0, y = 0;
+			let parent = My._parent;
+			let w = parent !== void 0 ? parent.width : 0;
 
-				if(My.y + ulElem.offsetHeight > window.innerHeight)
-					My.y -= ulElem.offsetHeight;
+			while(parent !== void 0){
+				x += parent.x;
+				y += parent.y;
+				parent = parent._parent;
+			}
 
-				My.hidden = '';
-			}, 0);
+			My.width = ulElem.offsetWidth;
+
+			if(x + My.x + My.width > window.innerWidth)
+				My.x -= My.width + w;
+
+			if(y + My.y + My.height > window.innerHeight)
+				My.y -= My.height;
+
+			My.hidden = '';
 		});
 
 		// Find nested options and add event listener on mouse hover
@@ -272,6 +284,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 
 					var deep = opt.deep;
 					deep.event = ev;
+					deep._parent = My;
 
 					// Use the cache instead
 					if(deep.el !== void 0){
