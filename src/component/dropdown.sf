@@ -13,9 +13,9 @@
       	// Icon on the left
       	if(x.icon !== void 0){
       		if(x.icon.includes('//'))
-      			{[ <img class="icon" :src="{{x.icon}}"> ]};
+      			{[ <img class="dropdown-icon" :src="{{x.icon}}"> ]};
       		else
-      			{[ <i class="{{x.icon}}"></i> ]};
+      			{[ <i class="dropdown-icon {{x.icon}}"></i> ]};
       	}
 
       	// Always use { [ enclosed template ]} to avoid vulnerability
@@ -125,6 +125,10 @@ sf-space[blackprint]{
 		ul{
 			margin: 0;
 			padding: 0;
+
+			.dropdown-icon {
+				padding-right: 5px;
+			}
 		}
 	}
 }
