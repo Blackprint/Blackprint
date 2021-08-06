@@ -186,7 +186,7 @@ Blackprint.space.model('dropdown', function(My){
 
 	var backdropCreated = false;
 	function backdropListener(ev){
-		if($(ev.target).parent('sf-m')[0] === My.$el[0])
+		if($(ev.target).parent('sf-m')[0] === sf.Window.source(My.$el))
 			return;
 
 		removeBackdrop();
@@ -199,11 +199,11 @@ Blackprint.space.model('dropdown', function(My){
 	function addBackdrop(){
 		if(backdropCreated) return;
 
-		backdrop.insertBefore(My.$el[0]);
+		backdrop.insertBefore(sf.Window.source(My.$el));
 		setTimeout(function(){
 			backdrop.addClass('show');
 			$(sf.Window).on('pointerdown', backdropListener);
-			$(sf.Window).once('contextmenu', function(ev){ev.preventDefault()});
+			$(sf.Window).once('contextmenu', ev => ev.preventDefault());
 			backdropCreated = true;
 		}, 10);
 	}
@@ -249,7 +249,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 		My.visible = true;
 
 		// Check position when the element rendered
-		var ulElem = $el[0].querySelector('ul');
+		var ulElem = sf.Window.source(My.$el, $item.event).querySelector('ul');
 		$.afterRepaint().then(function(){
 			let x = 0, y = 0;
 			let parent = My._parent;
@@ -263,10 +263,10 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 
 			My.width = ulElem.offsetWidth;
 
-			if(x + My.x + My.width > window.innerWidth)
+			if(x + My.x + My.width > sf.Window.focus.innerWidth)
 				My.x -= My.width + w;
 
-			if(y + My.y + My.height > window.innerHeight)
+			if(y + My.y + My.height > sf.Window.focus.innerHeight)
 				My.y -= My.height;
 
 			My.hidden = '';
