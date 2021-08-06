@@ -9,18 +9,22 @@ if(window.Blackprint === void 0)
 let { $ } = sf; // sQuery shortcut
 var Blackprint = window.Blackprint;
 
-Blackprint.Sketch = class Sketch{
+Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 	iface = {};
 	ifaceList = [];
 
 	// Create new blackprint container
 	constructor(){
+		super();
+
 		this.index = Blackprint.index++;
 		this.scope = Blackprint.space.getScope(this.index);
 		this.scope.sketch = this;
 
 		this.getNode = Blackprint.Engine.prototype.getNode;
 		this.getNodes = Blackprint.Engine.prototype.getNodes;
+
+		this._event = {$_fallback: BlackprintEventFallback};
 	}
 
 	settings(which, val){
@@ -83,7 +87,10 @@ Blackprint.Sketch = class Sketch{
 					for(var portName in out){
 						var linkPortA = node.outputs[portName];
 						if(linkPortA === void 0){
-							console.error("Node port not found for", node, "with name:", portName);
+							this._trigger('error', {
+								type: 'node_port_not_found',
+								data: {node, portName}
+							});
 							continue;
 						}
 
@@ -97,7 +104,13 @@ Blackprint.Sketch = class Sketch{
 							// Outputs can only meet input port
 							var linkPortB = targetNode.inputs[target.name];
 							if(linkPortB === void 0){
-								console.error("Node port not found for", targetNode, "with name:", target.name);
+								this._trigger('error', {
+									type: 'node_port_not_found',
+									data: {
+										node: targetNode,
+										portName: target.name
+									}
+								});
 								continue;
 							}
 
@@ -215,8 +228,16 @@ Blackprint.Sketch = class Sketch{
 	// @return node scope
 	createNode(namespace, options, handlers){
 		var func = deepProperty(Blackprint.nodes, namespace.split('/'));
-		if(func === void 0)
-			return console.error('Node for', namespace, "was not found, maybe .registerNode() haven't being called?") && void 0;
+		if(func === void 0){
+			this._trigger('error', {
+				type: 'node_not_found',
+				data: {namespace}
+			});
+
+			return;
+		}
+
+		let time = Date.now();
 
 		// Processing scope is different with node scope
 		var node = {}, iface = new Blackprint.Node(this);
@@ -273,6 +294,13 @@ Blackprint.Sketch = class Sketch{
 			handlers.push(node);
 		else if(node.init !== void 0)
 			node.init();
+
+		time = Date.now() - time;
+		if(time > 1000){
+			this._trigger('slow_node_creation', {
+				namespace, time
+			});
+		}
 
 		return iface;
 	}

@@ -82,7 +82,10 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 				var i = list.indexOf(iface);
 
 				if(i === -1)
-					return console.error("Node was not found on the list", iface);
+					return scope.sketch._trigger('error', {
+						type: 'node_delete_not_found',
+						data: {iface}
+					});
 
 				scope.$destroyed = true;
 				list.splice(i, 1);

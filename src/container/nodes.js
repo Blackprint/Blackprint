@@ -53,7 +53,11 @@ Space.model('nodes', function(My, include){
 		create(el){
 			var node = el.querySelector('.node');
 			if(!node){
-				console.error("It seems '"+el.firstChild.tagName.toLowerCase()+"' HTML was unable to load", el);
+				include.sketch._trigger('error', {
+					type: 'node_template_not_found',
+					tagName: el.firstChild.tagName.toLowerCase(),
+					element: el
+				});
 				return;
 			}
 

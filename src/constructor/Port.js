@@ -45,6 +45,7 @@ class Port extends Blackprint.Engine.Port{
 	}
 
 	connectCable(cable){
+		let scope = this._scope;
 		if(cable === void 0)
 			cable = this._scope('cables').currentCable;
 
@@ -60,7 +61,7 @@ class Port extends Blackprint.Engine.Port{
 			|| (cable.source === 'inputs' && this.source !== 'outputs')  // Input source not connected to output
 			|| (cable.source === 'properties' && this.source !== 'properties')  // Property source not connected to property
 		){
-			console.log(`The cable is not suitable (${cable.source}, ${this.source})`);
+			scope.sketch._trigger('cable_wrong_pair', {cable, port: this});
 			cable.destroy();
 			return;
 		}
@@ -68,7 +69,7 @@ class Port extends Blackprint.Engine.Port{
 		if(cable.owner.source === 'outputs'){
 			if((this.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(this.type, cable.owner.type))
 			   || (this.feature === Blackprint.PortUnion && !Blackprint.PortUnion.validate(this.type, cable.owner.type))){
-				console.log(this.iface.title+"> Port from '"+cable.owner.iface.title + " - " + cable.owner.name+"' was not an "+this.type.name);
+				scope.sketch._trigger('cable_wrong_type', {cable, iface: this.iface, source: cable.owner, target: this});
 				return cable.destroy();
 			}
 		}
@@ -76,7 +77,7 @@ class Port extends Blackprint.Engine.Port{
 		else if(this.source === 'outputs'){
 			if((cable.owner.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(cable.owner.type, this.type))
 			   || (cable.owner.feature === Blackprint.PortUnion && !Blackprint.PortUnion.validate(cable.owner.type, this.type))){
-				console.log(this.iface.title+"> Port from '"+this.iface.title + " - " + this.name+"' was not an "+cable.owner.type.name);
+				scope.sketch._trigger('cable_wrong_type', {cable, iface: this.iface, source: this, target: cable.owner});
 				return cable.destroy();
 			}
 		}
@@ -99,17 +100,19 @@ class Port extends Blackprint.Engine.Port{
 			   cable.owner.type === Function && this.type !== Function
 			|| cable.owner.type !== Function && this.type === Function
 		)){
-			console.log(`The cable type is not suitable (${cable.owner.type.name}, ${this.type.name})`);
+			scope.sketch._trigger('cable_wrong_type_pair', {cable, target: this});
 			cable.destroy();
 			return;
 		}
+
+		console.log(isInstance, valid, cable.owner.type, this.type);
 
 		var sourceCables = cable.owner.cables;
 
 		// Remove cable if there are similar connection for the ports
 		for (var i = 0; i < sourceCables.length; i++) {
 			if(this.cables.includes(sourceCables[i])){
-				console.log("Duplicated cable removed");
+				scope.sketch._trigger('cable_duplicate_removed', {cable, target: this});
 				cable.destroy();
 				return;
 			}
@@ -134,7 +137,7 @@ class Port extends Blackprint.Engine.Port{
 			}
 
 			if(removal === true)
-				console.log("Cable was replaced because input doesn't support array");
+				scope.sketch._trigger('cable_replaced', {cable, target: this});
 		}
 
 		// Connect this cable into port's cable list
