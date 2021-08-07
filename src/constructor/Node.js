@@ -48,6 +48,8 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 		if(container.onNodeMove !== void 0)
 			container.onNodeMove(e, this);
 
+		let nonce;
+
 		// Also move all cable connected to current iface
 		var ports = Blackprint.Node._ports;
 		for(var i=0; i<ports.length; i++){
@@ -60,10 +62,31 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 
 				var cable;
 				for (var a = 0; a < cables.length; a++) {
-					if(cables[a].owner.iface === this)
-						cable = cables[a].head1;
+					let ref = cables[a];
+
+					// If the source and target is in current node
+					if(ref.owner.iface === this && ref.target.iface === this){
+						if(nonce === void 0){
+							nonce = Date.now() + Math.random();
+							ref._nonce = nonce;
+						}
+						else if(ref._nonce === nonce)
+							continue;
+
+						let { head1, head2 } = ref;
+
+						head1[0] += x;
+						head1[1] += y;
+
+						head2[0] += x;
+						head2[1] += y;
+						continue;
+					}
+
+					if(ref.owner.iface === this)
+						cable = ref.head1;
 					else
-						cable = cables[a].head2;
+						cable = ref.head2;
 
 					cable[0] += x;
 					cable[1] += y;

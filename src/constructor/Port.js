@@ -105,8 +105,6 @@ class Port extends Blackprint.Engine.Port{
 			return;
 		}
 
-		console.log(isInstance, valid, cable.owner.type, this.type);
-
 		var sourceCables = cable.owner.cables;
 
 		// Remove cable if there are similar connection for the ports
