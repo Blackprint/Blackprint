@@ -1,6 +1,6 @@
 ## html
 <div class="input">
-  <div sf-each="key, val in inputs"
+  <div sf-each="key, val in input"
         class="ports {{ val.type.name + val.classAdd }}"
         @contextmenu.stop.prevent="val.portRightClick(event)"
         @pointerdown.left.stop="val.createCable(event)"

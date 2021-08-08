@@ -51,20 +51,20 @@ Space.model('cables', function(My, include){
 
 		// If you use this code as reference please support this project
 		// by put link on your code to this repository :3
-		if(item.source !== 'properties'){
+		if(item.source !== 'property'){
 			var cx = (x2-x1)/2;
 			if(cx > -50 && cx < 0)
 				cx = -50;
 			else if(cx < 50 && cx >= 0)
 				cx = 50;
 
-			if(item.source === 'inputs'){
+			if(item.source === 'input'){
 				if(x2 < x1)
 				  item.linePath = `${x1 + cx} ${y1} ${x2 - cx} ${y2}`;
 				else
 				  item.linePath = `${x1 - cx} ${y1} ${x2 + cx} ${y2}`;
 			}
-			else if(item.source === 'outputs'){
+			else if(item.source === 'output'){
 				if(x2 < x1)
 				  item.linePath = `${x1 - cx} ${y1} ${x2 + cx} ${y2}`;
 				else

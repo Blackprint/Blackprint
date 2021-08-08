@@ -3,12 +3,12 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 	x = 0;
 	y = 0;
 
-	inputs = {};
-	outputs = {};
-	properties = {};
+	input = {};
+	output = {};
+	property = {};
 	*/
 
-	static _ports = ['inputs', 'outputs', 'properties'];
+	static _ports = ['input', 'output', 'property'];
 
 	interface = 'bp/default';
 	title = 'No Title';
@@ -23,7 +23,7 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 	}
 
 	static prepare(node, iface){
-		// Default Node properties
+		// Default Node property
 		iface.x = 0;
 		iface.y = 0;
 	}

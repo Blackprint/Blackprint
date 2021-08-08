@@ -70,7 +70,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 		let cableConnects = [];
 
-		// Create cable only from outputs and properties
+		// Create cable only from output and property
 		// > Important to be separated from above, so the cable can reference to loaded nodes
 		for(var namespace in json){
 			var nodes = json[namespace];
@@ -79,13 +79,13 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			for (var a = 0; a < nodes.length; a++){
 				var node = inserted[nodes[a].i];
 
-				// If have outputs connection
-				if(nodes[a].outputs !== void 0){
-					var out = nodes[a].outputs;
+				// If have output connection
+				if(nodes[a].output !== void 0){
+					var out = nodes[a].output;
 
-					// Every outputs port that have connection
+					// Every output port that have connection
 					for(var portName in out){
-						var linkPortA = node.outputs[portName];
+						var linkPortA = node.output[portName];
 						if(linkPortA === void 0){
 							this._trigger('error', {
 								type: 'node_port_not_found',
@@ -96,13 +96,13 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 						var port = out[portName];
 
-						// Current outputs's available targets
+						// Current output's available targets
 						for (var k = 0; k < port.length; k++) {
 							var target = port[k];
 							var targetNode = inserted[target.i];
 
-							// Outputs can only meet input port
-							var linkPortB = targetNode.inputs[target.name];
+							// Output can only meet input port
+							var linkPortB = targetNode.input[target.name];
 							if(linkPortB === void 0){
 								this._trigger('error', {
 									type: 'node_port_not_found',
@@ -115,8 +115,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 							}
 
 							cableConnects.push({
-								outputs: node.outputs,
-								inputs: targetNode.inputs,
+								output: node.output,
+								input: targetNode.input,
 								target,
 								portName,
 								linkPortA,
@@ -130,14 +130,14 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 		await $.afterRepaint();
 		for (var i = 0; i < cableConnects.length; i++) {
-			let {outputs, portName, linkPortA, inputs, target, linkPortB} = cableConnects[i];
+			let {output, portName, linkPortA, input, target, linkPortB} = cableConnects[i];
 
 			// Create cable from NodeA
-			var rectA = getPortRect(outputs, portName);
+			var rectA = getPortRect(output, portName);
 			var cable = linkPortA.createCable(rectA);
 
 			// Positioning the cable head2 into target port position from NodeB
-			var rectB = getPortRect(inputs, target.name);
+			var rectB = getPortRect(input, target.name);
 			var center = rectB.width/2;
 			cable.head2 = [rectB.x+center, rectB.y+center];
 
@@ -169,7 +169,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			if(json[node.namespace] === void 0)
 				json[node.namespace] = [];
 
-			var data = { _i: i };
+			var data = { i };
 
 			if(options.position !== false){
 				data.x = Math.round(node.x);
@@ -182,16 +182,16 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 				deepCopy(data.data, node.data);
 			}
 
-			if(node.outputs !== void 0){
-				var outputs = data.outputs = {};
-				var outputs_ = node.outputs;
+			if(node.output !== void 0){
+				var output = data.output = {};
+				var output_ = node.output;
 
 				var haveValue = false;
-				for(var name in outputs_){
-					if(outputs[name] === void 0)
-						outputs[name] = [];
+				for(var name in output_){
+					if(output[name] === void 0)
+						output[name] = [];
 
-					var port = outputs_[name];
+					var port = output_[name];
 					var cables = port.cables;
 
 					for (var a = 0; a < cables.length; a++) {
@@ -199,12 +199,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 						if(target === void 0)
 							continue;
 
-						var _i = nodes.indexOf(target.iface);
-						if(exclude.includes(nodes[_i].namespace))
+						var i = nodes.indexOf(target.iface);
+						if(exclude.includes(nodes[i].namespace))
 							continue;
 
 						let temp = {
-							_i,
+							i,
 							name:target.name
 						};
 
@@ -212,12 +212,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 							temp.id = target.id;
 
 						haveValue = true;
-						outputs[name].push(temp);
+						output[name].push(temp);
 					}
 				}
 
 				if(haveValue === false)
-					delete data.outputs;
+					delete data.output;
 			}
 
 			json[node.namespace].push(data);
@@ -238,7 +238,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 				.replace(/"([\w]+)":/g, (_, v) => v+':')
 				.replace(/\[\n +{/g, '[{')
 				.replace(/}\n +\]/g, '}]')
-				.replace(/,\n +(\w{1,2}:)/g, (_, v) => ', '+v);
+				.replace(/,\n +(i|x|y|name):/g, (_, v) => ', '+v+':');
 
 		if(space !== void 0)
 			json = json.replace(/\n {6}/g, '\n   ')
@@ -283,12 +283,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		// Create the linker between the node and the iface
 		Blackprint.Engine.Node.prepare(node, iface);
 
-		iface.inputs ??= {};
-		iface.outputs ??= {};
-		iface.properties ??= {};
+		iface.input ??= {};
+		iface.output ??= {};
+		iface.property ??= {};
 
 		// Replace port prototype (intepreter port -> visual port)
-		['inputs', 'outputs', 'properties'].forEach(function(which){
+		['input', 'output', 'property'].forEach(function(which){
 			var localPorts = iface[which];
 			for(var portName in localPorts)
 				Object.setPrototypeOf(localPorts[portName], Port.prototype);

@@ -57,16 +57,16 @@ class Port extends Blackprint.Engine.Port{
 			return cable.destroy();
 
 		// Remove cable if ...
-		if((cable.source === 'outputs' && this.source !== 'inputs') // Output source not connected to input
-			|| (cable.source === 'inputs' && this.source !== 'outputs')  // Input source not connected to output
-			|| (cable.source === 'properties' && this.source !== 'properties')  // Property source not connected to property
+		if((cable.source === 'output' && this.source !== 'input') // Output source not connected to input
+			|| (cable.source === 'input' && this.source !== 'output')  // Input source not connected to output
+			|| (cable.source === 'property' && this.source !== 'property')  // Property source not connected to property
 		){
 			scope.sketch._trigger('cable_wrong_pair', {cable, port: this});
 			cable.destroy();
 			return;
 		}
 
-		if(cable.owner.source === 'outputs'){
+		if(cable.owner.source === 'output'){
 			if((this.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(this.type, cable.owner.type))
 			   || (this.feature === Blackprint.PortUnion && !Blackprint.PortUnion.validate(this.type, cable.owner.type))){
 				scope.sketch._trigger('cable_wrong_type', {cable, iface: this.iface, source: cable.owner, target: this});
@@ -74,7 +74,7 @@ class Port extends Blackprint.Engine.Port{
 			}
 		}
 
-		else if(this.source === 'outputs'){
+		else if(this.source === 'output'){
 			if((cable.owner.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(cable.owner.type, this.type))
 			   || (cable.owner.feature === Blackprint.PortUnion && !Blackprint.PortUnion.validate(cable.owner.type, this.type))){
 				scope.sketch._trigger('cable_wrong_type', {cable, iface: this.iface, source: this, target: cable.owner});
@@ -121,7 +121,7 @@ class Port extends Blackprint.Engine.Port{
 
 		// Remove old cable if the port not support array
 		if(this.feature !== Blackprint.PortArrayOf && this.type !== Function){
-			var removal = cable.target.source === 'inputs' ? cable.target : cable.owner;
+			var removal = cable.target.source === 'input' ? cable.target : cable.owner;
 
 			if(removal === cable.owner){
 				if(removal.cables.length !== 1){

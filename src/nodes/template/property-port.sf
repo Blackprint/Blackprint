@@ -4,7 +4,7 @@
 <div style="padding: 5px 8px 0 8px;">
     <div>Property still underdevelopment</div>
     <div class="property">
-      <div sf-each="key, val in properties"
+      <div sf-each="key, val in property"
             class="ports {{ val.type.name + val.classAdd }}"
             @contextmenu.stop.prevent="val.portRightClick(event)"
             @pointerdown.left.stop="val.createCable(event)"
