@@ -156,8 +156,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		var nodes = this.scope('nodes').list;
 		var json = {};
 		var exclude = [];
+		options ??= {};
 
-		if(options && options.exclude)
+		if(options.exclude)
 			exclude = options.exclude;
 
 		for (var i = 0; i < nodes.length; i++) {
@@ -168,11 +169,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			if(json[node.namespace] === void 0)
 				json[node.namespace] = [];
 
-			var data = {
-				id:i,
-				x: Math.round(node.x),
-				y: Math.round(node.y),
-			};
+			var data = { _i: i };
+
+			if(options.position !== false){
+				data.x = Math.round(node.x);
+				data.y = Math.round(node.y);
+			}
 
 			if(node.data !== void 0){
 				data.data = {};
@@ -197,15 +199,20 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 						if(target === void 0)
 							continue;
 
-						var id = nodes.indexOf(target.iface);
-						if(exclude.includes(nodes[id].namespace))
+						var _i = nodes.indexOf(target.iface);
+						if(exclude.includes(nodes[_i].namespace))
 							continue;
 
-						haveValue = true;
-						outputs[name].push({
-							id:id,
+						let temp = {
+							_i,
 							name:target.name
-						});
+						};
+
+						if(target.id)
+							temp.id = target.id;
+
+						haveValue = true;
+						outputs[name].push(temp);
 					}
 				}
 
@@ -216,7 +223,28 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			json[node.namespace].push(data);
 		}
 
-		return JSON.stringify(json);
+		let space = options.space;
+		if(space !== void 0){
+			options.space = 3;
+
+			if(space.constructor === Number)
+				space = ' '.repeat(space);
+		}
+
+		json = JSON.stringify(json, options.replacer, options.space);
+
+		if(options.toJS)
+			json = json.replace(/,"([\w]+)":/g, (_, v) => ', '+v+':')
+				.replace(/"([\w]+)":/g, (_, v) => v+':')
+				.replace(/\[\n +{/g, '[{')
+				.replace(/}\n +\]/g, '}]')
+				.replace(/,\n +(\w{1,2}:)/g, (_, v) => ', '+v);
+
+		if(space !== void 0)
+			json = json.replace(/\n {6}/g, '\n   ')
+			.replace(/ {3}/g, space);
+
+		return json;
 	}
 
 	clearNodes(){
