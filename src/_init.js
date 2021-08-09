@@ -199,12 +199,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 						if(target === void 0)
 							continue;
 
-						var i = nodes.indexOf(target.iface);
-						if(exclude.includes(nodes[i].namespace))
+						var _i = nodes.indexOf(target.iface);
+						if(exclude.includes(nodes[_i].namespace))
 							continue;
 
 						let temp = {
-							i,
+							i: _i,
 							name:target.name
 						};
 
