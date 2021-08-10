@@ -70,13 +70,16 @@ sf-space[blackprint]{
 			border-bottom: 1px dashed darkgray;
 			font-size: 16px;
 
+			> * {
+				pointer-events: none;
+			}
+
 			&:hover{
 				background: lightgray;
 			}
-		}
-		a {
+
 			cursor: pointer;
-	    	color: black;
+		    color: black;
 		}
 	}
 
