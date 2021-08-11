@@ -1,6 +1,6 @@
 let BlackprintEventFallback = {
 	error(error){
-		this.error.types[error.type](error.data);
+		BlackprintEventFallback.error.types[error.type](error.data || error);
 	},
 	cable_wrong_pair({ port, cable }){
 		console.log(`The cable is not suitable (${cable.source}, ${port.source})`);
