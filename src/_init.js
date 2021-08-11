@@ -273,6 +273,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		iface.node = node;
 		iface.namespace = namespace;
 		iface.importing = true;
+		iface.env = Blackprint.Environment.map;
 
 		// Call the registered func (from this.registerNode)
 		func(node, iface);
