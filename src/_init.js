@@ -338,44 +338,46 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 var NOOP = function(){};
 
 // Register new iface type
-Blackprint.registerInterface = function(templatePath, options, func){
-	if(options.constructor === Function){
-		func = options;
-		options = {};
-	}
-
-	options.keepTemplate = true;
-
-	if(options.html === void 0){
-		if(options.template === void 0)
-			options.template = templatePath;
-
-		if(!/\.(html|sf)$/.test(options.template)){
-			if(window.templates[`${options.template}.html`] !== void 0)
-				options.template += '.html';
-			else options.template += '.sf';
+Blackprint.Browser = {
+	registerInterface(templatePath, options, func){
+		if(options.constructor === Function){
+			func = options;
+			options = {};
 		}
-	}
 
-	if(options.extend === void 0){
-		if(func !== void 0 && Object.getPrototypeOf(func) !== Function.prototype){
-			options.extend = func;
+		options.keepTemplate = true;
+
+		if(options.html === void 0){
+			if(options.template === void 0)
+				options.template = templatePath;
+
+			if(!/\.(html|sf)$/.test(options.template)){
+				if(window.templates[`${options.template}.html`] !== void 0)
+					options.template += '.html';
+				else options.template += '.sf';
+			}
+		}
+
+		if(options.extend === void 0){
+			if(func !== void 0 && Object.getPrototypeOf(func) !== Function.prototype){
+				options.extend = func;
+				func = NOOP;
+			}
+			else options.extend = Blackprint.Node;
+		}
+
+		if(options.extend !== Blackprint.Node && !(options.extend.prototype instanceof Blackprint.Node))
+			throw new Error(options.extend.constructor.name+" must be instance of Blackprint.Node");
+
+		if(func === void 0)
 			func = NOOP;
-		}
-		else options.extend = Blackprint.Node;
+
+		var nodeName = templatePath.replace(/[\\/]/g, '-').toLowerCase();
+		nodeName = nodeName.replace(/\.\w+$/, '');
+
+		// Just like how we do it on ScarletsFrame component with namespace feature
+		Blackprint.space.component(nodeName, options, func);
 	}
-
-	if(options.extend !== Blackprint.Node && !(options.extend.prototype instanceof Blackprint.Node))
-		throw new Error(options.extend.constructor.name+" must be instance of Blackprint.Node");
-
-	if(func === void 0)
-		func = NOOP;
-
-	var nodeName = templatePath.replace(/[\\/]/g, '-').toLowerCase();
-	nodeName = nodeName.replace(/\.\w+$/, '');
-
-	// Just like how we do it on ScarletsFrame component with namespace feature
-	Blackprint.space.component(nodeName, options, func);
 }
 
 Blackprint.availableNode = Blackprint.nodes; // To display for available dropdown nodes
