@@ -65,7 +65,7 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 					let ref = cables[a];
 
 					// If the source and target is in current node
-					if(ref.owner.iface === this && ref.target.iface === this){
+					if(ref.owner.iface === this && (ref.target && ref.target.iface === this)){
 						if(nonce === void 0){
 							nonce = Date.now() + Math.random();
 							ref._nonce = nonce;
