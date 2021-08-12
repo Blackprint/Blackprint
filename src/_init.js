@@ -335,14 +335,6 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 	}
 }
 
-// Register node handler
-// Callback function will get node and iface
-// - node = Blackprint binding
-// - iface = ScarletsFrame binding <~> element
-Blackprint.registerNode = function(namespace, func){
-	deepProperty(Blackprint.nodes, namespace.split('/'), func);
-}
-
 var NOOP = function(){};
 
 // Register new iface type
@@ -386,7 +378,6 @@ Blackprint.registerInterface = function(templatePath, options, func){
 	Blackprint.space.component(nodeName, options, func);
 }
 
-Blackprint.nodes = {};
 Blackprint.availableNode = Blackprint.nodes; // To display for available dropdown nodes
 Blackprint.index = 0;
 Blackprint.template = {
