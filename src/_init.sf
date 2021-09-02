@@ -3,4 +3,7 @@ var NOOP = function(){};
 
 let { $ } = sf; // sQuery shortcut
 var Blackprint = window.Blackprint;
+if(Blackprint === void 0)
+	throw "window.Blackprint was undefined";
+
 var Space = Blackprint.space;

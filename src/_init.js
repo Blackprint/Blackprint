@@ -1,10 +1,6 @@
 // ToDo: Export as module instead to window
 if(window.Blackprint === void 0)
-	window.Blackprint = {
-		settings(which, val){
-			Blackprint.settings[which] = val;
-		}
-	};
+	throw "Blackprint Engine must be loaded before Blackprint Sketch";
 
 let { $ } = sf; // sQuery shortcut
 var Blackprint = window.Blackprint;
@@ -242,7 +238,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 		if(space !== void 0)
 			json = json.replace(/\n {6}/g, '\n   ')
-			.replace(/ {3}/g, space);
+			.replace(/ {3}/g, space)
+			.replace(/\t{4}/g, '\t'.repeat(3));
 
 		return json;
 	}
