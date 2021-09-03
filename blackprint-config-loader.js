@@ -77,42 +77,41 @@ module.exports = function(SFC, Gulp){
 					else dir = dir.join('/');
 
 					let fileName = _path.slice(_path.lastIndexOf('/') + 1);
-					let hardlinkList = (which === 'sf' ? ['.js', '.css'] : ['']);
 
-					that.onFinish = function(){
+					that.onFinish = function(location, fileExt){
                 		fs.mkdirSync(dir, {recursive: true});
+                		if(!fileExt) fileExt = '';
+                		else fileExt = '.'+fileExt;
 
-                		hardlinkList.forEach(v => {
-	                		let filePath = dir + "/" + fileName + v;
-	                		let oriPath = _path + v;
+	                	let filePath = dir + "/" + fileName + fileExt;
+	                	let oriPath = _path + fileExt;
 
-	                		fs.lstat(oriPath, function(err, stats1){
-	                			if(err)
-									return console.error(err, oriPath);
+	                	fs.lstat(oriPath, function(err, stats1){
+	                		if(err)
+								return console.error("[Blackprint Config Loader]", err, oriPath);
 
-	                			fs.lstat(filePath, function(err, stats2){
-	                				if(!err && stats1.ino === stats2.ino)
-	                					return;
+	                		fs.lstat(filePath, function(err, stats2){
+	                			if(!err && stats1.ino === stats2.ino)
+	                				return;
 
-									fs.link(oriPath, filePath, ()=>{});
-	                			});
-
-		                		// Also hardlink the sourcemap
-		                		let m_path = oriPath+'.map';
-		                		let m_filePath = filePath+'.map';
-		                		fs.lstat(m_path, function(err, stats1){
-		                			if(err)
-										return console.error(err, m_path);
-
-		                			fs.lstat(m_filePath, function(err, stats2){
-		                				if(!err && stats1.ino === stats2.ino)
-		                					return;
-
-										fs.link(m_path, m_filePath, ()=>{});
-		                			});
-		                		});
+								fs.link(oriPath, filePath, ()=>{});
 	                		});
-                		});
+
+		                	// Also hardlink the sourcemap
+		                	let m_path = oriPath+'.map';
+		                	let m_filePath = filePath+'.map';
+		                	fs.lstat(m_path, function(err, stats1){
+		                		if(err)
+									return console.error("[Blackprint Config Loader]", err, m_path);
+
+		                		fs.lstat(m_filePath, function(err, stats2){
+		                			if(!err && stats1.ino === stats2.ino)
+		                				return;
+
+									fs.link(m_path, m_filePath, ()=>{});
+		                		});
+		                	});
+	                	});
 					}
 				}
 
