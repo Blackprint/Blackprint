@@ -100,7 +100,11 @@ Space.model('nodes', function(My, include){
 		var strArr = [];
 		function deep(obj, target){
 			for(var name in obj){
-				if(obj[name].constructor === Function){
+				let that = obj[name];
+				if(that == null || that.hidden || that.disabled)
+					return;
+
+				if(that.constructor === Function){
 					target.push({
 						title:name,
 						args:[strArr.length !== 0 ? strArr.join('/')+'/'+name : name],
@@ -113,7 +117,7 @@ Space.model('nodes', function(My, include){
 				target.push({title:name, deep:newMenu});
 
 				strArr.push(name);
-				deep(obj[name], newMenu);
+				deep(that, newMenu);
 				strArr.pop();
 			}
 		}
