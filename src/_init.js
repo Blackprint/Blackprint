@@ -234,6 +234,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 				.replace(/"([\w]+)":/g, (_, v) => v+':')
 				.replace(/\[\n +{/g, '[{')
 				.replace(/}\n +\]/g, '}]')
+				.replace(/},\n +\{/g, '}, {')
 				.replace(/,\n +(i|x|y|name):/g, (_, v) => ', '+v+':');
 
 		if(space !== void 0)
