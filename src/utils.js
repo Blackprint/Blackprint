@@ -7,12 +7,14 @@ function getPortRect(RP, name){
 }
 
 function deepProperty(obj, path, value){
+	var temp;
 	if(value !== void 0){
 		for(var i = 0, n = path.length-1; i < n; i++){
-			if(obj[path[i]] === void 0)
-				obj[path[i]] = {};
+			temp = path[i];
+			if(obj[temp] === void 0)
+				obj[temp] = {};
 
-			obj = obj[path[i]];
+			obj = obj[temp];
 		}
 
 		obj[path[i]] = value;
@@ -20,9 +22,7 @@ function deepProperty(obj, path, value){
 	}
 
 	for(var i = 0; i < path.length; i++){
-		obj = obj[path[i]];
-
-		if(obj === void 0)
+		if((obj = obj[path[i]]) === void 0)
 			return;
 	}
 
