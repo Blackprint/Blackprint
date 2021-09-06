@@ -102,7 +102,7 @@ Space.model('nodes', function(My, include){
 			for(var name in obj){
 				let that = obj[name];
 				if(that == null || that.hidden || that.disabled)
-					return;
+					continue;
 
 				if(that.constructor === Function){
 					target.push({
