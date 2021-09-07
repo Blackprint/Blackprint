@@ -40,20 +40,35 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		if(json.constructor === String)
 			json = JSON.parse(json);
 
-		var metaData = json._;
+		var metadata = json._;
 		delete json._;
 
-		if(metaData !== void 0){
-			if(metaData.env !== void 0){
+		if(metadata !== void 0){
+			if(metadata.env !== void 0){
 				let temp = Blackprint.Environment;
-				Object.assign(temp.map, metaData.env);
-				temp.list = Object.entries(metaData.env).map(([k, v]) => ({key: k, val: v}));
+				Object.assign(temp.map, metadata.env);
+
+				// Because the array is a ReactiveArray
+				// We need to use splice & push to avoid using different object reference
+				// *For Browser only
+				temp.list.splice(0);
+				temp.list.push(...Object.entries(temp.map).map(([k, v]) => ({
+					key: k,
+					value: v
+				})));
 			}
 
-			if(metaData.moduleJS !== void 0){
-				Blackprint.loadModuleFromURL(metaData.moduleJS, {
+			if(metadata.moduleJS !== void 0){
+				// wait for .min.mjs
+				await Blackprint.loadModuleFromURL(metadata.moduleJS, {
 					loadBrowserInterface: true
 				});
+
+				// wait for .sf.mjs and .sf.css if being loaded from code above
+				if(window.sf && window.sf.loader){
+					await sf.loader.task;
+					await Promise.resolve();
+				}
 			}
 		}
 
@@ -167,7 +182,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		var json = {};
 		var exclude = [];
 		options ??= {};
-		let metaData = json._ = {};
+		let metadata = json._ = {};
 
 		if(options.exclude)
 			exclude = options.exclude;
@@ -244,7 +259,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 		// Inject environment data if exist to JSON
 		if(Blackprint.Environment.list.length !== 0)
-			metaData.env = Blackprint.Environment.map;
+			metadata.env = Blackprint.Environment.map;
 
 		// Find modules
 		let modules = new Set();
@@ -262,7 +277,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 		// Inject modules URL if exist to JSON
 		if(modules.size !== 0)
-			metaData.moduleJS = [...modules];
+			metadata.moduleJS = [...modules];
 
 		json = JSON.stringify(json, options.replacer, options.space);
 
