@@ -153,6 +153,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		var json = {};
 		var exclude = [];
 		options ??= {};
+		let metaData = json._ = {};
 
 		if(options.exclude)
 			exclude = options.exclude;
@@ -227,6 +228,28 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 				space = ' '.repeat(space);
 		}
 
+		// Inject environment data if exist to JSON
+		if(Blackprint.Environment.list.length !== 0)
+			metaData.env = Blackprint.Environment.map;
+
+		// Find modules
+		let modules = new Set();
+		let _modulesURL = Blackprint._modulesURL;
+		for(let key in json){
+			if(key === '_') continue;
+
+			for (var i = 0; i < _modulesURL.length; i++) {
+				if(key in _modulesURL[i]){
+					modules.add(_modulesURL[i]._url);
+					break;
+				}
+			}
+		}
+
+		// Inject modules URL if exist to JSON
+		if(modules.size !== 0)
+			metaData.moduleJS = [...modules];
+
 		json = JSON.stringify(json, options.replacer, options.space);
 
 		if(options.toJS)
@@ -241,6 +264,14 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			json = json.replace(/\n {6}/g, '\n   ')
 			.replace(/ {3}/g, space)
 			.replace(/\t{4}/g, '\t'.repeat(3));
+
+		// For metadata, just add one more tab
+		if(options.toJS)
+			json = json.replace(/_:.*?$.*?\t[\]}](?=\n\t})/gms, v => {
+				return v.replace(/\t+/g, tab => {
+					return tab + '\t';
+				})
+			});
 
 		return json;
 	}
