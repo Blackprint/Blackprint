@@ -2,8 +2,13 @@
 if(window.Blackprint === void 0)
 	throw "Blackprint Engine must be loaded before Blackprint Sketch";
 
+var NOOP = function(){};
 let { $ } = sf; // sQuery shortcut
 var Blackprint = window.Blackprint;
+
+// Will  be used for `Blackprint.registerNode`
+Blackprint.modulesURL = {};
+Blackprint._modulesURL = [];
 
 Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 	iface = {};
@@ -393,7 +398,111 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 	}
 }
 
-var NOOP = function(){};
+// Replace function from Blackprint Engine
+Blackprint.registerNode = function(namespace, func){
+	if(this._scopeURL !== void 0){
+		let temp = Blackprint.modulesURL[this._scopeURL];
+
+		if(temp === void 0){
+			Blackprint.modulesURL[this._scopeURL] = {};
+			temp = Blackprint.modulesURL[this._scopeURL];
+			temp._nodeLength = 0;
+			temp._url = this._scopeURL;
+			Blackprint._modulesURL.push(temp);
+		}
+
+		temp[namespace] = true;
+	}
+
+	namespace = namespace.split('/');
+
+	// Add with sf.Obj to trigger ScarletsFrame object binding update
+	if(!(namespace[0] in Blackprint.nodes))
+		sf.Obj.set(Blackprint.nodes, namespace[0], {});
+
+	let isExist = deepProperty(Blackprint.nodes, namespace);
+	if(isExist){
+		if(this._scopeURL && isExist._scopeURL !== this._scopeURL){
+			throw `Conflicting nodes with similar name was found\nNamespace: ${namespace.join('/')}\nFirst register from: ${isExist._scopeURL}\nTrying to register again from: ${this._scopeURL}`;
+		}
+
+		if(isExist._hidden)
+			func._hidden = true;
+
+		if(isExist._disabled)
+			func._disabled = true;
+	}
+	else if(this._scopeURL !== void 0){
+		let ref = Blackprint.modulesURL[this._scopeURL];
+		if(ref._nodeLength === void 0)
+			ref._nodeLength = 0;
+		ref._nodeLength++;
+
+		ref = Blackprint.nodes[namespace[0]];
+		if(ref._length === void 0){
+			Object.defineProperty(ref, '_length', {writable: true, value: 0});
+			Object.defineProperty(ref, '_visibleNode', {writable: true, value: 0});
+		}
+
+		ref._length++;
+		ref._visibleNode++;
+	}
+
+	func._scopeURL = this._scopeURL;
+	deepProperty(Blackprint.nodes, namespace, func, function(obj){
+		if(obj._length !== void 0)
+			obj._length++;
+		else{
+			Object.defineProperty(obj, '_length', {writable: true, value: 1});
+			Object.defineProperty(obj, '_visibleNode', {writable: true, value: 1});
+		}
+	});
+}
+
+Blackprint.loadModuleFromURL.browser = function(url, options){
+	// ToDo: Migrate some code to Blackprint Sketch
+	if(options == null) options = {};
+
+	if(options.loadBrowserInterface === false)
+		Blackprint.loadBrowserInterface = false;
+	if(options.loadBrowserInterface === true)
+		Blackprint.loadBrowserInterface = true;
+
+	if(window.sf === void 0 && Blackprint.loadBrowserInterface){
+		console.log("[Blackprint] ScarletsFrame was not found, node interface for Blackprint Editor will not being loaded. Please put `{loadBrowserInterface: false}` on second parameter of `Blackprint.loadModuleFromURL`. You can also set `Blackprint.loadBrowserInterface` to false if you don't want to use node interface for Blackprint Editor.");
+		return;
+	}
+
+	return Promise.all(url.map(v=> import(v)));
+}
+
+// Replace function from Blackprint Engine
+Blackprint.LoadScope = function(options){
+	let cleanURL = options.url.replace(/[?#].*?$/gm, '');
+
+	let temp = Object.create(Blackprint);
+	let isInterfaceModule = /\.sf\.mjs$/m.test(cleanURL);
+
+	temp._scopeURL = cleanURL.replace(/\.sf\.mjs$/m, '.min.mjs');
+
+	if(Blackprint.loadBrowserInterface && !isInterfaceModule){
+		if(window.sf === void 0)
+			return console.log("[Blackprint] ScarletsFrame was not found, node interface for Blackprint Editor will not being loaded. You can also set `Blackprint.loadBrowserInterface` to false if you don't want to use node interface for Blackprint Editor.");
+
+		let noStyle = Blackprint.loadBrowserInterface !== 'without-css';
+		if(options != null && options.css === false)
+			noStyle = false;
+
+		let url = temp._scopeURL.replace(/(|\.min|\.es6)\.(js|mjs|ts)$/m, '');
+
+		if(!noStyle)
+			sf.loader.css([url+'.sf.css']);
+
+		sf.loader.mjs([url+'.sf.mjs']);
+	}
+
+	return temp;
+}
 
 // Register new iface type
 Blackprint.Browser = {
