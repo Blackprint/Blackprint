@@ -16,21 +16,27 @@
   Blackprint Editor is built using ScarletsFrame to deliver better <a href="https://krausest.github.io/js-framework-benchmark/current.html">performance</a> and <a href="https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example">features</a>. Blackprint Engine is distributed separately. Please use WebKit based browser like Chromium or Safari for better Blackprint Editor's performance.
 </p>
 
-> Some feature still breaking right now, still on progress to fix it
-
 ## Documentation
 > Warning: This project haven't reach it stable version<br>
 > Please share this project with your friend.<br>
 > Maybe someone skilled like you interested to improve this open source project.<br>
 > And because of their contribution, you can enjoy the improved Blackprint :)
 
-Please go to this [link](http://stefansarya.gitbook.io/blackprint) for the documentation.
+Please go to this [link](http://stefansarya.gitbook.io/blackprint) for the documentation and version conventions on [CONTRIBUTING.md](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md#version-conventions) if you want to use Blackprint before reaching v1.0.0.
+
+Feel free to open new discussion when your custom nodes was breaking on the new updates 😁.
+
+Some of the interface design was inpired by UE4 Blueprint, it was designed to be modified with CSS and HTML easily. If you have better interface design, feel free to create an issue/discussion to show it. Currently Blackprint source code isn't being developed with ES6 modules importing system, but it will work if you import the minified file for ES6 module. You can also build your own nodes for JavaScript with ES6 modules or without using compiler, but it will be better if being combined + minified + have sourcemap. When importing Blackprint modules from URL it must have `.min.mjs` or `.sf.mjs` extension.
 
 ## Blackprint Roadmap
 Engine = Blackprint's engine
 
 This roadmap could be changed on the future
+<details>
+  <summary>Click here to expand</summary>
 - [x] [JavaScript Engine](https://github.com/Blackprint/engine-js)
+  - [x] Add support for Environment Variables
+  - [x] Importing modules from URL
   - Browser Nodes [Collection](https://github.com/Blackprint/nodes)
     - [x] [Minimal example](https://github.com/Blackprint/blackprint.github.io/blob/master/src/js/register-handler.js)
     - [x] [SFMediaStream](https://github.com/ScarletsFiction/SFMediaStream/)
@@ -47,6 +53,8 @@ This roadmap could be changed on the future
   - [x] Hot Reload
   - [x] Detachable window (with ScarletsFrame)
   - [x] [Demo](https://blackprint.github.io) ([Repository](https://github.com/Blackprint/blackprint.github.io))
+  - [x] Add support for Environment Variables
+  - [x] Importing modules from URL
   - [ ] Add hint for beginner guide
   - [ ] Node list editor (currently with right click)
   - [ ] Error/log popup or overlay
@@ -55,15 +63,20 @@ This roadmap could be changed on the future
   - [ ] Pausable node execution
 - [ ] [PHP Engine](https://github.com/Blackprint/engine-php)
   - [x] [Minimal example](https://github.com/Blackprint/engine-php/tree/master/example)
+  - [ ] Add support for Environment Variables
+  - [ ] Importing modules from URL
 - [ ] Python Engine
   - [ ] Minimal example
+  - [ ] Add support for Environment Variables
+  - [ ] Importing modules from URL
 - [ ] Simplify node development for new developer
   - [x] Auto `blackprint.config.js` import
-  - [ ] Support ES6 node development
+  - [ ] Support ES6 modules importing system
 - [ ] Better documentation or website
 - [ ] Tutorial and samples
-- [ ] Nodes Marketplace or Package Manager
+- [ ] Blackprint Nodes Package Manager or Marketplace
 - [ ] Engine's performance benchmark
+</details>
 
 Feel free to request feature or report an issue
 
@@ -78,8 +91,11 @@ Blackprint will follow semantic versioning after reach v1.0.0. Currently if the 
 ## Other possible plan
 Blackprint Engine:
 - C#
-- Java
+- Lua
+- Java (or maybe Kotlin)
 - Rust
+- Go
+- C++
 
 Planned Code Generation:
 - Dockerfile
@@ -107,15 +123,10 @@ To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSO
 
 The main target of the project is to help developers to modify their program's logic while the program is still running. You can create a custom node so it can be used to manage IoT, Docker container connections, or maybe like virtual cable for electrical stuff. Well, it may feel like a dream but it can be turned into the reality if the community getting bigger.
 
-Some of the interface design was inpired by UE4 Blueprint, it was designed to be modified with CSS and HTML easily. If you have better interface design, feel free to create an issue to show it. Currently Blackprint wasn't being developed with ES6 modules, but it will work if you import the minified file for ES6 module.
+## Contributing
+Please make sure to read the [Contributing Guide](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md) before creating a issue/request. If you have a Blackprint-related project/addons, you can add it with a pull request to this [list]()!
 
 ## License
-MIT
+Blackprint is a **MIT licensed** open source project and completely free to use.
 
-### Note
-This project is free to use, because I bring this for our future.<br>
-If you use this for commercial project, please consider sponsoring<br>
-the people who work behind the Blackprint project.
-
-But if you use Blackprint for creating another free open source project<br>
-it may be awesome (๑˃ᴗ˂)ﻭ
+But please consider sponsoring the people who work and contribute amount of effort to maintain and develop new features for this project. Because without their contribution, this project may get slowed down or possible to getting paused.
