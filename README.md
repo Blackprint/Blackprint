@@ -14,9 +14,9 @@
 
 <p align="center">
   <b>Blackprint Editor</b> is built using ScarletsFrame (<a href="https://krausest.github.io/js-framework-benchmark/current.html">performance</a> and <a href="https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example">features</a>).
-  <br><b>Blackprint Engine</b> is distributed separately for different runtime environment. 
+  <br><b>Blackprint Engine</b> is distributed separately for different runtime environment.
 </p>
-  
+
 <p align="center">
   When using the editor/sketch library, please use WebKit based browser like Chromium or Safari for better rendering performance.
 </p>
@@ -40,7 +40,7 @@ Blackprint Engine
 | Blackprint Engine | ✔️ [Link](https://github.com/Blackprint/engine-js) | ✔️ [Link](https://github.com/Blackprint/engine-js) | ✔️ [Link](https://github.com/Blackprint/engine-php) | - |
 | Minimal example | ✔️ [Link](https://github.com/Blackprint/blackprint.github.io/blob/master/src/js/register-handler.js) | ✔️ [Link](https://github.com/Blackprint/engine-js/tree/master/example) | ✔️ [Link](https://github.com/Blackprint/engine-php/tree/master/example) | - |
 | Environment variables | ✔️ | ✔️ | - | - |
-| Import addons from URL | ✔️ | ✔️ | - | - |
+| Import modules from URL | ✔️ | ✔️ | - | - |
 
 ---
 
@@ -93,7 +93,7 @@ For the example:
 
 Currently Blackprint will act as an interface for each engine. You will need to write code on how to handle Blackprint node with your library on different programming language.
 
-To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSON and use [engine-js](https://github.com/Blackprint/engine-js#example). But it doesn't mean exporting is just like a magic, you also need to write `registerNode` and `registerInterface` on the target engine. Except if someone already write the Addons (node and interface) on target engine, you can easily plug and play.
+To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSON and use [engine-js](https://github.com/Blackprint/engine-js#example). But it doesn't mean exporting is just like a magic, you also need to write `registerNode` and `registerInterface` on the target engine. Except if someone already write the Blackprint Module (node and interface) on target engine, you can easily plug and play.
 
 ## Motivation
 <details>
