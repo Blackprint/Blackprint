@@ -473,7 +473,7 @@ Blackprint.loadModuleFromURL.browser = function(url, options){
 		return;
 	}
 
-	return Promise.all(url.map(v=> import(v)));
+	return sf.loader.mjs(url);
 }
 
 // Replace function from Blackprint Engine
@@ -507,6 +507,9 @@ Blackprint.LoadScope = function(options){
 // Register new iface type
 Blackprint.Browser = {
 	registerInterface(templatePath, options, func){
+		if(templatePath.slice(0, 5) !== 'BPIC/')
+			throw new Error("The first parameter of 'registerInterface' must be started with BPIC to avoid name conflict. Please name the interface similar with 'templatePrefix' for your module that you have set on 'blackprint.config.js'.");
+
 		if(options.constructor === Function){
 			func = options;
 			options = {};
