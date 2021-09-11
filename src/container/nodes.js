@@ -8,6 +8,8 @@ Space.model('nodes', function(My, include){
 
 	function resetCablePosition(resized){
 		var iface = resized.target.model;
+		if(iface === void 0) return;
+
 		iface.h = resized.contentRect.height;
 		iface.w = resized.contentRect.width;
 
