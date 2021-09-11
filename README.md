@@ -35,12 +35,12 @@ Feel free to open new discussion when your custom nodes was breaking on the new 
 This roadmap could be changed on the future, feel free to request feature or report an issue.
 
 Blackprint Engine
-| Name | JS (Browser) | JS (Node.js / Deno) | PHP | Python |
-| --- | --- | --- | --- | ---|
-| Blackprint Engine | ✔️ [Link](https://github.com/Blackprint/engine-js) | ✔️ [Link](https://github.com/Blackprint/engine-js) | ✔️ [Link](https://github.com/Blackprint/engine-php) | - |
-| Minimal example | ✔️ [Link](https://github.com/Blackprint/blackprint.github.io/blob/master/src/js/register-handler.js) | ✔️ [Link](https://github.com/Blackprint/engine-js/tree/master/example) | ✔️ [Link](https://github.com/Blackprint/engine-php/tree/master/example) | - |
-| Environment variables | ✔️ | ✔️ | - | - |
-| Import modules from URL | ✔️ | ✔️ | - | - |
+| Name | JS (Browser) | JS (Node.js / Deno) | PHP | Python | C# |
+| --- | --- | --- | --- | --- | --- |
+| Blackprint Engine | ✔️ [Link](https://github.com/Blackprint/engine-js) | ✔️ [Link](https://github.com/Blackprint/engine-js) | ✔️ [Link](https://github.com/Blackprint/engine-php) | - | - |
+| Minimal example | ✔️ [Link](https://github.com/Blackprint/blackprint.github.io/blob/master/src/js/register-handler.js) | ✔️ [Link](https://github.com/Blackprint/engine-js/tree/master/example) | ✔️ [Link](https://github.com/Blackprint/engine-php/tree/master/example) | - | - |
+| Environment variables | ✔️ | ✔️ | - | - | - |
+| Import modules from URL | ✔️ | ✔️ | - | - | - |
 
 ---
 
@@ -66,19 +66,18 @@ Blackprint Engine
 
 ---
 
-Currently the main focus is Blackprint engine and sketch for browser. PHP, Node.js, and Deno engine could have some changes on the future.
+Currently the main focus is Blackprint for browser. PHP, Node.js, and Deno engine could have some changes on the future.
 
 ## Other possible plan
 Blackprint Engine:
-- C#
-- Lua
-- Java (or maybe Kotlin)
-- Rust
-- Go
-- C++
+- **Lua** (because it's embeddable language)
+- **Go v2** (for backend server)
+- **Java** (or maybe Kotlin)
+- **Rust** (may get removed from this list)
+- **C++** (for Arduino if possible)
 
 Planned Code Generation:
-- Dockerfile
+- **Dockerfile** (for networks/container relations)
 - Create a compiler for compiling 1 Blackprint file into different engine easily
 
 If you're looking for AST, currently you can use the exported Blackprint JSON.
