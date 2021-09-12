@@ -2,47 +2,45 @@ Space.model('nodes', function(My, include){
 	let container = My.container = include('container');
 
 	var sizeObserve = new ResizeObserver(function(items){
-		for (var i = 0; i < items.length; i++)
-			resetCablePosition(items[i]);
-	});
+		for (var i = 0; i < items.length; i++){
+			var resized = items[i];
+			var iface = resized.target.model;
+			if(iface === void 0) continue;
 
-	function resetCablePosition(resized){
-		var iface = resized.target.model;
-		if(iface === void 0) return;
+			iface.h = resized.contentRect.height;
+			iface.w = resized.contentRect.width;
 
-		iface.h = resized.contentRect.height;
-		iface.w = resized.contentRect.width;
+			var Ofst = container.offset;
 
-		var Ofst = container.offset;
-
-		var ports = Blackprint.Node._ports;
-		for(var i=0; i < ports.length; i++){
-			var which = iface[ports[i]];
-			if(which === void 0)
-				continue;
-
-			for(var key in which){
-				var cables = which[key].cables;
-				if(cables.length === 0)
+			var ports = Blackprint.Node._ports;
+			for(var a = 0; a < ports.length; a++){
+				var which = iface[ports[a]];
+				if(which === void 0)
 					continue;
 
-				var rect = which.getElement(key).querySelector('.port');
-				rect = rect.getBoundingClientRect();
+				for(var key in which){
+					var cables = which[key].cables;
+					if(cables.length === 0)
+						continue;
 
-				var cable;
-				for (var a = 0; a < cables.length; a++) {
-					if(cables[a].owner.iface === iface)
-						cable = cables[a].head1;
-					else
-						cable = cables[a].head2;
+					var rect = which.getElement(key).querySelector('.port');
+					rect = rect.getBoundingClientRect();
 
-					var center = rect.width/2;
-					cable[0] = (rect.x+center - container.pos.x - Ofst.x) / container.scale;
-					cable[1] = (rect.y+center - container.pos.y - Ofst.y) / container.scale;
+					var cable;
+					for (var a = 0; a < cables.length; a++) {
+						if(cables[a].owner.iface === iface)
+							cable = cables[a].head1;
+						else
+							cable = cables[a].head2;
+
+						var center = rect.width/2;
+						cable[0] = (rect.x+center - container.pos.x - Ofst.x) / container.scale;
+						cable[1] = (rect.y+center - container.pos.y - Ofst.y) / container.scale;
+					}
 				}
 			}
 		}
-	}
+	});
 
 	// Check if the container was a minimap
 	// If yes, then copy the Array reference from the original Space
@@ -72,8 +70,8 @@ Space.model('nodes', function(My, include){
 
 	function createNode(namespace){
 		My.$space.sketch.createNode(namespace, {
-			x:menuEv.offsetX - container.offset.x,
-			y:menuEv.offsetY - container.offset.y
+			x: menuEv.offsetX - container.offset.x,
+			y: menuEv.offsetY - container.offset.y
 		});
 	}
 
