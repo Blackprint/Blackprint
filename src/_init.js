@@ -489,7 +489,7 @@ Blackprint.LoadScope = function(options){
 		if(window.sf === void 0)
 			return console.log("[Blackprint] ScarletsFrame was not found, node interface for Blackprint Editor will not being loaded. You can also set `Blackprint.loadBrowserInterface` to false if you don't want to use node interface for Blackprint Editor.");
 
-		let noStyle = Blackprint.loadBrowserInterface !== 'without-css';
+		let noStyle = Blackprint.loadBrowserInterface === 'without-css';
 		if(options != null && options.css === false)
 			noStyle = false;
 
