@@ -14,12 +14,10 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 	title = 'No Title';
 	description = '';
 
-	#scope;
-	#container;
 	constructor(sketch){
 		super();
-		this.#scope = sketch.scope;
-		this.#container = sketch.scope('container');
+		this._scope = sketch.scope;
+		this._container = sketch.scope('container');
 	}
 
 	static prepare(node, iface){
@@ -30,14 +28,14 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 
 	newPort(portName, type, def, which, iface){
 		var temp = new Blackprint.Engine.Port(portName, type, def, which, iface);
-		temp._scope = this.#scope;
+		temp._scope = this._scope;
 		Object.setPrototypeOf(temp, Port.prototype);
 		return temp;
 	}
 
 	// DragMove event handler
 	moveNode(e){
-		var container = this.#container;
+		var container = this._container;
 		var scale = container.scale;
 		var x = e.movementX / scale;
 		var y = e.movementY / scale;
@@ -96,7 +94,7 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 	}
 
 	nodeMenu(ev){
-		var scope = this.#scope;
+		var scope = this._scope;
 		var menu = [{
 			title: 'Delete',
 			args: [this],
@@ -126,6 +124,6 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 		}];
 
 		this._trigger('node.menu', menu);
-		scope('dropdown').show(menu, ev.clientX, ev.clientY);
+		scope('dropdown').show(menu, {x: ev.clientX, y: ev.clientY});
 	}
 }

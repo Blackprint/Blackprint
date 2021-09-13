@@ -6,7 +6,7 @@
   ">
   <div class="first" style="display: {{ !title && 'none' }}">{{ title || '' }}</div>
   <ul>
-    <li sf-each="x in options" :class="{{x.divider ? 'divider' : ''}}">
+    <li sf-each="x in options" :class="{{ x.divider ? 'divider' : '' }} {{ x.disabled && 'disabled' }}" title="{{ x.info || '' }}">
       {{@if x.title !== undefined:
       	{[ <a> ]} // Begin
 
@@ -79,7 +79,7 @@ sf-space[blackprint]{
 			}
 
 			cursor: pointer;
-		    color: black;
+	    	color: black;
 		}
 	}
 
@@ -97,8 +97,7 @@ sf-space[blackprint]{
 		z-index: 10000;
 		visibility: hidden;
 		opacity: 0;
-		-webkit-transition-duration: .4s;
-		transition-duration: .4s;
+		transition-duration: .2s;
 
 		&.show{
 			opacity: 1;
@@ -132,6 +131,11 @@ sf-space[blackprint]{
 			.dropdown-icon {
 				padding-right: 5px;
 			}
+
+			li.disabled, li.disabled:hover{
+				cursor: default !important;
+				background: #888;
+			}
 		}
 	}
 }
@@ -143,39 +147,41 @@ sf-space[blackprint]{
 Blackprint.space.model('dropdown', function(My){
 	My.menus = [];
 	My.onCancel = void 0;
+	My.className = '';
+	My.pendingDeepOpen = false;
+	My.pendingDeepOpen_ = 0;
 
 	My.icon = {
 		more: 'fa fa-chevron-right'
 	};
 
-	// options: [{title, callback}, {title, deep:[{...}]}, ...]
-	My.show = function(options, x, y, title){
+	// menus: [{title, callback}, {title, deep:[{...}]}, ...]
+	My.show = function(menus, { x, y, event, element, title, className }){
 		// Remove last dropdown if haven't been closed
 		if(My.menus.length !== 0)
 			My.menus.splice(0);
 		else
 			addBackdrop();
 
-		if(y && y.constructor === String){
-			title = y;
-			y = void 0;
+		menus.title = title;
+
+		if(element !== void 0){
+			let rect = element.getBoundingClientRect();
+			menus.x = rect.x + 5;
+			menus.y = rect.y + rect.height;
+		}
+		else if(x !== void 0){
+			menus.x = x;
+			menus.y = y;
+		}
+		else{
+			menus.x = event.x;
+			menus.y = event.y;
+			menus.event = event;
 		}
 
-		options.title = title;
-
-		if(x !== void 0){
-			if(x.constructor === Number){
-				options.x = x;
-				options.y = y;
-			}
-			else{
-				options.x = x.x;
-				options.y = x.y;
-				options.event = x;
-			}
-		}
-
-		My.menus.push(options);
+		My.className = className || '';
+		My.menus.push(menus);
 		return My;
 	}
 
@@ -183,8 +189,12 @@ Blackprint.space.model('dropdown', function(My){
 		for (var i = 0; i < My.menus.length; i++)
 			My.menus.getElement(i).model.deepRemove();
 
+		My.pendingDeepOpen = false;
+		My.pendingDeepOpen_ = 0;
 		My.menus.splice(0);
 		removeBackdrop();
+
+		My.className = '';
 	}
 
 	var backdropCreated = false;
@@ -217,7 +227,7 @@ Blackprint.space.model('dropdown', function(My){
 
 		setTimeout(()=> {
 			backdrop.remove();
-		}, 500);
+		}, 200);
 
 		$(sf.Window).off('pointerdown', backdropListener);
 	}
@@ -236,6 +246,8 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 	My.y = $item.y;
 	My.root = include('dropdown');
 	My.width = 0;
+	My.height = 0;
+	My.disabled = $item.disabled === true;
 
 	// First dropdown title
 	My.title = $item.title;
@@ -265,6 +277,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 			}
 
 			My.width = ulElem.offsetWidth;
+			My.height = ulElem.offsetHeight;
 
 			if(x + My.x + My.width > sf.Window.focus.innerWidth)
 				My.x -= My.width + w;
@@ -282,7 +295,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 			const elem = $(options.getElements(i));
 
 			if(opt.deep !== void 0){
-				elem.on('mouseover', function(ev){
+				function openDeep(ev){
 					if(currentDeepLevel !== void 0)
 						My.deepRemove();
 
@@ -301,25 +314,40 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 					}
 
 					// Initialize position once
-					var rect = ev.target.getBoundingClientRect();
 					deep.x = ulElem.offsetWidth;
 					deep.y = ev.target.offsetTop - 7;
 
 					// Create dropdown in current sf-space
 					deep.el = currentDeepLevel = new $DropDown(deep, My.$space);
 					$el.append(currentDeepLevel);
+				}
+
+				elem.on('mouseover', function(ev){
+					My.root.pendingDeepOpen = ev.target;
+					clearTimeout(My.root.pendingDeepOpen_);
+
+					My.root.pendingDeepOpen_ = setTimeout(()=> {
+						if(My.root.pendingDeepOpen === ev.target)
+							openDeep(ev);
+					}, 400);
 				});
 
+				elem.on('click', openDeep);
 				continue;
 			}
 
 			elem.on('mouseover', function(ev){
-				if(currentDeepLevel !== void 0){
-					My.deepRemove();
-					currentDeepLevel = void 0;
-				}
+				My.root.pendingDeepOpen = ev.target;
+				clearTimeout(My.root.pendingDeepOpen_);
 
-				opt.hover && opt.hover.apply(opt.context, opt.args);
+				My.root.pendingDeepOpen_ = setTimeout(()=> {
+					if(currentDeepLevel !== void 0){
+						My.deepRemove();
+						currentDeepLevel = void 0;
+					}
+
+					opt.hover && opt.hover.apply(opt.context, opt.args);
+				}, 400);
 			});
 
 			if(opt.callback){
