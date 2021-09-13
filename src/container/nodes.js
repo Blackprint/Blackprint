@@ -125,6 +125,6 @@ Space.model('nodes', function(My, include){
 		menu.event = ev;
 
 		deep(Blackprint.availableNode, menu);
-		include('dropdown').show(menu, ev.clientX, ev.clientY);
+		include('dropdown').show(menu, {x: ev.clientX, y: ev.clientY});
 	}
 });

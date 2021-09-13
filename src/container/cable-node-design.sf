@@ -233,7 +233,9 @@ sf-space[blackprint]{
 				// > = direct child
 				.ports > div {
 					display: inline-block;
-					margin-right: 3px;
+				}
+				.ports > .name {
+					margin: 0 3px 0 5px;
 				}
 			}
 
@@ -254,7 +256,7 @@ sf-space[blackprint]{
 
 				.Function .port{
 					float: right;
-					margin-left: 2px;
+					margin-left: -1px;
 					margin-right: -5px;
 				}
 			}
