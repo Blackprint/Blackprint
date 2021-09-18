@@ -11,12 +11,12 @@ Blackprint.modulesURL = {};
 Blackprint._modulesURL = [];
 
 Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
-	iface = {};
-	ifaceList = [];
-
 	// Create new blackprint container
 	constructor(){
 		super();
+
+		this.iface = {}; // { id => object }
+		this.ifaceList = [];
 
 		this.index = Blackprint.index++;
 		this.scope = Blackprint.space.getScope(this.index);
@@ -26,6 +26,49 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		this.getNodes = Blackprint.Engine.prototype.getNodes;
 
 		this._event = {$_fallback: BlackprintEventFallback};
+	}
+
+	static registerInterface(templatePath, options, func){
+		if(templatePath.slice(0, 5) !== 'BPIC/')
+			throw new Error("The first parameter of 'registerInterface' must be started with BPIC to avoid name conflict. Please name the interface similar with 'templatePrefix' for your module that you have set on 'blackprint.config.js'.");
+
+		if(options.constructor === Function){
+			func = options;
+			options = {};
+		}
+
+		options.keepTemplate = true;
+
+		if(options.html === void 0){
+			if(options.template === void 0)
+				options.template = templatePath;
+
+			if(!/\.(html|sf)$/.test(options.template)){
+				if(window.templates[`${options.template}.html`] !== void 0)
+					options.template += '.html';
+				else options.template += '.sf';
+			}
+		}
+
+		if(options.extend === void 0){
+			if(func !== void 0 && Object.getPrototypeOf(func) !== Function.prototype){
+				options.extend = func;
+				func = NOOP;
+			}
+			else options.extend = Blackprint.Node;
+		}
+
+		if(options.extend !== Blackprint.Node && !(options.extend.prototype instanceof Blackprint.Node))
+			throw new Error(options.extend.constructor.name+" must be instance of Blackprint.Node");
+
+		if(func === void 0)
+			func = NOOP;
+
+		var nodeName = templatePath.replace(/[\\/]/g, '-').toLowerCase();
+		nodeName = nodeName.replace(/\.\w+$/, '');
+
+		// Just like how we do it on ScarletsFrame component with namespace feature
+		Blackprint.space.component(nodeName, options, func);
 	}
 
 	settings(which, val){
@@ -55,7 +98,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 				// Because the array is a ReactiveArray
 				// We need to use splice & push to avoid using different object reference
-				// *For Browser only
+				// *For Browser Sketch only
 				temp.list.splice(0);
 				temp.list.push(...Object.entries(temp.map).map(([k, v]) => ({
 					key: k,
@@ -502,52 +545,6 @@ Blackprint.LoadScope = function(options){
 	}
 
 	return temp;
-}
-
-// Register new iface type
-Blackprint.Browser = {
-	registerInterface(templatePath, options, func){
-		if(templatePath.slice(0, 5) !== 'BPIC/')
-			throw new Error("The first parameter of 'registerInterface' must be started with BPIC to avoid name conflict. Please name the interface similar with 'templatePrefix' for your module that you have set on 'blackprint.config.js'.");
-
-		if(options.constructor === Function){
-			func = options;
-			options = {};
-		}
-
-		options.keepTemplate = true;
-
-		if(options.html === void 0){
-			if(options.template === void 0)
-				options.template = templatePath;
-
-			if(!/\.(html|sf)$/.test(options.template)){
-				if(window.templates[`${options.template}.html`] !== void 0)
-					options.template += '.html';
-				else options.template += '.sf';
-			}
-		}
-
-		if(options.extend === void 0){
-			if(func !== void 0 && Object.getPrototypeOf(func) !== Function.prototype){
-				options.extend = func;
-				func = NOOP;
-			}
-			else options.extend = Blackprint.Node;
-		}
-
-		if(options.extend !== Blackprint.Node && !(options.extend.prototype instanceof Blackprint.Node))
-			throw new Error(options.extend.constructor.name+" must be instance of Blackprint.Node");
-
-		if(func === void 0)
-			func = NOOP;
-
-		var nodeName = templatePath.replace(/[\\/]/g, '-').toLowerCase();
-		nodeName = nodeName.replace(/\.\w+$/, '');
-
-		// Just like how we do it on ScarletsFrame component with namespace feature
-		Blackprint.space.component(nodeName, options, func);
-	}
 }
 
 Blackprint.availableNode = Blackprint.nodes; // To display for available dropdown nodes

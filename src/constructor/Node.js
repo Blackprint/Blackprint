@@ -10,14 +10,14 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 
 	static _ports = ['input', 'output', 'property'];
 
-	interface = 'bp/default';
-	title = 'No Title';
-	description = '';
-
 	constructor(sketch){
 		super();
 		this._scope = sketch.scope;
 		this._container = sketch.scope('container');
+
+		this.interface = 'bp/default';
+		this.title = 'No Title';
+		this.description = '';
 	}
 
 	static prepare(node, iface){

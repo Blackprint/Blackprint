@@ -2,13 +2,13 @@ var dotGlow = document.createElement('div');
 dotGlow.classList.add('bp-dot-glow');
 
 class Cable extends Blackprint.Engine.Cable{
-	connected = false;
-	valid = true;
-	linePath = '0 0 0 0';
-
 	constructor(obj, port){
 		super(port);
 		this._scope = port._scope;
+
+		this.connected = false;
+		this.valid = true;
+		this.linePath = '0 0 0 0';
 
 		var container = port._scope('container');
 		var Ofst = container.offset;

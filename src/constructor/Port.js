@@ -1,5 +1,7 @@
 class Port extends Blackprint.Engine.Port{
-	_scope = null;
+	constructor(){
+		this._scope = null;
+	}
 
 	findPortElement(el){
 		if(!el.classList.contains('ports'))
