@@ -1,7 +1,6 @@
 class Port extends Blackprint.Engine.Port{
-	constructor(){
-		this._scope = null;
-	}
+	// For Prototype only, the constructor() will not being used
+	// Used on ./Node.js -> newPort()
 
 	findPortElement(el){
 		if(!el.classList.contains('ports'))
