@@ -51,7 +51,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		}
 
 		if(options.extend === void 0){
-			if(func !== void 0 && Object.getPrototypeOf(func) !== Function.prototype){
+			if(isClass(func)){
 				options.extend = func;
 				func = NOOP;
 			}

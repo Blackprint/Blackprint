@@ -51,3 +51,5 @@ function deepCopy(target, source){
 		target[key] = source[key];
 	}
 }
+
+const isClass = Blackprint._utils.isClass;
