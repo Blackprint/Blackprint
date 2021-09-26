@@ -10,20 +10,31 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 
 	static _ports = ['input', 'output', 'property'];
 
-	constructor(sketch){
-		super();
-		this._scope = sketch.scope;
-		this._container = sketch.scope('container');
+	constructor(scope){
+		let that;
 
-		this.interface = 'bp/default';
-		this.title = 'No Title';
-		this.description = '';
-	}
+		if(Blackprint._reuseNode !== void 0){
+			that = Blackprint._reuseNode;
+			Blackprint._reuseNode = void 0;
+		}
+		else{
+			super();
+			that = this;
 
-	static prepare(node, iface){
-		// Default Node property
-		iface.x = 0;
-		iface.y = 0;
+			that.interface = 'bp/default';
+			that.title = 'No Title';
+			that.description = '';
+			that.x = 0;
+			that.y = 0;
+		}
+
+		if(scope === void 0)
+			throw new Error("First parameter was not found, did you forget 'super(scope)' when extending Blackprint.Node?");
+
+		that._scope = scope;
+		that._container = scope('container');
+
+		return that;
 	}
 
 	newPort(portName, type, def, which, iface){

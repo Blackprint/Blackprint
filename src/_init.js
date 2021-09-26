@@ -374,7 +374,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		let time = Date.now();
 
 		// Processing scope is different with node scope
-		var node = {}, iface = new Blackprint.Node(this);
+		var node = {}, iface = new Blackprint.Node(this.scope);
 
 		iface.node = node;
 		iface.namespace = namespace;
@@ -401,7 +401,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 				Object.setPrototypeOf(localPorts[portName], Port.prototype);
 		});
 
-		Blackprint.Node.prepare(node, iface);
+		// Blackprint.Node.prepare(node, iface);
 
 		var savedData = options.data;
 		delete options.data;
