@@ -383,7 +383,6 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		if(iface === void 0)
 			throw new Error(namespace+"> 'node.iface' was not found, do you forget to call 'node.setInterface()'?");
 
-		iface.node = node;
 		iface.namespace = namespace;
 
 		// Create the linker between the node and the iface

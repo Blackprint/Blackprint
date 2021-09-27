@@ -32,6 +32,7 @@ Blackprint.Sketch.Interface = class SketchInterface extends Blackprint.Engine.Cu
 			this.env = Blackprint.Environment.map;
 			this._scope = node._instance.scope;
 			this._container = this._scope('container');
+			this.node = node;
 		}
 
 		return that;
