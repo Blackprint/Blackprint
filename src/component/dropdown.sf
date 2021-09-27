@@ -329,7 +329,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 					My.root.pendingDeepOpen_ = setTimeout(()=> {
 						if(My.root.pendingDeepOpen === ev.target)
 							openDeep(ev);
-					}, 400);
+					}, 200);
 				});
 
 				elem.on('click', openDeep);
@@ -347,7 +347,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 					}
 
 					opt.hover && opt.hover.apply(opt.context, opt.args);
-				}, 400);
+				}, 200);
 			});
 
 			if(opt.callback){
