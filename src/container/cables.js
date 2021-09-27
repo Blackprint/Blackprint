@@ -35,53 +35,52 @@ Space.model('cables', function(My, include){
 		pendingCable.add(item);
 
 		if(recalculatePending) return;
-		requestAnimationFrame(recalculatePath_);
 		recalculatePending = true;
+		requestAnimationFrame(recalculatePath_);
 	}
 
 	function recalculatePath_(){
+		for(let item of pendingCable){
+			const [x1, y1] = item.head1;
+			const [x2, y2] = item.head2;
+
+			// If you use this code as reference please support this project
+			// by put link on your code to this repository :3
+			if(item.source !== 'property'){
+				var cx = (x2-x1)/2;
+				if(cx > -50 && cx < 0)
+					cx = -50;
+				else if(cx < 50 && cx >= 0)
+					cx = 50;
+
+				if(item.source === 'input'){
+					if(x2 < x1)
+					  item.linePath = `${x1 + cx} ${y1} ${x2 - cx} ${y2}`;
+					else
+					  item.linePath = `${x1 - cx} ${y1} ${x2 + cx} ${y2}`;
+				}
+				else if(item.source === 'output'){
+					if(x2 < x1)
+					  item.linePath = `${x1 - cx} ${y1} ${x2 + cx} ${y2}`;
+					else
+					  item.linePath = `${x1 + cx} ${y1} ${x2 - cx} ${y2}`;
+				}
+			}
+			else{
+				var cy = (y2-y1)/2;
+				if(cy > -50 && cy < 0)
+					cy = -50;
+				else if(cy < 50 && cy >= 0)
+					cy = 50;
+
+				if(y2 < y1)
+				  item.linePath = `${x1} ${y1 - cy} ${x2} ${y2 - cy}`;
+				else
+				  item.linePath = `${x1} ${y1 + cy} ${x2} ${y2 + cy}`;
+			}
+		}
+
 		recalculatePending = false;
-		pendingCable.forEach(recalculatePath);
 		pendingCable.clear();
-	}
-
-	function recalculatePath(item){
-		const [x1, y1] = item.head1;
-		const [x2, y2] = item.head2;
-
-		// If you use this code as reference please support this project
-		// by put link on your code to this repository :3
-		if(item.source !== 'property'){
-			var cx = (x2-x1)/2;
-			if(cx > -50 && cx < 0)
-				cx = -50;
-			else if(cx < 50 && cx >= 0)
-				cx = 50;
-
-			if(item.source === 'input'){
-				if(x2 < x1)
-				  item.linePath = `${x1 + cx} ${y1} ${x2 - cx} ${y2}`;
-				else
-				  item.linePath = `${x1 - cx} ${y1} ${x2 + cx} ${y2}`;
-			}
-			else if(item.source === 'output'){
-				if(x2 < x1)
-				  item.linePath = `${x1 - cx} ${y1} ${x2 + cx} ${y2}`;
-				else
-				  item.linePath = `${x1 + cx} ${y1} ${x2 - cx} ${y2}`;
-			}
-		}
-		else{
-			var cy = (y2-y1)/2;
-			if(cy > -50 && cy < 0)
-				cy = -50;
-			else if(cy < 50 && cy >= 0)
-				cy = 50;
-
-			if(y2 < y1)
-			  item.linePath = `${x1} ${y1 - cy} ${x2} ${y2 - cy}`;
-			else
-			  item.linePath = `${x1} ${y1 + cy} ${x2} ${y2 + cy}`;
-		}
 	}
 });
