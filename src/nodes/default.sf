@@ -17,7 +17,7 @@
 
 ## js-global
 Blackprint.space.component('bp-default', {
-	extend: Blackprint.Node,
+	extend: Blackprint.Sketch.Interface,
 	keepTemplate: true,
 	template: 'Blackprint/nodes/default.sf'
 }, function(self, root){

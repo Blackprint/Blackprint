@@ -11,6 +11,8 @@ Blackprint.modulesURL = {};
 Blackprint._modulesURL = [];
 
 Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
+	static _iface = {'BP/default': NOOP};
+
 	// Create new blackprint container
 	constructor(){
 		super();
@@ -50,25 +52,21 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			}
 		}
 
-		if(options.extend === void 0){
-			if(isClass(func)){
-				options.extend = func;
-				func = NOOP;
-			}
-			else options.extend = Blackprint.Node;
+		if(options.extend !== void 0 && !(options.extend.prototype instanceof Blackprint.Sketch.Interface)){
+			throw new Error(options.extend.constructor.name+" must be instance of Blackprint.Sketch.Interface");
 		}
-
-		if(options.extend !== Blackprint.Node && !(options.extend.prototype instanceof Blackprint.Node))
-			throw new Error(options.extend.constructor.name+" must be instance of Blackprint.Node");
-
-		if(func === void 0)
-			func = NOOP;
+		else if(isClass(func))
+			Blackprint.Sketch._iface[templatePath] = func;
+		else{
+			Blackprint.Sketch._iface[templatePath] = {func, options};
+			options.extend = Blackprint.Sketch.Interface;
+		}
 
 		var nodeName = templatePath.replace(/[\\/]/g, '-').toLowerCase();
 		nodeName = nodeName.replace(/\.\w+$/, '');
 
 		// Just like how we do it on ScarletsFrame component with namespace feature
-		Blackprint.space.component(nodeName, options, func);
+		Blackprint.space.component(nodeName, options, func || NOOP);
 	}
 
 	settings(which, val){
@@ -361,47 +359,47 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 	// Create new node that will be inserted to the container
 	// @return node scope
 	createNode(namespace, options, handlers){
+		if(Blackprint.Engine === void 0)
+			throw new Error("Blackprint.Engine was not found, please load it first before creating new node");
+
 		var func = deepProperty(Blackprint.nodes, namespace.split('/'));
 		if(func === void 0){
-			this._trigger('error', {
+			return this._trigger('error', {
 				type: 'node_not_found',
 				data: {namespace}
 			});
-
-			return;
 		}
 
 		let time = Date.now();
 
-		// Processing scope is different with node scope
-		var node = {}, iface = new Blackprint.Node(this.scope);
+		// Call the registered func (from this.registerNode)
+		var node;
+		if(isClass(func))
+			node = new func(this);
+		else func(node = new Blackprint.Node(this));
+
+		// Obtain iface from the node
+		let iface = node.iface;
+		if(iface === void 0)
+			throw new Error(namespace+"> 'node.iface' was not found, do you forget to call 'node.setInterface()'?");
 
 		iface.node = node;
 		iface.namespace = namespace;
-		iface.importing = true;
-		iface.env = Blackprint.Environment.map;
-
-		// Call the registered func (from this.registerNode)
-		func(node, iface);
-
-		if(Blackprint.Engine.Node === void 0)
-			throw new Error("Blackprint.Engine was not found, please load it first before creating new node");
 
 		// Create the linker between the node and the iface
-		Blackprint.Engine.Node.prepare(node, iface);
+		Blackprint.Interface.prepare(node, iface);
 
 		iface.input ??= {};
 		iface.output ??= {};
 		iface.property ??= {};
 
 		// Replace port prototype (intepreter port -> visual port)
-		['input', 'output', 'property'].forEach(function(which){
-			var localPorts = iface[which];
+		let _ports = Blackprint.Sketch.Interface._ports;
+		for (var i = 0; i < _ports.length; i++) {
+			var localPorts = iface[_ports[i]];
 			for(var portName in localPorts)
 				Object.setPrototypeOf(localPorts[portName], Port.prototype);
-		});
-
-		// Blackprint.Node.prepare(node, iface);
+		}
 
 		var savedData = options.data;
 		delete options.data;
@@ -431,7 +429,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			node.init();
 
 		time = Date.now() - time;
-		if(time > 1000){
+		if(time > 500){
 			this._trigger('slow_node_creation', {
 				namespace, time
 			});

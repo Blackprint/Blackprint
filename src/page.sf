@@ -58,7 +58,7 @@
           }
 
           // Create from Blackprint's namespace and (true = let the item become the scope)
-          Blackprint._reuseNode = item;
+          Blackprint._reuseIFace = item;
           @return new node(item, Blackprint.space);
         }}
       </div>

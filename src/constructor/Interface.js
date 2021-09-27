@@ -1,4 +1,4 @@
-Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
+Blackprint.Sketch.Interface = class SketchInterface extends Blackprint.Engine.CustomEvent{
 	/*
 	x = 0;
 	y = 0;
@@ -10,29 +10,29 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 
 	static _ports = ['input', 'output', 'property'];
 
-	constructor(scope){
+	constructor(node){
 		let that;
 
-		if(Blackprint._reuseNode !== void 0){
-			that = Blackprint._reuseNode;
-			Blackprint._reuseNode = void 0;
+		if(Blackprint._reuseIFace !== void 0){
+			// This part will run when created from sketch "/src/page.sf"
+			// node == Blackprint.space
+			that = Blackprint._reuseIFace;
+			Blackprint._reuseIFace = void 0;
 		}
 		else{
 			super();
 			that = this;
 
-			that.interface = 'bp/default';
-			that.title = 'No Title';
-			that.description = '';
-			that.x = 0;
-			that.y = 0;
+			if(node === void 0)
+				throw new Error("First parameter was not found, did you forget 'super(node)' when extending Blackprint.Sketch.Interface?");
+
+			this.title = 'No Title';
+			this.description = '';
+			this.importing = true;
+			this.env = Blackprint.Environment.map;
+			this._scope = node._instance.scope;
+			this._container = this._scope('container');
 		}
-
-		if(scope === void 0)
-			throw new Error("First parameter was not found, did you forget 'super(scope)' when extending Blackprint.Node?");
-
-		that._scope = scope;
-		that._container = scope('container');
 
 		return that;
 	}
@@ -60,7 +60,7 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 		let nonce;
 
 		// Also move all cable connected to current iface
-		var ports = Blackprint.Node._ports;
+		var ports = Blackprint.Sketch.Interface._ports;
 		for(var i=0; i<ports.length; i++){
 			var which = this[ports[i]];
 
@@ -122,7 +122,7 @@ Blackprint.Node = class NodeInteface extends Blackprint.Engine.CustomEvent{
 				scope.$destroyed = true;
 				list.splice(i, 1);
 
-				var check = Blackprint.Node._ports;
+				var check = Blackprint.Sketch.Interface._ports;
 				for (var i = 0; i < check.length; i++) {
 					var portList = iface[check[i]];
 					for(var port in portList){

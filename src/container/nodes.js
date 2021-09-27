@@ -12,7 +12,7 @@ Space.model('nodes', function(My, include){
 
 			var Ofst = container.offset;
 
-			var ports = Blackprint.Node._ports;
+			var ports = Blackprint.Sketch.Interface._ports;
 			for(var a = 0; a < ports.length; a++){
 				var which = iface[ports[a]];
 				if(which === void 0)
