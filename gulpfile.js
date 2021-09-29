@@ -21,6 +21,7 @@ let compileTargets = {
 			combine:[
 				// Start private wrapper
 				'engine-js/src/_init.js',
+				'engine-js/src/constructor/Port/_init.js',
 
 				// Combine files from all directory recursively
 				'engine-js/src/**/*.js',
@@ -71,7 +72,6 @@ if(!compileEngineOnly){
 					'src/_init.js',
 
 					// Import classes first, or sf.component can't extend them
-					'src/constructor/Node.js',
 					'src/constructor/*.js',
 
 					// Combine all files but not recursive

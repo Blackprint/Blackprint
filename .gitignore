@@ -11,3 +11,5 @@ node_modules/
 /nodes/
 *.npmignore
 /parser/
+/cli-tools/
+/templates/
