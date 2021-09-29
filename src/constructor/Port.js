@@ -124,15 +124,28 @@ class Port extends Blackprint.Engine.Port{
 		// Remove old cable if the port not support array
 		if(this.feature !== BP_Port.ArrayOf && this.type !== Function){
 			var removal = cable.target.source === 'input' ? cable.target : cable.owner;
+			let _cables = removal.cables;
 
 			if(removal === cable.owner){
 				if(removal.cables.length !== 1){
-					removal.cables.shift().destroy();
+					for (var a = 0; a < _cables.length; a++) {
+						if(_cables[a].connected){
+							_cables[a].destroy();
+							break;
+						}
+					}
+
 					removal = true;
 				}
 			}
 			else if(removal.cables.length !== 0){ // when cable not owned
-				removal.cables.pop().destroy();
+				for (var a = _cables.length-1; a >= 0; a--) {
+					if(_cables[a].connected){
+						_cables[a].destroy();
+						break;
+					}
+				}
+
 				removal = true;
 			}
 
