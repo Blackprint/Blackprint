@@ -41,21 +41,30 @@ Blackprint Engine
 | Minimal example | ✔️ [Link](https://github.com/Blackprint/blackprint.github.io/blob/master/src/js/register-handler.js) | ✔️ [Link](https://github.com/Blackprint/engine-js/tree/master/example) | ✔️ [Link](https://github.com/Blackprint/engine-php/tree/master/example) | - | - |
 | Environment variables | ✔️ | ✔️ | - | - | - |
 | Import modules from URL | ✔️ | ✔️ | - | - | - |
+| Remote connection control | - | - | - | - | - |
+| Pausable node execution | - | - | - | - | - |
 
 ---
 
-- [ ] Blackprint Editor
-  - [x] Basic nodes editor
+- [ ] Blackprint Sketch (this repository)
+  - [x] Mirrored sketch on detachable window
+  - [x] Mini sketch for preview
   - [x] Hot Reload
+  - [x] Export single sketch to JSON
+  - [x] Importable minimal sketch for different project
+  - [ ] Create addons for VS Code for previewing exported Blackprint
+- [ ] Blackprint Editor ([repository](https://github.com/Blackprint/blackprint.github.io))
+  - [x] Basic nodes editor
   - [x] Detachable window (with ScarletsFrame)
-  - [x] [Demo](https://blackprint.github.io) ([Repository](https://github.com/Blackprint/blackprint.github.io))
-  - [x] Add support for Environment Variables
+  - [x] [Demo](https://blackprint.github.io)
+  - [x] Add Environment Variables editor
+  - [ ] Move current sketch with minimap
+  - [ ] Auto attach cable to first suitable port
   - [ ] Add hint for beginner guide
   - [ ] Node list editor (currently with right click)
   - [ ] Error/log popup or overlay
-  - [ ] Multiple workspaces
-  - [ ] Importable minimal editor for different project
-  - [ ] Pausable node execution
+  - [ ] Multiple sketch workspaces or tabs
+    - [ ] Export multiple sketch workspaces to JSON
 - [ ] Simplify node development for new developer
   - [x] Auto `blackprint.config.js` import
   - [ ] Support ES6 modules importing system

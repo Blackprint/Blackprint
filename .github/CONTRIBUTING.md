@@ -46,6 +46,8 @@ To request an feature, you can create an issue in the repository. Please follow 
 ### Requesting Nodes
 Blackprint Engine is available on some programming language. If you want to request Blackprint nodes for other technology (like library that developed by someone else) please create issue on their repository instead or ask the community.
 
+You can use [this template](https://github.com/Blackprint/template-js) for start your first node for browser.
+
 ---
 
 ### The Build Script: how it works
