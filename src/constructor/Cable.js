@@ -34,6 +34,7 @@ class Cable extends Blackprint.Engine.Cable{
 		this.pathEl = list.getElement(this).firstElementChild;
 	}
 
+	// ToDo: Improve performance by caching the dotGlow.cloneNode()
 	visualizeFlow(){
 		if(this.animating || window.Timeplate === void 0)
 			return;

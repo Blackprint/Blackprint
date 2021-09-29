@@ -1,3 +1,4 @@
+let BP_Port = Blackprint.Port;
 class Port extends Blackprint.Engine.Port{
 	// For Prototype only, the constructor() will not being used
 	// Used on ./Interface.js -> newPort()
@@ -68,16 +69,16 @@ class Port extends Blackprint.Engine.Port{
 		}
 
 		if(cable.owner.source === 'output'){
-			if((this.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(this.type, cable.owner.type))
-			   || (this.feature === Blackprint.PortUnion && !Blackprint.PortUnion.validate(this.type, cable.owner.type))){
+			if((this.feature === BP_Port.ArrayOf && !BP_Port.ArrayOf.validate(this.type, cable.owner.type))
+			   || (this.feature === BP_Port.Union && !BP_Port.Union.validate(this.type, cable.owner.type))){
 				scope.sketch._trigger('cable_wrong_type', {cable, iface: this.iface, source: cable.owner, target: this});
 				return cable.destroy();
 			}
 		}
 
 		else if(this.source === 'output'){
-			if((cable.owner.feature === Blackprint.PortArrayOf && !Blackprint.PortArrayOf.validate(cable.owner.type, this.type))
-			   || (cable.owner.feature === Blackprint.PortUnion && !Blackprint.PortUnion.validate(cable.owner.type, this.type))){
+			if((cable.owner.feature === BP_Port.ArrayOf && !BP_Port.ArrayOf.validate(cable.owner.type, this.type))
+			   || (cable.owner.feature === BP_Port.Union && !BP_Port.Union.validate(cable.owner.type, this.type))){
 				scope.sketch._trigger('cable_wrong_type', {cable, iface: this.iface, source: this, target: cable.owner});
 				return cable.destroy();
 			}
@@ -90,8 +91,8 @@ class Port extends Blackprint.Engine.Port{
 			isInstance = cable.owner.type instanceof this.type || this.type instanceof cable.owner.type;
 
 		var valid = false;
-		if(cable.owner.type.portFeature === Blackprint.PortValidator
-			|| this.type.portFeature === Blackprint.PortValidator
+		if(cable.owner.type.portFeature === BP_Port.Validator
+			|| this.type.portFeature === BP_Port.Validator
 		){
 			isInstance = valid = true;
 		}
@@ -121,7 +122,7 @@ class Port extends Blackprint.Engine.Port{
 		cable.target = this;
 
 		// Remove old cable if the port not support array
-		if(this.feature !== Blackprint.PortArrayOf && this.type !== Function){
+		if(this.feature !== BP_Port.ArrayOf && this.type !== Function){
 			var removal = cable.target.source === 'input' ? cable.target : cable.owner;
 
 			if(removal === cable.owner){
