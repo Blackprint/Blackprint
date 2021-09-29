@@ -1,4 +1,4 @@
-Blackprint.Sketch.Interface = class SketchInterface extends Blackprint.Engine.CustomEvent{
+Blackprint.Sketch.Interface = class SketchInterface extends sf.Model{
 	/*
 	x = 0;
 	y = 0;
@@ -138,4 +138,9 @@ Blackprint.Sketch.Interface = class SketchInterface extends Blackprint.Engine.Cu
 		this._trigger('node.menu', menu);
 		scope('dropdown').show(menu, {x: ev.clientX, y: ev.clientY});
 	}
-}
+};
+
+// Class combine (sf.Model + CustomEvent)
+let _proto1 = Object.getOwnPropertyDescriptors(Blackprint.Engine.CustomEvent.prototype);
+delete _proto1.constructor;
+Object.defineProperties(Blackprint.Sketch.Interface.prototype, _proto1);
