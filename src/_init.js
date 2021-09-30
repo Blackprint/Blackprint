@@ -59,7 +59,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			Blackprint.Sketch._iface[templatePath] = func;
 		else{
 			Blackprint.Sketch._iface[templatePath] = {func, options};
-			options.extend = Blackprint.Sketch.Interface;
+
+			if(options.extend === void 0)
+				options.extend = Blackprint.Sketch.Interface;
 		}
 
 		var nodeName = templatePath.replace(/[\\/]/g, '-').toLowerCase();
@@ -517,7 +519,7 @@ Blackprint.loadModuleFromURL.browser = function(url, options){
 }
 
 // Replace function from Blackprint Engine
-Blackprint.LoadScope = function(options){
+Blackprint.loadScope = function(options){
 	let cleanURL = options.url.replace(/[?#].*?$/gm, '');
 
 	let temp = Object.create(Blackprint);
