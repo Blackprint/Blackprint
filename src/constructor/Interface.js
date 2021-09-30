@@ -11,21 +11,18 @@ Blackprint.Sketch.Interface = class SketchInterface extends sf.Model{
 	static _ports = ['input', 'output', 'property'];
 
 	constructor(node){
-		let that;
-
 		if(Blackprint._reuseIFace !== void 0){
 			// This part will run when created from sketch "/src/page.sf"
 			// node == Blackprint.space
-			that = Blackprint._reuseIFace;
+			let that = Blackprint._reuseIFace;
 			Blackprint._reuseIFace = void 0;
+			return that;
 		}
 		else{
-			super();
-			that = this;
-
 			if(node === void 0)
 				throw new Error("First parameter was not found, did you forget 'super(node)' when extending Blackprint.Sketch.Interface?");
 
+			super();
 			this.title = 'No Title';
 			this.description = '';
 			this.importing = true;
@@ -34,14 +31,16 @@ Blackprint.Sketch.Interface = class SketchInterface extends sf.Model{
 			this._container = this._scope('container');
 			this.node = node;
 		}
-
-		return that;
 	}
 
 	newPort(portName, type, def, which, iface){
 		var temp = new Blackprint.Engine.Port(portName, type, def, which, iface);
 		temp._scope = this._scope;
 		Object.setPrototypeOf(temp, Port.prototype);
+
+		if(type.constructor === Array && type.name.includes(' '))
+			type._name = type.name.replace(/ /g, ', ');
+
 		return temp;
 	}
 
