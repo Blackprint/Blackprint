@@ -52,16 +52,15 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			}
 		}
 
-		if(options.extend !== void 0 && !(options.extend.prototype instanceof Blackprint.Sketch.Interface)){
-			throw new Error(options.extend.constructor.name+" must be instance of Blackprint.Sketch.Interface");
-		}
+		if(options.extend !== void 0 && !(options.extend.prototype instanceof Blackprint.Interface))
+			throw new Error(options.extend.constructor.name+" must be instance of Blackprint.Interface");
 		else if(isClass(func))
 			Blackprint.Sketch._iface[templatePath] = func;
 		else{
 			Blackprint.Sketch._iface[templatePath] = {func, options};
 
 			if(options.extend === void 0)
-				options.extend = Blackprint.Sketch.Interface;
+				options.extend = Blackprint.Interface;
 		}
 
 		var nodeName = templatePath.replace(/[\\/]/g, '-').toLowerCase();
@@ -395,7 +394,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		iface.property ??= {};
 
 		// Replace port prototype (intepreter port -> visual port)
-		let _ports = Blackprint.Sketch.Interface._ports;
+		let _ports = Blackprint.Interface._ports;
 		for (var i = 0; i < _ports.length; i++) {
 			var localPorts = iface[_ports[i]];
 			for(var portName in localPorts)
