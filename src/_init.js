@@ -52,15 +52,23 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			}
 		}
 
+		let isExist = Blackprint.Sketch._iface[templatePath];
+
 		if(options.extend !== void 0 && !(options.extend.prototype instanceof Blackprint.Interface))
 			throw new Error(options.extend.constructor.name+" must be instance of Blackprint.Interface");
-		else if(isClass(func))
+		else if(isClass(func)){
 			Blackprint.Sketch._iface[templatePath] = func;
+
+			if(isExist !== void 0)
+				window.sf$hotReload.replaceClass(isExist, func);
+		}
 		else{
 			Blackprint.Sketch._iface[templatePath] = {func, options};
 
 			if(options.extend === void 0)
 				options.extend = Blackprint.Interface;
+			else if(isExist !== void 0 && isExist.extend !== void 0)
+				window.sf$hotReload.replaceClass(isExist.extend, options.extend);
 		}
 
 		var nodeName = templatePath.replace(/[\\/]/g, '-').toLowerCase();
@@ -489,6 +497,13 @@ Blackprint.registerNode = function(namespace, func){
 		ref._visibleNode++;
 	}
 
+	if(isClass(func)){
+		let isExist = deepProperty(Blackprint.nodes, namespace);
+
+		if(isExist !== void 0)
+			window.sf$hotReload.replaceClass(isExist, func);
+	}
+
 	func._scopeURL = this._scopeURL;
 	deepProperty(Blackprint.nodes, namespace, func, function(obj){
 		if(obj._length !== void 0)
@@ -498,6 +513,28 @@ Blackprint.registerNode = function(namespace, func){
 			Object.defineProperty(obj, '_visibleNode', {writable: true, value: 1});
 		}
 	});
+}
+
+// Override just for supporting hot reload
+let _registerInterface = Blackprint.registerInterface;
+Blackprint.registerInterface = function(templatePath, options, func){
+	if(templatePath.slice(0, 5) !== 'BPIC/')
+		throw new Error("The first parameter of 'registerInterface' must be started with BPIC to avoid name conflict. Please name the interface similar with 'templatePrefix' for your module that you have set on 'blackprint.config.js'.");
+
+	let isExist = Blackprint.Sketch._iface[templatePath];
+	if(isExist !== void 0){
+		if(options.constructor === Function){
+			func = options;
+			options = {};
+		}
+
+		if(isClass(func))
+			window.sf$hotReload.replaceClass(isExist, func);
+		else if(isExist !== void 0 && options.extend !== void 0)
+			window.sf$hotReload.replaceClass(isExist.extend, options.extend);
+	}
+
+	_registerInterface(templatePath, options, func);
 }
 
 Blackprint.loadModuleFromURL.browser = function(url, options){
