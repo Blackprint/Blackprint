@@ -63,6 +63,8 @@ This will only compile `.js, .html, .scss, .sf` file extension.
 `npm run compile`: Compile, minify files, and run Babel for Blackprint (Sketch + Editor + Nodes + Engine).<br>
 This will only compile `.js, .html, .scss, .sf` file extension, similar with `npm start`.
 
+You may want to see the [guidelines](https://github.com/Blackprint/blackprint.github.io/blob/master/.github/CONTRIBUTING.md) if you want to use the Blackprint Editor.
+
 ---
 
 #### Bundled file location
@@ -83,9 +85,9 @@ The file names that has different export target:
 
 The node and interface should be registered with capitalized letter with slash with following format:
  - Node: `LibraryName/[Category or Feature name]/NodeName`
- - Interface: `BPAO/LibraryName/[Category or Feature name]/NodeName`
+ - Interface: `BPIC/LibraryName/[Category or Feature name]/NodeName`
 
-> BPAO: Blackprint Addons.
+> BPIC: Blackprint Interface Component
 
 The example below
 ```js
@@ -98,12 +100,15 @@ Blackprint.registerNode('Graphics/Converter/GIF', ...);
 instance.createNode('Graphics/Converter/GIF'); // instance = sketch/engine object
 
 // ------ IFace ------
-Blackprint.registerInterface('BPAO/Graphics/Converter/GIF', ...);
-// Blackprint will create the DOM Element with lowercased tag name: <bpao-graphics-converter-gif>
+Blackprint.registerInterface('BPIC/Graphics/Converter/GIF', ...);
+// Blackprint will create the DOM Element with lowercased tag name: <bpic-graphics-converter-gif>
 
 // Get the iface from the DOM
-let iface = $('bpao-graphics-converter-gif')[0].model;
+let iface = $('bpic-graphics-converter-gif')[0].model;
 let node = iface.node;
+
+// Get the iface from the engine instance
+let myNode = instance.iface[id];
 ```
 
 ---

@@ -49,10 +49,13 @@ Blackprint Engine
 - [ ] Blackprint Sketch (this repository)
   - [x] Mirrored sketch on detachable window
   - [x] Mini sketch for preview
+    - [ ] Move the sketch container from mini sketch
   - [x] Hot Reload
   - [x] Export single sketch to JSON
   - [x] Importable minimal sketch for different project
   - [ ] Create addons for VS Code for previewing exported Blackprint
+  - [ ] Select and move multiple nodes at once
+    - [ ] Add feature to put nodes into a group
 - [ ] Blackprint Editor ([repository](https://github.com/Blackprint/blackprint.github.io))
   - [x] [Demo](https://blackprint.github.io)
   - [x] Basic nodes editor
@@ -63,6 +66,8 @@ Blackprint Engine
   - [ ] Add hint for beginner guide
   - [ ] Node list editor (currently with right click)
   - [ ] Error/log popup or overlay
+  - [ ] Show overview or notice when importing nodes from URL
+  - [ ] Add warning if the imported nodes was using GPL license
   - [ ] Multiple sketch workspaces or tabs
     - [ ] Export multiple sketch workspaces to JSON
 - [ ] Simplify node development for new developer
