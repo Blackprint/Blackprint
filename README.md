@@ -54,9 +54,9 @@ Blackprint Engine
   - [x] Importable minimal sketch for different project
   - [ ] Create addons for VS Code for previewing exported Blackprint
 - [ ] Blackprint Editor ([repository](https://github.com/Blackprint/blackprint.github.io))
+  - [x] [Demo](https://blackprint.github.io)
   - [x] Basic nodes editor
   - [x] Detachable window (with ScarletsFrame)
-  - [x] [Demo](https://blackprint.github.io)
   - [x] Add Environment Variables editor
   - [ ] Move current sketch with minimap
   - [ ] Auto attach cable to first suitable port
@@ -67,7 +67,8 @@ Blackprint Engine
     - [ ] Export multiple sketch workspaces to JSON
 - [ ] Simplify node development for new developer
   - [x] Auto `blackprint.config.js` import
-  - [ ] Support ES6 modules importing system
+  - [ ] Add example for using ES6 modules importing system
+    - It's possible to use SkyPack or something else, but it currently can't compile `.sf`
 - [ ] Better documentation or website
 - [ ] Tutorial and samples
 - [ ] Blackprint Nodes Package Manager or Marketplace
@@ -87,7 +88,6 @@ Blackprint Engine:
 
 Planned Code Generation:
 - **Dockerfile** (for networks/container relations)
-- Create a compiler for compiling 1 Blackprint file into different engine easily
 
 If you're looking for AST, currently you can use the exported Blackprint JSON.
 
@@ -99,17 +99,7 @@ For the example:
 
 ---
 
-Currently Blackprint will act as an interface for each engine. You will need to write code on how to handle Blackprint node with your library on different programming language.
-
-To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSON and use [engine-js](https://github.com/Blackprint/engine-js#example). But it doesn't mean exporting is just like a magic, you also need to write `registerNode` and `registerInterface` on the target engine. Except if someone already write the Blackprint Module (node and interface) on target engine, you can easily plug and play.
-
-## Motivation
-<details>
-  <summary>Personal story</summary>
-  FYI, I have used UE4 Blueprint since 2021. Developing a visual script by connecting nodes was my unfinished project since 2014 with ActionScript3 (Adobe Flash). It was very tough because I almost know nothing how to make curve for the cable on AS3. Well, it's not professional to tell a story about my very young age with programming. But the time was passed and I have a feeling like I can continue my old project with my current skill. Thank you Apple for bringing WebKit and Google for V8 engine, and also for everyone who bringing the advanced web technologies.
-</details>
-
-The main target of the project is to help developers to modify their program's logic while the program is still running. You can create a custom node so it can be used to manage IoT, Docker container connections, or maybe like virtual cable for electrical stuff. Well, it may feel like a dream but it can be turned into the reality if the community getting bigger.
+Currently Blackprint will act as an interface for each engine. To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSON and use [engine-js](https://github.com/Blackprint/engine-js#example). But it doesn't mean exporting is just like a magic, you also need to write `registerNode` and `registerInterface` on the target engine. Except if someone already write the Blackprint Module (node and interface) on target engine, you can easily plug and play.
 
 ## Contributing
 To make things easier, please make sure to read the [Contributing Guide](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md) before creating a issue/request.
