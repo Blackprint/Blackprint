@@ -99,7 +99,7 @@ sf-space[blackprint]{
 		    	display: none;
 		    }
 
-		    .await{
+		    .disabled{
 		    	opacity: 0.4;
 		    }
 

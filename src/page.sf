@@ -21,7 +21,7 @@
           {{ x.type }}
           {{ x.valid ? '' : 'invalid' }}
           {{ x.connected ? 'connected' : ''}}
-          {{ x.await ? 'await' : ''}}
+          {{ x.disabled ? 'disabled' : ''}}
         " @contextmenu.capture.prevent="x.cableMenu(event)">
           <path
               d="M {{ recalculatePath(x) || x.head1[0] + ' ' + x.head1[1] }}

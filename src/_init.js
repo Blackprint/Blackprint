@@ -521,7 +521,7 @@ Blackprint.registerInterface = function(templatePath, options, func){
 	if(templatePath.slice(0, 5) !== 'BPIC/')
 		throw new Error("The first parameter of 'registerInterface' must be started with BPIC to avoid name conflict. Please name the interface similar with 'templatePrefix' for your module that you have set on 'blackprint.config.js'.");
 
-	let isExist = Blackprint.Sketch._iface[templatePath];
+	let isExist = Blackprint._iface[templatePath];
 	if(isExist !== void 0){
 		if(options.constructor === Function){
 			func = options;
