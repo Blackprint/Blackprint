@@ -152,7 +152,7 @@ Space.model('container', function(My, include){
 		if(ev.deltaY < 0 && My.scale > 1.98)
 			return;
 
-		var delta = ev.deltaY/100 * 0.08;
+		var delta = ev.deltaY/100 * 0.05;
 		My.scale -= delta;
 
 		// ToDo: fix scaling, should scale with cursor as the middle scaling position
