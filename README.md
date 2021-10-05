@@ -66,8 +66,7 @@ Blackprint Engine
   - [ ] Add hint for beginner guide
   - [ ] Node list editor (currently with right click)
   - [ ] Error/log popup or overlay
-  - [ ] Show overview or notice when importing nodes from URL
-  - [ ] Add warning if the imported nodes was using GPL license
+  - [x] Show overview or notice when importing nodes from URL
   - [ ] Multiple sketch workspaces or tabs
     - [ ] Export multiple sketch workspaces to JSON
 - [ ] Simplify node development for new developer
