@@ -445,6 +445,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 		return iface;
 	}
+
+	destroy(){
+		this.iface = {};
+		this.ifaceList.splice(0);
+		this.clearNodes();
+	}
 }
 
 // Replace function from Blackprint Engine
