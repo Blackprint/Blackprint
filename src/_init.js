@@ -95,6 +95,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		if(json.constructor === String)
 			json = JSON.parse(json);
 
+		let containerModel = this.scope('container');
+		containerModel._isImporting = true;
+
 		var metadata = json._;
 		delete json._;
 
@@ -229,6 +232,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		for (var i = 0; i < handlers.length; i++)
 			handlers[i].init && handlers[i].init();
 
+		containerModel._isImporting = false;
 		return inserted;
 	}
 

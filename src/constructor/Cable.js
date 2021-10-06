@@ -8,20 +8,16 @@ class Cable extends Blackprint.Engine.Cable{
 
 		this.connected = false;
 		this.valid = true;
-		this.linePath = '0 0 0 0';
 
 		var container = port._scope('container');
 		var Ofst = container.offset;
 
-		this.head1 = [
-			(obj.x - container.pos.x - Ofst.x) / container.scale,
-			(obj.y - container.pos.y - Ofst.y) / container.scale
-		];
+		let x = (obj.x - container.pos.x - Ofst.x) / container.scale;
+		let y = (obj.y - container.pos.y - Ofst.y) / container.scale;
+		this.linePath = `${x} ${y} ${x} ${y}`;
 
-		this.head2 = [
-			(obj.x - container.pos.x - Ofst.x) / container.scale,
-			(obj.y - container.pos.y - Ofst.y) / container.scale
-		];
+		this.head1 = [x, y];
+		this.head2 = this.head1.slice(0); // Copy on same position
 
 		this.type = !port.type ? 'Any' : port.type.name
 		this.source = port.source;
