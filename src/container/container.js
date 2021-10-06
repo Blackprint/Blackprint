@@ -9,6 +9,7 @@ Space.model('container', function(My, include){
 	My.cableScope = include('cables');
 	My.nodeScope = include('nodes');
 	My._isImporting = false;
+	My._relativeSize = true;
 
 	function onlyNegative(now){
 		if(now > 0) return 0;
@@ -91,14 +92,10 @@ Space.model('container', function(My, include){
 				recalculateScale();
 			});
 		}
+		else My._relativeSize = false;
 	}
 
 	My.resetOffset = async function(){
-		My.$el.css({
-			width:'100%',
-			height:'100%'
-		});
-
 		await $.afterRepaint();
 
 		let w = 0, h = 0;

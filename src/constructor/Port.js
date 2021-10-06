@@ -15,12 +15,12 @@ class Port extends Blackprint.Engine.Port{
 
 		// Get size and position of the port
 		var rect = isAuto ? e : this.findPortElement(e.target).getBoundingClientRect();
-
-		var container = this._scope('container');
-
 		var Ofst = {x:0, y:0};
-		if(!isAuto && e.target.closest('sf-space') !== container.$el[0].closest('sf-space')){
-			Ofst = container.offset;
+
+		if(!isAuto){
+			var container = this._scope('container');
+			if(e.target.closest('sf-space') !== container.$el[0].closest('sf-space'))
+				Ofst = container.offset;
 		}
 
 		var center = rect.width/2;
