@@ -9,7 +9,6 @@ Space.model('container', function(My, include){
 	My.cableScope = include('cables');
 	My.nodeScope = include('nodes');
 	My._isImporting = false;
-	My._relativeSize = true;
 
 	function onlyNegative(now){
 		if(now > 0) return 0;
@@ -36,8 +35,10 @@ Space.model('container', function(My, include){
 	if(My.isMinimap){
 		My.minimapSource.cableScope.minimapCableScope = My.cableScope;
 		My.minimapSource.onNodeMove = function(e){
-			if(e.type === "pointerup")
-				recalculateScale();
+			if(e.type === "pointerup"){
+				if(My.scale === 0) fixScaling();
+				else recalculateScale();
+			}
 		};
 
 		My.config.move = false;
@@ -74,25 +75,22 @@ Space.model('container', function(My, include){
 		My.scale = A < B ? A : B;
 	}
 
-	let reinit = false;
-	My.init = async function(){
+	async function fixScaling(){
+		My.$el.css({width: '100%', height: '100%', transform: 'scale(1)'});
+		await $.afterRepaint();
 		await My.resetOffset();
 		My.size.w = My.offset.width;
 		My.size.h = My.offset.height;
 
-		if(My.offset.width === 0 && reinit === false){
-			My.scale = 1;
-			setTimeout(async function(){
-				await $.afterRepaint();
+		if(My.isMinimap) recalculateScale();
+	}
 
-				reinit = true;
-				await My.init();
+	My.init = async function(){
+		await fixScaling();
 
-				reinit = false;
-				recalculateScale();
-			});
-		}
-		else My._relativeSize = false;
+		if(My.offset.width === 0)
+			setTimeout(fixScaling, 1000);
+		else if(My.isMinimap) recalculateScale();
 	}
 
 	My.resetOffset = async function(){

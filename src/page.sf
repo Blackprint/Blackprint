@@ -1,7 +1,7 @@
 ## html
 <sf-space blackprint>
   <sf-m name="container"
-    class="{{ _isImporting ? 'importing-nodes' : '' }} {{ _relativeSize ? 'relative-size' : '' }}"
+    class="{{ _isImporting ? 'importing-nodes' : '' }}"
     @mousewheel.prevent="scaleContainer(event)"
     style="
       width: {{ size.w }}px;
@@ -130,11 +130,6 @@ sf-space[blackprint]{
   sf-m[name="container"]{
     transform-origin: top left;
     backface-visibility: hidden;
-
-    &.relative-size{
-      width: 100% !important;
-      height: 100% !important;
-    }
   }
 
   .nodes{
