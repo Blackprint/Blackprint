@@ -289,7 +289,7 @@ sf-space[blackprint]{
 	}
 }
 
-body.blackprint-no-vfx sf-space[blackprint]{
+body.blackprint-no-vfx sf-space[blackprint], body sf-space[blackprint] .importing-nodes {
 	.cables > svg{
 		filter: none;
 		transform: translateZ(1px);

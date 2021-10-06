@@ -8,6 +8,7 @@ Space.model('container', function(My, include){
 
 	My.cableScope = include('cables');
 	My.nodeScope = include('nodes');
+	My._isImporting = false;
 
 	function onlyNegative(now){
 		if(now > 0) return 0;

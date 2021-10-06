@@ -1,6 +1,7 @@
 ## html
 <sf-space blackprint>
   <sf-m name="container"
+    class="{{ _isImporting ? 'importing-nodes' : '' }}"
     @mousewheel.prevent="scaleContainer(event)"
     style="
       width: {{ size.w }}px;
