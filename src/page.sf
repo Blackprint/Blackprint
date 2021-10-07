@@ -254,6 +254,25 @@ sf-space[blackprint]{
           font-style: italic;
         }
 
+        .extra{
+          position: absolute;
+          top: -12px;
+          right: -10px;
+          .item{
+            background: black;
+            border-radius: 50px;
+            box-shadow: 0 0 11px white;
+            height: 20px;
+            width: 20px;
+            padding: 2px;
+            font-size: 12px;
+            text-align: center;
+            line-height: 21px;
+            display: inline-block;
+            margin-left: 5px;
+          }
+        }
+
         &.small{
             position: absolute;
             height: 96%;

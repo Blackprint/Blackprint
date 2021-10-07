@@ -20,8 +20,8 @@ let BlackprintEventFallback = {
 };
 
 BlackprintEventFallback.error.types = {
-	node_port_not_found({ node, portName }){
-		console.error("Node port not found for", node, "with name:", portName);
+	node_port_not_found({ iface, portName }){
+		console.error("Node port not found for", iface, "with name:", portName);
 	},
 	node_not_found({ namespace }){
 		console.error('Node for', namespace, "was not found, maybe .registerNode() haven't being called?")

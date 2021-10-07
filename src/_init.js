@@ -160,7 +160,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 			// Every nodes that using this namespace name
 			for (var a = 0; a < nodes.length; a++){
-				var node = inserted[nodes[a].i];
+				var iface = inserted[nodes[a].i];
 
 				// If have output connection
 				if(nodes[a].output !== void 0){
@@ -168,11 +168,11 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 					// Every output port that have connection
 					for(var portName in out){
-						var linkPortA = node.output[portName];
+						var linkPortA = iface.output[portName];
 						if(linkPortA === void 0){
 							this._trigger('error', {
 								type: 'node_port_not_found',
-								data: {node, portName}
+								data: {iface, portName}
 							});
 							continue;
 						}
@@ -190,7 +190,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 								this._trigger('error', {
 									type: 'node_port_not_found',
 									data: {
-										node: targetNode,
+										iface: targetNode,
 										portName: target.name
 									}
 								});
@@ -198,7 +198,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 							}
 
 							cableConnects.push({
-								output: node.output,
+								output: iface.output,
 								input: targetNode.input,
 								target,
 								portName,
@@ -237,7 +237,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 	}
 
 	exportJSON(options){
-		var nodes = this.scope('nodes').list;
+		var ifaces = this.scope('nodes').list;
 		var json = {};
 		var exclude = [];
 		options ??= {};
@@ -246,30 +246,33 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		if(options.exclude)
 			exclude = options.exclude;
 
-		for (var i = 0; i < nodes.length; i++) {
-			var node = nodes[i];
-			if(exclude.includes(node.namespace))
+		for (var i = 0; i < ifaces.length; i++) {
+			var iface = ifaces[i];
+			if(exclude.includes(iface.namespace))
 				continue;
 
-			if(json[node.namespace] === void 0)
-				json[node.namespace] = [];
+			if(json[iface.namespace] === void 0)
+				json[iface.namespace] = [];
 
 			var data = { i };
 
 			if(options.position !== false){
-				data.x = Math.round(node.x);
-				data.y = Math.round(node.y);
+				data.x = Math.round(iface.x);
+				data.y = Math.round(iface.y);
 			}
 
-			if(node.data !== void 0){
+			if(iface.id !== void 0)
+				data.id = iface.id;
+
+			if(iface.data !== void 0){
 				data.data = {};
 
-				deepCopy(data.data, node.data);
+				deepCopy(data.data, iface.data);
 			}
 
-			if(node.output !== void 0){
+			if(iface.output !== void 0){
 				var output = data.output = {};
-				var output_ = node.output;
+				var output_ = iface.output;
 
 				var haveValue = false;
 				for(var name in output_){
@@ -284,13 +287,13 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 						if(target === void 0)
 							continue;
 
-						var _i = nodes.indexOf(target.iface);
-						if(exclude.includes(nodes[_i].namespace))
+						var _i = ifaces.indexOf(target.iface);
+						if(exclude.includes(ifaces[_i].namespace))
 							continue;
 
 						let temp = {
 							i: _i,
-							name:target.name
+							name: target.name
 						};
 
 						if(target.id)
@@ -305,7 +308,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 					delete data.output;
 			}
 
-			json[node.namespace].push(data);
+			json[iface.namespace].push(data);
 		}
 
 		let space = options.space;
