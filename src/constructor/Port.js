@@ -179,6 +179,7 @@ class Port extends Blackprint.Engine.Port{
 		var scope = this._scope;
 		var menu = [];
 		this.iface._trigger('port.menu', this, menu);
+		scope.sketch._trigger('port.menu', this, menu);
 
 		// Prepare default menu
 		var disconnect = {title:"Disconnect", deep:[]};
