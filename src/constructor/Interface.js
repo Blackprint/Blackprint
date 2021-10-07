@@ -18,6 +18,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model{
 			// node == Blackprint.space
 			let that = Blackprint._reuseIFace;
 			Blackprint._reuseIFace = void 0;
+
 			return that;
 		}
 		else{
@@ -30,10 +31,31 @@ Blackprint.Interface = class SketchInterface extends sf.Model{
 			this.importing = true;
 			this.env = Blackprint.Environment.map;
 			this.node = node;
+			this.headmarks = new Map();
 			this._scope = node._instance.scope;
 
 			if(this._scope !== void 0)
 				this._container = this._scope('container');
+		}
+	}
+
+	get id(){
+		return this._id_;
+	}
+	set id(val){
+		if(val){
+			if(val.constructor !== String)
+				val = ''+val;
+
+			this._id_ = val;
+			this.headmarks.set('id', {
+				title: 'IFace ID: '+ val,
+				icon: 'fa fa-bookmark'
+			});
+		}
+		else{
+			this._id_ = void 0;
+			this.headmarks.delete('id');
 		}
 	}
 
@@ -141,6 +163,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model{
 		}];
 
 		this._trigger('node.menu', menu);
+		scope.sketch._trigger('node.menu', this, menu);
 		scope('dropdown').show(menu, {x: ev.clientX, y: ev.clientY});
 	}
 };

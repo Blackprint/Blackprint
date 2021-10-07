@@ -2,4 +2,9 @@
 <div class="header" @contextmenu.stopAll.prevent="nodeMenu(event)" @dragmove="moveNode(event)">
   <div class="title"><div class="icon"></div><div class="text">{{ title }}</div></div>
   <div class="description">{{ description }}</div>
+  <div class="extra">
+  	<div class="item" sf-each="x in headmarks" title="{{ x.title || '' }}">
+  		<i class="{{ x.icon }}"></i>
+  	</div>
+  </div>
 </div>
