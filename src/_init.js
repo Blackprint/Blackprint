@@ -34,9 +34,16 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		if(templatePath.slice(0, 5) !== 'BPIC/')
 			throw new Error("The first parameter of 'registerInterface' must be started with BPIC to avoid name conflict. Please name the interface similar with 'templatePrefix' for your module that you have set on 'blackprint.config.js'.");
 
-		if(options.constructor === Function){
+		if(options && options.constructor === Function){
 			func = options;
 			options = {};
+		}
+
+		// Return for Decorator
+		if(func === void 0){
+			return function(claz){
+				Blackprint.Sketch.registerInterface(templatePath, options, claz);
+			}
 		}
 
 		options.keepTemplate = true;
@@ -476,6 +483,13 @@ Blackprint.registerNode = function(namespace, func){
 		temp[namespace] = true;
 	}
 
+	// Return for Decorator
+	if(func === void 0){
+		return function(claz){
+			Blackprint.registerNode(namespace, claz);
+		}
+	}
+
 	namespace = namespace.split('/');
 
 	// Add with sf.Obj to trigger ScarletsFrame object binding update
@@ -534,13 +548,20 @@ Blackprint.registerInterface = function(templatePath, options, func){
 	if(templatePath.slice(0, 5) !== 'BPIC/')
 		throw new Error("The first parameter of 'registerInterface' must be started with BPIC to avoid name conflict. Please name the interface similar with 'templatePrefix' for your module that you have set on 'blackprint.config.js'.");
 
+	if(options.constructor === Function){
+		func = options;
+		options = {};
+	}
+
+	// Return for Decorator
+	if(func === void 0){
+		return function(claz){
+			Blackprint.registerInterface(templatePath, options, claz);
+		}
+	}
+
 	let isExist = Blackprint._iface[templatePath];
 	if(isExist !== void 0){
-		if(options.constructor === Function){
-			func = options;
-			options = {};
-		}
-
 		if(isClass(func))
 			window.sf$hotReload.replaceClass(isExist, func);
 		else if(isExist !== void 0 && options.extend !== void 0)
