@@ -56,11 +56,13 @@ Blackprint Engine
   - [ ] Create addons for VS Code for previewing exported Blackprint
   - [ ] Select and move multiple nodes at once
     - [ ] Add feature to put nodes into a group
+  - [ ] Clicked nodes should be moved on front of the other nodes (z-index)
 - [ ] Blackprint Editor ([repository](https://github.com/Blackprint/blackprint.github.io))
   - [x] [Demo](https://blackprint.github.io)
   - [x] Basic nodes editor
   - [x] Detachable window (with ScarletsFrame)
   - [x] Add Environment Variables editor
+  - [x] Import sketch from URL
   - [ ] Move current sketch with minimap
   - [ ] Auto attach cable to first suitable port
   - [ ] Add hint for beginner guide
