@@ -162,8 +162,11 @@ Blackprint.Interface = class SketchInterface extends sf.Model{
 			}
 		}];
 
-		this._trigger('node.menu', menu);
-		scope.sketch._trigger('node.menu', this, menu);
+		let event = {iface: this, instance: scope.sketch, menu};
+
+		this._trigger('node.menu', event);
+		scope.sketch._trigger('node.menu', event);
+
 		scope('dropdown').show(menu, {x: ev.clientX, y: ev.clientY});
 	}
 };

@@ -43,7 +43,7 @@ class Port extends Blackprint.Engine.Port{
 
 		// Default head index is "2" when creating new cable
 		cable.cableHeadClicked(e, true);
-		this.iface._trigger('cable.created', this, cable);
+		this.iface._trigger('cable.created', {iface: this, cable});
 	}
 
 	connectCable(cable){
@@ -178,8 +178,10 @@ class Port extends Blackprint.Engine.Port{
 	portRightClick(ev){
 		var scope = this._scope;
 		var menu = [];
-		this.iface._trigger('port.menu', this, menu);
-		scope.sketch._trigger('port.menu', this, menu);
+
+		let event = {iface: this, instance: scope.sketch, menu};
+		this.iface._trigger('port.menu', event);
+		scope.sketch._trigger('port.menu', event);
 
 		// Prepare default menu
 		var disconnect = {title:"Disconnect", deep:[]};
