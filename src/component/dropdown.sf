@@ -352,8 +352,10 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 
 			if(opt.callback){
 				elem.on('click', function(ev){
-					if(opt.unhover !== void 0)
-						opt.unhover.apply(opt.context, opt.args);
+					setTimeout(()=> {
+						if(opt.unhover !== void 0)
+							opt.unhover.apply(opt.context, opt.args);
+					}, 200);
 
 					opt.callback.apply(opt.context, opt.args);
 					My.root.hide();
