@@ -44,17 +44,11 @@
       <div sf-each="item in list" @pointerup="checkNodeClick(event)">
         {{@exec
           // Capitalize each word
-          var name = item.interface.split('.sf')[0].replace(/-/g, '/').toLowerCase().split('/');
-
-          for (var i = 0; i < name.length; i++)
-            name[i] = name[i][0].toUpperCase() + name[i].slice(1);
-
-          name = name.join('');
-
-          var node = window["$"+name];
+          var name = item.interface.split('.sf')[0].replace(/\//g, '-').toLowerCase();
+          var node = sf.component.roots[name];
 
           if(node === void 0){
-            throw new Error("Node element with interface "+name+" was not found");
+            throw new Error("Node element with interface '"+name+"' ("+item.interface+") was not found");
             @return null;
           }
 
