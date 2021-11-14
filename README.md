@@ -1,4 +1,4 @@
-<p align="center"><a href="#" target="_blank" rel="noopener noreferrer"><img width="150" src="https://avatars2.githubusercontent.com/u/61224306?s=150&v=4" alt="Blackprint"></a></p>
+<p align="center"><a href="#" target="_blank" rel="noopener noreferrer"><img width="150" src="https://user-images.githubusercontent.com/11073373/141421213-5decd773-a870-4324-8324-e175e83b0f55.png" alt="Blackprint"></a></p>
 
 <h1 align="center">Blackprint</h1>
 <p align="center">A general purpose node to node visual programming interface for lowering programming language's steep learning curve, and introduce an easy way to experimenting with your beautiful project for other developer.</p>
@@ -33,16 +33,15 @@ Feel free to open new discussion when your custom nodes was breaking on the new 
 
 ## Blackprint Roadmap
 This roadmap could be changed on the future, feel free to request feature or report an issue.
-
 Blackprint Engine
-| Name | JS (Browser) | JS (Node.js / Deno) | PHP | Python | C# |
-| --- | --- | --- | --- | --- | --- |
-| Blackprint Engine | ✔️ [Link](https://github.com/Blackprint/engine-js) | ✔️ [Link](https://github.com/Blackprint/engine-js) | ✔️ [Link](https://github.com/Blackprint/engine-php) | - | - |
-| Minimal example | ✔️ [Link](https://github.com/Blackprint/blackprint.github.io/blob/master/src/js/register-handler.js) | ✔️ [Link](https://github.com/Blackprint/engine-js/tree/master/example) | ✔️ [Link](https://github.com/Blackprint/engine-php/tree/master/example) | - | - |
-| Environment variables | ✔️ | ✔️ | - | - | - |
-| Import modules from URL | ✔️ | ✔️ | - | - | - |
-| Remote connection control | - | - | - | - | - |
-| Pausable node execution | - | - | - | - | - |
+| Name | JS (Browser) | JS (Node.js / Deno) | PHP | Go | Python | C# |
+| --- | --- | --- | --- | --- | --- | --- |
+| Blackprint Engine | ✔️ [Link](https://github.com/Blackprint/engine-js) | ✔️ [Link](https://github.com/Blackprint/engine-js) | ✔️ [Link](https://github.com/Blackprint/engine-php) | ✔️ [Link](https://github.com/Blackprint/engine-go) | - | - |
+| Minimal example | ✔️ [Link](https://github.com/Blackprint/blackprint.github.io/blob/master/src/js/register-handler.js) | ✔️ [Link](https://github.com/Blackprint/engine-js/tree/master/example) | ✔️ [Link](https://github.com/Blackprint/engine-php/tree/master/example) | ✔️ [Link](https://github.com/Blackprint/engine-go/tree/main/example) | - | - |
+| Environment variables | ✔️ | ✔️ | - | - | - | - |
+| Import modules from URL | ✔️ | ✔️ | - | - | - | - |
+| Remote connection control | - | - | - | - | - | - |
+| Pausable node execution | - | - | - | - | - | - |
 
 ---
 
@@ -87,7 +86,6 @@ Currently the main focus is Blackprint for browser. PHP, Node.js, and Deno engin
 ## Other possible plan
 Blackprint Engine:
 - **Lua** (because it's embeddable language)
-- **Go v2** (for backend server)
 - **Java** (or maybe Kotlin)
 - **Rust** (may get removed from this list)
 - **C++** (for Arduino if possible)
