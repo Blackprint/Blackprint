@@ -179,16 +179,33 @@ var IFaceDecoration = Blackprint.Interface.Decoration = class IFaceDecoration {
 		this.other = []; // This elements will be appended on <div class="other">
 	}
 
-	_headInfo(type, msg){
+	headInfo(type, msg){
 		let temp = Blackprint.space.component('bpnode-header-info').new.stem({});
 		temp.model.type = type;
 		temp.model.text = msg;
 
-		this.other.push(temp);
+		let list = this.other;
+		list.push(temp);
+
+		let controller = temp.model;
+		controller.destroy = function(){
+			let i = list.indexOf(temp);
+			if(i === -1) return;
+
+			list.splice(i, 1);
+		}
+
+		return controller;
 	}
-	info(msg){ this._headInfo('info', msg) }
-	warn(msg){ this._headInfo('warn', msg) }
-	error(msg){ this._headInfo('error', msg) }
+	info(msg){ return this.headInfo('info', msg) }
+	warn(msg){ return this.headInfo('warn', msg) }
+	error(msg){ return this.headInfo('error', msg) }
+	success(msg){
+		let model = this.headInfo('success', msg);
+		setTimeout(()=> model.destroy(), 5000);
+
+		return model;
+	}
 }
 
 // Class combine (sf.Model + CustomEvent)
