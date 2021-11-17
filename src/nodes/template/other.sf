@@ -1,0 +1,4 @@
+## html
+<div class="other">
+	<div sf-each="x in $decoration.other">{{@exec return x }}</div>
+</div>

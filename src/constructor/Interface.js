@@ -1,5 +1,5 @@
-// Override the Interface to make itu compatible for Sketch and non-sketch
-Blackprint.Interface = class SketchInterface extends sf.Model{
+// Override the Interface to make it compatible for Sketch and non-sketch
+Blackprint.Interface = class SketchInterface extends sf.Model {
 	/*
 	x = 0;
 	y = 0;
@@ -31,11 +31,12 @@ Blackprint.Interface = class SketchInterface extends sf.Model{
 			this.importing = true;
 			this.env = Blackprint.Environment.map;
 			this.node = node;
-			this.headmarks = new Map();
 			this._scope = node._instance.scope;
 
 			if(this._scope !== void 0)
 				this._container = this._scope('container');
+
+			this.$decoration = new IFaceDecoration(this);
 		}
 	}
 
@@ -43,19 +44,20 @@ Blackprint.Interface = class SketchInterface extends sf.Model{
 		return this._id_;
 	}
 	set id(val){
+		let {marks} = this.$decoration;
 		if(val){
 			if(val.constructor !== String)
 				val = ''+val;
 
 			this._id_ = val;
-			this.headmarks.set('id', {
+			marks.set('id', {
 				title: 'IFace ID: '+ val,
 				icon: 'fa fa-bookmark'
 			});
 		}
 		else{
 			this._id_ = void 0;
-			this.headmarks.delete('id');
+			marks.delete('id');
 		}
 	}
 
@@ -170,6 +172,24 @@ Blackprint.Interface = class SketchInterface extends sf.Model{
 		scope('dropdown').show(menu, {x: ev.clientX, y: ev.clientY});
 	}
 };
+
+class IFaceDecoration {
+	constructor(iface){
+		this.marks = new Map();
+		this.other = []; // This elements will be appended on <div class="other">
+	}
+
+	_headInfo(type, msg){
+		let temp = Blackprint.space.component('bpnode-header-info').new.stem({});
+		temp.model.type = type;
+		temp.model.text = msg;
+
+		this.other.push(temp);
+	}
+	info(msg){ this._headInfo('info', msg) }
+	warn(msg){ this._headInfo('warn', msg) }
+	error(msg){ this._headInfo('error', msg) }
+}
 
 // Class combine (sf.Model + CustomEvent)
 let _proto1 = Object.getOwnPropertyDescriptors(Blackprint.Engine.CustomEvent.prototype);

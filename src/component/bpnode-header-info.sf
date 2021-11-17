@@ -1,0 +1,36 @@
+## html
+<bpnode-header-info class="bphead-{{ type }}">{{ text }}</bpnode-header-info>
+
+## scss-global
+bpnode-header-info {
+	bottom: 24px;
+	position: relative;
+	padding: 5px 7px;
+	border-radius: 10px;
+	font-size: 16px;
+
+	&.bphead-error{
+		box-shadow: 0 0 12px red;
+		background: #ff0000c7;
+	}
+
+	&.bphead-info{
+		box-shadow: 0 0 12px white;
+		color: black;
+		background: #ffffffc7;
+	}
+
+	&.bphead-warn{
+		box-shadow: 0 0 12px orange;
+		background: #ffa500d1;
+		color: black;
+	}
+}
+
+## js-global
+Blackprint.space.component('bpnode-header-info', {
+	template: #this.path
+}, function(My){
+	My.type = "info";
+	My.text = "";
+});

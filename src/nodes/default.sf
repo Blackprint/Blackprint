@@ -13,6 +13,8 @@
       <sf-template path="Blackprint/nodes/template/output-port.sf"></sf-template>
     </div>
   </div>
+
+  <sf-template path="Blackprint/nodes/template/other.sf"></sf-template>
 </div>
 
 ## js-global

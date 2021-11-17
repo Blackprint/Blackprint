@@ -283,6 +283,15 @@ sf-space[blackprint]{
         }
       }
 
+      .other {
+        position: absolute;
+        bottom: calc(100% - 15px);
+        display: flex;
+        left: -1px;
+        justify-content: center;
+        right: -1px;
+      }
+
       .ports{
         .port{
           z-index: 200;
