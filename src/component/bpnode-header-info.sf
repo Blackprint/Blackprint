@@ -21,8 +21,14 @@ bpnode-header-info {
 	}
 
 	&.bphead-warn{
-		box-shadow: 0 0 12px orange;
-		background: #ffa500d1;
+		box-shadow: 0 0 12px #fff700;
+		background: #fff70096;
+		color: black;
+	}
+
+	&.bphead-success{
+		box-shadow: 0 0 12px #62ff00;
+		background: #62ff00c7;
 		color: black;
 	}
 }

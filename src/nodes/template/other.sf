@@ -1,4 +1,4 @@
 ## html
 <div class="other">
-	<div sf-each="x in $decoration.other">{{@exec return x }}</div>
+	<div class="item" sf-each="x in $decoration.other">{{@exec return x }}</div>
 </div>

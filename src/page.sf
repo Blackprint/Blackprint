@@ -290,6 +290,10 @@ sf-space[blackprint]{
         left: -1px;
         justify-content: center;
         right: -1px;
+
+        .item {
+          display: inline-flex;
+        }
       }
 
       .ports{
