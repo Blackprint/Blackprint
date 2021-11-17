@@ -173,7 +173,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 	}
 };
 
-class IFaceDecoration {
+var IFaceDecoration = Blackprint.Interface.Decoration = class IFaceDecoration {
 	constructor(iface){
 		this.marks = new Map();
 		this.other = []; // This elements will be appended on <div class="other">
