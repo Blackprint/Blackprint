@@ -1,5 +1,8 @@
 {
-  "plugins": ["@babel/plugin-syntax-top-level-await"],
+  "plugins": [
+    "@babel/plugin-syntax-top-level-await",
+    "@babel/plugin-proposal-class-properties"
+  ],
   "presets": [
     [
       "@babel/preset-env", {
@@ -12,5 +15,16 @@
         "shippedProposals": true
       }
     ]
-  ]
+  ],
+  "assumptions": {
+    "constantSuper": true,
+    "ignoreFunctionLength": true,
+    "ignoreToPrimitiveHint": true,
+    "privateFieldsAsProperties": true,
+    "pureGetters": true,
+    "setClassMethods": true,
+    "setComputedProperties": true,
+    "setPublicClassFields": true,
+    "setSpreadProperties": true
+  }
 }
