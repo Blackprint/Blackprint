@@ -110,7 +110,7 @@ let SFC = require("scarletsframe-compiler")({
 		// Standalone server with BrowserSync
 		server:{
 			baseDir:'example/',
-			index:'dev.html',
+			index:'index.html',
 		}
 	},
 
