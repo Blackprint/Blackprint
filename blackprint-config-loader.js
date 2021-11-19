@@ -120,7 +120,7 @@ module.exports = function(SFC, Gulp){
 			}
 		});
 
-		config.versioning = 'example/index.html';
+		config.versioning = 'example/dev.html';
 		config.autoGenerate = 'url+"/dist/**",'
 		// config.stripURL = 'example/';
 

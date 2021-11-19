@@ -11,7 +11,7 @@ let notifier = os.platform() === 'win32'
 let compileTargets = {
 	// Compiler for Blackprint Engine
 	'engine-js':{
-		versioning:'example/index.html',
+		versioning:'example/dev.html',
 		// stripURL:'example/',
 
 		js:{
@@ -35,7 +35,7 @@ if(!compileEngineOnly){
 	Object.assign(compileTargets, {
 		// Use `default` if you're not exporting project as library/module
 		default:{
-			versioning:'example/index.html',
+			versioning:'example/dev.html',
 			stripURL:'example/',
 
 			js:{
@@ -60,7 +60,7 @@ if(!compileEngineOnly){
 		// This needed if you want to maintain Blackprint's source code
 		// You can specify other property if you exporting something
 		blackprint:{
-			versioning:'example/index.html',
+			versioning:'example/dev.html',
 			// stripURL:'example/',
 
 			js:{
@@ -110,7 +110,7 @@ let SFC = require("scarletsframe-compiler")({
 		// Standalone server with BrowserSync
 		server:{
 			baseDir:'example/',
-			index:'index.html',
+			index:'dev.html',
 		}
 	},
 
@@ -149,7 +149,7 @@ let SFC = require("scarletsframe-compiler")({
 	},
 	beforeInit(){
 		if(!compileEngineOnly)
-			SFC.clearGenerateImport('example/index.html');
+			SFC.clearGenerateImport('example/dev.html');
 	},
 
 	// ===== Modify me, add slash as last character if it's directory =====
