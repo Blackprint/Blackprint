@@ -65,7 +65,7 @@ sf-space[blackprint]{
 			position: relative;
 			vertical-align: baseline;
 			display: inherit !important;
-			padding: 8px;
+			padding: 8px 16px 8px 8px;
 			min-width: 100px;
 			border-bottom: 1px dashed darkgray;
 			font-size: 16px;

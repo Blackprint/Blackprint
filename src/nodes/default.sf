@@ -7,8 +7,6 @@
       <sf-template path="Blackprint/nodes/template/input-port.sf"></sf-template>
     </div>
 
-    <!-- <sf-template path="Blackprint/nodes/template/property-port.sf"></sf-template> -->
-
     <div class="right-port">
       <sf-template path="Blackprint/nodes/template/output-port.sf"></sf-template>
     </div>

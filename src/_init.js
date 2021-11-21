@@ -575,7 +575,6 @@ Blackprint.registerInterface = function(templatePath, options, func){
 }
 
 Blackprint.loadModuleFromURL.browser = function(url, options){
-	// ToDo: Migrate some code to Blackprint Sketch
 	if(options == null) options = {};
 
 	if(options.loadBrowserInterface === false)
