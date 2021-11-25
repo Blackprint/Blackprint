@@ -216,6 +216,7 @@ class Port extends Blackprint.Engine.Port{
 			return;
 
 		var pos = this.findPortElement(ev.target).getClientRects()[0];
+		pos.event = ev;
 		scope('dropdown').show(menu, pos);
 	}
 

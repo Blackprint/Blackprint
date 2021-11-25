@@ -177,8 +177,9 @@ Blackprint.space.model('dropdown', function(My){
 		else{
 			menus.x = event.x;
 			menus.y = event.y;
-			menus.event = event;
 		}
+
+		menus.event ??= event;
 
 		My.className = className || '';
 		My.menus.push(menus);
@@ -288,7 +289,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 			My.hidden = '';
 		});
 
-		// Find nested options and add event listener on mouse hover
+		// Find nested options and add event listener on pointer hover
 		var options = My.options;
 		for (var i = 0; i < options.length; i++) {
 			let opt = options[i];
@@ -322,7 +323,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 					$el.append(currentDeepLevel);
 				}
 
-				elem.on('mouseover', function(ev){
+				elem.on('pointerover', function(ev){
 					My.root.pendingDeepOpen = ev.target;
 					clearTimeout(My.root.pendingDeepOpen_);
 
@@ -332,11 +333,11 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 					}, 200);
 				});
 
-				elem.on('click', openDeep);
+				elem.on('pointerdown', openDeep);
 				continue;
 			}
 
-			elem.on('mouseover', function(ev){
+			elem.on('pointerover', function(ev){
 				My.root.pendingDeepOpen = ev.target;
 				clearTimeout(My.root.pendingDeepOpen_);
 
@@ -351,7 +352,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 			});
 
 			if(opt.callback){
-				elem.on('click', function(ev){
+				elem.on('pointerdown', function(ev){
 					setTimeout(()=> {
 						if(opt.unhover !== void 0)
 							opt.unhover.apply(opt.context, opt.args);
@@ -363,7 +364,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 			}
 
 			if(opt.unhover){
-				elem.on('mouseout', function(ev){
+				elem.on('pointerout', function(ev){
 					opt.unhover.apply(opt.context, opt.args);
 				});
 			}

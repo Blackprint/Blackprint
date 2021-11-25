@@ -185,7 +185,7 @@ class Cable extends Blackprint.Engine.Cable{
 				if(this.target)
 					this.target.iface.$el.removeClass('highlight');
 			}
-		}], {x: ev.clientX, y: ev.clientY});
+		}], {x: ev.clientX, y: ev.clientY, event: ev});
 	}
 
 	destroy(){
