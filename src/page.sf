@@ -288,9 +288,12 @@ sf-space[blackprint]{
             padding: 2px;
             font-size: 12px;
             text-align: center;
-            line-height: 21px;
             display: inline-block;
             margin-left: 5px;
+
+            i{
+              line-height: 21px;
+            }
           }
         }
 
