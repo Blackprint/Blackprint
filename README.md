@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  When using the editor/sketch library, please use WebKit based browser like Chromium or Safari for better rendering performance.
+  When using the editor/sketch library, please use Chromium based browser for better rendering performance.
 </p>
 
 ## Documentation
@@ -29,7 +29,9 @@
 
 Please go to this [link](http://stefansarya.gitbook.io/blackprint) for the documentation and version conventions on [CONTRIBUTING.md](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md#version-conventions) if you want to use Blackprint before reaching v1.0.0.
 
-Feel free to open new discussion when your custom nodes was breaking on the new updates 😁
+If you're looking for minimal sketch example to get started for your project:
+- [JSBin](https://jsbin.com/bakulux/edit?html,js,output)
+- [StackBlitz](https://stackblitz.com/edit/minimal-blackprint?file=index.js)
 
 ## Blackprint Roadmap
 This roadmap could be changed on the future, feel free to request feature or report an issue.
@@ -56,6 +58,8 @@ Blackprint Engine
   - [ ] Select and move multiple nodes at once
     - [ ] Add feature to put nodes into a group
   - [ ] Clicked nodes should be moved on front of the other nodes (z-index)
+  - [ ] Automatically put cable on suitable port when it's dropped on top of a node
+  - [ ] Add feature to hide some unused port on a node
 - [ ] Blackprint Editor ([repository](https://github.com/Blackprint/blackprint.github.io))
   - [x] [Demo](https://blackprint.github.io)
   - [x] Basic nodes editor
