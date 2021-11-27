@@ -1,5 +1,4 @@
 import sf from "scarletsframe";
-import Blackprint from "@blackprint/engine/dist/engine.es6.js";
+import Blackprint from "@blackprint/engine";
 
 window.sf = sf;
-window.Blackprint = Blackprint;
