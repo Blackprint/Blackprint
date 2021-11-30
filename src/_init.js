@@ -49,6 +49,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		options.keepTemplate = true;
 
 		if(options.html === void 0){
+			if(options.template === null)
+				options.template = 'Blackprint/nodes/default.sf';
+
 			if(options.template === void 0)
 				options.template = templatePath;
 
@@ -78,7 +81,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 				window.sf$hotReload.replaceClass(isExist.extend, options.extend);
 		}
 
-		var nodeName = templatePath.replace(/[\\/]/g, '-').toLowerCase();
+		var nodeName = templatePath.replace(/[\/.,<>:\[\]{}+_=`~!@#$%^*(\\|)]/g, '-').toLowerCase();
 		nodeName = nodeName.replace(/\.\w+$/, '');
 
 		// Just like how we do it on ScarletsFrame component with namespace feature
@@ -138,7 +141,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		}
 
 		var inserted = this.ifaceList;
-		var handlers = [];
+		var handlers = []; // nodes
 
 		// Prepare all nodes depend on the namespace
 		// before we create cables for them
@@ -235,7 +238,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			linkPortB.connectCable(cable);
 		}
 
-		// Call handler init after creation processes was finished
+		// Call node init after creation processes was finished
 		for (var i = 0; i < handlers.length; i++)
 			handlers[i].init && handlers[i].init();
 

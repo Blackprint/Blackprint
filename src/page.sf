@@ -19,7 +19,7 @@
         @pointerdown="container.moveContainer(event)"
       >
         <g sf-each="x in list" class="
-          {{ x.type }}
+          {{ x.typeName }}
           {{ x.valid ? '' : 'invalid' }}
           {{ x.connected ? 'connected' : ''}}
           {{ x.disabled ? 'disabled' : ''}}
@@ -44,7 +44,7 @@
       <div sf-each="item in list" @pointerup="checkNodeClick(event)">
         {{@exec
           // Capitalize each word
-          var name = item.interface.split('.sf')[0].replace(/\//g, '-').toLowerCase();
+          var name = item.interface.split('.sf')[0].replace(/[\/.,<>:\[\]{}+_=`~!@#$%^*(\\|)]/g, '-').toLowerCase();
           var node = sf.component.roots[name];
 
           if(node === void 0){
