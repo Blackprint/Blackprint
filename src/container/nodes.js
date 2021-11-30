@@ -106,25 +106,28 @@ Space.model('nodes', function(My, include){
 
 				if(that.constructor === Function){
 					target.push({
-						title:name,
-						args:[strArr.length !== 0 ? strArr.join('/')+'/'+name : name],
-						callback:createNode
+						title: name,
+						args: [strArr.length !== 0 ? strArr.join('/')+'/'+name : name],
+						callback: createNode
 					});
 					continue;
 				}
 
 				var newMenu = [];
-				target.push({title:name, deep:newMenu});
 
 				strArr.push(name);
 				deep(that, newMenu);
 				strArr.pop();
+
+				newMenu = newMenu.sort((a, b) => a.title < b.title ? -1 : 1);
+				target.push({title: name, deep: newMenu});
 			}
 		}
 
 		menu.event = ev;
-
 		deep(Blackprint.availableNode, menu);
+
+		menu = menu.sort((a, b) => a.title < b.title ? -1 : 1);
 		include('dropdown').show(menu, {x: ev.clientX, y: ev.clientY, event: ev});
 	}
 });
