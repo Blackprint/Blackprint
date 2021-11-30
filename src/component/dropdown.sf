@@ -310,16 +310,21 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 					// Use the cache instead
 					if(deep.el !== void 0){
 						currentDeepLevel = deep.el;
+						deep.el.model.y = deep.yi - (deep.ul?.scrollTop || 0);
 						$el.append(deep.el);
 						return;
 					}
 
+					deep.ul = My.$el.children('ul')[0];
+
 					// Initialize position once
 					deep.x = ulElem.offsetWidth;
-					deep.y = ev.target.offsetTop - 7;
+					deep.yi = ev.target.offsetTop - 7;
+					deep.y = deep.yi - (deep.ul?.scrollTop || 0);
 
 					// Create dropdown in current sf-space
 					deep.el = currentDeepLevel = new $DropDown(deep, My.$space);
+					currentDeepLevel.sf$noGC = true; // Avoid framework's GC
 					$el.append(currentDeepLevel);
 				}
 
