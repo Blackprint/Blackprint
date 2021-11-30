@@ -56,7 +56,7 @@ class Port extends Blackprint.Engine.Port{
 			return;
 
 		if(cable.owner === this) // It's referencing to same port
-			return cable.destroy();
+			return cable.disconnect();
 
 		// Remove cable if ...
 		if((cable.source === 'output' && this.source !== 'input') // Output source not connected to input
@@ -64,7 +64,7 @@ class Port extends Blackprint.Engine.Port{
 			|| (cable.source === 'property' && this.source !== 'property')  // Property source not connected to property
 		){
 			scope.sketch._trigger('cable_wrong_pair', {cable, port: this});
-			cable.destroy();
+			cable.disconnect();
 			return;
 		}
 
@@ -72,7 +72,7 @@ class Port extends Blackprint.Engine.Port{
 			if((this.feature === BP_Port.ArrayOf && !BP_Port.ArrayOf.validate(this.type, cable.owner.type))
 			   || (this.feature === BP_Port.Union && !BP_Port.Union.validate(this.type, cable.owner.type))){
 				scope.sketch._trigger('cable_wrong_type', {cable, iface: this.iface, source: cable.owner, target: this});
-				return cable.destroy();
+				return cable.disconnect();
 			}
 		}
 
@@ -80,10 +80,11 @@ class Port extends Blackprint.Engine.Port{
 			if((cable.owner.feature === BP_Port.ArrayOf && !BP_Port.ArrayOf.validate(cable.owner.type, this.type))
 			   || (cable.owner.feature === BP_Port.Union && !BP_Port.Union.validate(cable.owner.type, this.type))){
 				scope.sketch._trigger('cable_wrong_type', {cable, iface: this.iface, source: this, target: cable.owner});
-				return cable.destroy();
+				return cable.disconnect();
 			}
 		}
 
+		// ToDo: recheck why we need to check if the constructor is a function
 		var isInstance = true;
 		if(cable.owner.type !== this.type
 		   && cable.owner.type.constructor === Function
@@ -103,7 +104,7 @@ class Port extends Blackprint.Engine.Port{
 			|| cable.owner.type !== Function && this.type === Function
 		)){
 			scope.sketch._trigger('cable_wrong_type_pair', {cable, target: this});
-			cable.destroy();
+			cable.disconnect();
 			return;
 		}
 
@@ -113,7 +114,7 @@ class Port extends Blackprint.Engine.Port{
 		for (var i = 0; i < sourceCables.length; i++) {
 			if(this.cables.includes(sourceCables[i])){
 				scope.sketch._trigger('cable_duplicate_removed', {cable, target: this});
-				cable.destroy();
+				cable.disconnect();
 				return;
 			}
 		}
@@ -130,7 +131,7 @@ class Port extends Blackprint.Engine.Port{
 				if(removal.cables.length !== 1){
 					for (var a = 0; a < _cables.length; a++) {
 						if(_cables[a].connected){
-							_cables[a].destroy();
+							_cables[a].disconnect();
 							break;
 						}
 					}
@@ -141,7 +142,7 @@ class Port extends Blackprint.Engine.Port{
 			else if(removal.cables.length !== 0){ // when cable not owned
 				for (var a = _cables.length-1; a >= 0; a--) {
 					if(_cables[a].connected){
-						_cables[a].destroy();
+						_cables[a].disconnect();
 						break;
 					}
 				}
@@ -188,21 +189,21 @@ class Port extends Blackprint.Engine.Port{
 
 		var cables = this.cables;
 		for (var i = 0; i < cables.length; i++) {
-			let target = cables[i].owner === this ? cables[i].target : cables[i].owner;
+			let cable = cables[i];
+			let target = cable.owner === this ? cable.target : cable.owner;
 			if(target === void 0)
 				continue;
 
 			disconnect.deep.push({
 				title:target.iface.title+`(${this.name} ~ ${target.name})`,
-				context:cables[i],
-				callback:Cable.prototype.destroy,
+				callback(){cable.disconnect()},
 				hover(){
-					scope('cables').list.getElement(this).classList.add('highlight');
+					scope('cables').list.getElement(this)?.classList.add('highlight');
 
 					target.iface.$el.addClass('highlight');
 				},
 				unhover(){
-					scope('cables').list.getElement(this).classList.remove('highlight');
+					scope('cables').list.getElement(this)?.classList.remove('highlight');
 
 					target.iface.$el.removeClass('highlight');
 				}

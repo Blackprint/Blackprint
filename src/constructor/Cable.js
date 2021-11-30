@@ -19,7 +19,7 @@ class Cable extends Blackprint.Engine.Cable{
 		this.head1 = [x, y];
 		this.head2 = this.head1.slice(0); // Copy on same position
 
-		this.type = !port.type ? 'Any' : port.type.name
+		this.typeName = !port.type ? 'Any' : port.type.name;
 		this.source = port.source;
 
 		// Push to cable list
@@ -53,6 +53,12 @@ class Cable extends Blackprint.Engine.Cable{
 		var offsetPath = `path('${this.pathEl.getAttribute('d')}')`;
 		var first = {offset:0, offsetPath, offsetDistance:'1%'};
 		var last = {offset: 1, translate: 0, offsetPath, scale: 1, offsetDistance: '100%'};
+
+		// reverse if owner is not the output port
+		if(this.owner !== this.output){
+			first.offsetDistance = '100%';
+			last.offsetDistance = '1%';
+		}
 
 		var els = new Array(glowContainer.length);
 		for (var z = 0; z < glowContainer.length; z++) {
@@ -169,10 +175,10 @@ class Cable extends Blackprint.Engine.Cable{
 	cableMenu(ev){
 		ev.stopPropagation();
 
+		let cable = this;
 		this._scope('dropdown').show([{
-			title:this.target ? "Disconnect" : "Delete",
-			context:this,
-			callback:Cable.prototype.destroy,
+			title: this.target ? "Disconnect" : "Delete",
+			callback(){cable.disconnect()},
 			hover(){
 				this.owner.iface.$el.addClass('highlight');
 
@@ -185,15 +191,15 @@ class Cable extends Blackprint.Engine.Cable{
 				if(this.target)
 					this.target.iface.$el.removeClass('highlight');
 			}
-		}], {x: ev.clientX, y: ev.clientY, event: ev});
+		}], {x: ev.clientX, y: ev.clientY, event: ev, cable});
 	}
 
-	destroy(){
+	disconnect(){
 		var list = this._scope('cables').list;
 
 		// Remove from cable list
 		list.splice(list.indexOf(this), 1);
-		Blackprint.Engine.Cable.prototype.destroy.call(this);
+		super.disconnect();
 
 		// console.log('A cable was removed', this);
 	}

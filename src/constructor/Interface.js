@@ -158,7 +158,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 					for(var port in portList){
 						var cables = portList[port].cables;
 						for (var a = cables.length - 1; a >= 0; a--)
-							cables[a].destroy();
+							cables[a].disconnect();
 					}
 				}
 			}
