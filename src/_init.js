@@ -286,11 +286,14 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 				var haveValue = false;
 				for(var name in output_){
-					if(output[name] === void 0)
-						output[name] = [];
-
 					var port = output_[name];
 					var cables = port.cables;
+
+					if(cables.length === 0)
+						continue;
+
+					if(output[name] === void 0)
+						output[name] = [];
 
 					for (var a = 0; a < cables.length; a++) {
 						var target = cables[a].owner === port ? cables[a].target : cables[a].owner;
