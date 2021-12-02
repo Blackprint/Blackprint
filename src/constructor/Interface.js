@@ -19,6 +19,10 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 			let that = Blackprint._reuseIFace;
 			Blackprint._reuseIFace = void 0;
 
+			// Throw the cloned element to SF Component
+			if(that.$decoration !== void 0)
+				throw {_sf_component: true, _sf_obj: that};
+
 			return that;
 		}
 		else{
