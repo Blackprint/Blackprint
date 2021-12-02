@@ -141,7 +141,10 @@ Space.model('container', function(My, include){
 	// My.onScale = callback
 
 	My.scaleContainer = function(ev){
+		if(ev.ctrlKey === false) return;
 		if(My.config.scale === false) return;
+		ev.preventDefault();
+
 		if(ev.deltaY > 0 && My.scale < 0.21)
 			return;
 

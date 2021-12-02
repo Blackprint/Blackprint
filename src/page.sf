@@ -2,7 +2,7 @@
 <sf-space blackprint>
   <sf-m name="container"
     class="{{ _isImporting ? 'importing-nodes' : '' }}"
-    @mousewheel.prevent="scaleContainer(event)"
+    @mousewheel="scaleContainer(event)"
     style="
       width: {{ size.w }}px;
       height: {{ size.h }}px;
@@ -80,11 +80,13 @@ sf-space[blackprint]{
   }
 
   .node{
-    textarea{
-      margin: 0px 5px 0px -10px;
+    textarea, input{
       background: rgba(0, 0, 0, 0.63);
       color: white;
       border: none;
+    }
+    textarea{
+      margin: 0px 5px 0px -10px;
     }
 
     select{
@@ -115,7 +117,7 @@ sf-space[blackprint]{
 
   @include portType("Number", deepskyblue);
   @include portType("Object", mediumpurple);
-  @include portType("Boolean", #ff3636);
+  @include portType("Boolean", #ff5959);
   @include portType("String", white);
 
   .glow-cable{
@@ -363,7 +365,7 @@ sf-space[blackprint]{
 
         // > = direct child
         .ports > div {
-          display: inline-block;
+          display: inline-flex;
         }
         .ports > .name {
           margin: 0 3px 0 5px;
