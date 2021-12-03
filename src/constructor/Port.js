@@ -43,7 +43,7 @@ class Port extends Blackprint.Engine.Port{
 
 		// Default head index is "2" when creating new cable
 		cable.cableHeadClicked(e, true);
-		this.iface._trigger('cable.created', {iface: this, cable});
+		this.iface.emit('cable.created', {iface: this, cable});
 	}
 
 	connectCable(cable){
@@ -63,7 +63,7 @@ class Port extends Blackprint.Engine.Port{
 			|| (cable.source === 'input' && this.source !== 'output')  // Input source not connected to output
 			|| (cable.source === 'property' && this.source !== 'property')  // Property source not connected to property
 		){
-			scope.sketch._trigger('cable_wrong_pair', {cable, port: this});
+			scope.sketch.emit('cable.wrong_pair', {cable, port: this});
 			cable.disconnect();
 			return;
 		}
@@ -71,7 +71,7 @@ class Port extends Blackprint.Engine.Port{
 		if(cable.owner.source === 'output'){
 			if((this.feature === BP_Port.ArrayOf && !BP_Port.ArrayOf.validate(this.type, cable.owner.type))
 			   || (this.feature === BP_Port.Union && !BP_Port.Union.validate(this.type, cable.owner.type))){
-				scope.sketch._trigger('cable_wrong_type', {cable, iface: this.iface, source: cable.owner, target: this});
+				scope.sketch.emit('cable.wrong_type', {cable, iface: this.iface, source: cable.owner, target: this});
 				return cable.disconnect();
 			}
 		}
@@ -79,7 +79,7 @@ class Port extends Blackprint.Engine.Port{
 		else if(this.source === 'output'){
 			if((cable.owner.feature === BP_Port.ArrayOf && !BP_Port.ArrayOf.validate(cable.owner.type, this.type))
 			   || (cable.owner.feature === BP_Port.Union && !BP_Port.Union.validate(cable.owner.type, this.type))){
-				scope.sketch._trigger('cable_wrong_type', {cable, iface: this.iface, source: this, target: cable.owner});
+				scope.sketch.emit('cable.wrong_type', {cable, iface: this.iface, source: this, target: cable.owner});
 				return cable.disconnect();
 			}
 		}
@@ -103,7 +103,7 @@ class Port extends Blackprint.Engine.Port{
 			   cable.owner.type === Function && this.type !== Function
 			|| cable.owner.type !== Function && this.type === Function
 		)){
-			scope.sketch._trigger('cable_wrong_type_pair', {cable, target: this});
+			scope.sketch.emit('cable.wrong_type_pair', {cable, target: this});
 			cable.disconnect();
 			return;
 		}
@@ -113,7 +113,7 @@ class Port extends Blackprint.Engine.Port{
 		// Remove cable if there are similar connection for the ports
 		for (var i = 0; i < sourceCables.length; i++) {
 			if(this.cables.includes(sourceCables[i])){
-				scope.sketch._trigger('cable_duplicate_removed', {cable, target: this});
+				scope.sketch.emit('cable.duplicate_removed', {cable, target: this});
 				cable.disconnect();
 				return;
 			}
@@ -151,7 +151,7 @@ class Port extends Blackprint.Engine.Port{
 			}
 
 			if(removal === true)
-				scope.sketch._trigger('cable_replaced', {cable, target: this});
+				scope.sketch.emit('cable.replaced', {cable, target: this});
 		}
 
 		// Connect this cable into port's cable list
@@ -181,8 +181,8 @@ class Port extends Blackprint.Engine.Port{
 		var menu = [];
 
 		let event = {iface: this, instance: scope.sketch, menu};
-		this.iface._trigger('port.menu', event);
-		scope.sketch._trigger('port.menu', event);
+		this.iface.emit('port.menu', event);
+		scope.sketch.emit('port.menu', event);
 
 		// Prepare default menu
 		var disconnect = {title:"Disconnect", deep:[]};

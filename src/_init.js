@@ -180,7 +180,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 					for(var portName in out){
 						var linkPortA = iface.output[portName];
 						if(linkPortA === void 0){
-							this._trigger('error', {
+							this.emit('error', {
 								type: 'node_port_not_found',
 								data: {iface, portName}
 							});
@@ -197,7 +197,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 							// Output can only meet input port
 							var linkPortB = targetNode.input[target.name];
 							if(linkPortB === void 0){
-								this._trigger('error', {
+								this.emit('error', {
 									type: 'node_port_not_found',
 									data: {
 										iface: targetNode,
@@ -393,7 +393,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 		var func = deepProperty(Blackprint.nodes, namespace.split('/'));
 		if(func === void 0){
-			return this._trigger('error', {
+			return this.emit('error', {
 				type: 'node_not_found',
 				data: {namespace}
 			});
@@ -458,7 +458,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 		time = Date.now() - time;
 		if(time > 500){
-			this._trigger('slow_node_creation', {
+			this.emit('node.slow_creation', {
 				namespace, time
 			});
 		}

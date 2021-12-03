@@ -53,7 +53,7 @@ Space.model('nodes', function(My, include){
 		create(el){
 			var node = el.querySelector('.node');
 			if(!node){
-				include.sketch._trigger('error', {
+				include.sketch.emit('error', {
 					type: 'node_template_not_found',
 					tagName: el.firstChild.tagName.toLowerCase(),
 					element: el

@@ -44,9 +44,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 		}
 	}
 
-	get id(){
-		return this._id_;
-	}
+	get id(){ return this._id_ }
 	set id(val){
 		let {marks} = this.$decoration;
 		if(val){
@@ -148,7 +146,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 				var i = list.indexOf(iface);
 
 				if(i === -1)
-					return scope.sketch._trigger('error', {
+					return scope.sketch.emit('error', {
 						type: 'node_delete_not_found',
 						data: {iface}
 					});
@@ -170,8 +168,8 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 
 		let event = {iface: this, instance: scope.sketch, menu};
 
-		this._trigger('node.menu', event);
-		scope.sketch._trigger('node.menu', event);
+		this.emit('node.menu', event);
+		scope.sketch.emit('node.menu', event);
 
 		scope('dropdown').show(menu, {x: ev.clientX, y: ev.clientY, event: ev});
 	}
@@ -183,6 +181,7 @@ var IFaceDecoration = Blackprint.Interface.Decoration = class IFaceDecoration {
 		this.other = []; // This elements will be appended on <div class="other">
 	}
 
+	// ToDO: fix for cloned container, the decoration doesn't get cloned
 	headInfo(type, msg){
 		let temp = Blackprint.space.component('bpnode-header-info').new.stem({});
 		temp.model.type = type;
