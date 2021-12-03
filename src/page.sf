@@ -309,6 +309,7 @@ sf-space[blackprint]{
       .content{
         display: inline-block;
         margin-top: 2px;
+        width: 100%;
 
         &.header-small{
           margin-left: 32px;
