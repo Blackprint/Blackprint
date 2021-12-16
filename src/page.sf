@@ -307,7 +307,7 @@ sf-space[blackprint]{
       }
 
       .content{
-        display: inline-block;
+        display: inline;
         margin-top: 2px;
         width: 100%;
 
