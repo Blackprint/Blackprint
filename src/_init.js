@@ -6,10 +6,6 @@ var NOOP = function(){};
 let { $ } = sf; // sQuery shortcut
 var Blackprint = window.Blackprint;
 
-// Will  be used for `Blackprint.registerNode`
-Blackprint.modulesURL = {};
-Blackprint._modulesURL = [];
-
 Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 	static _iface = {'BP/default': NOOP};
 
