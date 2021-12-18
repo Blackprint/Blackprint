@@ -5,7 +5,7 @@
 
 <p align="center">
   <a href='https://github.com/Blackprint/Blackprint/blob/master/LICENSE'><img src='https://img.shields.io/badge/License-MIT-brightgreen.svg' height='20'></a>
-  <a href='https://discord.gg/cNrBnCFy7q'><img src='https://img.shields.io/discord/840593315157245972.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2' height='20'></a>
+  <a href='https://discord.gg/cz9rh3a7d6'><img src='https://img.shields.io/discord/915881655921704971.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2' height='20'></a>
 </p>
 
 <p align="center">
@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  When using the editor/sketch library, please use Chromium based browser for better rendering performance.
+  Basic Node's UI design was inspired by UE4 Blueprint and can be modified with HTML/CSS.<br>If you have better UI theme, feel free to show it on Discord. When using the editor/sketch library, please use Chromium based browser for better rendering performance.
 </p>
 
 ## Documentation
@@ -60,6 +60,8 @@ Blackprint Engine
   - [ ] Clicked nodes should be moved on front of the other nodes (z-index)
   - [ ] Automatically put cable on suitable port when it's dropped on top of a node
   - [ ] Add feature to hide some unused port on a node
+  - [ ] Add feature to import node skeleton (use default node, and no execution)
+    - [ ] Add JSON preview for Visual Studio Code
 - [ ] Blackprint Editor ([repository](https://github.com/Blackprint/blackprint.github.io))
   - [x] [Demo](https://blackprint.github.io)
   - [x] Basic nodes editor
