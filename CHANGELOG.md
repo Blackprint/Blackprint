@@ -1,3 +1,17 @@
+# 0.4.0
+
+### Bug Fix
+- Fix default node styles
+- Avoid multiple constructor call
+
+### Feature
+- Simplify JSON export by removing empty field
+- Sort DropDown menu by name
+
+### Breaking Changes
+- Blackprint Engine v0.4 is required
+- Zoom now using CTRL + Mouse Scroll
+
 # 0.3.0
 
 ### Bug Fix
@@ -15,7 +29,7 @@
 - Add custom environment data
 - Load module from URL (default to disabled)
 - Add support for using Decorator when registering node/interface
-- Add support for listening to all event with "*"
+- Add support for listening to all event with "\*"
 - Add SmallNotif (Toast) on the top right of the screen
 - Add headmarks and other additional header element for nodes
 

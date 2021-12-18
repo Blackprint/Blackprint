@@ -1,7 +1,7 @@
 {
   "name": "@blackprint/sketch",
   "description": "Blackprint sketch for browser",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": "Blackprint",
   "license": "MIT",
   "repository": {
@@ -17,7 +17,7 @@
   },
   "main": "dist/_entry.js",
   "module": "dist/_entry.mjs",
-  "homepage": "http://stefansarya.gitbook.io/blackprint",
+  "homepage": "https://blackprint.github.io/",
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@babel/parser": "^7.16.4",
@@ -26,7 +26,7 @@
     "@babel/preset-env": "^7.16.4",
     "gulp": "^4.0.2",
     "node-notifier": "^9.0.0",
-    "scarletsframe-compiler": "0.6.15"
+    "scarletsframe-compiler": "0.6.19"
   },
   "keywords": [
     "visual-programming",
