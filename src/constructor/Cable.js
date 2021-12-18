@@ -31,13 +31,16 @@ class Cable extends Blackprint.Engine.Cable{
 	}
 
 	// ToDo: Improve performance by caching the dotGlow.cloneNode()
-	visualizeFlow(){
+	async visualizeFlow(){
 		if(this.animating || window.Timeplate === void 0)
 			return;
 
 		this.animating = true;
 		let cableScope = this._scope('cables');
 		var glowContainer = cableScope.$el('.glow-cable');
+
+		await $.afterRepaint();
+		if(this.output === void 0) return;
 
 		if(cableScope.minimapCableScope !== void 0)
 			glowContainer = [glowContainer, ...cableScope.minimapCableScope.$el('.glow-cable')];
