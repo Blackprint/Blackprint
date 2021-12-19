@@ -53,3 +53,7 @@ function deepCopy(target, source){
 }
 
 const isClass = Blackprint._utils.isClass;
+
+function isTouchDevice(){
+	return navigator.maxTouchPoints !== 0;
+}
