@@ -69,14 +69,14 @@ You may want to see the [guidelines](https://github.com/Blackprint/blackprint.gi
 
 #### Bundled file location
 When you run the build script above you may get these files.
- - Sketch library: `/dist/*.js` and `/dist/*.css`
- - Engine library: `/engine-js/dist/engine.js` and `/engine-js/dist/engine.es6.js`
+ - Sketch library: `/dist/blackprint.min.js`, `/dist/blackprint.sf.js` and `/dist/blackprint.sf.css`
+ - Engine library: `/engine-js/dist/engine.min.js`
  - Editor: `/example/assets/*.js` and `/example/assets/*.css`
- - Nodes: `/dist/*.min.js`, `/dist/*.es6.js`, `/dist/*.sf.js`, `/dist/*.sf.css`
+ - Nodes: `/dist/*.mjs`, `/dist/*.sf.mjs`, `/dist/*.sf.css`
 
 The file names that has different export target:
- - `*.sf.js` and `*.sf.js` can only being imported/run on Browser
- - `*.es6.js` is ES6 module that can be imported for Deno
+ - `*.sf.css` and `*.sf.mjs` can only being imported/run on Browser
+ - `*.mjs` is mjs module that can be imported for Deno
 
 ---
 
