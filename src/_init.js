@@ -131,8 +131,11 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 				// wait for .sf.mjs and .sf.css if being loaded from code above
 				if(window.sf && window.sf.loader){
 					await sf.loader.task;
-					await Promise.resolve();
+					await new Promise(resolve=> setTimeout(resolve, 100));
+					await sf.loader.task;
 				}
+
+				await Promise.resolve();
 			}
 		}
 

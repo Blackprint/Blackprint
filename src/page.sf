@@ -153,6 +153,7 @@ sf-space[blackprint]{
   sf-m[name="container"]{
     transform-origin: top left;
     backface-visibility: hidden;
+    touch-action: pinch-zoom;
   }
 
   .nodes{

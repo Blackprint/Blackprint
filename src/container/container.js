@@ -114,14 +114,16 @@ Space.model('container', function(My, include){
 	}
 
 	function moveContainer(ev){
-		if(!(My.pos.x >= 0 && ev.movementX > 0)){
-			My.size.w -= ev.movementX;
-			My.pos.x += ev.movementX;
+		let {movementX, movementY} = ev;
+
+		if(!(My.pos.x >= 0 && movementX > 0)){
+			My.size.w -= movementX;
+			My.pos.x += movementX;
 		}
 
-		if(!(My.pos.y >= 0 && ev.movementY > 0)){
-			My.size.h -= ev.movementY;
-			My.pos.y += ev.movementY;
+		if(!(My.pos.y >= 0 && movementY > 0)){
+			My.size.h -= movementY;
+			My.pos.y += movementY;
 		}
 	}
 
