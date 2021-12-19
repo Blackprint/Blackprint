@@ -163,6 +163,9 @@ class Port extends Blackprint.Engine.Port{
 	portHovered(event){
 		var portElem = this.findPortElement(event.target);
 
+		// ToDo: on touch device, hover/unhover isn't triggered properly
+		// Currently I don't have solution for it
+
 		// For magnet sensation when the cable reach the port
 		this._scope('cables').hoverPort = {
 			elem:portElem,
