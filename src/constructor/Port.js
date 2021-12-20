@@ -1,5 +1,5 @@
 let BP_Port = Blackprint.Port;
-class Port extends Blackprint.Engine.Port{
+class Port extends Blackprint.Engine.Port {
 	// For Prototype only, the constructor() must not being used here
 	// But used on ./Interface.js -> newPort()
 
@@ -46,117 +46,11 @@ class Port extends Blackprint.Engine.Port{
 		this.iface.emit('cable.created', {iface: this, cable});
 	}
 
-	connectCable(cable){
-		let scope = this._scope;
-		if(cable === void 0)
-			cable = this._scope('cables').currentCable;
+	_cableConnectError(name, obj){
+		if(this._scope === void 0)
+			return super._cableConnectError(name, obj);
 
-		// It's not a cable might
-		if(cable === void 0)
-			return;
-
-		if(cable.owner === this) // It's referencing to same port
-			return cable.disconnect();
-
-		// Remove cable if ...
-		if((cable.source === 'output' && this.source !== 'input') // Output source not connected to input
-			|| (cable.source === 'input' && this.source !== 'output')  // Input source not connected to output
-			|| (cable.source === 'property' && this.source !== 'property')  // Property source not connected to property
-		){
-			scope.sketch.emit('cable.wrong_pair', {cable, port: this});
-			cable.disconnect();
-			return;
-		}
-
-		if(cable.owner.source === 'output'){
-			if((this.feature === BP_Port.ArrayOf && !BP_Port.ArrayOf.validate(this.type, cable.owner.type))
-			   || (this.feature === BP_Port.Union && !BP_Port.Union.validate(this.type, cable.owner.type))){
-				scope.sketch.emit('cable.wrong_type', {cable, iface: this.iface, source: cable.owner, target: this});
-				return cable.disconnect();
-			}
-		}
-
-		else if(this.source === 'output'){
-			if((cable.owner.feature === BP_Port.ArrayOf && !BP_Port.ArrayOf.validate(cable.owner.type, this.type))
-			   || (cable.owner.feature === BP_Port.Union && !BP_Port.Union.validate(cable.owner.type, this.type))){
-				scope.sketch.emit('cable.wrong_type', {cable, iface: this.iface, source: this, target: cable.owner});
-				return cable.disconnect();
-			}
-		}
-
-		// ToDo: recheck why we need to check if the constructor is a function
-		var isInstance = true;
-		if(cable.owner.type !== this.type
-		   && cable.owner.type.constructor === Function
-		   && this.type.constructor === Function)
-			isInstance = cable.owner.type instanceof this.type || this.type instanceof cable.owner.type;
-
-		var valid = false;
-		if(cable.owner.type.portFeature === BP_Port.Validator
-			|| this.type.portFeature === BP_Port.Validator
-		){
-			isInstance = valid = true;
-		}
-
-		// Remove cable if type restriction
-		if(!isInstance || !valid && (
-			   cable.owner.type === Function && this.type !== Function
-			|| cable.owner.type !== Function && this.type === Function
-		)){
-			scope.sketch.emit('cable.wrong_type_pair', {cable, target: this});
-			cable.disconnect();
-			return;
-		}
-
-		var sourceCables = cable.owner.cables;
-
-		// Remove cable if there are similar connection for the ports
-		for (var i = 0; i < sourceCables.length; i++) {
-			if(this.cables.includes(sourceCables[i])){
-				scope.sketch.emit('cable.duplicate_removed', {cable, target: this});
-				cable.disconnect();
-				return;
-			}
-		}
-
-		// Put port reference to the cable
-		cable.target = this;
-
-		// Remove old cable if the port not support array
-		if(this.feature !== BP_Port.ArrayOf && this.type !== Function){
-			var removal = cable.target.source === 'input' ? cable.target : cable.owner;
-			let _cables = removal.cables;
-
-			if(removal === cable.owner){
-				if(removal.cables.length !== 1){
-					for (var a = 0; a < _cables.length; a++) {
-						if(_cables[a].connected){
-							_cables[a].disconnect();
-							break;
-						}
-					}
-
-					removal = true;
-				}
-			}
-			else if(removal.cables.length !== 0){ // when cable not owned
-				for (var a = _cables.length-1; a >= 0; a--) {
-					if(_cables[a].connected){
-						_cables[a].disconnect();
-						break;
-					}
-				}
-
-				removal = true;
-			}
-
-			if(removal === true)
-				scope.sketch.emit('cable.replaced', {cable, target: this});
-		}
-
-		// Connect this cable into port's cable list
-		this.cables.push(cable);
-		cable.connecting();
+		this._scope.sketch.emit(name, obj);
 	}
 
 	// PointerOver event handler
