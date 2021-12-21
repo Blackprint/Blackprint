@@ -1,5 +1,6 @@
 process.stdout.write("Loading scarletsframe-compiler\r");
 let compileEngineOnly = false;
+let isCI = process.env.CI;
 
 let Gulp = require('gulp');
 let os = require('os');
@@ -11,7 +12,7 @@ let notifier = os.platform() === 'win32'
 let compileTargets = {
 	// Compiler for Blackprint Engine
 	'engine-js':{
-		versioning:'example/dev.html',
+		versioning: !isCI && 'example/dev.html',
 		// stripURL:'example/',
 
 		js:{
@@ -20,6 +21,7 @@ let compileTargets = {
 			header:"/* Blackprint \n MIT Licensed */",
 			combine:[
 				// Start private wrapper
+				'engine-js/src/constructor/CustomEvent.js',
 				'engine-js/src/_init.js',
 				'engine-js/src/constructor/Port/_init.js',
 
@@ -32,11 +34,11 @@ let compileTargets = {
 
 // Editor and Sketch library for Browser
 if(!compileEngineOnly){
-	Object.assign(compileTargets, {
-		// Use `default` if you're not exporting project as library/module
-		default:{
-			versioning:'example/dev.html',
-			stripURL:'example/',
+	// Use `default` if you're not exporting project as library/module
+	if(!isCI){
+		compileTargets.default = {
+			versioning: 'example/dev.html',
+			stripURL: 'example/',
 
 			js:{
 				file:'example/assets/myjs.min.js',
@@ -55,47 +57,47 @@ if(!compileEngineOnly){
 				file:'example/assets/custom.sf',
 				combine:'example/src/**/*.sf',
 			},
+		};
+	}
+
+	// This needed if you want to maintain Blackprint's source code
+	// You can specify other property if you exporting something
+	compileTargets.blackprint = {
+		versioning: !isCI && 'example/dev.html',
+		// stripURL:'example/',
+
+		js:{
+			file:'dist/blackprint.min.js',
+			wrapped: true,
+			header:"/* Blackprint \n MIT Licensed */",
+			combine:[
+				// Start private wrapper from here
+				'src/_init.js',
+
+				// Import classes first, or sf.component can't extend them
+				'src/constructor/*.js',
+
+				// Combine all files but not recursive
+				'src/*.js',
+
+				// Combine files from all directory recursively
+				'src/**/*.js',
+			],
 		},
+		sf:{
+			file:'dist/blackprint.sf',
+			wrapped: true,
+			header:"/* Blackprint \n MIT Licensed */",
+			prefix:'Blackprint',
+			combine:[
+				// Start private wrapper from here
+				'src/_init.sf',
 
-		// This needed if you want to maintain Blackprint's source code
-		// You can specify other property if you exporting something
-		blackprint:{
-			versioning:'example/dev.html',
-			// stripURL:'example/',
-
-			js:{
-				file:'dist/blackprint.min.js',
-				wrapped: true,
-				header:"/* Blackprint \n MIT Licensed */",
-				combine:[
-					// Start private wrapper from here
-					'src/_init.js',
-
-					// Import classes first, or sf.component can't extend them
-					'src/constructor/*.js',
-
-					// Combine all files but not recursive
-					'src/*.js',
-
-					// Combine files from all directory recursively
-					'src/**/*.js',
-				],
-			},
-			sf:{
-				file:'dist/blackprint.sf',
-				wrapped: true,
-				header:"/* Blackprint \n MIT Licensed */",
-				prefix:'Blackprint',
-				combine:[
-					// Start private wrapper from here
-					'src/_init.sf',
-
-					// Combine files from all directory recursively
-					'src/**/*.sf'
-				],
-			}
-		},
-	});
+				// Combine files from all directory recursively
+				'src/**/*.sf'
+			],
+		}
+	};
 }
 
 let SFC = require("scarletsframe-compiler")({

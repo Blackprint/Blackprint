@@ -1,7 +1,7 @@
 {
   "name": "@blackprint/sketch",
   "description": "Blackprint sketch for browser",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "author": "Blackprint",
   "license": "MIT",
   "repository": {
@@ -13,7 +13,8 @@
   },
   "scripts": {
     "start": "gulp",
-    "compile": "gulp compile"
+    "compile": "gulp compile",
+    "test": "jest ./tests/"
   },
   "main": "dist/_entry.js",
   "module": "dist/_entry.mjs",
@@ -34,5 +35,8 @@
     "blackprint",
     "html5",
     "diagram"
-  ]
+  ],
+  "dependencies": {
+    "scarletsframe": "^0.35.6"
+  }
 }
