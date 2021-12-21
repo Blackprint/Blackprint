@@ -150,7 +150,7 @@ let SFC = require("scarletsframe-compiler")({
 			require('./blackprint-config-loader.js')(SFC, Gulp);
 	},
 	beforeInit(){
-		if(!compileEngineOnly)
+		if(!compileEngineOnly && !isCI)
 			SFC.clearGenerateImport('example/dev.html');
 	},
 
