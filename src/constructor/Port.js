@@ -46,9 +46,9 @@ class Port extends Blackprint.Engine.Port {
 		this.iface.emit('cable.created', {iface: this, cable});
 	}
 
-	_cableConnectError(name, obj){
+	_cableConnectError(name, obj, isWarning){
 		if(this._scope === void 0)
-			return super._cableConnectError(name, obj);
+			return super._cableConnectError(name, obj, isWarning);
 
 		this._scope.sketch.emit(name, obj);
 	}
