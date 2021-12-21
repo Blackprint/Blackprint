@@ -412,6 +412,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			throw new Error(namespace+"> 'node.iface' was not found, do you forget to call 'node.setInterface()'?");
 
 		iface.namespace = namespace;
+		options ??= {};
 
 		// Create the linker between the node and the iface
 		Blackprint.Interface.prepare(node, iface);
@@ -437,9 +438,6 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		// Node is become the component scope
 		// equal to calling registerInterface's registered function
 		this.scope('nodes').list.push(iface);
-		iface.importing = false;
-
-		iface.imported && iface.imported(savedData);
 
 		if(iface.id !== void 0)
 			this.iface[iface.id] = iface;
@@ -448,6 +446,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			this.ifaceList[iface.i] = iface;
 		else this.ifaceList.push(iface);
 
+		iface.importing = false;
+		iface.imported && iface.imported(savedData);
 		node.imported && node.imported(savedData);
 
 		if(handlers !== void 0)
