@@ -9,7 +9,7 @@ specifiers:
   gulp: ^4.0.2
   jest: ^27.4
   node-notifier: ^9.0.0
-  scarletsframe: ^0.35.6
+  scarletsframe: 0.35.x
   scarletsframe-compiler: 0.6.19
 
 dependencies:
