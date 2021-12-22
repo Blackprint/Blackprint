@@ -1,3 +1,18 @@
+# 0.4.2
+
+### Bug Fix
+- Fix incorrect default value
+- Move `iface.imported` call order near `node.imported`
+
+### Feature
+- `Blackprint.Engine` is now using `CustomEvent`
+- You can now connect cable with script
+
+# 0.4.1
+
+### Bug Fix
+- Fix race condition when importing module from the URL
+
 # 0.4.0
 
 ### Bug Fix

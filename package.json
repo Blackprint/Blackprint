@@ -1,7 +1,7 @@
 {
   "name": "@blackprint/sketch",
   "description": "Blackprint sketch for browser",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "author": "Blackprint",
   "license": "MIT",
   "repository": {
@@ -38,6 +38,6 @@
     "diagram"
   ],
   "dependencies": {
-    "scarletsframe": "^0.35.6"
+    "scarletsframe": "0.35.x"
   }
 }
