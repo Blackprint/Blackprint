@@ -8,16 +8,6 @@ test('Blackprint.Sketch does exist on window', () => {
   expect(window.Blackprint.Sketch).toBeDefined();
 });
 
-function jestFn(){ // alternative for jest.fn
-	function temp(){
-		temp.args = arguments;
-		temp.called++;
-	}
-
-	temp.called = 0;
-	return temp;
-}
-
 let sketch, engine, cable_status;
 describe("Create new instance of:", () => {
 	test('Blackprint.Sketch', () => {
@@ -72,7 +62,7 @@ describe("Blackprint register", () => {
 				};
 			}
 
-			_imported = jestFn();
+			_imported = jest.fn();
 			imported(data){
 				this._imported(data);
 				Object.assign(this.iface.data, data);
@@ -113,7 +103,7 @@ describe("Blackprint register", () => {
 				this.iface.title = "Test-Node2";
 			}
 
-			_imported = jestFn();
+			_imported = jest.fn();
 			imported(data){
 				this._imported(data);
 				// Object.assign(this.iface.data, data);
@@ -145,7 +135,7 @@ describe("Blackprint register", () => {
 				expect(node._node2).toBe(true);
 			}
 
-			_imported = jestFn();
+			_imported = jest.fn();
 			imported(data){
 				this._imported(data);
 				let {Input, IInput, Output, IOutput} = this.const;
@@ -173,7 +163,7 @@ describe("Blackprint register", () => {
 				expect(node._node2).toBe(true);
 			}
 
-			_imported = jestFn();
+			_imported = jest.fn();
 			imported(data){
 				this._imported(data);
 				let {Input, IInput, Output, IOutput} = this.const;
@@ -199,10 +189,10 @@ describe("Blackprint create node with JavaScript", () => {
 		test('Create "Test/Node1" for sketch', async () => {
 			iface1 = sketch.createNode('Test/Node1', {data: {foo: 'bar'}});
 			expect(iface1.data.foo).toBe('bar ok');
-			expect(iface1.node._imported.called).toBe(1);
+			expect(iface1.node._imported).toHaveBeenCalledTimes(1);
 
 			expect(sketch.getNodes('Test/Node1')[0].iface === iface1).toBe(true);
-			iface1.node.update = jestFn();
+			iface1.node.update = jest.fn();
 		});
 
 		test('Create "Test/Node2" for sketch', async () => {
@@ -210,11 +200,11 @@ describe("Blackprint create node with JavaScript", () => {
 			expect(iface2.isSketch).toBe(true);
 			expect(iface2.x).toBe(121);
 			expect(iface2.y).toBe(242);
-			expect(iface2._imported.called).toBe(1);
-			expect(iface2.node._imported.called).toBe(1);
+			expect(iface2._imported).toHaveBeenCalledTimes(1);
+			expect(iface2.node._imported).toHaveBeenCalledTimes(1);
 
 			expect(sketch.iface.helloSketch === iface2).toBe(true);
-			iface2.node.update = jestFn();
+			iface2.node.update = jest.fn();
 		});
 
 		describe("Cable connection", () => {
@@ -269,13 +259,13 @@ describe("Blackprint create node with JavaScript", () => {
 			});
 
 			test('Return correct value', async () => {
-				fn1 = jestFn();
+				fn1 = jest.fn();
 				B.on('port.value', function(ev){
 					expect(ev.cable.value).toBe(12);
 					fn1();
 				});
 
-				fn2 = jestFn();
+				fn2 = jest.fn();
 				B.input.In.on('value', function(ev){
 					expect(ev.cable.value).toBe(12);
 					fn2();
@@ -288,11 +278,11 @@ describe("Blackprint create node with JavaScript", () => {
 			});
 
 			test('Event was triggered', async () => {
-				expect(iface1.node.update.called).toBe(0);
-				expect(iface2.node.update.called).toBe(1);
+				expect(iface1.node.update).toHaveBeenCalledTimes(0);
+				expect(iface2.node.update).toHaveBeenCalledTimes(1);
 
-				expect(fn1.called).toBe(1);
-				expect(fn2.called).toBe(1);
+				expect(fn1).toHaveBeenCalledTimes(1);
+				expect(fn2).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
@@ -302,20 +292,20 @@ describe("Blackprint create node with JavaScript", () => {
 		test('Create "Test/Node1" for non-sketch', async () => {
 			iface1 = engine.createNode('Test/Node1', {data: {foo: 'bar'}});
 			expect(iface1.data.foo).toBe('bar ok');
-			expect(iface1.node._imported.called).toBe(1);
+			expect(iface1.node._imported).toHaveBeenCalledTimes(1);
 
 			expect(engine.getNodes('Test/Node1')[0].iface === iface1).toBe(true);
-			iface1.node.update = jestFn();
+			iface1.node.update = jest.fn();
 		});
 
 		test('Create "Test/Node2" for non-sketch', async () => {
 			iface2 = engine.createNode('Test/Node2', {id: 'helloEngine'});
 			expect(iface2.isSketch).toBe(false);
-			expect(iface2._imported.called).toBe(1);
-			expect(iface2.node._imported.called).toBe(1);
+			expect(iface2._imported).toHaveBeenCalledTimes(1);
+			expect(iface2.node._imported).toHaveBeenCalledTimes(1);
 
 			expect(engine.iface.helloEngine === iface2).toBe(true);
-			iface2.node.update = jestFn();
+			iface2.node.update = jest.fn();
 		});
 
 		describe("Cable connection", () => {
@@ -370,13 +360,13 @@ describe("Blackprint create node with JavaScript", () => {
 			});
 
 			test('Return correct value', async () => {
-				fn1 = jestFn();
+				fn1 = jest.fn();
 				B.on('port.value', function(ev){
 					expect(ev.cable.value).toBe(12);
 					fn1();
 				});
 
-				fn2 = jestFn();
+				fn2 = jest.fn();
 				B.input.In.on('value', function(ev){
 					expect(ev.cable.value).toBe(12);
 					fn2();
@@ -389,11 +379,11 @@ describe("Blackprint create node with JavaScript", () => {
 			});
 
 			test('Event was triggered', async () => {
-				expect(iface1.node.update.called).toBe(0);
-				expect(iface2.node.update.called).toBe(1);
+				expect(iface1.node.update).toHaveBeenCalledTimes(0);
+				expect(iface2.node.update).toHaveBeenCalledTimes(1);
 
-				expect(fn1.called).toBe(1);
-				expect(fn2.called).toBe(1);
+				expect(fn1).toHaveBeenCalledTimes(1);
+				expect(fn2).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
