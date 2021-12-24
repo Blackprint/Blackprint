@@ -5,6 +5,7 @@ import "./blackprint.sf.css";
 
 const {
 	settings,
+	createContext,
 	getContext,
 	loadScope,
 	allowModuleOrigin,
@@ -27,6 +28,7 @@ const {
 export default window.Blackprint;
 export {
 	settings,
+	createContext,
 	getContext,
 	loadScope,
 	allowModuleOrigin,
