@@ -183,18 +183,18 @@ class Cable extends Blackprint.Engine.Cable{
 			title: this.target ? "Disconnect" : "Delete",
 			callback(){cable.disconnect()},
 			hover(){
-				this.owner.iface.$el.addClass('highlight');
+				cable.owner.iface.$el.addClass('highlight');
 
-				if(this.target)
-					this.target.iface.$el.addClass('highlight');
+				if(cable.target)
+					cable.target.iface.$el.addClass('highlight');
 			},
 			unhover(){
-				this.owner.iface.$el.removeClass('highlight');
+				cable.owner.iface.$el.removeClass('highlight');
 
-				if(this.target)
-					this.target.iface.$el.removeClass('highlight');
+				if(cable.target)
+					cable.target.iface.$el.removeClass('highlight');
 			}
-		}], {x: ev.clientX, y: ev.clientY, event: ev, cable});
+		}], {x: ev.clientX, y: ev.clientY, event: ev});
 	}
 
 	disconnect(){
