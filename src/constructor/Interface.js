@@ -138,10 +138,17 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 
 	nodeMenu(ev){
 		var scope = this._scope;
+		let iface = this;
 		var menu = [{
+			title: 'New Node',
+			callback(){
+				scope.sketch.createNode(iface.namespace, {
+					x: iface.x + 10, y: iface.y + 10
+				});
+			}
+		}, {
 			title: 'Delete',
-			args: [this],
-			callback(iface){
+			callback(){
 				var list = scope('nodes').list;
 				var i = list.indexOf(iface);
 
