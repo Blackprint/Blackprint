@@ -58,7 +58,7 @@ function isTouchDevice(){
 	return navigator.maxTouchPoints !== 0;
 }
 
-function createNodesMenu(list, sketch, ev){
+function createNodesMenu(list, sketch, ev, pos){
 	var menu = [];
 	var strArr = [];
 	function deep(obj, target){
@@ -90,8 +90,8 @@ function createNodesMenu(list, sketch, ev){
 	let container = sketch.scope('container');
 	function createNode(namespace){
 		sketch.createNode(namespace, {
-			x: ev.offsetX - container.offset.x,
-			y: ev.offsetY - container.offset.y
+			x: (pos ? pos.x : ev.offsetX) - container.offset.x,
+			y: (pos ? pos.y : ev.offsetY) - container.offset.y
 		});
 	}
 

@@ -75,7 +75,23 @@ class Port extends Blackprint.Engine.Port {
 
 	portRightClick(ev){
 		var scope = this._scope;
-		var menu = [];
+		var menu = [{
+			title: "Suggested Node",
+			callback(){ setTimeout(suggestNode, 220) },
+		}];
+
+		let port = this;
+		if(ev.ctrlKey) return suggestNode();
+		function suggestNode(){
+			let source = port.source === 'input' ? 'output' : 'input';
+			let suggestedNode = Blackprint.Sketch.suggestNode(source, port.type);
+
+			var pos = port.findPortElement(ev.target).getClientRects()[0];
+			pos.event = ev;
+
+			let menu = createNodesMenu(suggestedNode, scope.sketch, ev, pos);
+			scope('dropdown').show(menu, pos);
+		}
 
 		let event = {iface: this, instance: scope.sketch, menu};
 		this.iface.emit('port.menu', event);

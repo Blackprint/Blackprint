@@ -1,10 +1,22 @@
 let _portFunc = new RegExp(`\\.(${Object.keys(Blackprint.Port).join('|')})\\((.*?)\\)`, 'g');
 
 Blackprint.Sketch.suggestNode = function(portType, typeData){
-	if(!typeData.name) throw new Error("Class name is required");
+	let any = false;
+
+	if(typeData !== null){
+		if(!typeData.name) throw new Error("Class name is required");
+		if(typeData === void 0) throw new Error("typeData can't be undefined");
+		if(typeData.constructor === Object && typeData.name === 'Any'){
+			any = true;
+		}
+	}
+	else{
+		any = true;
+		typeData = {};
+	}
 
 	let name = typeData.name;
-	let regex = new RegExp(`:(${typeData.name}|null)\\b`, 'g');
+	let regex = new RegExp(`:(null|${name}|[a-zA-Z_0-9.]+?\.${name})\\b`, 'g');
 	let deep = Blackprint.nodes;
 
 	let temp = {};
@@ -34,8 +46,13 @@ Blackprint.Sketch.suggestNode = function(portType, typeData){
 				}
 
 				str = str.replace(/\s/g, '');
-				str = str.split(portType + '={')[1];
+				if(any && str.includes(portType + '={')){
+					obj[key] = ref;
+					found = true;
+					continue;
+				}
 
+				str = str.split(portType + '={')[1];
 				if(str === void 0) continue;
 
 				if(portType === 'input')
