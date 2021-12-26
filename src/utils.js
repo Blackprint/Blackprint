@@ -57,3 +57,47 @@ const isClass = Blackprint._utils.isClass;
 function isTouchDevice(){
 	return navigator.maxTouchPoints !== 0;
 }
+
+function createNodesMenu(list, sketch, ev){
+	var menu = [];
+	var strArr = [];
+	function deep(obj, target){
+		for(var name in obj){
+			let that = obj[name];
+			if(that == null || that.hidden || that.disabled)
+				continue;
+
+			if(that.constructor === Function){
+				target.push({
+					title: name,
+					args: [strArr.length !== 0 ? strArr.join('/')+'/'+name : name],
+					callback: createNode
+				});
+				continue;
+			}
+
+			var newMenu = [];
+
+			strArr.push(name);
+			deep(that, newMenu);
+			strArr.pop();
+
+			newMenu = newMenu.sort((a, b) => a.title < b.title ? -1 : 1);
+			target.push({title: name, deep: newMenu});
+		}
+	}
+
+	let container = sketch.scope('container');
+	function createNode(namespace){
+		sketch.createNode(namespace, {
+			x: ev.offsetX - container.offset.x,
+			y: ev.offsetY - container.offset.y
+		});
+	}
+
+	deep(list, menu);
+
+	menu = menu.sort((a, b) => a.title < b.title ? -1 : 1);
+	menu.event = ev;
+	return menu;
+}

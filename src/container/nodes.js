@@ -68,13 +68,6 @@ Space.model('nodes', function(My, include){
 		},
 	};
 
-	function createNode(namespace){
-		My.$space.sketch.createNode(namespace, {
-			x: menuEv.offsetX - container.offset.x,
-			y: menuEv.offsetY - container.offset.y
-		});
-	}
-
 	My.checkNodeClick = function(ev){
 		if(ev.target.closest('.ports'))
 			return;
@@ -96,38 +89,7 @@ Space.model('nodes', function(My, include){
 		ev.preventDefault();
 		menuEv = ev;
 
-		var menu = [];
-		var strArr = [];
-		function deep(obj, target){
-			for(var name in obj){
-				let that = obj[name];
-				if(that == null || that.hidden || that.disabled)
-					continue;
-
-				if(that.constructor === Function){
-					target.push({
-						title: name,
-						args: [strArr.length !== 0 ? strArr.join('/')+'/'+name : name],
-						callback: createNode
-					});
-					continue;
-				}
-
-				var newMenu = [];
-
-				strArr.push(name);
-				deep(that, newMenu);
-				strArr.pop();
-
-				newMenu = newMenu.sort((a, b) => a.title < b.title ? -1 : 1);
-				target.push({title: name, deep: newMenu});
-			}
-		}
-
-		menu.event = ev;
-		deep(Blackprint.availableNode, menu);
-
-		menu = menu.sort((a, b) => a.title < b.title ? -1 : 1);
+		let menu = createNodesMenu(Blackprint.availableNode, My.$space.sketch, ev);
 		include('dropdown').show(menu, {x: ev.clientX, y: ev.clientY, event: ev});
 	}
 });
