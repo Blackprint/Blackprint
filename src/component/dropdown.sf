@@ -161,7 +161,7 @@ Blackprint.space.model('dropdown', function(My){
 		if(My.menus.length !== 0)
 			My.menus.splice(0);
 		else
-			addBackdrop();
+			addBackdrop(event || menus.event);
 
 		menus.title = title;
 
@@ -210,10 +210,10 @@ Blackprint.space.model('dropdown', function(My){
 	}
 
 	var backdrop = $('<div class="ground-backdrop"></div>');
-	function addBackdrop(){
+	function addBackdrop(ev){
 		if(backdropCreated) return;
 
-		backdrop.insertBefore(sf.Window.source(My.$el));
+		backdrop.insertBefore(sf.Window.source(My.$el, ev));
 		setTimeout(function(){
 			backdrop.addClass('show');
 			$(sf.Window).on('pointerdown', backdropListener);
