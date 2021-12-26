@@ -194,20 +194,21 @@ class Cable extends Blackprint.Engine.Cable{
 			scope('dropdown').show(menu, {x: ev.clientX, y: ev.clientY, event: ev});
 		}
 
+		let {owner, target} = cable;
 		scope('dropdown').show([{
 			title: this.target ? "Disconnect" : "Delete",
 			callback(){cable.disconnect()},
 			hover(){
-				cable.owner.iface.$el.addClass('highlight');
+				owner.iface.$el.addClass('highlight');
 
-				if(cable.target)
-					cable.target.iface.$el.addClass('highlight');
+				if(target)
+					target.iface.$el.addClass('highlight');
 			},
 			unhover(){
-				cable.owner.iface.$el.removeClass('highlight');
+				owner.iface.$el.removeClass('highlight');
 
-				if(cable.target)
-					cable.target.iface.$el.removeClass('highlight');
+				if(target)
+					target.iface.$el.removeClass('highlight');
 			}
 		}, {
 			title: "Suggested Node",
