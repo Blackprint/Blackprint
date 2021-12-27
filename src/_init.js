@@ -332,26 +332,32 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		}
 
 		// Inject environment data if exist to JSON
-		if(Blackprint.Environment.list.length !== 0)
+		if(options.environment !== false && Blackprint.Environment.list.length !== 0)
 			metadata.env = Blackprint.Environment.map;
 
 		// Find modules
-		let modules = new Set();
-		let _modulesURL = Blackprint._modulesURL;
-		for(let key in json){
-			if(key === '_') continue;
+		if(options.module !== false){
+			let modules = new Set();
+			let _modulesURL = Blackprint._modulesURL;
+			for(let key in json){
+				if(key === '_') continue;
 
-			for (var i = 0; i < _modulesURL.length; i++) {
-				if(key in _modulesURL[i]){
-					modules.add(_modulesURL[i]._url);
-					break;
+				for (var i = 0; i < _modulesURL.length; i++) {
+					if(key in _modulesURL[i]){
+						modules.add(_modulesURL[i]._url);
+						break;
+					}
 				}
 			}
+
+			// Inject modules URL if exist to JSON
+			if(modules.size !== 0)
+				metadata.moduleJS = [...modules];
 		}
 
-		// Inject modules URL if exist to JSON
-		if(modules.size !== 0)
-			metadata.moduleJS = [...modules];
+		// Remove metadata if empty
+		if(options.module === false && options.environment === false)
+			delete json._;
 
 		json = JSON.stringify(json, options.replacer, options.space);
 
