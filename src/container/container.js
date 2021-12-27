@@ -125,6 +125,8 @@ Space.model('container', function(My, include){
 			My.size.h -= movementY;
 			My.pos.y += movementY;
 		}
+
+		My.onMove && My.onMove(My.pos);
 	}
 
 	My.moveContainer = function(ev){
