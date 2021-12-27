@@ -83,6 +83,7 @@ Blackprint Engine
   - [ ] Add example for using ES6 modules importing system
     - It's possible to use SkyPack or something else, but it currently can't compile `.sf`
 - [ ] Better documentation or website
+- [ ] Nodes docs generator
 - [ ] Tutorial and samples
 - [ ] Blackprint Nodes Package Manager or Marketplace
 - [ ] Engine's performance benchmark

@@ -1,3 +1,16 @@
+# 0.4.3
+
+### Feature
+- Add `suggestNode` and `suggestFromPort` for suggesting possible related node (may not 100% accurate)
+- CTRL + right clicking on port and detached cable will use `suggestNode` feature
+- Add options to disable export for environment and module URL
+- Add header menu for creating similar node
+
+### Bug Fix
+- Fix error when right clicking cable
+- Fix DropDown when being called after a delay
+- Fix cable deletion for disconnected cable
+
 # 0.4.2
 
 ### Bug Fix
