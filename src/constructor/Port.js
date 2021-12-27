@@ -83,8 +83,7 @@ class Port extends Blackprint.Engine.Port {
 		let port = this;
 		if(ev.ctrlKey) return suggestNode();
 		function suggestNode(){
-			let source = port.source === 'input' ? 'output' : 'input';
-			let suggestedNode = Blackprint.Sketch.suggestNode(source, port.type);
+			let suggestedNode = Blackprint.Sketch.suggestFromPort(port);
 
 			var pos = port.findPortElement(ev.target).getClientRects()[0];
 			pos.event = ev;

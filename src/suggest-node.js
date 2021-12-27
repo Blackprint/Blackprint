@@ -1,6 +1,22 @@
 let _portFunc = new RegExp(`\\.(${Object.keys(Blackprint.Port).join('|')})\\((.*?)\\)`, 'g');
 
-Blackprint.Sketch.suggestNode = function(portType, typeData){
+function _constructorCleaner(claz){
+	let str = claz.toString();
+	let proto = claz.prototype;
+	let _proto = Object.getOwnPropertyDescriptors(proto);
+
+	for(let prop in _proto){
+		if(prop !== 'constructor' && proto[prop] instanceof Function){
+			str = str.split(proto[prop].toString())[0];
+			break;
+		}
+	}
+
+	return str.replace(/\s/g, '');
+}
+
+// This is just feature to suggest, may not 100% accurate
+Blackprint.Sketch.suggestNode = function(portType, typeData, fromList){
 	let any = false;
 
 	if(typeData !== null){
@@ -15,9 +31,10 @@ Blackprint.Sketch.suggestNode = function(portType, typeData){
 		typeData = {};
 	}
 
-	let name = typeData.name;
-	let regex = new RegExp(`:(null|${name}|[a-zA-Z_0-9.]+?\.${name})\\b`, 'g');
-	let deep = Blackprint.nodes;
+	let name = typeData.name.split(' ');
+	let _name = name.join('|');
+	let regex = new RegExp(`:(null|(?:${_name})|[a-zA-Z_0-9.]+?\.(?:${_name}))\\b`, 'g');
+	let deep = fromList || Blackprint.nodes;
 
 	let temp = {};
 	function dive(nodes, obj){
@@ -34,18 +51,7 @@ Blackprint.Sketch.suggestNode = function(portType, typeData){
 				else found = true;
 			}
 			else{
-				let str = ref.toString();
-				let proto = ref.prototype;
-				let _proto = Object.getOwnPropertyDescriptors(proto);
-
-				for(let prop in _proto){
-					if(prop !== 'constructor' && proto[prop] instanceof Function){
-						str = str.split(proto[prop].toString())[0];
-						break;
-					}
-				}
-
-				str = str.replace(/\s/g, '');
+				let str = _constructorCleaner(ref);
 				if(any && str.includes(portType + '={')){
 					obj[key] = ref;
 					found = true;
@@ -63,10 +69,19 @@ Blackprint.Sketch.suggestNode = function(portType, typeData){
 
 				// Blackprint.Port.*(.*?)
 				str.replace(_portFunc, function(full, func, args){
-					if(name === 'Function' && func === 'Trigger')
+					if(name.includes('Function') && func === 'Trigger')
 						match = true;
 
-					if(!match) match = args.includes(name) || args.includes('null');
+					if(!match){
+						match = args.includes('null');
+
+						if(!match){
+							for (var i = 0; i < name.length; i++) {
+								match = args.includes(name[i]);
+								if(match) break;
+							}
+						}
+					}
 				});
 
 				if(!match){
@@ -88,4 +103,38 @@ Blackprint.Sketch.suggestNode = function(portType, typeData){
 	if(dive(deep, temp))
 		return temp;
 	else return {};
+}
+
+// This is just feature to suggest, may not 100% accurate
+Blackprint.Sketch.suggestFromPort = function(port){
+	let source = port.source === 'input' ? 'output' : 'input';
+
+	if(port.type.name.length >= 3)
+		return Blackprint.Sketch.suggestNode(source, port.type);
+	// else try find the unminified class name
+
+	let node = port.iface.node;
+	let str = _constructorCleaner(node.constructor);
+
+	str = str.split(port.source + '={')[1];
+
+	if(port.source === 'input')
+		str = str.split('output={')[0];
+	else str = str.split('input={')[0];
+
+	let regex = new RegExp(`${port.name}:([a-zA-Z_0-9.\\[\\]\\(\\), ]+)[,}]`);
+	let match = str.match(regex);
+
+	if(match === null) throw new Error("Failed to get type name");
+	str = match[1];
+
+	let match2 = str.match(_portFunc);
+	if(match2 !== null){
+		str = match2 = match2[1];
+
+		if(match2.slice(0, 1) === '[') // array/union
+			str = match2.slice(1, -1).split(',').join(' ');
+	}
+
+	return Blackprint.Sketch.suggestNode(source, {name: str});
 }
