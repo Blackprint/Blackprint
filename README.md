@@ -85,7 +85,8 @@ Blackprint Engine
 - [ ] Better documentation or website
 - [ ] Nodes docs generator
 - [ ] Tutorial and samples
-- [ ] Blackprint Nodes Package Manager or Marketplace
+- [ ] Blackprint Nodes Package Manager
+  - [x] Use NPM registry for Node.js/Deno/Browser
 - [ ] Engine's performance benchmark
 
 ---
