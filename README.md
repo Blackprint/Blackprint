@@ -1,6 +1,6 @@
 <p align="center"><a href="#" target="_blank" rel="noopener noreferrer"><img width="150" src="https://user-images.githubusercontent.com/11073373/141421213-5decd773-a870-4324-8324-e175e83b0f55.png" alt="Blackprint"></a></p>
 
-<h1 align="center">Blackprint</h1>
+<h1 align="center">Blackprint Sketch</h1>
 <p align="center">A general purpose node to node visual programming interface for lowering programming language's steep learning curve, and introduce an easy way to experimenting with your beautiful project for other developer.</p>
 
 <p align="center">
@@ -15,12 +15,13 @@
 </p>
 
 <p align="center">
-  <b>Blackprint Editor</b> is built using ScarletsFrame (<a href="https://krausest.github.io/js-framework-benchmark/current.html">performance</a> and <a href="https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example">features</a>).
+  <b>Blackprint Sketch</b> is built using ScarletsFrame (<a href="https://krausest.github.io/js-framework-benchmark/current.html">performance</a> and <a href="https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example">features</a>).
   <br><b>Blackprint Engine</b> is distributed separately for different runtime environment.
+  <br><a href="https://github.com/Blackprint/blackprint.github.io">Blackprint Editor</a> is created as a online IDE for browser.
 </p>
 
 <p align="center">
-  Basic Node's UI design was inspired by UE4 Blueprint and can be modified with HTML/CSS.<br>If you have better UI theme, feel free to show it on Discord. When using the editor/sketch library, please use Chromium based browser for better rendering performance.
+  Basic Node's UI design was inspired by UE4 Blueprint and can be modified with HTML/CSS. Please use Chromium based browser for better rendering performance.
 </p>
 
 ## Documentation
@@ -29,11 +30,13 @@
 > Maybe someone skilled like you interested to improve this open source project.<br>
 > And because of their contribution, you can enjoy the improved Blackprint :)
 
-Please go to this [link](http://stefansarya.gitbook.io/blackprint) for the documentation and version conventions on [CONTRIBUTING.md](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md#version-conventions) if you want to use Blackprint before reaching v1.0.0.
+The documentation haven't been finished ([link](http://stefansarya.gitbook.io/blackprint)), but there are inline documentation on [the template](https://github.com/Blackprint/template-js) and version conventions on [CONTRIBUTING.md](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md#version-conventions) if you want to use Blackprint before reaching v1.0.0.
 
-If you're looking for minimal sketch example to get started for your project:
+If you're looking for minimal sketch example to get started integrate for your project:
 - [JSBin](https://jsbin.com/bakulux/edit?html,js,output)
 - [StackBlitz](https://stackblitz.com/edit/minimal-blackprint?file=index.js)
+
+If you want Blackprint to just execute exported JSON, you can just use the engine.
 
 ## Blackprint Roadmap
 This roadmap could be changed on the future, feel free to request feature or report an issue.
@@ -74,7 +77,7 @@ Blackprint Engine
   - [ ] Auto attach cable to first suitable port
   - [ ] Add hint for beginner guide
   - [ ] Node list editor (currently with right click)
-  - [ ] Error/log popup or overlay
+  - [x] Error/log popup or overlay
   - [x] Show overview or notice when importing nodes from URL
   - [ ] Multiple sketch workspaces or tabs
     - [ ] Export multiple sketch workspaces to JSON
@@ -87,11 +90,10 @@ Blackprint Engine
 - [ ] Tutorial and samples
 - [ ] Blackprint Nodes Package Manager
   - [x] Use NPM registry for Node.js/Deno/Browser
-- [ ] Engine's performance benchmark
 
 ---
 
-Currently the main focus is Blackprint for browser. PHP, Node.js, and Deno engine could have some changes on the future.
+Currently the main focus is Blackprint for JavaScript. PHP, and Golang engine could have some changes on the future.
 
 ## Other possible plan
 Blackprint Engine:
@@ -99,11 +101,6 @@ Blackprint Engine:
 - **Java** (or maybe Kotlin)
 - **Rust** (may get removed from this list)
 - **C++** (for Arduino if possible)
-
-Planned Code Generation:
-- **Dockerfile** (for networks/container relations)
-
-If you're looking for AST, currently you can use the exported Blackprint JSON.
 
 ## Some Note
 Each engine may have different node compatibilities.<br>
