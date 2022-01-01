@@ -1,6 +1,6 @@
 <p align="center"><a href="#" target="_blank" rel="noopener noreferrer"><img width="150" src="https://user-images.githubusercontent.com/11073373/141421213-5decd773-a870-4324-8324-e175e83b0f55.png" alt="Blackprint"></a></p>
 
-<h1 align="center">Blackprint Sketch</h1>
+<h1 align="center">Blackprint</h1>
 <p align="center">A general purpose node to node visual programming interface for lowering programming language's steep learning curve, and introduce an easy way to experimenting with your beautiful project for other developer.</p>
 
 <p align="center">
@@ -17,7 +17,7 @@
 <p align="center">
   <b>Blackprint Sketch</b> is built using ScarletsFrame (<a href="https://krausest.github.io/js-framework-benchmark/current.html">performance</a> and <a href="https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example">features</a>).
   <br><b>Blackprint Engine</b> is distributed separately for different runtime environment.
-  <br><a href="https://github.com/Blackprint/blackprint.github.io">Blackprint Editor</a> is created as a online IDE for browser.
+  <br><b>Blackprint Editor</b> is created as a <a href="https://github.com/Blackprint/blackprint.github.io">online IDE</a> for browser.
 </p>
 
 <p align="center">

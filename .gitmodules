@@ -1,6 +1,6 @@
-[submodule "example"]
-	path = example
-	url = https://github.com/Blackprint/blackprint.github.io
 [submodule "engine-js"]
 	path = engine-js
 	url = https://github.com/Blackprint/engine-js.git
+[submodule "editor"]
+	path = editor
+	url = https://github.com/Blackprint/blackprint.github.io
