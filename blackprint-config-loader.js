@@ -120,9 +120,9 @@ module.exports = function(SFC, Gulp){
 			}
 		});
 
-		config.versioning = 'example/dev.html';
+		config.versioning = 'editor/dev.html';
 		config.autoGenerate = 'url+"/dist/**",'
-		// config.stripURL = 'example/';
+		// config.stripURL = 'editor/';
 
 		if(event === 'removed'){
 			if(oldConfig[_path] === void 0) return;

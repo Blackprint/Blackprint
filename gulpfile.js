@@ -1,6 +1,7 @@
 process.stdout.write("Loading scarletsframe-compiler\r");
 let compileEngineOnly = false;
 let isCI = process.env.CI;
+let withNodes = false;
 
 let Gulp = require('gulp');
 let os = require('os');
@@ -12,8 +13,8 @@ let notifier = os.platform() === 'win32'
 let compileTargets = {
 	// Compiler for Blackprint Engine
 	'engine-js':{
-		versioning: !isCI && 'example/dev.html',
-		// stripURL:'example/',
+		versioning: !isCI && 'editor/dev.html',
+		// stripURL:'editor/',
 
 		js:{
 			file:'dist/engine.min.js',
@@ -37,25 +38,25 @@ if(!compileEngineOnly){
 	// Use `default` if you're not exporting project as library/module
 	if(!isCI){
 		compileTargets.default = {
-			versioning: 'example/dev.html',
-			stripURL: 'example/',
+			versioning: 'editor/dev.html',
+			stripURL: 'editor/',
 
 			js:{
-				file:'example/assets/myjs.min.js',
+				file:'editor/assets/myjs.min.js',
 
 				// Will be processed from the top to bottom
 				combine:[
 					// Combine files from all directory recursively
-					'example/src/**/*.js',
+					'editor/src/**/*.js',
 				],
 			},
 			scss:{
-				file:'example/assets/mycss.min.css',
-				combine:'example/src/**/*.scss',
+				file:'editor/assets/mycss.min.css',
+				combine:'editor/src/**/*.scss',
 			},
 			sf:{
-				file:'example/assets/custom.sf',
-				combine:'example/src/**/*.sf',
+				file:'editor/assets/custom.sf',
+				combine:'editor/src/**/*.sf',
 			},
 		};
 	}
@@ -63,8 +64,8 @@ if(!compileEngineOnly){
 	// This needed if you want to maintain Blackprint's source code
 	// You can specify other property if you exporting something
 	compileTargets.blackprint = {
-		versioning: !isCI && 'example/dev.html',
-		// stripURL:'example/',
+		versioning: !isCI && 'editor/dev.html',
+		// stripURL:'editor/',
 
 		js:{
 			file:'dist/blackprint.min.js',
@@ -111,7 +112,7 @@ let SFC = require("scarletsframe-compiler")({
 
 		// Standalone server with BrowserSync
 		server:{
-			baseDir:'example/',
+			baseDir:'editor/',
 			index:'index.html',
 		}
 	},
@@ -146,12 +147,12 @@ let SFC = require("scarletsframe-compiler")({
 	},
 
 	onInit(){
-		if(!compileEngineOnly)
+		if(withNodes && !compileEngineOnly)
 			require('./blackprint-config-loader.js')(SFC, Gulp);
 	},
 	beforeInit(){
-		if(!compileEngineOnly && !isCI)
-			SFC.clearGenerateImport('example/dev.html');
+		if(withNodes && !compileEngineOnly && !isCI)
+			SFC.clearGenerateImport('editor/dev.html');
 	},
 
 	// ===== Modify me, add slash as last character if it's directory =====

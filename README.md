@@ -44,7 +44,7 @@ Blackprint Engine
 | Name | JS (Browser) | JS (Node.js / Deno) | PHP | Go | Python | C# |
 | --- | --- | --- | --- | --- | --- | --- |
 | Blackprint Engine | [![JS](https://img.shields.io/npm/v/@blackprint/engine.svg?include_prereleases)](https://www.npmjs.com/package/@blackprint/sketch) | [![JS](https://img.shields.io/npm/v/@blackprint/engine.svg?include_prereleases)](https://www.npmjs.com/package/@blackprint/sketch) | [![PHP](https://img.shields.io/github/v/release/blackprint/engine-php?include_prereleases)](https://packagist.org/packages/blackprint/engine) | [![Go](https://img.shields.io/github/v/release/blackprint/engine-go?include_prereleases)](https://github.com/Blackprint/engine-go) | - | - |
-| Minimal example | ✔️ [Link](https://github.com/Blackprint/blackprint.github.io/blob/master/src/js/register-handler.js) | ✔️ [Link](https://github.com/Blackprint/engine-js/tree/master/example) | ✔️ [Link](https://github.com/Blackprint/engine-php/tree/master/example) | ✔️ [Link](https://github.com/Blackprint/engine-go/tree/main/example) | - | - |
+| Minimal example | ✔️ [Link](https://github.com/Blackprint/blackprint.github.io/blob/master/src/global/sampleList.js) | ✔️ [Link](https://github.com/Blackprint/engine-js/tree/master/example) | ✔️ [Link](https://github.com/Blackprint/engine-php/tree/master/example) | ✔️ [Link](https://github.com/Blackprint/engine-go/tree/main/example) | - | - |
 | Environment variables | ✔️ | ✔️ | - | - | - | - |
 | Import modules from URL | ✔️ | ✔️ | - | - | - | - |
 | Remote connection control | - | - | - | - | - | - |
