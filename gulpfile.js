@@ -1,7 +1,7 @@
 process.stdout.write("Loading scarletsframe-compiler\r");
 let compileEngineOnly = false;
 let isCI = process.env.CI;
-let withNodes = false;
+let withNodes = true;
 
 let Gulp = require('gulp');
 let os = require('os');
