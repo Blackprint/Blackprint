@@ -20,9 +20,10 @@
   <br><b>Blackprint Editor</b> is created as a <a href="https://github.com/Blackprint/blackprint.github.io">online IDE</a> for browser.
 </p>
 
-<p align="center">
-  Basic Node's UI design was inspired by UE4 Blueprint and can be modified with HTML/CSS. Please use Chromium based browser for better rendering performance.
-</p>
+## Note
+Please use Chromium based browser for better rendering performance.
+
+Default Node's UI design was inspired by UE4 Blueprint and can be modified with HTML/CSS. If you're using Blackprint Editor you can choose different theme on the settings, and here's the <a href="https://github.com/Blackprint/blackprint.github.io/blob/ed9cb35fdd0fb79acf2bede4d007e3afd2b40399/src/node-design.scss#L47-L67">code</a> for reference if you want to create your own theme.
 
 ## Documentation
 > Warning: This project haven't reach it stable version<br>
