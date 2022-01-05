@@ -210,9 +210,12 @@ var IFaceDecoration = Blackprint.Interface.Decoration = class IFaceDecoration {
 	info(msg){ return this.headInfo('info', msg) }
 	warn(msg){ return this.headInfo('warn', msg) }
 	error(msg){ return this.headInfo('error', msg) }
-	success(msg){
+	success(msg, timeout=5000){
 		let model = this.headInfo('success', msg);
-		setTimeout(()=> model.destroy(), 5000);
+
+		if(timeout){
+			setTimeout(()=> model.destroy(), timeout);
+		}
 
 		return model;
 	}
