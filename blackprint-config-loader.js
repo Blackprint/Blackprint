@@ -2,7 +2,10 @@ const fs = require('fs');
 
 module.exports = function(SFC, Gulp){
 	let resolvePath = require('path').resolve;
-	let configWatch = Gulp.watch("nodes/**/blackprint.config.js", {ignoreInitial: false});
+	let configWatch = Gulp.watch("nodes/**/blackprint.config.js", {
+		ignoreInitial: false,
+		ignored: (path => path.includes('node_modules') || path.includes('.git') || path.includes('turbo_modules'))
+	});
 
 	function convertCWD(paths, dirPath){
 		dirPath += '/';
