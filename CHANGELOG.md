@@ -1,3 +1,8 @@
+# 0.4.4
+
+- Tidy up
+- Improve some element style
+
 # 0.4.3
 
 ### Feature
