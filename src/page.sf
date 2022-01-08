@@ -320,13 +320,14 @@ sf-space[blackprint]{
       .other {
         position: absolute;
         bottom: calc(100% - 15px);
-        display: flex;
+        display: grid;
         left: -1px;
-        justify-content: center;
+        justify-items: center;
         right: -1px;
 
         .item {
           display: inline-flex;
+          margin-top: 10px;
         }
       }
 
