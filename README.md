@@ -38,6 +38,7 @@ If you're looking for minimal sketch example to get started integrate for your p
 - [StackBlitz](https://stackblitz.com/edit/minimal-blackprint?file=index.js)
 
 If you want Blackprint to just execute exported JSON, you can just use the engine.
+- [JSBin - Multiply example](https://jsbin.com/gaxisop/edit?html,js,output)
 
 ## Blackprint Roadmap
 This roadmap could be changed on the future, feel free to request feature or report an issue.
