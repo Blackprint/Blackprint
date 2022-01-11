@@ -113,17 +113,14 @@ Blackprint.Sketch.suggestFromPort = function(port){
 		return Blackprint.Sketch.suggestNode(source, port.type);
 	// else try find the unminified class name
 
-	let node = port.iface.node;
-	let str = _constructorCleaner(node.constructor);
-
+	let str = _constructorCleaner(port.iface.node.constructor);
 	str = str.split(port.source + '={')[1];
 
 	if(port.source === 'input')
 		str = str.split('output={')[0];
 	else str = str.split('input={')[0];
 
-	let regex = new RegExp(`${port.name}:([a-zA-Z_0-9.\\[\\]\\(\\), ]+)[,}]`);
-	let match = str.match(regex);
+	let match = str.match(new RegExp(`${port.name}:([a-zA-Z_0-9.\\[\\]\\(\\), ]+)[,}]`));
 
 	if(match === null) throw new Error("Failed to get type name");
 	str = match[1];
@@ -136,5 +133,53 @@ Blackprint.Sketch.suggestFromPort = function(port){
 			str = match2.slice(1, -1).split(',').join(' ');
 	}
 
-	return Blackprint.Sketch.suggestNode(source, {name: str});
+	let A = Blackprint.Sketch.suggestNode(source, {name: str});
+	if(port.type.constructor === Object)
+		return A;
+
+	let B = Blackprint.Sketch.suggestByRef(source, port.type);
+	return Object.assign(A, B);
+}
+
+Blackprint.Sketch.suggestByRef = function(source, clazz, fromList){
+	let temp = {};
+	function dive(nodes, obj){
+		let found = false;
+
+		for(let key in nodes){
+			let ref = nodes[key];
+
+			if(ref.constructor === Object){
+				obj[key] = {};
+
+				if(!dive(nodes[key], obj[key]))
+					delete obj[key];
+				else found = true;
+			}
+			else{
+				let metadata = ref[`$${source}`];
+				if(metadata === void 0) continue;
+
+				let match = false;
+				for(let prop in metadata){
+					if(metadata[prop] === clazz){
+						match = true;
+						break;
+					}
+				}
+
+				if(match){
+					obj[key] = ref;
+					found = true;
+				}
+			}
+		}
+
+		return found;
+	}
+
+	let deep = fromList || Blackprint.nodes;
+	if(dive(deep, temp))
+		return temp;
+	else return {};
 }
