@@ -100,9 +100,12 @@ Blackprint.Sketch.suggestNode = function(portType, typeData, fromList){
 		return found;
 	}
 
-	if(dive(deep, temp))
+	dive(deep, temp);
+	if(any || typeData.constructor === Object)
 		return temp;
-	else return {};
+
+	deepMerge(temp, Blackprint.Sketch.suggestByRef(portType, typeData));
+	return temp;
 }
 
 // This is just feature to suggest, may not 100% accurate
@@ -133,12 +136,7 @@ Blackprint.Sketch.suggestFromPort = function(port){
 			str = match2.slice(1, -1).split(',').join(' ');
 	}
 
-	let A = Blackprint.Sketch.suggestNode(source, {name: str});
-	if(port.type.constructor === Object)
-		return A;
-
-	let B = Blackprint.Sketch.suggestByRef(source, port.type);
-	return Object.assign(A, B);
+	return Blackprint.Sketch.suggestNode(source, {name: str});
 }
 
 Blackprint.Sketch.suggestByRef = function(source, clazz, fromList){
