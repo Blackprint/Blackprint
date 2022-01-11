@@ -52,6 +52,22 @@ function deepCopy(target, source){
 	}
 }
 
+function deepMerge(target, source){
+	for(var key in source){
+		// Skip any character that contain $ or _
+		// Because it's marked as private property
+		if(key.includes('$') || key.includes('_'))
+			continue;
+
+		if(typeof target[key] === 'object'){
+			deepMerge(target[key], source[key]);
+			continue;
+		}
+
+		target[key] = source[key];
+	}
+}
+
 const isClass = Blackprint._utils.isClass;
 
 function isTouchDevice(){
