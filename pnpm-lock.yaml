@@ -10,7 +10,7 @@ specifiers:
   jest: ^27.4
   node-notifier: ^9.0.0
   scarletsframe: 0.35.x
-  scarletsframe-compiler: 0.6.19
+  scarletsframe-compiler: 0.6.20
 
 dependencies:
   scarletsframe: 0.35.6
@@ -24,7 +24,7 @@ devDependencies:
   gulp: 4.0.2
   jest: 27.4.5_node-notifier@9.0.0
   node-notifier: 9.0.0
-  scarletsframe-compiler: 0.6.19_@babel+core@7.16.0
+  scarletsframe-compiler: 0.6.20_@babel+core@7.16.0
 
 packages:
 
@@ -140,7 +140,7 @@ packages:
       '@babel/traverse': 7.16.3
       debug: 4.3.1
       lodash.debounce: 4.0.8
-      resolve: 1.17.0
+      resolve: 1.20.0
       semver: 6.3.0
     transitivePeerDependencies:
       - supports-color
@@ -2034,6 +2034,7 @@ packages:
 
   /bindings/1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
+    requiresBuild: true
     dependencies:
       file-uri-to-path: 1.0.0
     dev: true
@@ -2126,7 +2127,7 @@ packages:
       http-proxy: 1.18.1
       immutable: 3.8.2
       localtunnel: 2.0.1
-      micromatch: 4.0.2
+      micromatch: 4.0.4
       opn: 5.3.0
       portscanner: 2.1.1
       qs: 6.2.3
@@ -3278,6 +3279,7 @@ packages:
 
   /file-uri-to-path/1.0.0:
     resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -3475,6 +3477,7 @@ packages:
     resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -5091,7 +5094,7 @@ packages:
       is-plain-object: 2.0.4
       object.map: 1.0.1
       rechoir: 0.6.2
-      resolve: 1.17.0
+      resolve: 1.20.0
     dev: true
 
   /limiter/1.1.5:
@@ -5239,7 +5242,7 @@ packages:
     dependencies:
       findup-sync: 2.0.0
       micromatch: 3.1.10
-      resolve: 1.17.0
+      resolve: 1.20.0
       stack-trace: 0.0.10
     dev: true
 
@@ -5303,14 +5306,6 @@ packages:
       regex-not: 1.0.2
       snapdragon: 0.8.2
       to-regex: 3.0.2
-    dev: true
-
-  /micromatch/4.0.2:
-    resolution: {integrity: sha512-y7FpHSbMUMoyPbYUSzO6PaZ6FyRnQOpHuKwbo1G+Knck95XVU4QAiKdGEnj5wwoS7PlOgthX/09u5iFJ+aYf5Q==}
-    engines: {node: '>=8'}
-    dependencies:
-      braces: 3.0.2
-      picomatch: 2.2.2
     dev: true
 
   /micromatch/4.0.4:
@@ -5542,7 +5537,7 @@ packages:
     resolution: {integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==}
     dependencies:
       hosted-git-info: 2.8.8
-      resolve: 1.17.0
+      resolve: 1.20.0
       semver: 5.7.1
       validate-npm-package-license: 3.0.4
     dev: true
@@ -5905,11 +5900,6 @@ packages:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
     dev: true
 
-  /picomatch/2.2.2:
-    resolution: {integrity: sha512-q0M/9eZHzmr0AulXyPwNfZjtwZ/RBZlbN3K3CErVrk50T2ASYI7Bye0EvekFY3IP1Nt2DHu0re+V2ZHIpMkuWg==}
-    engines: {node: '>=8.6'}
-    dev: true
-
   /picomatch/2.3.0:
     resolution: {integrity: sha512-lY1Q/PiJGC2zOv/z391WOTD+Z02bCgsFfvxoXXf6h7kv9o+WmsmzYqrAwY63sNgOxE4xEdq0WyUnXfKeBrSvYw==}
     engines: {node: '>=8.6'}
@@ -6149,14 +6139,14 @@ packages:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
     dependencies:
-      picomatch: 2.2.2
+      picomatch: 2.3.0
     dev: true
 
   /rechoir/0.6.2:
     resolution: {integrity: sha1-hSBLVNuoLVdC4oyWdW70OvUOM4Q=}
     engines: {node: '>= 0.10'}
     dependencies:
-      resolve: 1.17.0
+      resolve: 1.20.0
     dev: true
 
   /redent/3.0.0:
@@ -6355,12 +6345,6 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /resolve/1.17.0:
-    resolution: {integrity: sha512-ic+7JYiV8Vi2yzQGFWOkiZD5Z9z7O2Zhm9XMaTxdJExKasieFCr+yXZ/WmXsckHiKl12ar0y6XiXDx3m4RHn1w==}
-    dependencies:
-      path-parse: 1.0.6
-    dev: true
-
   /resolve/1.20.0:
     resolution: {integrity: sha512-wENBPt4ySzg4ybFQW2TT1zMQucPK95HSh/nq2CFTZVOGut2+pQvSsgtda4d26YrYcr067wjbmzOG8byDPBX63A==}
     dependencies:
@@ -6434,8 +6418,8 @@ packages:
       xmlchars: 2.2.0
     dev: true
 
-  /scarletsframe-compiler/0.6.19_@babel+core@7.16.0:
-    resolution: {integrity: sha512-2e9/vvpERWhjQaP4C3kUc74yqmccWjCCSFTJlWcuhE0yBimX8IxhVmlRiO+k0nTJmc510mVFIGiBsfW98I7WuQ==}
+  /scarletsframe-compiler/0.6.20_@babel+core@7.16.0:
+    resolution: {integrity: sha512-5a/Q69HUPsi8CK5ar8HHM83Fg51upb3LU6L8ukIv2uteXxYII6XHqv+5Dzy7MJg4uRp/3glJ0RoERP+fsguyuA==}
     dependencies:
       autoprefixer: 10.3.5_postcss@8.3.8
       browser-sync: 2.27.7
@@ -6719,6 +6703,7 @@ packages:
 
   /source-map-resolve/0.5.3:
     resolution: {integrity: sha512-Htz+RnsXWk5+P2slx5Jh3Q66vhQj1Cllm0zvnaY98+NFx+Dv2CF/f5O/t8x+KaNdrdIAsruNzoh/KpialbqAnw==}
+    deprecated: See https://github.com/lydell/source-map-resolve#deprecated
     dependencies:
       atob: 2.1.2
       decode-uri-component: 0.2.0
@@ -6729,6 +6714,7 @@ packages:
 
   /source-map-resolve/0.6.0:
     resolution: {integrity: sha512-KXBr9d/fO/bWo97NXsPIAW1bFSBOuCnjbNTBMO7N59hsv5i9yzRDfcYwwt0l04+VqnKC+EwzvJZIP/qkuMgR/w==}
+    deprecated: See https://github.com/lydell/source-map-resolve#deprecated
     dependencies:
       atob: 2.1.2
       decode-uri-component: 0.2.0
