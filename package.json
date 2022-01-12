@@ -28,7 +28,7 @@
     "gulp": "^4.0.2",
     "jest": "^27.4",
     "node-notifier": "^9.0.0",
-    "scarletsframe-compiler": "0.6.19"
+    "scarletsframe-compiler": "0.6.20"
   },
   "keywords": [
     "visual-programming",
