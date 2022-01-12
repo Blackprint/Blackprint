@@ -31,14 +31,19 @@ Default Node's UI design was inspired by UE4 Blueprint and can be modified with 
 > Maybe someone skilled like you interested to improve this open source project.<br>
 > And because of their contribution, you can enjoy the improved Blackprint :)
 
-The documentation haven't been finished ([link](http://stefansarya.gitbook.io/blackprint)), but there are inline documentation on [the template](https://github.com/Blackprint/template-js) and version conventions on [CONTRIBUTING.md](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md#version-conventions) if you want to use Blackprint before reaching v1.0.0.
+The documentation haven't been finished, but there are inline documentation on [the template](https://github.com/Blackprint/template-js) and some information on [CONTRIBUTING.md](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md#version-conventions) if you want to use Blackprint before reaching v1.0.0.
 
-If you're looking for minimal sketch example to get started integrate for your project:
+## Example
+
+If you're looking for minimal sketch example to get started integrate for your editor project:
 - [JSBin](https://jsbin.com/bakulux/edit?html,js,output)
 - [StackBlitz](https://stackblitz.com/edit/minimal-blackprint?file=index.js)
 
-If you want Blackprint to just execute exported JSON, you can just use the engine.
-- [JSBin - Multiply example](https://jsbin.com/gaxisop/edit?html,js,output)
+If you just want to execute exported Blackprint JSON, you can just use the engine. I also provide few simple example for different framework in case you want to use integrate to your frontend framework. For non-browser engine, there are example on it's repository. You can copy and paste the JSON to [Blackprint Editor](https://blackprint.github.io/) to see the nodes arrangement. The example below is using this [arrangement](https://blackprint.github.io/#page/sketch/1#;importSketch:tZHLbsIwEEX_ZdYmTgKpGq8oiEWrsinLClVubIHBL8UOCkL59zovKbTLthvLHs2998z4Bh9AbqAMqyR_2QF5h6P31hGMC6ajk2NciksZae6xtgovPyUtzrYUOrwN424ZR0kUYybcUJgVRjsjeaRODtCv3YS2lf8jL15TZQeyfYNg3ZPiV3MIg99AAIkR1ECy7AHBFUgS5wgEAwLSHA68hGaP4LklwjspGC9Xph6VSad8HITZYhC6ri8J9Ix62u46bo8LlRUHkiJQQgOZJXFIVrRuM8PNeW4DTJQ0AdNUPiQO0j5sjkBTFQzgKTCFpq6a3iHk8zuE9N8QVh1C2Mym3y_eUn_E20p6YeV10h-s52lPl8cDnBrbpiFv3IXy5E_GYfX1e9aq8t5ovBPta1QsuqxF3kVl2dR6LUVx5uznFJuaF7158wU).
+- [Multiply - Event Listener](https://jsbin.com/gaxisop/edit?html,js,output)
+- [Multiply - ScarletsFrame](https://jsbin.com/nigarib/edit?html,js,output)
+- [Multiply - Vue](https://jsbin.com/bocehax/edit?html,js,output)
+- [Multiply - React](https://jsbin.com/watogus/edit?js,output)
 
 ## Blackprint Roadmap
 This roadmap could be changed on the future, feel free to request feature or report an issue.
