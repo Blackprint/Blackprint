@@ -67,7 +67,7 @@ describe("Blackprint register", () => {
 				this._imported(data);
 				Object.assign(this.iface.data, data);
 
-				let {Input, IInput, Output, IOutput} = this.const;
+				let {Input, IInput, Output, IOutput} = this.ref;
 
 				// test('Node1: check port references')
 				expect(Input === this.input).toBe(true);
@@ -108,7 +108,7 @@ describe("Blackprint register", () => {
 				this._imported(data);
 				// Object.assign(this.iface.data, data);
 
-				let {Input, IInput, Output, IOutput} = this.const;
+				let {Input, IInput, Output, IOutput} = this.ref;
 
 				// test('Node2: check port references')
 				expect(Input === this.input).toBe(true);
@@ -120,6 +120,11 @@ describe("Blackprint register", () => {
 				// test('Node2: check default port value')
 				expect(Input.In).toBe(0);
 				expect(Output.Out).toBe(undefined);
+			}
+
+			_destroyed = false;
+			destroy(){
+				this._destroyed = true;
 			}
 		}
 		Blackprint.registerNode("Test/Node2", Node2);
@@ -138,7 +143,7 @@ describe("Blackprint register", () => {
 			_imported = jest.fn();
 			imported(data){
 				this._imported(data);
-				let {Input, IInput, Output, IOutput} = this.const;
+				let {Input, IInput, Output, IOutput} = this.ref;
 
 				// test('Iface2: check port references')
 				expect(Input === this.node.input).toBe(true);
@@ -166,7 +171,7 @@ describe("Blackprint register", () => {
 			_imported = jest.fn();
 			imported(data){
 				this._imported(data);
-				let {Input, IInput, Output, IOutput} = this.const;
+				let {Input, IInput, Output, IOutput} = this.ref;
 
 				// test('Iface2: check port references')
 				expect(Input === this.node.input).toBe(true);
@@ -255,7 +260,7 @@ describe("Blackprint create node with JavaScript", () => {
 				expect(A === iface1.node).toBe(true);
 				expect(B === iface2).toBe(true);
 
-				expect(A.const.IOutput.Out.cables[0].input.iface === B).toBe(true);
+				expect(A.ref.IOutput.Out.cables[0].input.iface === B).toBe(true);
 			});
 
 			test('Return correct value', async () => {
@@ -356,7 +361,7 @@ describe("Blackprint create node with JavaScript", () => {
 				expect(A === iface1.node).toBe(true);
 				expect(B === iface2).toBe(true);
 
-				expect(A.const.IOutput.Out.cables[0].input.iface === B).toBe(true);
+				expect(A.ref.IOutput.Out.cables[0].input.iface === B).toBe(true);
 			});
 
 			test('Return correct value', async () => {
@@ -410,5 +415,39 @@ describe("Blackprint create node with JavaScript", () => {
 		expect(engine.iface.helloEngine.id).toBe('helloEngine');
 		expect(engine.iface.dummySketch).not.toBeDefined();
 		expect(engine.iface.dummyEngine).not.toBeDefined();
+	});
+
+	function deleteNode(instance, prop){
+		let temp = instance.iface[prop];
+		instance.deleteNode(temp);
+
+		expect(instance.iface[prop]).not.toBeDefined();
+		expect(instance.ref[prop]).not.toBeDefined();
+		expect(temp.node._destroyed).toBe(true);
+
+		// Check if port still have a cable/connection
+		for(let val of Object.values(temp.output))
+			expect(val.cables.length).toBe(0);
+
+		for(let val of Object.values(temp.input))
+			expect(val.cables.length).toBe(0);
+
+
+		let temp2 = instance.getNodes('Test/Node1')[0].iface;
+
+		// Check if port still have a cable/connection
+		for(let val of Object.values(temp2.output))
+			expect(val.cables.length).toBe(0);
+
+		for(let val of Object.values(temp2.input))
+			expect(val.cables.length).toBe(0);
+	}
+
+	test('Delete "Test/Node2" for sketch', async () => {
+		deleteNode(sketch, 'helloSketch');
+	});
+
+	test('Delete "Test/Node2" for engine', async () => {
+		deleteNode(engine, 'helloEngine');
 	});
 });

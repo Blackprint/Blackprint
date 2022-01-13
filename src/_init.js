@@ -13,7 +13,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 	constructor(){
 		super();
 
-		this.iface = {}; // { id => object }
+		this.iface = {}; // { id => IFace }
+		this.ref = {}; // { id => Port references }
+
 		this.ifaceList = [];
 
 		this.index = Blackprint.index++;
@@ -385,8 +387,49 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		return json;
 	}
 
+	deleteNode(iface){
+		let scope = this.scope;
+
+		var list = scope('nodes').list;
+		var i = list.indexOf(iface);
+
+		if(i === -1)
+			return scope.sketch.emit('error', {
+				type: 'node_delete_not_found',
+				data: {iface}
+			});
+
+		iface.node.destroy && iface.node.destroy();
+		list.splice(i, 1); // iface.destroy will be called by SF
+
+		let ifaceList = this.ifaceList;
+		i = ifaceList.indexOf(iface);
+
+		if(i !== -1)
+			ifaceList.splice(i, 1);
+
+		var check = Blackprint.Interface._ports;
+		for (var i = 0; i < check.length; i++) {
+			var portList = iface[check[i]];
+
+			for(var port in portList){
+				portList[port].disconnectAll();
+			}
+		}
+
+		// Delete reference
+		delete this.iface[iface.id];
+		delete this.ref[iface.id];
+	}
+
 	clearNodes(){
-		this.scope('nodes').list.splice(0);
+		let list = this.scope('nodes').list;
+		for (var i = 0; i < list.length; i++) {
+			let temp = list[i].node;
+			temp.destroy && temp.destroy();
+		}
+
+		list.splice(0);
 		this.scope('cables').list.splice(0);
 	}
 
