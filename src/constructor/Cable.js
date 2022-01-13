@@ -8,15 +8,22 @@ class Cable extends Blackprint.Engine.Cable{
 
 		this.connected = false;
 		this.valid = true;
+		this.childs = [];
+		this.hasChild = false;
 
 		var container = port._scope('container');
 		var Ofst = container.offset;
+
+		if(obj instanceof Cable){
+			this.parentCable = obj.head2;
+			obj = {x: obj.head2[0], y: obj.head2[1]};
+		}
 
 		let x = (obj.x - container.pos.x - Ofst.x) / container.scale;
 		let y = (obj.y - container.pos.y - Ofst.y) / container.scale;
 		this.linePath = `${x} ${y} ${x} ${y}`;
 
-		this.head1 = [x, y];
+		this.head1 = this.parentCable || [x, y];
 		this.head2 = this.head1.slice(0); // Copy on same position
 
 		this.typeName = !port.type ? 'Any' : port.type.name;
@@ -120,6 +127,9 @@ class Cable extends Blackprint.Engine.Cable{
 	cableHeadClicked(ev, isCreating){
 		ev.stopPropagation();
 
+		if(!isCreating && ev.ctrlKey)
+			return this.createChild(ev);
+
 		var container = this._scope('container');
 		var cablesModel = this._scope('cables');
 
@@ -173,6 +183,17 @@ class Cable extends Blackprint.Engine.Cable{
 				(ev.clientY - container.pos.y - Ofst.y) / container.scale
 			];
 		}
+	}
+
+	createChild(ev){
+		this.hasChild = true;
+
+		let newCable = new Cable(this, this.owner);
+		this.childs.push(newCable);
+
+		this._scope('cables').list.push(newCable);
+
+		newCable.cableHeadClicked(ev, true);
 	}
 
 	cableMenu(ev){
