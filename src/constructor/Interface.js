@@ -149,27 +149,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 		}, {
 			title: 'Delete',
 			callback(){
-				var list = scope('nodes').list;
-				var i = list.indexOf(iface);
-
-				if(i === -1)
-					return scope.sketch.emit('error', {
-						type: 'node_delete_not_found',
-						data: {iface}
-					});
-
-				scope.$destroyed = true;
-				list.splice(i, 1);
-
-				var check = Blackprint.Interface._ports;
-				for (var i = 0; i < check.length; i++) {
-					var portList = iface[check[i]];
-					for(var port in portList){
-						var cables = portList[port].cables;
-						for (var a = cables.length - 1; a >= 0; a--)
-							cables[a].disconnect();
-					}
-				}
+				scope.sketch.deleteNode(iface);
 			}
 		}];
 
