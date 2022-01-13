@@ -136,8 +136,8 @@ Space.model('container', function(My, include){
 		if(ev.button === 0) return; // left click
 
 		My.$el.on('pointermove', moveContainer);
-
 		let cancelContextMenu = false;
+
 		$(sf.Window)
 		.once('contextmenu', {capture: true}, function(ev2){
 			if(cancelContextMenu){
@@ -148,9 +148,8 @@ Space.model('container', function(My, include){
 		.once('pointerup', function(){
 			My.$el.off('pointermove', moveContainer);
 
-			if(ev.button === 2 && isMoved){ // right click, disable context menu if moved
+			if(ev.button === 2 && isMoved) // right click, disable context menu if moved
 				cancelContextMenu = true;
-			}
 
 			isMoved = false;
 
