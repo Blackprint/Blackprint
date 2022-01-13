@@ -196,6 +196,18 @@ class Cable extends Blackprint.Engine.Cable{
 		newCable.cableHeadClicked(ev, true);
 	}
 
+	_delete(){
+		let childs = this.childs;
+		for (var i = 0; i < childs.length; i++)
+			childs[i]._delete();
+
+		let list = this._scope('cables').list;
+
+		let a = list.indexOf(this);
+		if(a !== -1)
+			list.splice(a, 1);
+	}
+
 	cableMenu(ev){
 		ev.stopPropagation();
 		let cable = this;
@@ -248,6 +260,8 @@ class Cable extends Blackprint.Engine.Cable{
 		// Remove from cable list
 		list.splice(list.indexOf(this), 1);
 		super.disconnect();
+
+		this._delete();
 
 		// console.log('A cable was removed', this);
 	}
