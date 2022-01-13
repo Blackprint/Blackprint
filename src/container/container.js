@@ -113,7 +113,9 @@ Space.model('container', function(My, include){
 		My.origSize.h = h;
 	}
 
+	let isMoved = false;
 	function moveContainer(ev){
+		isMoved = true;
 		let {movementX, movementY} = ev;
 
 		if(!(My.pos.x >= 0 && movementX > 0)){
@@ -131,10 +133,26 @@ Space.model('container', function(My, include){
 
 	My.moveContainer = function(ev){
 		if(My.config.move === false) return;
+		if(ev.button === 0) return; // left click
+
 		My.$el.on('pointermove', moveContainer);
 
-		$(sf.Window).once('pointerup', function(){
+		let cancelContextMenu = false;
+		$(sf.Window)
+		.once('contextmenu', {capture: true}, function(ev2){
+			if(cancelContextMenu){
+				ev2.stopPropagation();
+				ev2.preventDefault();
+			}
+		})
+		.once('pointerup', function(){
 			My.$el.off('pointermove', moveContainer);
+
+			if(ev.button === 2 && isMoved){ // right click, disable context menu if moved
+				cancelContextMenu = true;
+			}
+
+			isMoved = false;
 
 			// Fix incorrect scaling when the movement was too fast
 			My.size.w = My.origSize.w / My.scale - My.pos.x;
