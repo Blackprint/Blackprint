@@ -198,6 +198,66 @@ class Cable extends Blackprint.Engine.Cable{
 		}
 	}
 
+	cablePathClicked(ev){
+		let hasBranch = this._allBranch !== void 0;
+		let lastBranch = null;
+		if(hasBranch){
+			lastBranch = this.branch;
+			this.branch = [];
+		}
+
+		let cable = this.createBranch();
+		let isSwap = false;
+
+		if(!hasBranch){
+			isSwap = true;
+			cable.cableTrunk = this;
+			this._allBranch.push(this);
+		}
+		else{
+			if(this.input != null){
+				isSwap = true;
+
+				let temp = this._inputCable;
+				temp.splice(temp.indexOf(this), 1);
+
+				temp = this.output.cables;
+				temp.splice(temp.indexOf(this), 1);
+			}
+			else{
+				cable.branch = lastBranch;
+				for (var i = 0; i < lastBranch.length; i++) {
+					lastBranch[i].head1 = cable.head1;
+				}
+			}
+		}
+
+		if(isSwap){
+			this._inputCable.push(cable);
+
+			// Swap from input port
+			let list = this.input.cables;
+			list.push(cable);
+			list.splice(list.indexOf(this), 1);
+
+			this.output.cables.push(cable);
+
+			cable.target = cable.input = this.input;
+			this.target = this.input = void 0;
+			cable.connected = true;
+			this.connected = false;
+		}
+
+		this.parentCable = cable;
+
+		this.cableHeadClicked({
+			stopPropagation(){ev.stopPropagation()},
+			target: ev.target,
+			clientX: ev.clientX,
+			clientY: ev.clientY,
+		});
+	}
+
 	createBranch(ev){
 		if(this.source !== 'output')
 			throw new Error("Cable branch currently can only be created from output port");
@@ -303,6 +363,20 @@ class Cable extends Blackprint.Engine.Cable{
 			menu.push({
 				title: "Suggested Node",
 				callback(){ setTimeout(suggestNode, 220) },
+			});
+		}
+
+		if(cable.branch !== void 0 && cable.branch.length === 1){
+			menu.push({
+				title: "Merge cable",
+				callback(){
+					let child = cable.branch[0];
+					child.cableTrunk = child;
+					child.head1 = cable.head1;
+
+					cable.branch = [];
+					cable._delete();
+				},
 			});
 		}
 
