@@ -19,7 +19,8 @@ Space.model('nodes', function(My, include){
 					continue;
 
 				for(var key in which){
-					var cables = which[key].cables;
+					let port = which[key];
+					var cables = port.cables;
 					if(cables.length === 0)
 						continue;
 
@@ -28,10 +29,19 @@ Space.model('nodes', function(My, include){
 
 					var cable;
 					for (var a = 0; a < cables.length; a++) {
-						if(cables[a].owner.iface === iface)
-							cable = cables[a].head1;
+						let cable = cables[a];
+
+						// Avoid moving branch cable
+						if(cable._allBranch !== void 0
+						   && port.source === 'output'
+						   && cable.cableTrunk !== cable){
+							continue;
+						}
+
+						if(cable.owner.iface === iface)
+							cable = cable.head1;
 						else
-							cable = cables[a].head2;
+							cable = cable.head2;
 
 						var center = rect.width/2;
 						cable[0] = (rect.x+center - container.pos.x - Ofst.x) / container.scale;
