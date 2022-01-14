@@ -8,14 +8,13 @@ class Cable extends Blackprint.Engine.Cable{
 
 		this.connected = false;
 		this.valid = true;
-		this.childs = [];
 		this.hasChild = false;
 
 		var container = port._scope('container');
 		var Ofst = container.offset;
 
 		if(obj instanceof Cable){
-			this.parentCable = obj.head2;
+			this.parentCable = obj;
 			obj = {x: obj.head2[0], y: obj.head2[1]};
 		}
 
@@ -23,7 +22,7 @@ class Cable extends Blackprint.Engine.Cable{
 		let y = (obj.y - container.pos.y - Ofst.y) / container.scale;
 		this.linePath = `${x} ${y} ${x} ${y}`;
 
-		this.head1 = this.parentCable || [x, y];
+		this.head1 = this.parentCable ? this.parentCable.head2 : [x, y];
 		this.head2 = this.head1.slice(0); // Copy on same position
 
 		this.typeName = !port.type ? 'Any' : port.type.name;
@@ -128,7 +127,7 @@ class Cable extends Blackprint.Engine.Cable{
 		ev.stopPropagation();
 
 		if(!isCreating && ev.ctrlKey)
-			return this.createChild(ev);
+			return this.createBranch(ev);
 
 		var container = this._scope('container');
 		var cablesModel = this._scope('cables');
@@ -185,21 +184,53 @@ class Cable extends Blackprint.Engine.Cable{
 		}
 	}
 
-	createChild(ev){
+	createBranch(ev){
+		if(this.source !== 'output')
+			throw new Error("Cable branch currently can only be created from output port");
+
 		this.hasChild = true;
+		this.branch = [];
+
+		this._allBranch ??= []; // All cables reference
+		this._inputPort ??= []; // All input port IFace reference
 
 		let newCable = new Cable(this, this.owner);
-		this.childs.push(newCable);
+		newCable._allBranch = this._allBranch; // copy reference
+		newCable._inputPort = this._inputPort; // copy reference
+
+		if(this.source === 'output')
+			this.output = newCable.output = this.owner;
+
+		this._allBranch.push(newCable);
+		this.branch.push(newCable);
 
 		this._scope('cables').list.push(newCable);
-
 		newCable.cableHeadClicked(ev, true);
 	}
 
+	_connected(){
+		super._connected();
+
+		if(this._allBranch !== void 0){
+			if(this.source === 'input'){
+				// Sync output port to every branch
+				let cables = this._allBranch;
+				for (var i = cables.length-1; i >= 0; i--) {
+					let cable = cables[i];
+					cable.output = this.output;
+				}
+			}
+
+			this._inputPort.push(this.input);
+		}
+	}
+
 	_delete(){
-		let childs = this.childs;
-		for (var i = 0; i < childs.length; i++)
-			childs[i]._delete();
+		if(this.hasChild){
+			let branch = this.branch;
+			for (var i = 0; i < branch.length; i++)
+				branch[i]._delete();
+		}
 
 		let list = this._scope('cables').list;
 
