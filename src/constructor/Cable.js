@@ -8,7 +8,7 @@ class Cable extends Blackprint.Engine.Cable{
 
 		this.connected = false;
 		this.valid = true;
-		this.hasChild = false;
+		this.hasBranch = false;
 
 		var container = port._scope('container');
 		var Ofst = container.offset;
@@ -188,15 +188,17 @@ class Cable extends Blackprint.Engine.Cable{
 		if(this.source !== 'output')
 			throw new Error("Cable branch currently can only be created from output port");
 
-		this.hasChild = true;
+		this.hasBranch = true;
+		this.cableTrunk ??= this;
 		this.branch = [];
 
 		this._allBranch ??= []; // All cables reference
-		this._inputPort ??= []; // All input port IFace reference
+		this._inputCable ??= []; // All input port IFace reference
 
 		let newCable = new Cable(this, this.owner);
 		newCable._allBranch = this._allBranch; // copy reference
-		newCable._inputPort = this._inputPort; // copy reference
+		newCable._inputCable = this._inputCable; // copy reference
+		newCable.cableTrunk = this.cableTrunk; // copy reference
 
 		if(this.source === 'output')
 			this.output = newCable.output = this.owner;
@@ -204,7 +206,7 @@ class Cable extends Blackprint.Engine.Cable{
 		this._allBranch.push(newCable);
 		this.branch.push(newCable);
 
-		this._scope('cables').list.push(newCable);
+		this._scope('cables').list.unshift(newCable);
 		newCable.cableHeadClicked(ev, true);
 	}
 
@@ -212,21 +214,24 @@ class Cable extends Blackprint.Engine.Cable{
 		super._connected();
 
 		if(this._allBranch !== void 0){
-			if(this.source === 'input'){
+			if(this.source === 'input'){ // This may never be called for now
 				// Sync output port to every branch
-				let cables = this._allBranch;
+				/*let cables = this._allBranch;
 				for (var i = cables.length-1; i >= 0; i--) {
 					let cable = cables[i];
 					cable.output = this.output;
-				}
+				}*/
+
+				throw new Error("Not implemented");
 			}
 
-			this._inputPort.push(this.input);
+			this._inputCable.push(this);
+			this.cableTrunk.output.cables.push(this);
 		}
 	}
 
 	_delete(){
-		if(this.hasChild){
+		if(this.hasBranch){
 			let branch = this.branch;
 			for (var i = 0; i < branch.length; i++)
 				branch[i]._delete();
