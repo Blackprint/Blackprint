@@ -163,6 +163,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		}
 
 		let cableConnects = [];
+		let branchPrepare = new Map();
 
 		// Create cable only from output and property
 		// > Important to be separated from above, so the cable can reference to loaded nodes
@@ -171,11 +172,13 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 			// Every nodes that using this namespace name
 			for (var a = 0; a < nodes.length; a++){
-				var iface = inserted[nodes[a].i];
+				let node = nodes[a];
+				var iface = inserted[node.i];
 
 				// If have output connection
-				if(nodes[a].output !== void 0){
-					var out = nodes[a].output;
+				if(node.output !== void 0){
+					var out = node.output;
+					var _cableMeta = node._cable;
 
 					// Every output port that have connection
 					for(var portName in out){
@@ -189,6 +192,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 						}
 
 						var port = out[portName];
+
+						if(_cableMeta)
+							branchPrepare.set(linkPortA, _cableMeta[portName])
 
 						// Current output's available targets
 						for (var k = 0; k < port.length; k++) {
@@ -222,13 +228,52 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			}
 		}
 
+		let branchMap = new Map();
+
 		await $.afterRepaint();
 		for (var i = 0; i < cableConnects.length; i++) {
 			let {output, portName, linkPortA, input, target, linkPortB} = cableConnects[i];
 
-			// Create cable from NodeA
-			var rectA = getPortRect(output, portName);
-			var cable = linkPortA.createCable(rectA);
+			let cable;
+			let _cable = branchPrepare.get(linkPortA);
+			if(_cable !== void 0){
+				if(_cable !== true){
+					branchPrepare.set(linkPortA, true);
+
+					// Create cable from NodeA
+					let rectA = getPortRect(output, portName);
+
+					// Create branches
+					for (let z = 0; z < _cable.length; z++)
+						deepCreate(_cable[z], linkPortA.createCable(rectA));
+
+					function deepCreate(temp, cable) {
+						if(temp.branch !== void 0){
+							cable.head2[0] = temp.x;
+							cable.head2[1] = temp.y;
+
+							let list = temp.branch;
+							for (let z = 0; z < list.length; z++)
+								deepCreate(list[z], cable.createBranch());
+
+							return;
+						}
+
+						if(!branchMap.has(linkPortA))
+							branchMap.set(linkPortA, []);
+
+						branchMap.get(linkPortA)[temp.id] = cable;
+					}
+				}
+
+				cable = branchMap.get(linkPortA)[target.parentId];
+			}
+
+			if(cable === void 0){
+				// Create cable from NodeA
+				var rectA = getPortRect(output, portName);
+				cable = linkPortA.createCable(rectA);
+			}
 
 			// Positioning the cable head2 into target port position from NodeB
 			var rectB = getPortRect(input, target.name);
@@ -281,6 +326,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 				deepCopy(data.data, iface.data);
 			}
 
+			let cableMetadata = {};
+			let hasCableMetadata = false;
+
 			if(iface.output !== void 0){
 				var output = data.output = {};
 				var output_ = iface.output;
@@ -296,8 +344,20 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 					if(output[name] === void 0)
 						output[name] = [];
 
+					let pendingBranch = [];
+					let parentMap = new Map()
+
 					for (var a = 0; a < cables.length; a++) {
-						var target = cables[a].owner === port ? cables[a].target : cables[a].owner;
+						let cable = cables[a];
+						var target = cable.owner === port ? cable.target : cable.owner;
+
+						if(cable.hasBranch){
+							if(cable._inputCable.length !== 0)
+								pendingBranch.push(cable);
+
+							continue;
+						}
+
 						if(target === void 0)
 							continue;
 
@@ -310,17 +370,58 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 							name: target.name
 						};
 
+						if(cable.parentCable !== void 0)
+							parentMap.set(cable, temp);
+
 						if(target.id)
 							temp.id = target.id;
 
 						haveValue = true;
 						output[name].push(temp);
 					}
+
+					if(pendingBranch.length !== 0){
+						let parentCable = 0;
+
+						let meta = cableMetadata[name] = [];
+						hasCableMetadata = true;
+
+						function deepBranch(cable, save){
+							if(cable.branch){
+								let branch = cable.branch;
+
+								save.x = cable.head2[0];
+								save.y = cable.head2[1];
+								save.branch = [];
+
+								for (let z = 0; z < branch.length; z++){
+									let temp = {};
+									save.branch.push(temp);
+									deepBranch(branch[z], temp);
+								}
+
+								return;
+							}
+
+							let temp = parentMap.get(cable);
+							save.id = temp.parentId = parentCable++;
+						}
+
+						for (var z = 0; z < pendingBranch.length; z++) {
+							let temp = {};
+							meta.push(temp);
+
+							deepBranch(pendingBranch[z], temp);
+						}
+					}
 				}
 
 				if(haveValue === false)
 					delete data.output;
 			}
+
+			if(hasCableMetadata)
+				data._cable = cableMetadata;
 
 			json[iface.namespace].push(data);
 		}

@@ -220,6 +220,7 @@ class Cable extends Blackprint.Engine.Cable{
 		this._allBranch.push(newCable);
 		this.branch.push(newCable);
 
+		if(ev === void 0) return newCable;
 		newCable.cableHeadClicked(ev, true);
 	}
 
