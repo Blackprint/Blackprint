@@ -1,6 +1,14 @@
 var dotGlow = document.createElement('div');
 dotGlow.classList.add('bp-dot-glow');
 
+function _deleteFromList(list, item){
+	if(list === void 0) return;
+
+	let a = list.indexOf(item);
+	if(a !== -1)
+		list.splice(a, 1);
+}
+
 class Cable extends Blackprint.Engine.Cable{
 	constructor(obj, port){
 		super(port);
@@ -9,13 +17,16 @@ class Cable extends Blackprint.Engine.Cable{
 		this.connected = false;
 		this.valid = true;
 		this.hasBranch = false;
+		this._destroyed = false;
 
 		var container = port._scope('container');
 		var Ofst = container.offset;
 
+		let unshift = false;
 		if(obj instanceof Cable){
 			this.parentCable = obj;
 			obj = {x: obj.head2[0], y: obj.head2[1]};
+			unshift = true;
 		}
 
 		let x = (obj.x - container.pos.x - Ofst.x) / container.scale;
@@ -30,7 +41,10 @@ class Cable extends Blackprint.Engine.Cable{
 
 		// Push to cable list
 		var list = port._scope('cables').list;
-		list.push(this);
+
+		if(unshift)
+			list.unshift(this);
+		else list.push(this);
 
 		// Get SVG Path element
 		this.pathEl = list.getElement(this).firstElementChild;
@@ -190,7 +204,7 @@ class Cable extends Blackprint.Engine.Cable{
 
 		this.hasBranch = true;
 		this.cableTrunk ??= this;
-		this.branch = [];
+		this.branch ??= [];
 
 		this._allBranch ??= []; // All cables reference
 		this._inputCable ??= []; // All input port IFace reference
@@ -206,7 +220,6 @@ class Cable extends Blackprint.Engine.Cable{
 		this._allBranch.push(newCable);
 		this.branch.push(newCable);
 
-		this._scope('cables').list.unshift(newCable);
 		newCable.cableHeadClicked(ev, true);
 	}
 
@@ -230,18 +243,23 @@ class Cable extends Blackprint.Engine.Cable{
 		}
 	}
 
-	_delete(){
+	_delete(isDeep){
 		if(this.hasBranch){
 			let branch = this.branch;
 			for (var i = 0; i < branch.length; i++)
-				branch[i]._delete();
+				branch[i]._delete(true);
 		}
 
-		let list = this._scope('cables').list;
+		_deleteFromList(this._scope('cables').list, this);
+		_deleteFromList(this._inputCable, this);
+		_deleteFromList(this._allBranch, this);
+		_deleteFromList(this.output.cables, this);
 
-		let a = list.indexOf(this);
-		if(a !== -1)
-			list.splice(a, 1);
+		if(this.input !== void 0)
+			_deleteFromList(this.input.cables, this);
+
+		if(isDeep && this._destroyed === false)
+			super.disconnect();
 	}
 
 	cableMenu(ev){
@@ -291,12 +309,8 @@ class Cable extends Blackprint.Engine.Cable{
 	}
 
 	disconnect(){
-		var list = this._scope('cables').list;
-
-		// Remove from cable list
-		list.splice(list.indexOf(this), 1);
 		super.disconnect();
-
+		this._destroyed = true;
 		this._delete();
 
 		// console.log('A cable was removed', this);
