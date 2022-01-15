@@ -209,12 +209,11 @@ class Cable extends Blackprint.Engine.Cable{
 	}
 
 	cablePathClicked(ev){
-		let hasBranch = this._allBranch !== void 0;
 		let current = this;
 		let clickedEl = ev.target;
 
-		let cable;
-		if(!hasBranch){
+		let cable, assignPosFor;
+		if(!this.hasBranch){
 			cable = current.createBranch();
 
 			cable.cableTrunk = current;
@@ -223,37 +222,41 @@ class Cable extends Blackprint.Engine.Cable{
 
 			// Swap from input port
 			let list = current.input.cables;
-			list.push(cable);
-			list.splice(list.indexOf(current), 1);
-
-			current.output.cables.push(cable);
+			list[list.indexOf(current)] = cable;
 
 			cable.target = cable.input = current.input;
 			current.target = current.input = void 0;
-			cable.connected = true;
+			cable.connected = current.connected;
 			current.connected = false;
+			current.hasBranch = true;
+
+			assignPosFor = cable.head1;
 		}
 		else{
 			if(current.branch == null || current.branch.length === 0){
 				cable = current.parentCable.createBranch();
-				let parentBranch = current.parentCable.branch;
-				parentBranch.splice(parentBranch.indexOf(current), 1);
 
-				current.head1 = cable.head2 = [ev.clientX, ev.clientY];
+				let parentBranch = current.parentCable.branch;
+				parentBranch[parentBranch.indexOf(current)] = cable;
+
+				// current.head1 = cable.head2 = [ev.clientX, ev.clientY];
 				cable.branch = [current];
 
 				current = cable;
 				clickedEl = current.pathEl;
 
 				current.parentCable = cable;
+				assignPosFor = cable.head1;
 			}
 			else{
 				cable = current.createBranch();
 				current.branch.pop();
 
-				cable.head1 = current.head2 = [ev.clientX, ev.clientY];
+				// cable.head1 = current.head2 = [ev.clientX, ev.clientY];
 				cable.branch = current.branch;
 				current.branch = [cable];
+
+				assignPosFor = cable.head1;
 			}
 		}
 
@@ -263,6 +266,9 @@ class Cable extends Blackprint.Engine.Cable{
 			clientX: ev.clientX,
 			clientY: ev.clientY,
 		}, true);
+
+		if(assignPosFor !== void 0)
+			Object.assign(current.head2, assignPosFor);
 	}
 
 	createBranch(ev){
@@ -391,9 +397,16 @@ class Cable extends Blackprint.Engine.Cable{
 
 					if(cable.parentCable !== void 0){
 						let branch = cable.parentCable.branch;
-						let i = branch.indexOf(cable);
-						branch[i] = child;
+						branch[branch.indexOf(cable)] = child;
 						child.parentCable = cable.parentCable;
+					}
+					else {
+						let cables = cable.output.cables;
+
+						if(cables.includes(child) === false)
+							cables[cables.indexOf(cable)] = child;
+
+						child.parentCable = void 0;
 					}
 
 					cable.branch = [];
