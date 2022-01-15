@@ -10,7 +10,7 @@ function _deleteFromList(list, item){
 }
 
 class Cable extends Blackprint.Engine.Cable{
-	constructor(obj, port){
+	constructor(obj, port, head2){
 		super(port);
 		this._scope = port._scope;
 
@@ -33,8 +33,8 @@ class Cable extends Blackprint.Engine.Cable{
 		let y = (obj.y - container.pos.y - Ofst.y) / container.scale;
 		this.linePath = `${x} ${y} ${x} ${y}`;
 
-		this.head1 = this.parentCable ? this.parentCable.head2 : [x, y];
-		this.head2 = this.head1.slice(0); // Copy on same position
+		this.head1 = this.parentCable ? this.parentCable.head2.slice(0) : [x, y];
+		this.head2 = head2 ? head2.slice(0) : this.head1.slice(0); // Copy on same position
 
 		this.typeName = !port.type ? 'Any' : port.type.name;
 		this.source = port.source;
@@ -164,6 +164,16 @@ class Cable extends Blackprint.Engine.Cable{
 				(ev.clientX - container.pos.x - Ofst.x) / container.scale,
 				(ev.clientY - container.pos.y - Ofst.y) / container.scale
 			];
+
+			if(cable.branch !== void 0 && cable.branch.length !== 0){
+				let branch = cable.branch;
+				for (var i = 0; i < branch.length; i++) {
+					let _cable = branch[i];
+					if(_cable.head1 === cable.head2) continue;
+
+					_cable.head1 = cable.head2;
+				}
+			}
 		}
 
 		var elem = cablesModel.list.getElement(cable);
@@ -200,65 +210,81 @@ class Cable extends Blackprint.Engine.Cable{
 
 	cablePathClicked(ev){
 		let hasBranch = this._allBranch !== void 0;
-		let lastBranch = null;
-		if(hasBranch){
-			lastBranch = this.branch;
-			this.branch = [];
-		}
+		let current = this;
+		let clickedEl = ev.target;
+		let assignPosFor = void 0;
 
-		let cable = this.createBranch();
-		let isSwap = false;
-
+		let cable, isSwap = false;
 		if(!hasBranch){
 			isSwap = true;
-			cable.cableTrunk = this;
-			this._allBranch.push(this);
+			cable = current.createBranch();
+
+			cable.cableTrunk = current;
+			current._allBranch.push(current);
 		}
 		else{
-			if(this.input != null){
+			if(current.input != null){
 				isSwap = true;
+				cable = current.createBranch();
 
-				let temp = this._inputCable;
-				temp.splice(temp.indexOf(this), 1);
+				let temp = current._inputCable;
+				temp.splice(temp.indexOf(current), 1);
 
-				temp = this.output.cables;
-				temp.splice(temp.indexOf(this), 1);
+				temp = current.output.cables;
+				temp.splice(temp.indexOf(current), 1);
 			}
 			else{
-				cable.branch = lastBranch;
-				for (var i = 0; i < lastBranch.length; i++) {
-					lastBranch[i].head1 = cable.head1;
+				let lastBranch = current.branch;
+				current.branch = [];
+
+				current._delete();
+
+				if(current.parentCable === void 0){
+					throw new Error("Implement me");
 				}
+
+				cable = current.parentCable.createBranch();
+				cable.head2[0] = ev.clientX;
+				cable.head2[1] = ev.clientY;
+
+				let cableB = cable.createBranch(void 0, current.head2);
+				cableB.branch = lastBranch;
+				// cableB.head2 = current.head2;
+
+				current = cable;
+				clickedEl = cable.pathEl;
+				assignPosFor = cableB.head1;
 			}
 		}
 
 		if(isSwap){
-			this._inputCable.push(cable);
+			current._inputCable.push(cable);
 
 			// Swap from input port
-			let list = this.input.cables;
+			let list = current.input.cables;
 			list.push(cable);
-			list.splice(list.indexOf(this), 1);
+			list.splice(list.indexOf(current), 1);
 
-			this.output.cables.push(cable);
+			current.output.cables.push(cable);
 
-			cable.target = cable.input = this.input;
-			this.target = this.input = void 0;
+			cable.target = cable.input = current.input;
+			current.target = current.input = void 0;
 			cable.connected = true;
-			this.connected = false;
+			current.connected = false;
 		}
 
-		this.parentCable = cable;
-
-		this.cableHeadClicked({
+		current.cableHeadClicked({
 			stopPropagation(){ev.stopPropagation()},
-			target: ev.target,
+			target: clickedEl,
 			clientX: ev.clientX,
 			clientY: ev.clientY,
-		});
+		}, true);
+
+		if(assignPosFor !== void 0)
+			Object.assign(assignPosFor, current.head2);
 	}
 
-	createBranch(ev){
+	createBranch(ev, head2){
 		if(this.source !== 'output')
 			throw new Error("Cable branch currently can only be created from output port");
 
@@ -269,7 +295,7 @@ class Cable extends Blackprint.Engine.Cable{
 		this._allBranch ??= []; // All cables reference
 		this._inputCable ??= []; // All input port IFace reference
 
-		let newCable = new Cable(this, this.owner);
+		let newCable = new Cable(this, this.owner, head2);
 		newCable._allBranch = this._allBranch; // copy reference
 		newCable._inputCable = this._inputCable; // copy reference
 		newCable.cableTrunk = this.cableTrunk; // copy reference
@@ -307,7 +333,7 @@ class Cable extends Blackprint.Engine.Cable{
 	_delete(isDeep){
 		if(this.hasBranch){
 			let branch = this.branch;
-			for (var i = 0; i < branch.length; i++)
+			for (var i = branch.length-1; i >= 0; i--)
 				branch[i]._delete(true);
 		}
 
@@ -315,6 +341,14 @@ class Cable extends Blackprint.Engine.Cable{
 		_deleteFromList(this._inputCable, this);
 		_deleteFromList(this._allBranch, this);
 		_deleteFromList(this.output.cables, this);
+
+		if(this.parentCable !== void 0){
+			let branch = this.parentCable.branch;
+			let i = branch.indexOf(this);
+
+			if(i !== -1)
+				branch.splice(i, 1);
+		}
 
 		if(this.input !== void 0)
 			_deleteFromList(this.input.cables, this);
@@ -373,6 +407,13 @@ class Cable extends Blackprint.Engine.Cable{
 					let child = cable.branch[0];
 					child.cableTrunk = child;
 					child.head1 = cable.head1;
+
+					if(cable.parentCable !== void 0){
+						let branch = cable.parentCable.branch;
+						let i = branch.indexOf(cable);
+						branch[i] = child;
+						child.parentCable = cable.parentCable;
+					}
 
 					cable.branch = [];
 					cable._delete();
