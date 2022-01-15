@@ -210,7 +210,6 @@ class Cable extends Blackprint.Engine.Cable{
 
 	cablePathClicked(ev){
 		let current = this;
-		let clickedEl = ev.target;
 
 		let cable, assignPosFor;
 		if(!this.hasBranch){
@@ -220,12 +219,15 @@ class Cable extends Blackprint.Engine.Cable{
 			current._allBranch.push(current);
 			current._inputCable.push(cable);
 
-			// Swap from input port
-			let list = current.input.cables;
-			list[list.indexOf(current)] = cable;
+			if(current.input != null){
+				// Swap from input port
+				let list = current.input.cables;
+				list[list.indexOf(current)] = cable;
 
-			cable.target = cable.input = current.input;
-			current.target = current.input = void 0;
+				cable.target = cable.input = current.input;
+				current.target = current.input = void 0;
+			}
+
 			cable.connected = current.connected;
 			current.connected = false;
 			current.hasBranch = true;
@@ -239,11 +241,8 @@ class Cable extends Blackprint.Engine.Cable{
 				let parentBranch = current.parentCable.branch;
 				parentBranch[parentBranch.indexOf(current)] = cable;
 
-				// current.head1 = cable.head2 = [ev.clientX, ev.clientY];
 				cable.branch = [current];
-
 				current = cable;
-				clickedEl = current.pathEl;
 
 				current.parentCable = cable;
 				assignPosFor = cable.head1;
@@ -252,7 +251,6 @@ class Cable extends Blackprint.Engine.Cable{
 				cable = current.createBranch();
 				current.branch.pop();
 
-				// cable.head1 = current.head2 = [ev.clientX, ev.clientY];
 				cable.branch = current.branch;
 				current.branch = [cable];
 
@@ -262,13 +260,18 @@ class Cable extends Blackprint.Engine.Cable{
 
 		current.cableHeadClicked({
 			stopPropagation(){ev.stopPropagation()},
-			target: clickedEl,
+			target: current.pathEl,
 			clientX: ev.clientX,
 			clientY: ev.clientY,
 		}, true);
 
-		if(assignPosFor !== void 0)
-			Object.assign(current.head2, assignPosFor);
+		// Don't use Object.assign
+		if(assignPosFor !== void 0){
+			let temp = current.head2;
+			let temp2 = assignPosFor;
+			temp2[0] = temp[0];
+			temp2[1] = temp[1];
+		}
 	}
 
 	createBranch(ev){
