@@ -107,10 +107,10 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 					let ref = cables[a];
 
 					// Avoid moving branch cable
-					if(ref._allBranch !== void 0
-					   && port.source === 'output'
-					   && ref.cableTrunk !== ref){
-						continue;
+					if(ref._allBranch !== void 0){
+						if(port.source === 'output'
+						   && (ref.cableTrunk !== ref || ref.parentCable !== void 0))
+							continue;
 					}
 
 					// If the source and target is in current node
