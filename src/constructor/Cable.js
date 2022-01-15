@@ -252,6 +252,7 @@ class Cable extends Blackprint.Engine.Cable{
 				current.branch.pop();
 
 				cable.branch = current.branch;
+				cable.hasBranch = true;
 				current.branch = [cable];
 
 				assignPosFor = cable.head1;
