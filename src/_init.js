@@ -96,7 +96,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 	}
 
 	// Import node positions and cable connection from JSON
-	async importJSON(json){
+	async importJSON(json, options){
 		if(window.sf && window.sf.loader)
 			await window.sf.loader.task;
 
@@ -105,6 +105,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 		let containerModel = this.scope('container');
 		containerModel._isImporting = true;
+
+		if(options !== void 0) options = {};
+		if(!options.appendMode) this.clearNodes();
 
 		var metadata = json._;
 		delete json._;
