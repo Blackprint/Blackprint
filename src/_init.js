@@ -106,6 +106,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		let containerModel = this.scope('container');
 		containerModel._isImporting = true;
 
+		let oldIfaces = this.iface;
+
 		if(options !== void 0) options = {};
 		if(!options.appendMode) this.clearNodes();
 
@@ -161,6 +163,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 					id: temp.id, // Named ID (if exist)
 					i: temp.i, // List Index
 					data: temp.data, // if exist
+					oldIface: oldIfaces[temp.id],
 				}, handlers);
 			}
 		}
@@ -567,8 +570,11 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		iface.namespace = namespace;
 		options ??= {};
 
+		if(options.oldIface !== void 0)
+			Blackprint.Interface.reuse(iface, options.oldIface);
+
 		// Create the linker between the node and the iface
-		Blackprint.Interface.prepare(node, iface);
+		else Blackprint.Interface.prepare(node, iface);
 
 		iface.input ??= {};
 		iface.output ??= {};
