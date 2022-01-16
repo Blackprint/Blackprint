@@ -331,7 +331,9 @@ class Cable extends Blackprint.Engine.Cable{
 		_deleteFromList(this._scope('cables').list, this);
 		_deleteFromList(this._inputCable, this);
 		_deleteFromList(this._allBranch, this);
-		_deleteFromList(this.output.cables, this);
+
+		if(this.output !== void 0)
+			_deleteFromList(this.output.cables, this);
 
 		if(this.parentCable !== void 0){
 			let branch = this.parentCable.branch;
