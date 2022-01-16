@@ -151,7 +151,7 @@ class Cable extends Blackprint.Engine.Cable{
 
 		function moveCableHead(ev){
 			// Let's make a magnet sensation (fixed position when hovering node port)
-			if(cablesModel.hoverPort !== false){
+			if(cablesModel.hoverPort !== false && (cable.branch == null || cable.branch.length === 0)){
 				var center = cablesModel.hoverPort.rect.width/2;
 				cable.head2 = [
 					(cablesModel.hoverPort.rect.x+center - container.pos.x - Ofst.x) / container.scale,
