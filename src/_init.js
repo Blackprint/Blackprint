@@ -108,7 +108,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 		let oldIfaces = this.iface;
 
-		if(options !== void 0) options = {};
+		if(options === void 0) options = {};
 		if(!options.appendMode) this.clearNodes();
 
 		var metadata = json._;
@@ -408,6 +408,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 								return;
 							}
+
+							// Skip if no branch and not connected to anything
+							if(cable.connected === false) return;
 
 							let temp = parentMap.get(cable);
 							save.id = temp.parentId = parentCable++;
