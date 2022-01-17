@@ -573,22 +573,24 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		iface.namespace = namespace;
 		options ??= {};
 
-		if(options.oldIface !== void 0)
-			Blackprint.Interface.reuse(iface, options.oldIface);
+		if(options.oldIface !== void 0 && options.oldIface.namespace === iface.namespace)
+			Blackprint.Interface._reuse(iface, options.oldIface);
 
 		// Create the linker between the node and the iface
-		else Blackprint.Interface.prepare(node, iface);
+		else{
+			Blackprint.Interface._prepare(node, iface);
 
-		iface.input ??= {};
-		iface.output ??= {};
-		iface.property ??= {};
+			iface.input ??= {};
+			iface.output ??= {};
+			iface.property ??= {};
 
-		// Replace port prototype (intepreter port -> visual port)
-		let _ports = Blackprint.Interface._ports;
-		for (var i = 0; i < _ports.length; i++) {
-			var localPorts = iface[_ports[i]];
-			for(var portName in localPorts)
-				Object.setPrototypeOf(localPorts[portName], Port.prototype);
+			// Replace port prototype (intepreter port -> visual port)
+			let _ports = Blackprint.Interface._ports;
+			for (var i = 0; i < _ports.length; i++) {
+				var localPorts = iface[_ports[i]];
+				for(var portName in localPorts)
+					Object.setPrototypeOf(localPorts[portName], Port.prototype);
+			}
 		}
 
 		var savedData = options.data;

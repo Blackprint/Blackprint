@@ -10,7 +10,8 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 	*/
 
 	static _ports = ['input', 'output', 'property'];
-	static prepare = Blackprint.Interface.prepare; // Copy from engine-js
+	static _prepare = Blackprint.Interface._prepare; // Copy from engine-js
+	static _reuse = Blackprint.Interface._reuse; // Copy from engine-js
 
 	constructor(node){
 		if(Blackprint._reuseIFace !== void 0){
