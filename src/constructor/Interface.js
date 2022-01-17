@@ -169,6 +169,14 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 
 		scope('dropdown').show(menu, {x: ev.clientX, y: ev.clientY, event: ev});
 	}
+
+	swapZIndex(ev){
+		var container = this._container;
+		let ifaceList = container.nodeScope.list;
+
+		if(ifaceList.swap)
+			ifaceList.swap(ifaceList.indexOf(this), ifaceList.length-1);
+	}
 };
 
 var IFaceDecoration = Blackprint.Interface.Decoration = class IFaceDecoration {

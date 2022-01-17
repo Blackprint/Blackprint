@@ -1,4 +1,9 @@
 ## html
-<div class="header small" @contextmenu.stopAll.prevent="nodeMenu(event)" @dragmove="moveNode(event)">
+<div class="header small" @contextmenu.stopAll.prevent="nodeMenu(event)" @dragmove="moveNode(event)" @pointerdown="swapZIndex(event)">
   <div class="icon"></div>
+  <div class="extra">
+  	<div class="item" sf-each="x in $decoration.marks" title="{{ x.title || '' }}">
+  		<i class="{{ x.icon }}"></i>
+  	</div>
+  </div>
 </div>
