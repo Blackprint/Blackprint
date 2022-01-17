@@ -185,17 +185,21 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 
 		if(cable !== void 0){
 			// ToDo: show hidden ports
+			let el = event.target;
 
 			// Return if already targeting to any port
-			if(event.target.parentElement.classList.contains('ports'))
+			if(el.parentElement.classList.contains('ports') || el.classList.contains('ports'))
 				return;
 
 			this.__onCableDrop = function(ev){
+				let el = event.target;
+
 				// Return if already targeting to any port
-				if(ev.target.parentElement.classList.contains('ports'))
+				if(el.parentElement.classList.contains('ports') || el.classList.contains('ports'))
 					return;
 
-				if(!cableScope.hoverPort && !cableScope.hoverPort.item)
+				if(!cableScope.hoverPort
+				   || cableScope.hoverPort && cableScope.hoverPort._from !== '#1')
 					return;
 
 				let port = cableScope.hoverPort.item;
@@ -208,19 +212,25 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 			let owner = cable.owner; // source port
 			let targetPorts = owner.source === "input" ? this.output : this.input;
 
+			// ToDo: Remove this after the engine was updated to v0.5.1
+			if(owner.type.constructor === Object && owner.type.name === 'Any' && owner.type._name === void 0)
+				owner.type.any = true;
+
 			for(let key in targetPorts){
 				let port = targetPorts[key];
 
-				if(port.type.any
-				   || port.type === owner.type
-				   || (port.type.constructor === Array && port.type.includes(owner.type))
-				   || (owner.type.constructor === Array && owner.type.includes(port.type))
+				if((port.type.any && owner.type !== Function)
+					|| (owner.type.any && port.type !== Function)
+					|| port.type === owner.type
+					|| (port.type.constructor === Array && port.type.includes(owner.type))
+					|| (owner.type.constructor === Array && owner.type.includes(port.type))
 				){
-					let portElem = targetPorts.getElement(port.name).children[0];
+					let portElem = targetPorts.getElement(port.name).querySelector('.port');
 				   	cableScope.hoverPort = {
 				   		elem: portElem,
 				   		rect: portElem.getBoundingClientRect(),
-				   		item: port
+				   		item: port,
+				   		_from: '#1', // From Interface.js
 				   	};
 				   	break;
 				}
