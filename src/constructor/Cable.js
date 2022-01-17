@@ -29,8 +29,10 @@ class Cable extends Blackprint.Engine.Cable{
 			unshift = true;
 		}
 
-		let x = (obj.x - container.pos.x - Ofst.x) / container.scale;
-		let y = (obj.y - container.pos.y - Ofst.y) / container.scale;
+		let windowless = Blackprint.settings.windowless;
+
+		let x = windowless ? 100 : (obj.x - container.pos.x - Ofst.x) / container.scale;
+		let y = windowless ? 100 : (obj.y - container.pos.y - Ofst.y) / container.scale;
 		this.linePath = `${x} ${y} ${x} ${y}`;
 
 		this.head1 = this.parentCable ? this.parentCable.head2.slice(0) : [x, y];
@@ -47,7 +49,7 @@ class Cable extends Blackprint.Engine.Cable{
 		else list.push(this);
 
 		// Get SVG Path element
-		this.pathEl = list.getElement(this).firstElementChild;
+		this.pathEl = windowless ? {} : list.getElement(this).firstElementChild;
 	}
 
 	// ToDo: Improve performance by caching the dotGlow.cloneNode()
