@@ -1,5 +1,11 @@
 ## html
-<div class="header" @contextmenu.stopAll.prevent="nodeMenu(event)" @dragmove="moveNode(event)" @pointerdown="swapZIndex(event)">
+<div class="header"
+	@contextmenu.stopAll.prevent="nodeMenu(event)"
+	@dragmove="moveNode(event)"
+	@pointerdown="swapZIndex(event)"
+	@pointerover="nodeHovered(event)"
+  @pointerout="nodeUnhovered(event)"
+>
   <div class="title"><div class="icon"></div><div class="text">{{ title }}</div></div>
   <div class="description">{{ description }}</div>
   <div class="extra">

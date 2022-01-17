@@ -1,5 +1,11 @@
 ## html
-<div class="header small" @contextmenu.stopAll.prevent="nodeMenu(event)" @dragmove="moveNode(event)" @pointerdown="swapZIndex(event)">
+<div class="header small"
+	@contextmenu.stopAll.prevent="nodeMenu(event)"
+	@dragmove="moveNode(event)"
+	@pointerdown="swapZIndex(event)"
+	@pointerover="nodeHovered(event)"
+  @pointerout="nodeUnhovered(event)"
+>
   <div class="icon"></div>
   <div class="extra">
   	<div class="item" sf-each="x in $decoration.marks" title="{{ x.title || '' }}">

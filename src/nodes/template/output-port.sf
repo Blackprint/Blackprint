@@ -1,5 +1,5 @@
 ## html
-<div class="output">
+<div class="output" @pointerover="nodeHovered(event)" @pointerout="nodeUnhovered(event)">
   <div sf-each="key, val in output"
         class="ports {{ val.type.name + val.classAdd }}"
         @contextmenu.stop.prevent="val.portRightClick(event)"

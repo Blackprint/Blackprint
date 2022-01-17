@@ -177,6 +177,71 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 		if(ifaceList.swap)
 			ifaceList.swap(ifaceList.indexOf(this), ifaceList.length-1);
 	}
+
+	nodeHovered(event){
+		var container = this._container;
+		let cableScope = container.cableScope;
+		let cable = cableScope.currentCable;
+
+		if(cable !== void 0){
+			// ToDo: show hidden ports
+
+			// Return if already targeting to any port
+			if(event.target.parentElement.classList.contains('ports'))
+				return;
+
+			this.__onCableDrop = function(ev){
+				// Return if already targeting to any port
+				if(ev.target.parentElement.classList.contains('ports'))
+					return;
+
+				if(!cableScope.hoverPort && !cableScope.hoverPort.item)
+					return;
+
+				let port = cableScope.hoverPort.item;
+				port.connectCable(cable);
+			};
+
+			this.$el.on('pointerup', this.__onCableDrop);
+
+			// Search suitable port for the hovering cable
+			let owner = cable.owner; // source port
+			let targetPorts = owner.source === "input" ? this.output : this.input;
+
+			for(let key in targetPorts){
+				let port = targetPorts[key];
+
+				if(port.type.any
+				   || port.type === owner.type
+				   || (port.type.constructor === Array && port.type.includes(owner.type))
+				   || (owner.type.constructor === Array && owner.type.includes(port.type))
+				){
+					let portElem = targetPorts.getElement(port.name).children[0];
+				   	cableScope.hoverPort = {
+				   		elem: portElem,
+				   		rect: portElem.getBoundingClientRect(),
+				   		item: port
+				   	};
+				   	break;
+				}
+			}
+
+			return;
+		}
+	}
+
+	nodeUnhovered(){
+		var container = this._container;
+		let cableScope = container.cableScope;
+		// let cable = cableScope.currentCable;
+
+		if(this.__onCableDrop !== void 0){
+			this.$el.off('pointerup', this.__onCableDrop);
+			this.__onCableDrop = void 0;
+		}
+
+		cableScope.hoverPort = false;
+	}
 };
 
 var IFaceDecoration = Blackprint.Interface.Decoration = class IFaceDecoration {
