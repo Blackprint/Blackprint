@@ -417,6 +417,47 @@ describe("Blackprint create node with JavaScript", () => {
 		expect(engine.iface.dummyEngine).not.toBeDefined();
 	});
 
+	describe('Export and import with JSON', () => {
+		var json;
+		var AA,A0,A1,A2,A3;
+		test('For Sketch', async () => {
+			A0 = sketch.iface.helloSketch.ref;
+			A1 = sketch.iface.helloSketch.ref.IOutput;
+			A2 = sketch.iface.helloSketch.ref.Output;
+			A3 = sketch.iface.helloSketch.ref.IOutput.Out;
+
+			Blackprint.settings('windowless', true);
+
+			json = sketch.exportJSON();
+			AA = sketch.importJSON(json);
+		});
+		test('Reuse references for Sketch IFace', async () => {
+			await AA;
+			expect(A0 === sketch.iface.helloSketch.ref).toBe(true);
+			expect(A1 === sketch.iface.helloSketch.ref.IOutput).toBe(true);
+			expect(A2 === sketch.iface.helloSketch.ref.Output).toBe(true);
+			expect(A3 === sketch.iface.helloSketch.ref.IOutput.Out).toBe(true);
+		});
+
+		var BB,B0,B1,B2,B3;
+		test('For Engine', async () => {
+			B0 = engine.iface.helloEngine.ref;
+			B1 = engine.iface.helloEngine.ref.IOutput;
+			B2 = engine.iface.helloEngine.ref.Output;
+			B3 = engine.iface.helloEngine.ref.IOutput.Out;
+
+			json = json.split('helloSketch').join('helloEngine');
+			BB = engine.importJSON(json);
+		});
+		test('Reuse references for Engine IFace', async () => {
+			await BB;
+			expect(B0 === engine.iface.helloEngine.ref).toBe(true);
+			expect(B1 === engine.iface.helloEngine.ref.IOutput).toBe(true);
+			expect(B2 === engine.iface.helloEngine.ref.Output).toBe(true);
+			expect(B3 === engine.iface.helloEngine.ref.IOutput.Out).toBe(true);
+		});
+	});
+
 	function deleteNode(instance, prop){
 		let temp = instance.iface[prop];
 		instance.deleteNode(temp);
