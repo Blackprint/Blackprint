@@ -1,3 +1,24 @@
+# 0.5.0
+
+### Features
+- Add `node.destroy` as an alternative for `iface.destroy`, this will be called by the engine and shouldn't be manually called
+- Add `instance.deleteNode` to delete node manually by using code
+- Add cable branching feature for output port
+- Add feature to create branch on connected cable
+- Add merge branch for single cable
+- Add options for `importJSON`
+- Clicked nodes will be moved on front of the other nodes (z-index)
+- Add decoration on small header template
+- Automatically put cable on suitable port when it's dropped on top of a node
+
+### Breaking Changes
+- Blackprint Engine v0.5 is required (for more information please see the changelog)
+- Moving the container with left click is removed, please use right/middle click instead
+- `importJSON` now will clear the instance first
+
+### Bug Fix
+- Fix batch load when being loaded from CDN
+
 # 0.4.4
 
 - Tidy up

@@ -68,9 +68,9 @@ Blackprint Engine
   - [x] Importable minimal sketch for different project
   - [ ] Select and move multiple nodes at once
     - [ ] Add feature to put nodes into a group
-  - [ ] Clicked nodes should be moved on front of the other nodes (z-index)
-  - [ ] Automatically put cable on suitable port when it's dropped on top of a node
-  - [ ] Add feature to arrange cable, and wormhole
+  - [x] Clicked nodes should be moved on front of the other nodes (z-index)
+  - [x] Automatically put cable on suitable port when it's dropped on top of a node
+  - [x] Add feature to arrange cable (cable branching)
   - [ ] Add feature to hide some unused port on a node
   - [ ] Add feature to import node skeleton (use default node, and no execution)
     - [ ] Create addons for VS Code for previewing exported Blackprint
@@ -82,8 +82,6 @@ Blackprint Engine
   - [x] Add Environment Variables editor
   - [x] Import sketch from URL
   - [ ] Move current sketch with minimap
-  - [ ] Auto attach cable to first suitable port
-  - [ ] Add hint for beginner guide
   - [ ] Node list editor (currently with right click)
   - [x] Error/log popup or overlay
   - [x] Show overview or notice when importing nodes from URL
@@ -93,9 +91,8 @@ Blackprint Engine
   - [x] Auto `blackprint.config.js` import
   - [ ] Add example for using ES6 modules importing system
     - It's possible to use SkyPack or something else, but it currently can't compile `.sf`
-- [ ] Better documentation or website
+- [ ] Better documentation
 - [ ] Nodes docs generator
-- [ ] Tutorial and samples
 - [ ] Blackprint Nodes Package Manager
   - [x] Use NPM registry for Node.js/Deno/Browser
 
