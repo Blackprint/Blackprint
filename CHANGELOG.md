@@ -1,4 +1,4 @@
-# 0.5.0
+# 0.5.1
 
 ### Features
 - Add `node.destroy` as an alternative for `iface.destroy`, this will be called by the engine and shouldn't be manually called
