@@ -198,15 +198,11 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 				if(el.parentElement.classList.contains('ports') || el.classList.contains('ports'))
 					return;
 
-				if(!cableScope.hoverPort
-				   || cableScope.hoverPort && cableScope.hoverPort._from !== '#1')
-					return;
-
 				let port = cableScope.hoverPort.item;
 				port.connectCable(cable);
 			};
 
-			this.$el.on('pointerup', this.__onCableDrop);
+			this.$el.once('pointerup', this.__onCableDrop);
 
 			// Search suitable port for the hovering cable
 			let owner = cable.owner; // source port
@@ -230,7 +226,6 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 				   		elem: portElem,
 				   		rect: portElem.getBoundingClientRect(),
 				   		item: port,
-				   		_from: '#1', // From Interface.js
 				   	};
 				   	break;
 				}

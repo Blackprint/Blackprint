@@ -53,23 +53,6 @@ class Port extends Blackprint.Engine.Port {
 		this._scope.sketch.emit(name, obj);
 	}
 
-	connectCable(cable){
-		var cables = this._scope('cables');
-		if(cables.hoverPort !== void 0){
-			if(cables.hoverPort._from === '#1' && cable === void 0)
-				return; // wait for another call from Interface.js
-		}
-
-		if(cable === void 0)
-			cable = cables.currentCable;
-
-		if(cable === void 0) return;
-		super.connectCable(cable);
-
-		cables.currentCable = void 0;
-		cables.hoverPort = false;
-	}
-
 	// PointerOver event handler
 	portHovered(event){
 		var portElem = this.findPortElement(event.target);
