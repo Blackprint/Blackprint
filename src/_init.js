@@ -351,31 +351,34 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 						output[name] = [];
 
 					let pendingBranch = [];
-					let parentMap = new Map()
+					let parentMap = new Map();
 
 					for (var a = 0; a < cables.length; a++) {
 						let cable = cables[a];
 						var target = cable.owner === port ? cable.target : cable.owner;
 
-						if(cable.hasBranch){
+						if(cable.branch !== void 0 && cable.branch.length !== 0){
+							// Skip cable that doesn't end up to connect to any input port
 							if(cable._inputCable.length !== 0)
 								pendingBranch.push(cable);
 
-							continue;
+							continue; // This is just branch, let's just continue
 						}
 
 						if(target === void 0)
-							continue;
+							continue; // Not connected to any port, let's continue
 
 						var _i = ifaces.indexOf(target.iface);
 						if(exclude.includes(ifaces[_i].namespace))
-							continue;
+							continue; // Being excluded from export
 
 						let temp = {
 							i: _i,
 							name: target.name
 						};
 
+						// Save this child/cable on the map
+						// so we can attach it to the parent later.
 						if(cable.parentCable !== void 0)
 							parentMap.set(cable, temp);
 
@@ -409,7 +412,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 								return;
 							}
 
-							// Skip if no branch and not connected to anything
+							// Skip if not connected to anything
 							if(cable.connected === false) return;
 
 							let temp = parentMap.get(cable);
