@@ -190,6 +190,7 @@ sf-space[blackprint]{
       backface-visibility: hidden;
       height: 100%;
       width: 100%;
+      transform: translateZ(1px);
 
       path, circle{
         transition: 0.1s ease-in;
@@ -251,6 +252,7 @@ sf-space[blackprint]{
       position: absolute;
       background: rgba(0,0,0,0.7);
       backface-visibility: hidden;
+      transform: translateZ(1px);
 
       @mixin headerColor($type, $borderColor, $bgA, $bgB, $bgC) {
         &.#{$type} .header{
@@ -434,7 +436,6 @@ sf-space[blackprint]{
 body.blackprint-no-vfx sf-space[blackprint], body sf-space[blackprint] .importing-nodes {
   .cables > svg{
     filter: none;
-    transform: translateZ(1px);
   }
   .nodes .node{
     box-shadow: none;
