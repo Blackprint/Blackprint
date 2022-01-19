@@ -73,7 +73,7 @@ class Cable extends Blackprint.Engine.Cable{
 		var glowContainer = cableScope.$el('.glow-cable');
 
 		await $.afterRepaint();
-		if(this.output === void 0) return;
+		if(this.output === void 0 || this._destroyed) return;
 
 		if(cableScope.minimapCableScope !== void 0)
 			glowContainer = [glowContainer, ...cableScope.minimapCableScope.$el('.glow-cable')];

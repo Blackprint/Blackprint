@@ -198,6 +198,9 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 				if(el.parentElement.classList.contains('ports') || el.classList.contains('ports'))
 					return;
 
+				if(cableScope.hoverPort === false)
+					return;
+
 				let port = cableScope.hoverPort.item;
 				port.connectCable(cable);
 			};
@@ -207,10 +210,6 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 			// Search suitable port for the hovering cable
 			let owner = cable.owner; // source port
 			let targetPorts = owner.source === "input" ? this.output : this.input;
-
-			// ToDo: Remove this after the engine was updated to v0.5.1
-			if(owner.type.constructor === Object && owner.type.name === 'Any' && owner.type._name === void 0)
-				owner.type.any = true;
 
 			for(let key in targetPorts){
 				let port = targetPorts[key];
