@@ -219,9 +219,17 @@ class Cable extends Blackprint.Engine.Cable{
 				(ev.clientY - container.pos.y - Ofst.y) / container.scale
 			];
 		}
+
+		if(ev.pointerType === 'touch') this._touchCable(ev);
 	}
 
 	cablePathClicked(ev){
+		if(!ev.ctrlKey && !this._clicked){
+			this._clicked = true
+			setTimeout(()=> this._clicked = void 0, 400);
+			return;
+		}
+
 		let current = this;
 
 		let cable, assignPosFor;
@@ -299,6 +307,8 @@ class Cable extends Blackprint.Engine.Cable{
 
 		current.cableHeadClicked({
 			stopPropagation(){ev.stopPropagation()},
+			type: ev.type,
+			pointerType: ev.pointerType,
 			target: current.pathEl,
 			clientX: ev.clientX,
 			clientY: ev.clientY,
@@ -338,6 +348,50 @@ class Cable extends Blackprint.Engine.Cable{
 
 		if(ev === void 0) return newCable;
 		newCable.cableHeadClicked(ev, true);
+	}
+
+	_touchCable(oldEv){
+		let lastEl = null;
+		function hoverSimulate(ev){
+			let touch = ev.touches[0];
+			let el = document.elementFromPoint(touch.clientX, touch.clientY);
+
+			if(lastEl === el) return;
+			if(lastEl !== null)
+				$(lastEl).trigger('pointerout');
+
+			lastEl = el;
+			$(el).trigger('pointerover');
+		}
+
+		let port = this.owner;
+		port._ignoreConnect = true;
+
+		let container = this._scope('container');
+		let cable = this;
+		container.$el.on('touchmove', hoverSimulate).once('pointerup', function(ev){
+			container.$el.off('touchmove', hoverSimulate);
+
+			let hovered = container.cableScope.hoverPort;
+			if(hovered !== false){
+				if(hovered.item === port)
+					cable._delete();
+				else
+					hovered.item.connectCable(cable);
+
+				container.cableScope.hoverPort = false;
+			}
+			else {
+				if(Math.abs(oldEv.clientX - ev.clientX) < 100
+				   && Math.abs(oldEv.clientY - ev.clientY) < 100){
+					cable._delete();
+				}
+			}
+
+			setTimeout(()=> {
+				port._ignoreConnect = void 0;
+			}, 500);
+		});
 	}
 
 	_connected(){

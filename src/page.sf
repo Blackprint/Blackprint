@@ -3,6 +3,7 @@
   <sf-m name="container"
     class="{{ _isImporting ? 'importing-nodes' : '' }}"
     @mousewheel="scaleContainer(event)"
+    @touchstart.capture="checkTouch(event)"
     style="
       width: {{ size.w }}px;
       height: {{ size.h }}px;
@@ -26,7 +27,7 @@
           {{ x.hasBranch ? 'has-branch' : ''}}
         " @contextmenu.capture.prevent="x.cableMenu(event)">
           <path
-            @pointerdown.ctrl.capture="x.cablePathClicked(event)"
+            @pointerdown.capture="x.cablePathClicked(event)"
             d="M {{ recalculatePath(x) || x.head1[0] + ' ' + x.head1[1] }}
                C {{ x.linePath }},
                  {{ recalculatePath(x) || x.head2[0] + ' ' + x.head2[1] }}"

@@ -38,12 +38,29 @@ class Port extends Blackprint.Engine.Port {
 		cable.owner = this;
 
 		// Stop here if this function wasn't triggered by user
-		if(isAuto)
-			return cable;
+		if(isAuto) return cable;
 
 		// Default head index is "2" when creating new cable
 		cable.cableHeadClicked(e, true);
 		this.iface.emit('cable.created', {iface: this, cable});
+
+		if(e.pointerType !== 'touch') return;
+
+		let targetEl = $(e.target);
+
+		targetEl.once('contextmenu', isContextMenu);
+		function isContextMenu() {
+			cable._delete();
+		}
+
+		setTimeout(()=> {
+			targetEl.off('contextmenu', isContextMenu);
+		}, 4000);
+	}
+
+	connectCable(){
+		if(this._ignoreConnect) return;
+		return super.connectCable.apply(this, arguments);
 	}
 
 	_cableConnectError(name, obj){
@@ -55,6 +72,9 @@ class Port extends Blackprint.Engine.Port {
 
 	// PointerOver event handler
 	portHovered(event){
+		if(event.pointerType === 'touch')
+			return;
+
 		var portElem = this.findPortElement(event.target);
 
 		// ToDo: on touch device, hover/unhover isn't triggered properly
@@ -70,6 +90,9 @@ class Port extends Blackprint.Engine.Port {
 
 	// PointerOut event handler
 	portUnhovered(){
+		if(event.pointerType === 'touch')
+			return;
+
 		this._scope('cables').hoverPort = false;
 	}
 

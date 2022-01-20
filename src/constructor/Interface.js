@@ -198,7 +198,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 				if(el.parentElement.classList.contains('ports') || el.classList.contains('ports'))
 					return;
 
-				if(cableScope.hoverPort === false)
+				if(cableScope.hoverPort === false || cable.connected)
 					return;
 
 				let port = cableScope.hoverPort.item;

@@ -159,21 +159,45 @@ Space.model('container', function(My, include){
 		});
 	}
 
+	My.checkTouch = function(ev){
+		if(ev.touches.length === 2){
+			ev.stopPropagation();
+			ev.preventDefault();
+
+			My.moveContainer({button: 1});
+		}
+	}
+
 	// My.onScale = callback
 
 	My.scaleContainer = function(ev){
-		if(ev.ctrlKey === false) return;
+		if(ev.ctrlKey === false && ev.scale === void 0) return;
 		if(My.config.scale === false) return;
 		ev.preventDefault();
 
 		if(ev.deltaY > 0 && My.scale < 0.21)
 			return;
 
-		if(ev.deltaY < 0 && My.scale > 1.98)
+		if(ev.deltaY < 0 && My.scale > 4.98)
 			return;
 
-		var delta = ev.deltaY/100 * 0.05;
-		My.scale -= delta;
+		// From touchGesture
+		if(ev.scale !== void 0){
+			// console.log(ev);
+
+			// Mouse scroll delta Y
+			var delta = ev.scale;
+
+			My.scale += ev.scale;
+			var scale = My.scale;
+		}
+		else{
+			// Mouse scroll delta Y
+			var delta = ev.deltaY/100 * (My.scale < 1 ? 0.05 : 0.1);
+
+			My.scale -= delta;
+			var scale = My.scale;
+		}
 
 		// ToDo: fix scaling, should scale with cursor as the middle scaling position
 		My.pos.x += Math.round(ev.clientX * delta);
@@ -182,9 +206,23 @@ Space.model('container', function(My, include){
 		// My.pos will always negative or zero value
 		// hint on the object declaration
 
-		My.size.w = My.origSize.w / My.scale - My.pos.x;
-		My.size.h = My.origSize.h / My.scale - My.pos.y;
+		My.size.w = My.origSize.w / scale - My.pos.x;
+		My.size.h = My.origSize.h / scale - My.pos.y;
 
-		My.onScale && My.onScale(My.scale);
+		My.onScale && My.onScale(scale);
+	}
+
+	// @gesture.capture="touchGesture(event)"
+	My.touchGesture = function(ev){
+		if(ev.pointerType === 'mouse') return;
+		if(ev.type === "pointerup")
+			return;
+
+		ev.preventDefault();
+		ev.stopPropagation();
+		moveContainer(ev);
+
+		// ToDo: enable after middle scaling position was fixed
+		// My.scaleContainer(ev);
 	}
 });
