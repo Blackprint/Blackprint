@@ -1,3 +1,14 @@
+# 0.5.2
+
+### Features
+- Add support for touch devices
+- Double click the path will create new cable branch
+
+### Bug Fix
+- Improve rendering performance
+- Fix cable branch arrangement
+- Fix some low impact bugs
+
 # 0.5.1
 
 ### Features
