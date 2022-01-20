@@ -14,7 +14,7 @@ if(window.Blackprint === void 0)
 	let path = sf.$('script[src*="blackprint/sketch"]')[0];
 	if(path === void 0) alert("'blackprint/sketch' URL was not found on any <script> tag, make sure to load Blackprint from the correct CDN link");
 
-	path = path.src.split('/dist')[0];
+	path = path.src.match(/.*?blackprint\/sketch(?:@.*?(?=\/)|.*?$)/m)[0];
 
 	sf.loader.js([path+'/dist/blackprint.min.js', path+'/dist/blackprint.sf.js'], {ordered: true});
 	sf.loader.css([path+'/dist/blackprint.sf.css']);
