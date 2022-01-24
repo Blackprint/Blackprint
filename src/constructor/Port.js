@@ -115,7 +115,7 @@ class Port extends Blackprint.Engine.Port {
 			scope('dropdown').show(menu, pos);
 		}
 
-		let event = {iface: this, instance: scope.sketch, menu};
+		let event = {iface: this, instance: scope.sketch, port, menu};
 		this.iface.emit('port.menu', event);
 		scope.sketch.emit('port.menu', event);
 
