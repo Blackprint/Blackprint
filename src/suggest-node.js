@@ -128,9 +128,11 @@ Blackprint.Sketch.suggestFromPort = function(port){
 	if(match === null) throw new Error("Failed to get type name");
 	str = match[1];
 
-	let match2 = str.match(_portFunc);
+	let match2 = _portFunc.exec(str);
+	_portFunc.lastIndex = 0;
+
 	if(match2 !== null){
-		str = match2 = match2[1];
+		str = match2 = match2[2];
 
 		if(match2.slice(0, 1) === '[') // array/union
 			str = match2.slice(1, -1).split(',').join(' ');
@@ -160,7 +162,14 @@ Blackprint.Sketch.suggestByRef = function(source, clazz, fromList){
 
 				let match = false;
 				for(let prop in metadata){
-					if(metadata[prop] === clazz){
+					let temp = metadata[prop]; // the target port (source= input/output)
+					if(temp == null) continue;
+
+					// console.log(31, temp);
+
+					if(temp === clazz
+					   || (source === 'output' && temp.prototype instanceof clazz)
+					   || (source === 'input' && clazz.prototype instanceof temp)){
 						match = true;
 						break;
 					}
