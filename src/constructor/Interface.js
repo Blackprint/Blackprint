@@ -1,3 +1,5 @@
+let EngineInterface = Blackprint.Interface;
+
 // Override the Interface to make it compatible for Sketch and non-sketch
 Blackprint.Interface = class SketchInterface extends sf.Model {
 	/*
@@ -64,9 +66,10 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 		}
 	}
 
-	newPort(portName, type, def, which, iface){
-		var temp = new Blackprint.Engine.Port(portName, type, def, which, iface);
+	_newPort(portName, type, def, which){
+		var temp = new Blackprint.Engine.Port(portName, type, def, which, this);
 		temp._scope = this._scope;
+		temp.inactive = false;
 		Object.setPrototypeOf(temp, Port.prototype);
 
 		if(type.constructor === Array && type.name.includes(' '))
@@ -247,6 +250,13 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 		cableScope.hoverPort = false;
 	}
 };
+
+Object.defineProperties(Blackprint.Interface.prototype, {
+	createPort: {value: EngineInterface.prototype.createPort},
+	deletePort: {value: EngineInterface.prototype.deletePort},
+});
+
+
 
 var IFaceDecoration = Blackprint.Interface.Decoration = class IFaceDecoration {
 	constructor(iface){
