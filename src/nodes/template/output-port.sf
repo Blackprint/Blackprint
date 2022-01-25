@@ -1,7 +1,7 @@
 ## html
 <div class="output" @pointerover="nodeHovered(event)" @pointerout="nodeUnhovered(event)">
   <div sf-each="key, val in output"
-        class="ports {{ val.type.name + val.classAdd }}"
+        class="ports {{ val.type.name + val.classAdd }} {{ val.inactive ? 'inactive' : ''}}"
         @contextmenu.stop.prevent="val.portRightClick(event)"
         @pointerdown.left.stop="val.createCable(event)"
         @pointerup.left="val.connectCable()"

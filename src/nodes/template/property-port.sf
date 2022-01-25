@@ -5,7 +5,7 @@
     <div>Property still underdevelopment</div>
     <div class="property">
       <div sf-each="key, val in property"
-            class="ports {{ val.type.name + val.classAdd }}"
+            class="ports {{ val.type.name + val.classAdd }} {{ val.inactive ? 'inactive' : ''}}"
             @contextmenu.stop.prevent="val.portRightClick(event)"
             @pointerdown.left.stop="val.createCable(event)"
             @pointerup.left="val.connectCable()"

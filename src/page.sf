@@ -112,9 +112,22 @@ sf-space[blackprint]{
       path{stroke: #{$color}}
     }
 
-    .nodes .node .ports.#{$type} > .port {
-      background: #{$color};
-      color: #{$color};
+    .nodes .node .ports.#{$type} {
+      & > .port {
+        background: #{$color};
+        // color: #{$color};
+      }
+
+      &.inactive {
+        color: grey;
+        & > .port {
+          background: transparent;
+          border: 2px solid #{$color};
+          width: 8px;
+          height: 8px;
+          box-shadow: 0 0 4px #{$color};
+        }
+      }
     }
   }
 
@@ -262,7 +275,7 @@ sf-space[blackprint]{
         }
       }
 
-      @include headerColor('trigger', #a05f5f, rgba(226, 18, 18, 0.7), rgba(229, 41, 41, 0.2), rgba(229, 32, 32, 0.1));
+      @include headerColor('event', #a05f5f, rgba(226, 18, 18, 0.7), rgba(229, 41, 41, 0.2), rgba(229, 32, 32, 0.1));
       @include headerColor('input', #75a05f, rgba(108, 232, 93, 0.7), rgba(103, 255, 108, 0.2), rgba(130, 226, 124, 0.1));
 
       .header{
@@ -341,6 +354,17 @@ sf-space[blackprint]{
       }
 
       .ports{
+        &.inactive {
+          color: grey;
+          & > .port {
+            background: transparent;
+            border: 2px solid white;
+            width: 8px;
+            height: 8px;
+            box-shadow: 0 0 4px white;
+          }
+        }
+
         .port{
           z-index: 200;
           background: white;

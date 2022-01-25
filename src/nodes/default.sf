@@ -1,5 +1,5 @@
 ## html
-<div class="node general" style="transform: translate({{ x }}px, {{ y }}px)">
+<div class="node {{ type || 'general' }}" style="transform: translate({{ x }}px, {{ y }}px)">
   <sf-template path="Blackprint/nodes/template/header.sf"></sf-template>
 
   <div class="content">
