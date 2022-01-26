@@ -36,6 +36,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 			this.title = 'No Title';
 			this.description = '';
 			this.importing = true;
+			this.type = false; // default node type: general
 			this.env = Blackprint.Environment.map;
 			this.node = node;
 			this._scope = node._instance.scope;
@@ -250,12 +251,6 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 		cableScope.hoverPort = false;
 	}
 };
-
-Object.defineProperties(Blackprint.Interface.prototype, {
-	createPort: {value: EngineInterface.prototype.createPort},
-	deletePort: {value: EngineInterface.prototype.deletePort},
-});
-
 
 
 var IFaceDecoration = Blackprint.Interface.Decoration = class IFaceDecoration {
