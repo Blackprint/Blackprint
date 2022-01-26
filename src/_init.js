@@ -585,9 +585,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		else{
 			Blackprint.Interface._prepare(node, iface);
 
-			iface.input ??= {};
-			iface.output ??= {};
-			iface.property ??= {};
+			iface.input ??= {_list: []};
+			iface.output ??= {_list: []};
+			iface.property ??= {_list: []};
 
 			// Replace port prototype (intepreter port -> visual port)
 			let _ports = Blackprint.Interface._ports;

@@ -7,10 +7,11 @@ function getPortRect(RP, name){
 		return temp;
 	}
 
-	if(RP.getElement === void 0)
+	let _list = RP._list;
+	if(_list.getElement === void 0)
 		console.error("It seems the JSON was imported when sketch view haven't been loaded");
 
-	return RP.getElement(name).querySelector('.port').getBoundingClientRect();
+	return _list.getElement(RP[name]).querySelector('.port').getBoundingClientRect();
 }
 
 function deepProperty(obj, path, value, onCreate){
