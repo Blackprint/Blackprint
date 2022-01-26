@@ -14,22 +14,23 @@ Space.model('nodes', function(My, include){
 
 			var ports = Blackprint.Interface._ports;
 			for(var a = 0; a < ports.length; a++){
-				var which = iface[ports[a]];
-				if(which === void 0)
+				var _list = iface[ports[a]]?._list;
+				if(_list === void 0)
 					continue;
 
-				for(var key in which){
-					let port = which[key];
+				for (var z = 0; z < _list.length; z++) {
+					let port = _list[z];
+
 					var cables = port.cables;
 					if(cables.length === 0)
 						continue;
 
-					var rect = which.getElement(key).querySelector('.port');
+					var rect = _list.getElement(z).querySelector('.port');
 					rect = rect.getBoundingClientRect();
 
 					var cable;
-					for (var a = 0; a < cables.length; a++) {
-						let cable = cables[a];
+					for (var h = 0; h < cables.length; h++) {
+						let cable = cables[h];
 
 						// Avoid moving branch cable
 						if(cable._allBranch !== void 0

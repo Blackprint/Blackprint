@@ -1,6 +1,6 @@
 ## html
 <div class="input" @pointerover="nodeHovered(event)" @pointerout="nodeUnhovered(event)">
-  <div sf-each="key, val in input"
+  <div sf-each="val in input._list"
         class="ports {{ val.type.name + val.classAdd }} {{ val.inactive ? 'inactive' : ''}}"
         @contextmenu.stop.prevent="val.portRightClick(event)"
         @pointerdown.left.stop="val.createCable(event)"
@@ -8,6 +8,6 @@
         @pointerover="val.portHovered(event)"
         @pointerout="val.portUnhovered(event)">
     <div class="port" title="{{ (val.type._name || val.type.name) + val.classAdd }}"></div>
-    <div class="name">{{ key }}</div>
+    <div class="name">{{ val.name }}</div>
   </div>
 </div>

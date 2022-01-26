@@ -590,9 +590,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			// Replace port prototype (intepreter port -> visual port)
 			let _ports = Blackprint.Interface._ports;
 			for (var i = 0; i < _ports.length; i++) {
-				var localPorts = iface[_ports[i]];
-				for(var portName in localPorts)
-					Object.setPrototypeOf(localPorts[portName], Port.prototype);
+				var localPorts = iface[_ports[i]]._list;
+
+				for (var z = 0; z < localPorts.length; z++)
+					Object.setPrototypeOf(localPorts[z], Port.prototype);
 			}
 		}
 

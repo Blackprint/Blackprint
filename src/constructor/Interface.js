@@ -98,11 +98,13 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 
 		// Also move all cable connected to current iface
 		var ports = Blackprint.Interface._ports;
-		for(var i=0; i<ports.length; i++){
-			var which = this[ports[i]];
+		for(var i = 0; i < ports.length; i++){
+			var _list = this[ports[i]]?._list;
+			if(_list === void 0)
+				continue;
 
-			for(var key in which){
-				let port = which[key];
+			for (var z = 0; z < _list.length; z++) {
+				let port = _list[z];
 				var cables = port.cables;
 				if(cables.length === 0)
 					continue;
@@ -215,8 +217,9 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 			let owner = cable.owner; // source port
 			let targetPorts = owner.source === "input" ? this.output : this.input;
 
-			for(let key in targetPorts){
-				let port = targetPorts[key];
+			let _list = targetPorts._list;
+			for (var i = 0; i < _list.length; i++) {
+				let port = _list[i];
 
 				if((port.type.any && owner.type !== Function)
 					|| (owner.type.any && port.type !== Function)
@@ -224,7 +227,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 					|| (port.type.constructor === Array && port.type.includes(owner.type))
 					|| (owner.type.constructor === Array && owner.type.includes(port.type))
 				){
-					let portElem = targetPorts.getElement(port.name).querySelector('.port');
+					let portElem = _list.getElement(i).querySelector('.port');
 				   	cableScope.hoverPort = {
 				   		elem: portElem,
 				   		rect: portElem.getBoundingClientRect(),
