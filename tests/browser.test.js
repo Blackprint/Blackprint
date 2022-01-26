@@ -41,12 +41,9 @@ describe("Blackprint register", () => {
 	test('Node', () => {
 		// With default interface
 		class Node1 extends Blackprint.Node {
-			input = {
-				In: String,
-			}
-			output = {
-				Out: Number,
-			}
+			static input = { In: String }
+			static output = { Out: Number }
+
 			constructor(instance){
 				super(instance);
 
@@ -85,13 +82,12 @@ describe("Blackprint register", () => {
 
 		// With BPIC/Test/Node2 interface
 		class Node2 extends Blackprint.Node {
-			input = {
+			static input = {
 				In: Number,
 				Dummy: String,
 			}
-			output = {
-				Out: String,
-			}
+			static output = { Out: String }
+
 			constructor(instance){
 				super(instance);
 
@@ -467,21 +463,29 @@ describe("Blackprint create node with JavaScript", () => {
 		expect(temp.node._destroyed).toBe(true);
 
 		// Check if port still have a cable/connection
-		for(let val of Object.values(temp.output))
+		for(let val of Object.values(temp.output)){
+			if(val.cables === void 0) continue;
 			expect(val.cables.length).toBe(0);
+		}
 
-		for(let val of Object.values(temp.input))
+		for(let val of Object.values(temp.input)){
+			if(val.cables === void 0) continue;
 			expect(val.cables.length).toBe(0);
+		}
 
 
 		let temp2 = instance.getNodes('Test/Node1')[0].iface;
 
 		// Check if port still have a cable/connection
-		for(let val of Object.values(temp2.output))
+		for(let val of Object.values(temp2.output)){
+			if(val.cables === void 0) continue;
 			expect(val.cables.length).toBe(0);
+		}
 
-		for(let val of Object.values(temp2.input))
+		for(let val of Object.values(temp2.input)){
+			if(val.cables === void 0) continue;
 			expect(val.cables.length).toBe(0);
+		}
 	}
 
 	test('Delete "Test/Node2" for sketch', async () => {
