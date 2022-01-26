@@ -337,11 +337,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 			if(iface.output !== void 0){
 				var output = data.output = {};
-				var output_ = iface.output;
+				var _list = iface.output._list;
 
 				var haveValue = false;
-				for(var name in output_){
-					var port = output_[name];
+				for (var g = 0; g < _list.length; g++) {
+					var port = _list[g];
+					var name = port.name;
 					var cables = port.cables;
 
 					if(cables.length === 0)
@@ -526,6 +527,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			var portList = iface[check[i]];
 
 			for(var port in portList){
+				if(port.slice(0, 1) === '_') continue;
 				portList[port].disconnectAll();
 			}
 		}
@@ -592,6 +594,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			for (var i = 0; i < _ports.length; i++) {
 				var localPorts = iface[_ports[i]]._list;
 
+				if(localPorts === void 0) continue;
 				for (var z = 0; z < localPorts.length; z++)
 					Object.setPrototypeOf(localPorts[z], Port.prototype);
 			}
