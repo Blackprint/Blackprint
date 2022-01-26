@@ -451,7 +451,7 @@ class Cable extends Blackprint.Engine.Cable{
 		let suggestedNode;
 		if(this.target === void 0){
 			let owner = this.owner;
-			suggestedNode = Blackprint.Sketch.suggestFromPort(owner);
+			suggestedNode = Blackprint.Sketch.suggestNodeForPort(owner);
 
 			if(ev.ctrlKey) return suggestNode();
 		}
