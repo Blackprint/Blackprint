@@ -1,40 +1,5 @@
-let _portFunc = new RegExp(`\\.(${Object.keys(Blackprint.Port).join('|')})\\((.*?)\\)`, 'g');
-
-function _constructorCleaner(claz){
-	let str = claz.toString();
-	let proto = claz.prototype;
-	let _proto = Object.getOwnPropertyDescriptors(proto);
-
-	for(let prop in _proto){
-		if(prop !== 'constructor' && proto[prop] instanceof Function){
-			str = str.split(proto[prop].toString())[0];
-			break;
-		}
-	}
-
-	return str.replace(/\s/g, '');
-}
-
-// This is just feature to suggest, may not 100% accurate
-Blackprint.Sketch.suggestNode = function(portType, typeData, fromList){
-	let any = false;
-
-	if(typeData !== null){
-		if(!typeData.name) throw new Error("Class name is required");
-		if(typeData === void 0) throw new Error("typeData can't be undefined");
-		if(typeData.constructor === Object && typeData.name === 'Any'){
-			any = true;
-		}
-	}
-	else{
-		any = true;
-		typeData = {};
-	}
-
-	let name = typeData.name.split(' ');
-	let _name = name.join('|');
-	let regex = new RegExp(`:(null|(?:${_name})|[a-zA-Z_0-9.]+?\.(?:${_name}))\\b`, 'g');
-	let deep = fromList || Blackprint.nodes;
+Blackprint.Sketch.suggestNode = function(source, clazz, fromList){
+	let BP_Port = Blackprint.Port;
 
 	let temp = {};
 	function dive(nodes, obj){
@@ -51,128 +16,62 @@ Blackprint.Sketch.suggestNode = function(portType, typeData, fromList){
 				else found = true;
 			}
 			else{
-				let str = _constructorCleaner(ref);
-				if(any && str.includes(portType + '={')){
-					obj[key] = ref;
-					found = true;
-					continue;
-				}
-
-				str = str.split(portType + '={')[1];
-				if(str === void 0) continue;
-
-				if(portType === 'input')
-					str = str.split('output={')[0];
-				else str = str.split('input={')[0];
-
-				let match = false;
-
-				// Blackprint.Port.*(.*?)
-				str.replace(_portFunc, function(full, func, args){
-					if(name.includes('Function') && func === 'Trigger')
-						match = true;
-
-					if(!match){
-						match = args.includes('null');
-
-						if(!match){
-							for (var i = 0; i < name.length; i++) {
-								match = args.includes(name[i]);
-								if(match) break;
-							}
-						}
-					}
-				});
-
-				if(!match){
-					str.replace(regex, function(full){
-						if(!match) match = true;
-					});
-				}
-
-				if(match){
-					obj[key] = ref;
-					found = true;
-				}
-			}
-		}
-
-		return found;
-	}
-
-	dive(deep, temp);
-	if(any || typeData.constructor === Object)
-		return temp;
-
-	deepMerge(temp, Blackprint.Sketch.suggestByRef(portType, typeData));
-	return temp;
-}
-
-// This is just feature to suggest, may not 100% accurate
-Blackprint.Sketch.suggestFromPort = function(port){
-	let source = port.source === 'input' ? 'output' : 'input';
-
-	if(port.type.name.length >= 3)
-		return Blackprint.Sketch.suggestNode(source, port.type);
-	// else try find the unminified class name
-
-	let str = _constructorCleaner(port.iface.node.constructor);
-	str = str.split(port.source + '={')[1];
-
-	if(port.source === 'input')
-		str = str.split('output={')[0];
-	else str = str.split('input={')[0];
-
-	let match = str.match(new RegExp(`${port.name}:([a-zA-Z_0-9.\\[\\]\\(\\), ]+)[,}]`));
-
-	if(match === null) throw new Error("Failed to get type name");
-	str = match[1];
-
-	let match2 = _portFunc.exec(str);
-	_portFunc.lastIndex = 0;
-
-	if(match2 !== null){
-		str = match2 = match2[2];
-
-		if(match2.slice(0, 1) === '[') // array/union
-			str = match2.slice(1, -1).split(',').join(' ');
-	}
-
-	return Blackprint.Sketch.suggestNode(source, {name: str});
-}
-
-Blackprint.Sketch.suggestByRef = function(source, clazz, fromList){
-	let temp = {};
-	function dive(nodes, obj){
-		let found = false;
-
-		for(let key in nodes){
-			let ref = nodes[key];
-
-			if(ref.constructor === Object){
-				obj[key] = {};
-
-				if(!dive(nodes[key], obj[key]))
-					delete obj[key];
-				else found = true;
-			}
-			else{
-				let metadata = ref[`$${source}`];
+				let metadata = ref[source]; // the target port (source= input/output)
 				if(metadata === void 0) continue;
 
 				let match = false;
-				for(let prop in metadata){
-					let temp = metadata[prop]; // the target port (source= input/output)
-					if(temp == null) continue;
+				that: for(let prop in metadata){
+					let temp = metadata[prop];
+
+					if(temp === undefined) continue;
+					if(temp === null){
+						if(clazz === Function)
+							continue;
+
+						match = true;
+						continue;
+					}
 
 					// console.log(31, temp);
 
-					if(temp === clazz
-					   || (source === 'output' && temp.prototype instanceof clazz)
-					   || (source === 'input' && clazz.prototype instanceof temp)){
+					if(temp.constructor === Object){
+						if(temp.portFeature !== void 0){
+							if(temp.portFeature === BP_Port.Trigger){
+								if(clazz === Function)
+									match = true;
+
+								continue;
+							}
+
+							if(temp.portType === null){
+								if(clazz !== Function)
+									match = true;
+
+								continue;
+							}
+
+							if(temp.portFeature === BP_Port.Union){
+								match = checkTypeInstance(source, clazz, temp.portType);
+								if(match) break;
+
+								continue;
+							}
+							else temp = temp.portType;
+						}
+					}
+
+					// Skip if not matching with BP_Port.Trigger
+					if(source === 'input' && clazz === Function)
+						continue;
+
+					if(clazz.any != null){
+						if(temp === Function) continue;
 						match = true;
 						break;
 					}
+
+					match = checkTypeInstance(source, clazz, temp);
+					if(match) break;
 				}
 
 				if(match){
@@ -189,4 +88,47 @@ Blackprint.Sketch.suggestByRef = function(source, clazz, fromList){
 	if(dive(deep, temp))
 		return temp;
 	else return {};
+}
+
+function checkTypeInstance(source, clazz, target){
+	if(target === clazz)
+		return true;
+
+	if(source === 'output'){
+		if(clazz === Object) return false;
+
+		if(clazz.constructor === Array){
+			for (var i = 0; i < clazz.length; i++) {
+				if(checkTypeInstance(source, clazz[i], target))
+					return true;
+			}
+
+			return false;
+		}
+
+		if(target.prototype instanceof clazz)
+			return true;
+	}
+
+	if(source === 'input'){
+		if(target === Object) return false;
+
+		if(target.constructor === Array){
+			for (var i = 0; i < target.length; i++) {
+				if(checkTypeInstance(source, target[i], clazz))
+					return true;
+			}
+
+			return false;
+		}
+
+		if(clazz.prototype instanceof target)
+			return true;
+	}
+
+	return false;
+}
+
+Blackprint.Sketch.suggestNodeForPort = function(port){
+	return Blackprint.Sketch.suggestNode(port.source === 'input' ? 'output' : 'input', port.type);
 }
