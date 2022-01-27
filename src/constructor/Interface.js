@@ -217,6 +217,8 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 			let owner = cable.owner; // source port
 			let targetPorts = owner.source === "input" ? this.output : this.input;
 
+			if(targetPorts == null) return;
+
 			let _list = targetPorts._list;
 			for (var i = 0; i < _list.length; i++) {
 				let port = _list[i];
