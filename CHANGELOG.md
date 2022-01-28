@@ -1,3 +1,17 @@
+# 0.6.0
+
+### Features
+- Improved node suggestion
+- Edit node description and title
+- Select nodes with left click
+- Move selected nodes and branch cable together
+- Add node comment
+
+### Breaking Changes
+- Blackprint Engine v0.6 is required (for more information please see the changelog)
+- `Blackprint.Sketch.suggestFromPort` is now changed to `Blackprint.Sketch.suggestNodeForPort`
+- `Blackprint.Sketch.suggestByRef` is now removed, please use `suggestNode` instead
+
 # 0.5.2
 
 ### Features
