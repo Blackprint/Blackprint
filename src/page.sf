@@ -179,7 +179,7 @@ sf-space[blackprint]{
     visibility: hidden;
   }
 
-  .nodes .node .ports.Array > .port {
+  .nodes .node .ports.ArrayOf > .port {
     background: none;
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
@@ -393,9 +393,25 @@ sf-space[blackprint]{
         justify-items: center;
         right: -1px;
 
+        .list{
+          display: grid;
+        }
+
         .item {
           display: inline-flex;
           margin-top: 10px;
+
+          &.comment {
+            border-radius: 5px;
+            width: calc(100% - 12px);
+            background: #0000009e;
+            outline: 1px solid black;
+            box-shadow: 0 0 5px white;
+            padding: 5px;
+            bottom: 25px;
+            font-size: 14px;
+            position: relative;
+          }
         }
       }
 

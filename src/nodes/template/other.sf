@@ -1,4 +1,8 @@
 ## html
 <div class="other">
-	<div class="item" sf-each="x in $decoration.other">{{@exec return x }}</div>
+	<div class="list">
+		<div class="item" sf-each="x in $decoration.other">{{@exec return x }}</div>
+	</div>
+
+	<div class="item comment" style="display: {{ comment !== '' ? '' : 'none' }}">{{ comment }}</div>
 </div>

@@ -8,10 +8,9 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 
 	input = {};
 	output = {};
-	property = {};
 	*/
 
-	static _ports = ['input', 'output', 'property'];
+	static _ports = ['input', 'output'];
 	static _prepare = Blackprint.Interface._prepare; // Copy from engine-js
 	static _reuse = Blackprint.Interface._reuse; // Copy from engine-js
 
@@ -36,6 +35,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 			this.title = 'No Title';
 			this.description = '';
 			this.importing = true;
+			this.comment = '';
 			this.type = false; // default node type: general
 			this.env = Blackprint.Environment.map;
 			this.node = node;

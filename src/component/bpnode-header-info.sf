@@ -1,5 +1,5 @@
 ## html
-<bpnode-header-info class="bphead-{{ type }}">{{ text }}</bpnode-header-info>
+<bpnode-header-info class="bphead-{{ type }}" title="{{ description }}">{{ text }}</bpnode-header-info>
 
 ## scss-global
 bpnode-header-info {
@@ -11,17 +11,20 @@ bpnode-header-info {
 
 	&.bphead-error{
 		box-shadow: 0 0 12px red;
+		border: 1px solid red;
 		background: #ff0000c7;
 	}
 
 	&.bphead-info{
 		box-shadow: 0 0 12px white;
+		border: 1px solid white;
 		color: black;
 		background: #ffffffc7;
 	}
 
 	&.bphead-warn{
 		box-shadow: 0 0 12px #fff700;
+		border: 1px solid #fff700;
 		background: #fff70096;
 		color: black;
 	}
@@ -39,4 +42,5 @@ Blackprint.space.component('bpnode-header-info', {
 }, function(My){
 	My.type = "info";
 	My.text = "";
+	My.description = "";
 });
