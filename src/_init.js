@@ -165,6 +165,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 					y: temp.y,
 					id: temp.id, // Named ID (if exist)
 					i: temp.i, // List Index
+					comment: temp.comment,
 					data: temp.data, // if exist
 					oldIface: oldIfaces[temp.id],
 				}, handlers);
@@ -328,6 +329,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 			if(iface.id !== void 0)
 				data.id = iface.id;
+
+			if(iface.comment !== void 0)
+				data.comment = iface.comment;
 
 			if(iface.data !== void 0){
 				data.data = {};
@@ -621,6 +625,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 		else this.ifaceList.push(iface);
 
 		iface.importing = false;
+		iface.comment = options.comment || '';
+
 		iface.imported && iface.imported(savedData);
 		node.imported && node.imported(savedData);
 
