@@ -18,6 +18,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 		this.ifaceList = [];
 
+		this.variables = {}; // { path => { value } }
+		this.functions = {}; // { path => { name, description, input, output, nodes: [] } }
+
 		this.index = Blackprint.index++;
 		this.scope = Blackprint.space.getScope(this.index);
 		this.scope.sketch = this;
