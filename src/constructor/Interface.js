@@ -40,6 +40,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 			this.env = Blackprint.Environment.map;
 			this.node = node;
 			this._scope = node._instance.scope;
+			this._nodeSelected = false;
 
 			if(this._scope !== void 0)
 				this._container = this._scope('container');
@@ -82,7 +83,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 	// ==== Below is for Sketch only ====
 
 	// DragMove event handler
-	moveNode(e){
+	moveNode(e, single){
 		var container = this._container;
 		var scale = container.scale;
 		var x = e.movementX / scale;
@@ -90,6 +91,8 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 
 		this.x += x;
 		this.y += y;
+
+		if(!single) container.moveSelection(e, this);
 
 		if(container.onNodeMove !== void 0)
 			container.onNodeMove(e, this);
@@ -204,7 +207,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 				if(el.parentElement.classList.contains('ports') || el.classList.contains('ports'))
 					return;
 
-				if(cableScope.hoverPort === false || cable.connected)
+				if(cableScope.hoverPort === false || cable.connected || cable.selected)
 					return;
 
 				let port = cableScope.hoverPort.item;

@@ -25,6 +25,8 @@ Space.model('cables', function(My, include){
 	// Move clicked cable
 	My.currentCable = void 0;
 
+	My.selected = [];
+
 	// This will run everytime the cable was moving
 	// used on: ../page.sf
 	var pendingCable = new Set();

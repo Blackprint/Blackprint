@@ -28,9 +28,12 @@ class Cable extends Blackprint.Engine.Cable{
 		this.connected = false;
 		this.valid = true;
 		this.hasBranch = false;
+		this.selected = false;
 		this._destroyed = false;
 
-		var container = port._scope('container');
+		var container = this._container = port._scope('container');
+		this._cablesModel = this._scope('cables');
+
 		var Ofst = container.offset;
 
 		let unshift = false;
@@ -61,6 +64,8 @@ class Cable extends Blackprint.Engine.Cable{
 
 		// Get SVG Path element
 		this.pathEl = windowless ? {} : list.getElement(this).firstElementChild;
+
+		this.moveCableHead = this.moveCableHead.bind(this);
 	}
 
 	// ToDo: Improve performance by caching the dotGlow.cloneNode()
@@ -150,44 +155,59 @@ class Cable extends Blackprint.Engine.Cable{
 		});
 	}
 
+	moveCableHead(ev, single){
+		this._Ofst ??= ev.target.closest('sf-space').getBoundingClientRect();
+
+		let { _Ofst, _container, branch } = this;
+		let { pos, scale } = this._container;
+		let { hoverPort } = this._cablesModel;
+
+		// Let's make a magnet sensation (fixed position when hovering node port)
+		if(!single && hoverPort !== false && (branch == null || branch.length === 0)){
+			var center = hoverPort.rect.width/2;
+			this.head2 = [
+				(hoverPort.rect.x + center - pos.x - _Ofst.x) / scale,
+				(hoverPort.rect.y + center - pos.y - _Ofst.y) / scale
+			];
+		}
+
+		// Follow pointer
+		else{
+			if(!single) {
+				this.head2 = [
+					(ev.clientX - pos.x - _Ofst.x) / scale,
+					(ev.clientY - pos.y - _Ofst.y) / scale
+				];
+
+				_container.moveSelection(ev, this);
+			}
+			else {
+				this.head2[0] += ev.movementX / scale;
+				this.head2[1] += ev.movementY / scale;
+			}
+		}
+
+		if(branch !== void 0 && branch.length !== 0){
+			for (var i = 0; i < branch.length; i++) {
+				let _cable = branch[i];
+				if(_cable.head1 === this.head2) continue;
+
+				_cable.head1 = this.head2;
+			}
+		}
+	}
+
 	cableHeadClicked(ev, isCreating){
 		ev.stopPropagation();
 
 		if(!isCreating && ev.ctrlKey)
 			return this.createBranch(ev);
 
-		var container = this._scope('container');
-		var cablesModel = this._scope('cables');
+		var container = this._container;
+		var cablesModel = this._cablesModel;
 
 		var Ofst = ev.target.closest('sf-space').getBoundingClientRect();
 		var cable = this;
-
-		function moveCableHead(ev){
-			// Let's make a magnet sensation (fixed position when hovering node port)
-			if(cablesModel.hoverPort !== false && (cable.branch == null || cable.branch.length === 0)){
-				var center = cablesModel.hoverPort.rect.width/2;
-				cable.head2 = [
-					(cablesModel.hoverPort.rect.x+center - container.pos.x - Ofst.x) / container.scale,
-					(cablesModel.hoverPort.rect.y+center - container.pos.y - Ofst.y) / container.scale
-				];
-			}
-
-			// Follow pointer
-			else cable.head2 = [
-				(ev.clientX - container.pos.x - Ofst.x) / container.scale,
-				(ev.clientY - container.pos.y - Ofst.y) / container.scale
-			];
-
-			if(cable.branch !== void 0 && cable.branch.length !== 0){
-				let branch = cable.branch;
-				for (var i = 0; i < branch.length; i++) {
-					let _cable = branch[i];
-					if(_cable.head1 === cable.head2) continue;
-
-					_cable.head1 = cable.head2;
-				}
-			}
-		}
 
 		var elem = cablesModel.list.getElement(cable);
 
@@ -201,8 +221,8 @@ class Cable extends Blackprint.Engine.Cable{
 		cablesModel.currentCable = cable;
 
 		var space = $(ev.target.closest('sf-space'));
-		space.on('pointermove', moveCableHead).once('pointerup', function(ev){
-			space.off('pointermove', moveCableHead);
+		space.on('pointermove', this.moveCableHead).once('pointerup', function(ev){
+			space.off('pointermove', this.moveCableHead);
 
 			// Add delay because it may be used for connecting port
 			setTimeout(function(){

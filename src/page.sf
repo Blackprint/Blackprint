@@ -25,6 +25,7 @@
           {{ x.connected ? 'connected' : ''}}
           {{ x.disabled ? 'disabled' : ''}}
           {{ x.hasBranch ? 'has-branch' : ''}}
+          {{ x.selected ? 'selected' : ''}}
         " @contextmenu.capture.prevent="x.cableMenu(event)">
           <path
             @pointerdown.capture="x.cablePathClicked(event)"
@@ -44,7 +45,7 @@
     <!-- Nodes goes here -->
     <sf-m name="nodes" class="nodes" style="user-select:none;">
       <!-- Handled on ./nodes.js -->
-      <div sf-each="item in list" @pointerup="checkNodeClick(event)">
+      <div sf-each="item in list" class="{{ item._nodeSelected && 'selected' }}" @pointerup="checkNodeClick(event)">
         {{@exec
           // Capitalize each word
           var name = item.interface.split('.sf')[0].replace(/[\/.,<>:\[\]{}+_=`~!@#$%^*(\\|)]/g, '-').toLowerCase();
@@ -61,6 +62,13 @@
         }}
       </div>
     </sf-m>
+
+    <div class="select {{ select.show ? '' : 'hide' }}" style="
+      height: {{ select.h }}px;
+      width: {{ select.w }}px;
+      transform: translate({{ select.x }}px, {{ select.y }}px)
+                 scale({{ select.ix ? '-':'' }}1, {{ select.iy ? '-':'' }}1);
+    "></div>
   </sf-m>
 
   <sf-m name="dropdown">
@@ -71,6 +79,24 @@
 ## scss-global
 sf-space[blackprint]{
   position: absolute;
+
+  sf-m[name=container] {
+    > .select {
+      background: #529fff40;
+      outline: 1px solid #0095ff;
+      position: absolute;
+      backface-visibility: hidden;
+      top: 0;
+      left: 0;
+      display: block;
+      transform-origin: top left;
+
+      &.hide {
+        display: none;
+      }
+    }
+  }
+
   &, .nodes, .cables{
     height: 100%;
     width: 100%;
@@ -219,6 +245,11 @@ sf-space[blackprint]{
         display: block;
       }
 
+      .has-branch.selected circle{
+        r: 8;
+        fill: white;
+      }
+
       .disabled{
         opacity: 0.4;
       }
@@ -257,6 +288,12 @@ sf-space[blackprint]{
 
   .nodes{
     position: unset;
+
+    .selected .node {
+      border: 1px solid white;
+      box-shadow: 0 0 5px white;
+    }
+
     .node{
       color: white;
       font-family: Arial;
@@ -318,6 +355,15 @@ sf-space[blackprint]{
 
             i{
               line-height: 21px;
+            }
+
+            &.node-route {
+              font-size: 15px;
+              line-height: 20px;
+              margin-left: 10px;
+              box-shadow: 0 0 17px 5px #ff8d00e3;
+              background: #53340e;
+              outline: 2px solid #ff8d00;
             }
           }
         }
@@ -389,9 +435,16 @@ sf-space[blackprint]{
             background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMTM0A1t6AAADUUlEQVRIS7WWXUhTYRjH3Waf2gdUEmYhgRUEIcIkcywmCHrRjS5Q8GZahA5CglHsrrvUlAkLvBh1I12UiGAwbzYU/EIvRpgiBc27BEHNLMdmPv3/Z2eb284+gnrgN97z/J/nffa+5z3POQUiEgemB0dBMSgBV8EtYFThmD5qjGGs/vAcWiQG0QJHwCmdTlcGqsA9XHeAxyod9KlaGWMBc7IWiv4kChQj+bJer68BNvAC12/h/0A4pk/VahjLHDVXlzp5DJoOFIIiJF1C8h2DwdAJPCaT6aPf7/+5t7d3QDimjxpjGMsc5J4EBs6VqQjFE6AECVVI7MAEr20229dIJIKYZKPP4XBIe3u7eDweGR4efoncC+AY0Nw2GsWz4BoKNANXdXX1UigUOkCApkGTlpYW6e7ulpGREfF6vc+Rz/tTCFmzSBEoxSpMKOAA3snJyRDErDY1NSWNjY3S29srMzMz+/Pz8+2Yh384bctoXEUFijQDt9Fo/AwhL2tqahK73S5jY2MSDAYja2trzZgrbcto50EleATe4599h5CXuVwusVqtyr1ZWVmRnZ2dXWCGlFbkIqgBT4B3dnY2DCEvm5ubk4aGBhkcHJRAICDb29sSDod/QKoESUVKgQk8A7719fXfEPIyxEpdXZ309fXJ4uKibG1tKacP9g3cAPEiPOdm4AR+RvyNWSwW6enpkYWFBdnc3ORKVEUC4L8WSVtJ0nZtbGxkfD5SDbFp25XpnvyzG48iu1jNXUjxAoSWdIQHBgbyPsJutzt+hJeXl/dXV1fvYw4DpLQihx/GV2az+QuEvKy1tVW6urpkdHR0f3x8vBPzsFFqPoypbWVieno6Z1tBK1G2im1laGioH3PEmqRmW1EaJIpcRwGlQdbW1n7K1SDb2tqUBul0Ot8gtwJzKA0SaBZJbfUP1FYfzNTqqTGGscxBbs5Wn/GlVV9fv+Tz+X7FXloc00eNMYxlDnKzv7SUn8Trl+/3K0jm/XkI+nH9Dv4JwjF9qmZiLHPUXM0CJDGIFuLXxxkkl4PbwIprO3iqYqdP1coZC3J+sSQG0W3jko8DHmt+jdwEfFAtKhzTR40xjM24TTEU03DGto8H4jQ4B/itRTimjxpjsq5CRAr+AGaARw6hXaKlAAAAAElFTkSuQmCC);
             background-size: 20px;
             width: 20px;
-            box-shadow: none;
             height: 20px;
+
+            // background: white;
+            // clip-path: path('M 0 0 L 6 0 C 8 1 12 5 12 6 C 12 7 8 11 6 12 L 0 12 C 3 9 2 10 5 6 C 3 3 2 2 0 0');
+            // width: 12px;
+            // height: 12px;
+            // border-radius: 0;
+
             border: none;
+            box-shadow: none;
           }
         }
       }

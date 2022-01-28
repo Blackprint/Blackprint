@@ -24,6 +24,7 @@ Space.model('container', function(My, include){
 	My.size = {w:0, h:0};
 	My.origSize = {w:0, h:0};
 	My.offset;
+	My.select = {x:0, y:0, w:0, h:0, ix: false, iy: false, show: false};
 
 	My.config = {
 		move: true,
@@ -133,7 +134,10 @@ Space.model('container', function(My, include){
 
 	My.moveContainer = function(ev){
 		if(My.config.move === false) return;
-		if(ev.button === 0) return; // left click
+		if(ev.button === 0){ // left click
+			My.beginSelecting(ev);
+			return;
+		}
 
 		My.$el.on('pointermove', moveContainer);
 		let cancelContextMenu = false;
@@ -156,6 +160,115 @@ Space.model('container', function(My, include){
 			// Fix incorrect scaling when the movement was too fast
 			My.size.w = My.origSize.w / My.scale - My.pos.x;
 			My.size.h = My.origSize.h / My.scale - My.pos.y;
+		});
+	}
+
+	let cableSelect = My.cableScope.selected;
+	let nodeSelect = My.nodeScope.selected;
+	let cableList = My.cableScope.list;
+	let nodeList = My.nodeScope.list;
+
+	My.moveSelection = function(ev, skip){
+		var scale = My.scale;
+
+		for (var i = 0; i < cableSelect.length; i++) {
+			let temp = cableSelect[i];
+			if(skip === temp) continue;
+
+			temp.moveCableHead(ev, true);
+		}
+
+		for (var i = 0; i < nodeSelect.length; i++) {
+			let temp = nodeSelect[i];
+			if(skip === temp) continue;
+
+			temp.moveNode(ev, true);
+		}
+	}
+
+	let selectPivotPoint = {x: 0, y: 0};
+	function containerSelecting(ev){
+		let dx = (ev.clientX + My.pos.x - My.offset.x) - selectPivotPoint.x;
+		let dy = (ev.clientY + My.pos.y - My.offset.y) - selectPivotPoint.y;
+
+		My.select.ix = dx < 0;
+		My.select.iy = dy < 0;
+		My.select.w = Math.abs(dx);
+		My.select.h = Math.abs(dy);
+	}
+
+	My.beginSelecting = function(ev){
+		My.select.show = true;
+
+		My.select.x = selectPivotPoint.x = ev.clientX + My.pos.x - My.offset.x;
+		My.select.y = selectPivotPoint.y = ev.clientY + My.pos.y - My.offset.y;
+
+		$(document.body).css('user-select', 'none');
+
+		My.$el.on('pointermove', containerSelecting);
+		$(sf.Window).once('pointerup', function(){
+			My.$el.off('pointermove', containerSelecting);
+			$(document.body).css('user-select', '');
+
+			let obj = My.select;
+			let sx, sy, ex, ey; // s = start, e = end; (X, Y position)
+
+			if(obj.ix){
+				sx = obj.x - obj.w;
+				ex = obj.x;
+			}
+			else{
+				sx = obj.x;
+				ex = obj.x + obj.w;
+			}
+
+			if(obj.iy){
+				sy = obj.y - obj.h;
+				ey = obj.y;
+			}
+			else{
+				sy = obj.y;
+				ey = obj.y + obj.h;
+			}
+
+			// Reset
+			My.select = {x:0, y:0, w:0, h:0, ix: false, iy: false, show: false};
+
+			for (var i = 0; i < cableSelect.length; i++)
+				cableSelect[i].selected = false;
+
+			for (var i = 0; i < nodeSelect.length; i++)
+				nodeSelect[i]._nodeSelected = false;
+
+			cableSelect.length = 0;
+			nodeSelect.length = 0;
+
+			for (var i = 0; i < cableList.length; i++) {
+				let temp = cableList[i];
+				if(temp.hasBranch === false) continue;
+
+				let [x, y] = temp.head2;
+				if(x >= sx && x <= ex
+				&& y >= sy && y <= ey){
+					temp.selected = true;
+					cableSelect.push(temp);
+				}
+			}
+
+			for (var i = 0; i < nodeList.length; i++) {
+				let temp = nodeList[i];
+				let {x, y} = temp;
+				let {offsetWidth, offsetHeight} = sf.Window.source(temp.$el, ev).firstElementChild;
+
+				let ox = offsetWidth + x;
+				let oy = offsetHeight + y;
+
+				if(ox >= sx && x <= ex
+				&& oy >= sy && y <= ey){
+					temp._nodeSelected = true;
+					nodeSelect.push(temp);
+				}
+			}
 		});
 	}
 

@@ -79,6 +79,8 @@ Space.model('nodes', function(My, include){
 		},
 	};
 
+	My.selected = [];
+
 	My.checkNodeClick = function(ev){
 		if(ev.target.closest('.ports'))
 			return;
