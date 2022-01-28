@@ -5,14 +5,14 @@
     <div>Property still underdevelopment</div>
     <div class="property">
       <div sf-each="val in property._list"
-            class="ports {{ val.type.name + val.classAdd }} {{ val.inactive ? 'inactive' : ''}}"
+            class="ports {{ val.classAdd + val.type.name }} {{ val.inactive ? 'inactive' : ''}}"
             @contextmenu.stop.prevent="val.portRightClick(event)"
             @pointerdown.left.stop="val.createCable(event)"
             @pointerup.left="val.connectCable()"
             @pointerover="val.portHovered(event)"
             @pointerout="val.portUnhovered(event)">
         <div class="name" style="display: none">{{ val.name }}</div>
-        <div class="port" title="{{ val.type.name + val.classAdd }}"></div>
+        <div class="port" title="{{ val.classAdd + val.type.name }}"></div>
       </div>
     </div>
 </div>
