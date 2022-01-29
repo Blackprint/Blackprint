@@ -133,19 +133,24 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			}
 
 			if(metadata.moduleJS !== void 0){
-				// wait for .min.mjs
-				await Blackprint.loadModuleFromURL(metadata.moduleJS, {
-					loadBrowserInterface: true
-				});
+				try{
+					// wait for .min.mjs
+					await Blackprint.loadModuleFromURL(metadata.moduleJS, {
+						loadBrowserInterface: true
+					});
 
-				// wait for .sf.mjs and .sf.css if being loaded from code above
-				if(window.sf && window.sf.loader){
-					await sf.loader.task;
-					await new Promise(resolve=> setTimeout(resolve, 100));
-					await sf.loader.task;
+					// wait for .sf.mjs and .sf.css if being loaded from code above
+					if(window.sf && window.sf.loader){
+						await sf.loader.task;
+						await new Promise(resolve=> setTimeout(resolve, 100));
+						await sf.loader.task;
+					}
+
+					await Promise.resolve();
+				} catch(e) {
+					containerModel._isImporting = false;
+					throw e;
 				}
-
-				await Promise.resolve();
 			}
 		}
 
@@ -154,22 +159,27 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 		// Prepare all nodes depend on the namespace
 		// before we create cables for them
-		for(var namespace in json){
-			var nodes = json[namespace];
+		try {
+			for(var namespace in json){
+				var nodes = json[namespace];
 
-			// Every nodes that using this namespace name
-			for (var a = 0; a < nodes.length; a++){
-				let temp = nodes[a];
-				this.createNode(namespace, {
-					x: temp.x,
-					y: temp.y,
-					id: temp.id, // Named ID (if exist)
-					i: temp.i, // List Index
-					comment: temp.comment,
-					data: temp.data, // if exist
-					oldIface: oldIfaces[temp.id],
-				}, handlers);
+				// Every nodes that using this namespace name
+				for (var a = 0; a < nodes.length; a++){
+					let temp = nodes[a];
+					this.createNode(namespace, {
+						x: temp.x,
+						y: temp.y,
+						id: temp.id, // Named ID (if exist)
+						i: temp.i, // List Index
+						comment: temp.comment,
+						data: temp.data, // if exist
+						oldIface: oldIfaces[temp.id],
+					}, handlers);
+				}
 			}
+		} catch(e) {
+			containerModel._isImporting = false;
+			throw e;
 		}
 
 		let cableConnects = [];
@@ -240,6 +250,24 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 		let branchMap = new Map();
 
+		function deepCreate(temp, cable, linkPortA) {
+			if(temp.branch !== void 0){
+				cable.head2[0] = temp.x;
+				cable.head2[1] = temp.y;
+
+				let list = temp.branch;
+				for (let z = 0; z < list.length; z++)
+					deepCreate(list[z], cable.createBranch(), linkPortA);
+
+				return;
+			}
+
+			if(!branchMap.has(linkPortA))
+				branchMap.set(linkPortA, []);
+
+			branchMap.get(linkPortA)[temp.id] = cable;
+		}
+
 		await $.afterRepaint();
 		for (var i = 0; i < cableConnects.length; i++) {
 			let {output, portName, linkPortA, input, target, linkPortB} = cableConnects[i];
@@ -255,40 +283,20 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 					// Create branches
 					for (let z = 0; z < _cable.length; z++)
-						deepCreate(_cable[z], linkPortA.createCable(rectA));
-
-					function deepCreate(temp, cable) {
-						if(temp.branch !== void 0){
-							cable.head2[0] = temp.x;
-							cable.head2[1] = temp.y;
-
-							let list = temp.branch;
-							for (let z = 0; z < list.length; z++)
-								deepCreate(list[z], cable.createBranch());
-
-							return;
-						}
-
-						if(!branchMap.has(linkPortA))
-							branchMap.set(linkPortA, []);
-
-						branchMap.get(linkPortA)[temp.id] = cable;
-					}
+						deepCreate(_cable[z], linkPortA.createCable(rectA), linkPortA);
 				}
 
 				cable = branchMap.get(linkPortA)[target.parentId];
 			}
 
-			if(cable === void 0){
-				// Create cable from NodeA
-				var rectA = getPortRect(output, portName);
-				cable = linkPortA.createCable(rectA);
-			}
+			// Create cable from NodeA
+			if(cable === void 0)
+				cable = linkPortA.createCable(getPortRect(output, portName));
 
 			// Positioning the cable head2 into target port position from NodeB
 			var rectB = getPortRect(input, target.name);
-			var center = rectB.width/2;
-			cable.head2 = [rectB.x+center, rectB.y+center];
+			var center = rectB.width / 2;
+			cable.head2 = [rectB.x + center, rectB.y + center];
 
 			// Connect cables.currentCable to target port on NodeB
 			linkPortB.connectCable(cable);

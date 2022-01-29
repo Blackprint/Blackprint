@@ -243,6 +243,8 @@ Space.model('container', function(My, include){
 			cableSelect.length = 0;
 			nodeSelect.length = 0;
 
+			if(obj.w < 10 && obj.h < 10) return;
+
 			for (var i = 0; i < cableList.length; i++) {
 				let temp = cableList[i];
 				if(temp.hasBranch === false) continue;

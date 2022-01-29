@@ -442,6 +442,19 @@ sf-space[blackprint]{
           }
         }
 
+        &._Exec {
+          .port {
+            background: white;
+            clip-path: path('M 0 0 L 6 0 C 8 1 12 5 12 6 C 12 7 8 11 6 12 L 0 12 C 3 9 2 10 5 6 C 3 3 2 2 0 0');
+            width: 12px;
+            height: 12px;
+            border-radius: 0;
+
+            border: none;
+            box-shadow: none;
+          }
+        }
+
         &.Function{
           height: 20px;
           .name{
@@ -452,12 +465,6 @@ sf-space[blackprint]{
             background-size: 20px;
             width: 20px;
             height: 20px;
-
-            // background: white;
-            // clip-path: path('M 0 0 L 6 0 C 8 1 12 5 12 6 C 12 7 8 11 6 12 L 0 12 C 3 9 2 10 5 6 C 3 3 2 2 0 0');
-            // width: 12px;
-            // height: 12px;
-            // border-radius: 0;
 
             border: none;
             box-shadow: none;
@@ -532,8 +539,10 @@ body.blackprint-no-vfx sf-space[blackprint], body sf-space[blackprint] .importin
     filter: none;
   }
   .nodes .node{
-    box-shadow: none;
     transition: none;
+  }
+  .nodes * {
+    box-shadow: none !important;
   }
 }
 
