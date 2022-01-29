@@ -231,6 +231,9 @@ Space.model('container', function(My, include){
 				ey = obj.y + obj.h;
 			}
 
+
+			let smallSelect = obj.w < 10 && obj.h < 10;
+
 			// Reset
 			My.select = {x:0, y:0, w:0, h:0, ix: false, iy: false, show: false};
 
@@ -243,7 +246,7 @@ Space.model('container', function(My, include){
 			cableSelect.length = 0;
 			nodeSelect.length = 0;
 
-			if(obj.w < 10 && obj.h < 10) return;
+			if(smallSelect) return;
 
 			for (var i = 0; i < cableList.length; i++) {
 				let temp = cableList[i];
