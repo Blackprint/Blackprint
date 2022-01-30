@@ -97,12 +97,12 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 		if(container.onNodeMove !== void 0)
 			container.onNodeMove(e, this);
 
-		let nonce;
-
 		// Also move all cable connected to current iface
 		var ports = Blackprint.Interface._ports;
 		for(var i = 0; i < ports.length; i++){
-			var _list = this[ports[i]]?._list;
+			let which = ports[i];
+			var _list = this[which]?._list;
+
 			if(_list === void 0)
 				continue;
 
@@ -118,18 +118,14 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 
 					// Avoid moving branch cable
 					if(ref._allBranch !== void 0){
-						if(port.source === 'output'
+						if(which === 'output'
 						   && (ref.cableTrunk !== ref || ref.parentCable !== void 0))
 							continue;
 					}
 
 					// If the source and target is in current node
 					if(ref.owner.iface === this && (ref.target && ref.target.iface === this)){
-						if(nonce === void 0){
-							nonce = Date.now() + Math.random();
-							ref._nonce = nonce;
-						}
-						else if(ref._nonce === nonce)
+						if(which === 'output')
 							continue;
 
 						let { head1, head2 } = ref;
