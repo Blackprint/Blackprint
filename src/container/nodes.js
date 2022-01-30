@@ -14,7 +14,9 @@ Space.model('nodes', function(My, include){
 
 			var ports = Blackprint.Interface._ports;
 			for(var a = 0; a < ports.length; a++){
-				var _list = iface[ports[a]]?._list;
+				let which = ports[a];
+				var _list = iface[which]?._list;
+
 				if(_list === void 0)
 					continue;
 
@@ -28,9 +30,12 @@ Space.model('nodes', function(My, include){
 					var rect = _list.getElement(z).querySelector('.port');
 					rect = rect.getBoundingClientRect();
 
+					let portX = (rect.x+(rect.width/2) - container.pos.x - Ofst.x) / container.scale;
+					let portY = (rect.y+(rect.height/2) - container.pos.y - Ofst.y) / container.scale;
+
 					var cable;
 					for (var h = 0; h < cables.length; h++) {
-						let cable = cables[h];
+						cable = cables[h];
 
 						// Avoid moving branch cable
 						if(cable._allBranch !== void 0
@@ -39,14 +44,13 @@ Space.model('nodes', function(My, include){
 							continue;
 						}
 
-						if(cable.owner.iface === iface)
+						if(cable.owner.iface === iface && which === 'output')
 							cable = cable.head1;
 						else
 							cable = cable.head2;
 
-						var center = rect.width/2;
-						cable[0] = (rect.x+center - container.pos.x - Ofst.x) / container.scale;
-						cable[1] = (rect.y+center - container.pos.y - Ofst.y) / container.scale;
+						cable[0] = portX;
+						cable[1] = portY;
 					}
 				}
 			}
