@@ -160,7 +160,8 @@ sf-space[blackprint]{
   @include portType("Number", deepskyblue);
   @include portType("Object", mediumpurple);
   @include portType("Boolean", #ff5959);
-  @include portType("String", white);
+  @include portType("String", #55ff52);
+  @include portType("BP-Union", white);
 
   .glow-cable{
     position: absolute;
