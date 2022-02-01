@@ -39,7 +39,7 @@ Space.model('nodes', function(My, include){
 
 						// Avoid moving branch cable
 						if(cable._allBranch !== void 0
-						   && port.source === 'output'
+						   && which === 'output'
 						   && cable.cableTrunk !== cable){
 							continue;
 						}
