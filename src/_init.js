@@ -18,8 +18,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 
 		this.ifaceList = [];
 
-		this.variables = {}; // { path => { value } }
-		this.functions = {}; // { path => { name, description, input, output, nodes: [] } }
+		this.variables = {}; // { name => { listener, value, type, category } }
+		this.functions = {}; // { name => { variables, input, output, used: [], node, title, category, description } }
 
 		this.index = Blackprint.index++;
 		this.scope = Blackprint.space.getScope(this.index);
@@ -338,7 +338,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 			if(iface.id !== void 0)
 				data.id = iface.id;
 
-			if(iface.comment !== void 0)
+			if(iface.comment != false) // is not empty string or undefined
 				data.comment = iface.comment;
 
 			if(iface.data !== void 0){
