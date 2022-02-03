@@ -6,28 +6,25 @@ var NOOP = function(){};
 let { $ } = sf; // sQuery shortcut
 var Blackprint = window.Blackprint;
 
-Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
+Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	static _iface = {'BP/default': NOOP};
 
 	// Create new blackprint container
 	constructor(){
 		super();
 
-		this.iface = {}; // { id => IFace }
-		this.ref = {}; // { id => Port references }
-
-		this.ifaceList = [];
-
-		this.variables = {}; // { name => { listener, value, type, category } }
-		this.functions = {}; // { name => { variables, input, output, used: [], node, title, category, description } }
+		// Properties from the engine
+		// this.iface = {}; // { id => IFace }
+		// this.ref = {}; // { id => Port references }
+		// this.variables = {};
+		// this.functions = {};
+		// this.ifaceList = [];
 
 		this.index = Blackprint.index++;
 		this.scope = Blackprint.space.getScope(this.index);
 		this.scope.sketch = this;
 
-		this.getNode = Blackprint.Engine.prototype.getNode;
-		this.getNodes = Blackprint.Engine.prototype.getNodes;
-
+		// Default event
 		this._event = {$_fallback: BlackprintEventFallback};
 	}
 
@@ -566,9 +563,6 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine.CustomEvent {
 	// Create new node that will be inserted to the container
 	// @return node scope
 	createNode(namespace, options, handlers){
-		if(Blackprint.Engine === void 0)
-			throw new Error("Blackprint.Engine was not found, please load it first before creating new node");
-
 		var func = deepProperty(Blackprint.nodes, namespace.split('/'));
 		if(func === void 0){
 			return this.emit('error', {
