@@ -62,15 +62,16 @@ Blackprint Engine
 - [ ] Blackprint Sketch (this repository)
   - [x] Mirrored sketch on detachable window
   - [x] Mini sketch for preview
-    - [ ] Move the sketch container from mini sketch
   - [x] Hot Reload
   - [x] Export single sketch to JSON
   - [x] Importable minimal sketch for different project
-  - [ ] Select and move multiple nodes at once
+  - [x] Select and move multiple nodes at once
     - [ ] Add feature to put nodes into a group
+    - [ ] Create a function from nodes
   - [x] Clicked nodes should be moved on front of the other nodes (z-index)
   - [x] Automatically put cable on suitable port when it's dropped on top of a node
   - [x] Add feature to arrange cable (cable branching)
+  - [ ] Add node for variables
   - [ ] Add feature to hide some unused port on a node
   - [ ] Add feature to import node skeleton (use default node, and no execution)
     - [ ] Create addons for VS Code for previewing exported Blackprint
