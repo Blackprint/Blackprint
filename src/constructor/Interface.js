@@ -112,23 +112,26 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 				if(cables.length === 0)
 					continue;
 
-				var cable;
+				var head;
 				for (var a = 0; a < cables.length; a++) {
-					let ref = cables[a];
+					let cable = cables[a];
+
+					// Avoid moving ghost cable
+					if(cable._ghost) continue;
 
 					// Avoid moving branch cable
-					if(ref._allBranch !== void 0){
+					if(cable._allBranch !== void 0){
 						if(which === 'output'
-						   && (ref.cableTrunk !== ref || ref.parentCable !== void 0))
+						   && (cable.cableTrunk !== cable || cable.parentCable !== void 0))
 							continue;
 					}
 
 					// If the source and target is in current node
-					if(ref.owner.iface === this && (ref.target && ref.target.iface === this)){
+					if(cable.owner.iface === this && (cable.target && cable.target.iface === this)){
 						if(which === 'output')
 							continue;
 
-						let { head1, head2 } = ref;
+						let { head1, head2 } = cable;
 
 						head1[0] += x;
 						head1[1] += y;
@@ -138,13 +141,13 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 						continue;
 					}
 
-					if(ref.owner.iface === this)
-						cable = ref.head1;
+					if(cable.owner.iface === this)
+						head = cable.head1;
 					else
-						cable = ref.head2;
+						head = cable.head2;
 
-					cable[0] += x;
-					cable[1] += y;
+					head[0] += x;
+					head[1] += y;
 				}
 			}
 		}
