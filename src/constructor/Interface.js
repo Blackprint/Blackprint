@@ -68,8 +68,8 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 		}
 	}
 
-	_newPort(portName, type, def, which){
-		var temp = new Blackprint.Engine.Port(portName, type, def, which, this);
+	_newPort(portName, type, def, which, haveFeature){
+		var temp = new Blackprint.Engine.Port(portName, type, def, which, this, haveFeature);
 		temp._scope = this._scope;
 		temp.inactive = false;
 		Object.setPrototypeOf(temp, Port.prototype);
@@ -229,12 +229,12 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 					|| (owner.type.constructor === Array && owner.type.includes(port.type))
 				){
 					let portElem = _list.getElement(i).querySelector('.port');
-				   	cableScope.hoverPort = {
-				   		elem: portElem,
-				   		rect: portElem.getBoundingClientRect(),
-				   		item: port,
-				   	};
-				   	break;
+					cableScope.hoverPort = {
+						elem: portElem,
+						rect: portElem.getBoundingClientRect(),
+						item: port,
+					};
+					break;
 				}
 			}
 
