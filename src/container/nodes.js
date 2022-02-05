@@ -37,6 +37,9 @@ Space.model('nodes', function(My, include){
 					for (var h = 0; h < cables.length; h++) {
 						cable = cables[h];
 
+						// Avoid moving ghost cable
+						if(cable._ghost) continue;
+
 						// Avoid moving branch cable
 						if(cable._allBranch !== void 0
 						   && which === 'output'
