@@ -1,3 +1,10 @@
+# 0.6.1
+
+### Bug Fix
+- Fix `registerNode` and `registerInterface` to be used for decorator
+- Fix and improve performance for cable position
+- Add support for engine's ghost port
+
 # 0.6.0
 
 ### Features
