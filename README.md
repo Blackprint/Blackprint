@@ -54,8 +54,15 @@ Blackprint Engine
 | Minimal example | ✔️ [Link](https://github.com/Blackprint/blackprint.github.io/blob/master/src/global/sampleList.js) | ✔️ [Link](https://github.com/Blackprint/engine-js/tree/master/example) | ✔️ [Link](https://github.com/Blackprint/engine-php/tree/master/example) | ✔️ [Link](https://github.com/Blackprint/engine-go/tree/main/example) | - | - |
 | Environment variables | ✔️ | ✔️ | - | - | - | - |
 | Import modules from URL | ✔️ | ✔️ | - | - | - | - |
-| Remote connection control | - | - | - | - | - | - |
-| Pausable node execution | - | - | - | - | - | - |
+| Pausable node data flow | - | - | - | - | - | - |
+| Remote control | - | - | - | - | - | - |
+
+With remote control you can easily manage connection to the target environment (Node.js/PHP/etc) from the browser. But currently I'm still considering the most efficient and secure way to sync the data remotely, and also which data will be synced. So this will take some time before it's really implemented. Please always run your app inside of container (like Docker) if you allow someone to remote control your system.
+
+Example case where you may need remote control:
+ - Creating Discord.js bot (because the library doesn't have support for browser)
+   - Support for browser was dropped due to CORS at the Discord endpoint
+ - Collaboratively work with your friend
 
 ---
 
@@ -91,7 +98,7 @@ Blackprint Engine
 - [ ] Simplify node development for new developer
   - [x] Auto `blackprint.config.js` import
   - [ ] Add example for using ES6 modules importing system
-    - It's possible to use SkyPack or something else, but it currently can't compile `.sf`
+    - It's possible to use Snowpack or something else, but it currently can't compile `.sf`
 - [ ] Better documentation
 - [ ] Nodes docs generator
 - [ ] Blackprint Nodes Package Manager
