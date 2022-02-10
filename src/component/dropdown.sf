@@ -2,7 +2,7 @@
 ## html
 <drop-down class="bp-dropdown-menu {{hidden}}" style="
     display: {{visible ? 'block' : 'none'}};
-    transform: translate({{ x }}px, {{ y }}px);
+    transform: translate({{ x | 0 }}px, {{ y | 0 }}px);
   ">
   <div class="first" style="display: {{ !title && 'none' }}">{{ title || '' }}</div>
   <ul>
@@ -286,6 +286,9 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 			if(y + My.y + My.height > sf.Window.focus.innerHeight)
 				My.y -= My.height;
 
+			$item.x = My.x;
+			$item.y = My.y;
+
 			My.hidden = '';
 		});
 
@@ -310,7 +313,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 					// Use the cache instead
 					if(deep.el !== void 0){
 						currentDeepLevel = deep.el;
-						deep.el.model.y = deep.yi - (deep.ul?.scrollTop || 0);
+						deep.el.model.y = deep.y - ((deep.ul?.scrollTop || 0) - deep.lastScrollTop);
 						$el.append(deep.el);
 						return;
 					}
@@ -320,7 +323,8 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 					// Initialize position once
 					deep.x = ulElem.offsetWidth;
 					deep.yi = ev.target.offsetTop - 7;
-					deep.y = deep.yi - (deep.ul?.scrollTop || 0);
+					deep.lastScrollTop = (deep.ul?.scrollTop || 0);
+					deep.y = deep.yi - deep.lastScrollTop;
 
 					// Create dropdown in current sf-space
 					deep.el = currentDeepLevel = new $DropDown(deep, My.$space);
