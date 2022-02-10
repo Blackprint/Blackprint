@@ -115,7 +115,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		delete json._;
 
 		if(metadata !== void 0){
-			if(metadata.env !== void 0){
+			if(metadata.env !== void 0 && !options.noEnv){
 				let temp = Blackprint.Environment;
 				Object.assign(temp.map, metadata.env);
 
@@ -129,7 +129,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				})));
 			}
 
-			if(metadata.moduleJS !== void 0){
+			if(metadata.moduleJS !== void 0 && !options.noModuleJS){
 				try{
 					// wait for .min.mjs
 					await Blackprint.loadModuleFromURL(metadata.moduleJS, {
