@@ -157,6 +157,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 
 	nodeMenu(ev){
 		var scope = this._scope;
+		var container = this._container;
 		let iface = this;
 		var menu = [{
 			title: 'New Node',
@@ -168,6 +169,17 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 		}, {
 			title: 'Delete',
 			callback(){
+				// delete selected
+				let selected = container.nodeScope.selected;
+				if(selected.length !== 0){
+					for (var i = selected.length - 1; i >= 0; i--)
+						scope.sketch.deleteNode(selected[i]);
+
+					selected.splice(0);
+					container.cableScope.selected.splice(0);
+					return;
+				}
+
 				scope.sketch.deleteNode(iface);
 			}
 		}];
