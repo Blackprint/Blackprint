@@ -10,7 +10,7 @@ class Port extends Blackprint.Engine.Port {
 		return el.querySelector('.port');
 	}
 
-	createCable(e){
+	createCable(e, noPush){
 		var isAuto = e.constructor === DOMRect;
 
 		// Get size and position of the port
@@ -32,7 +32,7 @@ class Port extends Blackprint.Engine.Port {
 		}, this);
 
 		// Connect this cable into port's cable list
-		this.cables.push(cable);
+		if(!noPush) this.cables.push(cable);
 
 		// Put port reference to the cable
 		cable.owner = this;

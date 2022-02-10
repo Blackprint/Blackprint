@@ -20,7 +20,7 @@ function _resetCableZIndex(branch, cableList){
 	}
 }
 
-class Cable extends Blackprint.Engine.Cable{
+class Cable extends Blackprint.Engine.Cable {
 	constructor(obj, port){
 		super(port);
 		this._scope = port._scope;

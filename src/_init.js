@@ -587,8 +587,13 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		iface.namespace = namespace;
 		options ??= {};
 
-		if(options.oldIface !== void 0 && options.oldIface.namespace === iface.namespace)
+		if(options.oldIface !== void 0 && options.oldIface.namespace === iface.namespace){
 			Blackprint.Interface._reuse(iface, options.oldIface);
+
+			iface.input ??= {_list: []};
+			iface.output ??= {_list: []};
+			iface.property ??= {_list: []};
+		}
 
 		// Create the linker between the node and the iface
 		else{

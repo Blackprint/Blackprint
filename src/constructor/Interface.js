@@ -34,6 +34,8 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 			super();
 			this.title = 'No Title';
 			this.description = '';
+			this.x = 0;
+			this.y = 0;
 			this.importing = true;
 			this.comment = '';
 			this.type = false; // default node type: general
