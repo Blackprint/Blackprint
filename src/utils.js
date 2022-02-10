@@ -1,7 +1,6 @@
 // RepeatedProperty: from node input, output, or property list
 function getPortRect(RP, name){
 	if(Blackprint.settings.windowless){ // Use fake data
-		window.DOMRect ??= class{}
 		let temp = {bottom:90,height:90,left:90,right:90,top:90,width:90,x:90,y:90};
 		Object.setPrototypeOf(temp, DOMRect.prototype);
 		return temp;
