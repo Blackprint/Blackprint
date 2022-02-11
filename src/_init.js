@@ -86,10 +86,6 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		Blackprint.space.component(nodeName, options, func || NOOP);
 	}
 
-	settings(which, val){
-		Blackprint.settings[which] = val;
-	}
-
 	// Clone current container index
 	cloneContainer(minimap){
 		return Blackprint.space.createHTML(this.index + (minimap ? '+mini' : ''));

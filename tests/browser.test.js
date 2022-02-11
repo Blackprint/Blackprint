@@ -5,7 +5,11 @@ require("../dist/blackprint.min.js");
 require("../dist/blackprint.sf.js");
 
 test('Blackprint.Sketch does exist on window', () => {
-  expect(window.Blackprint.Sketch).toBeDefined();
+	expect(window.Blackprint.Sketch).toBeDefined();
+
+	// We want to use Blackprint.Sketch but with no window
+	// let's set windowless to true
+	Blackprint.settings('windowless', true);
 });
 
 let sketch, engine, cable_status;
@@ -421,8 +425,6 @@ describe("Blackprint create node with JavaScript", () => {
 			A1 = sketch.iface.helloSketch.ref.IOutput;
 			A2 = sketch.iface.helloSketch.ref.Output;
 			A3 = sketch.iface.helloSketch.ref.IOutput.Out;
-
-			Blackprint.settings('windowless', true);
 
 			json = sketch.exportJSON();
 			AA = sketch.importJSON(json);
