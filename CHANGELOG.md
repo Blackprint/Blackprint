@@ -1,3 +1,16 @@
+# 0.6.2
+
+### Bug Fix
+- Fix error on unit test
+- Fix incorrect dropdown position
+- Fix some error when Sketch is being run on Jest environment
+- Fix some bug and some minor modification
+
+### Features
+- Add options to skip some import data
+- Add bulk delete feature for nodes
+- Add `moduleAdded` event
+
 # 0.6.1
 
 ### Bug Fix
