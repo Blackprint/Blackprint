@@ -44,10 +44,10 @@ If you just want to execute exported Blackprint JSON, you can just use the engin
 - [Multiply - React](https://jsbin.com/watogus/edit?js,output)
 
 ## Available Shortcut for Blackprint Sketch
-| Key | Touchscreen | Target | Description |
+| <div style="width:280px">Key</div> | <div style="width:280px">Touchscreen</div> | Target | Description |
 | --- | --- | --- | --- |
-| `LeftClick + Pointer Move` | `1 tap and move` | Container | Select nodes and cable branch |
-| `Ctrl + MouseWheel` | `2 tap finger/pinch zoom` | Container | Zoom the container |
+| `LeftClick + move` | `1 tap and move` | Container | Select nodes and cable branch |
+| `Ctrl + MouseWheel` | `2 finger/pinch zoom` | Container | Zoom the container |
 | `RightClick` | `tap hold 1 sec` | Node, Cable, Container | Context menu |
 | `Ctrl + LeftClick` | - | Cable | Create cable branch |
 | `Ctrl + RightClick` | - | Port, Cable | Node suggestion |
@@ -59,14 +59,58 @@ If you just want to execute exported Blackprint JSON, you can just use the engin
 This roadmap could be changed on the future, feel free to request feature or report an issue.
 
 Blackprint Engine
-| Name | JS (Browser) | JS (Node.js / Deno) | PHP | Go | Python | C# |
-| --- | --- | --- | --- | --- | --- | --- |
-| Blackprint Engine | [![JS](https://img.shields.io/npm/v/@blackprint/engine.svg?include_prereleases)](https://www.npmjs.com/package/@blackprint/engine) | [![JS](https://img.shields.io/npm/v/@blackprint/engine.svg?include_prereleases)](https://www.npmjs.com/package/@blackprint/engine) | [![PHP](https://img.shields.io/github/v/release/blackprint/engine-php?include_prereleases)](https://packagist.org/packages/blackprint/engine) | [![Go](https://img.shields.io/github/v/release/blackprint/engine-go?include_prereleases)](https://github.com/Blackprint/engine-go) | - | - |
-| Minimal example | ✔️ [Link](https://github.com/Blackprint/blackprint.github.io/blob/master/src/global/sampleList.js) | ✔️ [Link](https://github.com/Blackprint/engine-js/tree/master/example) | ✔️ [Link](https://github.com/Blackprint/engine-php/tree/master/example) | ✔️ [Link](https://github.com/Blackprint/engine-go/tree/main/example) | - | - |
-| Environment variables | ✔️ | ✔️ | - | - | - | - |
-| Import modules from URL | ✔️ | ✔️ | - | - | - | - |
-| Pausable node data flow | - | - | - | - | - | - |
-| Remote control | - | - | - | - | - | - |
+<table>
+<thead>
+  <tr>
+    <th rowspan="2">Name</th>
+    <th colspan="2">JavaScript</th>
+    <th rowspan="2">PHP</th>
+    <th rowspan="2">Golang</th>
+    <th rowspan="2">Python</th>
+    <th rowspan="2">C#</th>
+  </tr>
+  <tr>
+    <th>Browser</th>
+    <th>Deno/Node.js</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>Blackprint Engine</td>
+    <td><a href='https://www.npmjs.com/package/@blackprint/engine'><img src='https://img.shields.io/npm/v/@blackprint/engine.svg?include_prereleases' height='20'></a></td>
+    <td><a href='https://www.npmjs.com/package/@blackprint/engine'><img src='https://img.shields.io/npm/v/@blackprint/engine.svg?include_prereleases' height='20'></a></td>
+    <td><a href='https://packagist.org/packages/blackprint/engine'><img src='https://img.shields.io/github/v/release/blackprint/engine-php?include_prereleases' height='20'></a></td>
+    <td><a href='https://github.com/Blackprint/engine-go'><img src='https://img.shields.io/github/v/release/blackprint/engine-go?include_prereleases' height='20'></a></td>
+    <td>-</td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td>Minimal example</td>
+    <td><a href='https://github.com/Blackprint/blackprint.github.io/blob/master/src/global/sampleList.js'>✔️ Link</a></td>
+    <td><a href='https://github.com/Blackprint/engine-js/tree/master/example'>✔️ Link</a></td>
+    <td><a href='https://github.com/Blackprint/engine-php/tree/master/example'>✔️ Link</a></td>
+    <td><a href='https://github.com/Blackprint/engine-go/tree/main/example'>✔️ Link</a></td>
+    <td>-</td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td>Environment variables</td>
+    <td>✔️</td>  <td>✔️</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
+  </tr>
+  <tr>
+    <td>Import modules from URL</td>
+    <td>✔️</td>  <td>✔️</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
+  </tr>
+  <tr>
+    <td>Pausable node data flow</td>
+    <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
+  </tr>
+  <tr>
+    <td>Remote control</td>
+    <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
+  </tr>
+</tbody>
+</table>
 
 With remote control you can easily manage connection to the target environment (Node.js/PHP/etc) from the browser. But currently I'm still considering the most efficient and secure way to sync the data remotely, and also which data will be synced. So this will take some time before it's really implemented. Please always run your app inside of container (like Docker) if you allow someone to remote control your system.
 
