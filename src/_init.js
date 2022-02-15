@@ -68,7 +68,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			Blackprint.Sketch._iface[templatePath] = func;
 
 			if(isExist !== void 0)
-				window.sf$hotReload.replaceClass(isExist, func);
+				window.sf$hotReload?.replaceClass(isExist, func);
 		}
 		else{
 			Blackprint.Sketch._iface[templatePath] = {func, options};
@@ -76,7 +76,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			if(options.extend === void 0)
 				options.extend = Blackprint.Interface;
 			else if(isExist !== void 0 && isExist.extend !== void 0)
-				window.sf$hotReload.replaceClass(isExist.extend, options.extend);
+				window.sf$hotReload?.replaceClass(isExist.extend, options.extend);
 		}
 
 		var nodeName = templatePath.replace(/[\/.,<>:\[\]{}+_=`~!@#$%^*(\\|)]/g, '-').toLowerCase();
@@ -718,7 +718,7 @@ Blackprint.registerNode = function(namespace, func){
 		let isExist = deepProperty(Blackprint.nodes, namespace);
 
 		if(isExist !== void 0)
-			window.sf$hotReload.replaceClass(isExist, func);
+			window.sf$hotReload?.replaceClass(isExist, func);
 	}
 
 	func._scopeURL = this._scopeURL;
@@ -757,9 +757,9 @@ Blackprint.registerInterface = function(templatePath, options, func){
 	let isExist = Blackprint._iface[templatePath];
 	if(isExist !== void 0){
 		if(isClass(func))
-			window.sf$hotReload.replaceClass(isExist, func);
+			window.sf$hotReload?.replaceClass(isExist, func);
 		else if(isExist !== void 0 && options.extend !== void 0)
-			window.sf$hotReload.replaceClass(isExist.extend, options.extend);
+			window.sf$hotReload?.replaceClass(isExist.extend, options.extend);
 	}
 
 	_registerInterface(templatePath, options, func);
