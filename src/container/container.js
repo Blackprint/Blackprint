@@ -142,6 +142,8 @@ Space.model('container', function(My, include){
 		My.$el.on('pointermove', moveContainer);
 		let cancelContextMenu = false;
 
+		if(_stopSelect != null) _stopSelect();
+
 		$(sf.Window)
 		.once('contextmenu', {capture: true}, function(ev2){
 			if(cancelContextMenu){
@@ -197,6 +199,7 @@ Space.model('container', function(My, include){
 		My.select.h = Math.abs(dy);
 	}
 
+	let _stopSelect = null;
 	My.beginSelecting = function(ev){
 		My.select.show = true;
 
@@ -206,8 +209,15 @@ Space.model('container', function(My, include){
 		$(document.body).css('user-select', 'none');
 
 		My.$el.on('pointermove', containerSelecting);
-		$(sf.Window).once('pointerup', function(){
+		let winRef = $(sf.Window).once('pointerup', stopSelect);
+
+		_stopSelect = stopSelect;
+		function stopSelect(){
+			_stopSelect = null;
+
 			My.$el.off('pointermove', containerSelecting);
+			winRef.off('pointerup', stopSelect);
+
 			$(document.body).css('user-select', '');
 
 			let obj = My.select;
@@ -274,7 +284,7 @@ Space.model('container', function(My, include){
 					nodeSelect.push(temp);
 				}
 			}
-		});
+		};
 	}
 
 	My.checkTouch = function(ev){
