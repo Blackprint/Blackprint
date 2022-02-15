@@ -10,14 +10,14 @@ Space.model('container', function(My, include){
 	My.nodeScope = include('nodes');
 	My._isImporting = false;
 
-	function onlyNegative(now){
-		if(now > 0) return 0;
-	}
+	// function onlyNegative(now){
+	// 	if(now > 0) return 0;
+	// }
 
 	My.pos = {x:0, y:0,
 		// Because origin is top left, viewport height and width are increased on bottom right
 		// Force to zero if there are no more space to be panned on left side
-		on$x: onlyNegative, on$y: onlyNegative
+		// on$x: onlyNegative, on$y: onlyNegative
 	};
 
 	My.scale = 1;
@@ -120,13 +120,19 @@ Space.model('container', function(My, include){
 		let {movementX, movementY} = ev;
 
 		if(!(My.pos.x >= 0 && movementX > 0)){
-			My.size.w -= movementX;
-			My.pos.x += movementX;
+			var temp = My.pos.x + movementX;
+			if(temp > 0) temp = 0;
+
+			My.size.w = (My.origSize.w - temp) / My.scale;
+			My.pos.x = temp;
 		}
 
 		if(!(My.pos.y >= 0 && movementY > 0)){
-			My.size.h -= movementY;
-			My.pos.y += movementY;
+			var temp = My.pos.y + movementY;
+			if(temp > 0) temp = 0;
+
+			My.size.h = (My.origSize.h - temp) / My.scale;
+			My.pos.y = temp;
 		}
 
 		My.onMove && My.onMove(My.pos);
@@ -160,8 +166,8 @@ Space.model('container', function(My, include){
 			isMoved = false;
 
 			// Fix incorrect scaling when the movement was too fast
-			My.size.w = My.origSize.w / My.scale - My.pos.x;
-			My.size.h = My.origSize.h / My.scale - My.pos.y;
+			// My.size.w = (My.origSize.w - My.pos.x) / My.scale;
+			// My.size.h = (My.origSize.h - My.pos.y) / My.scale;
 		});
 	}
 
@@ -334,8 +340,8 @@ Space.model('container', function(My, include){
 		// My.pos will always negative or zero value
 		// hint on the object declaration
 
-		My.size.w = My.origSize.w / scale - My.pos.x;
-		My.size.h = My.origSize.h / scale - My.pos.y;
+		My.size.w = (My.origSize.w - My.pos.x) / scale;
+		My.size.h = (My.origSize.h - My.pos.y) / scale;
 
 		My.onScale && My.onScale(scale);
 	}
