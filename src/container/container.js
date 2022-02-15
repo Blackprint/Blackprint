@@ -188,8 +188,8 @@ Space.model('container', function(My, include){
 
 	let selectPivotPoint = {x: 0, y: 0};
 	function containerSelecting(ev){
-		let dx = (ev.clientX - My.pos.x - My.offset.x) - selectPivotPoint.x;
-		let dy = (ev.clientY - My.pos.y - My.offset.y) - selectPivotPoint.y;
+		let dx = (ev.clientX - My.pos.x - My.offset.x) / My.scale - selectPivotPoint.x;
+		let dy = (ev.clientY - My.pos.y - My.offset.y) / My.scale - selectPivotPoint.y;
 
 		My.select.ix = dx < 0;
 		My.select.iy = dy < 0;
@@ -200,8 +200,8 @@ Space.model('container', function(My, include){
 	My.beginSelecting = function(ev){
 		My.select.show = true;
 
-		My.select.x = selectPivotPoint.x = ev.clientX - My.pos.x - My.offset.x;
-		My.select.y = selectPivotPoint.y = ev.clientY - My.pos.y - My.offset.y;
+		My.select.x = selectPivotPoint.x = (ev.clientX - My.pos.x - My.offset.x) / My.scale;
+		My.select.y = selectPivotPoint.y = (ev.clientY - My.pos.y - My.offset.y) / My.scale;
 
 		$(document.body).css('user-select', 'none');
 
