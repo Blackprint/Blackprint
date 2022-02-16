@@ -88,8 +88,8 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 	moveNode(e, single){
 		var container = this._container;
 		var scale = container.scale;
-		var x = e.movementX / scale;
-		var y = e.movementY / scale;
+		var x = e.movementX/devicePixelRatio / scale;
+		var y = e.movementY/devicePixelRatio / scale;
 
 		this.x += x;
 		this.y += y;

@@ -115,13 +115,21 @@ Space.model('container', function(My, include){
 	}
 
 	let isMoved = false;
+	My._posNoScale = {x:0, y:0};
 	function moveContainer(ev){
 		isMoved = true;
-		let {movementX, movementY} = ev;
+
+		let movementX = ev.movementX / devicePixelRatio;
+		let movementY = ev.movementY / devicePixelRatio;
 
 		if(!(My.pos.x >= 0 && movementX > 0)){
 			var temp = My.pos.x + movementX;
-			if(temp > 0) temp = 0;
+
+			if(temp > 0){
+				temp = 0;
+				if(My.scale === 1) My._posNoScale.x = 0;
+			}
+			else My._posNoScale.x += movementX;
 
 			My.size.w = (My.origSize.w - temp) / My.scale;
 			My.pos.x = temp;
@@ -129,7 +137,12 @@ Space.model('container', function(My, include){
 
 		if(!(My.pos.y >= 0 && movementY > 0)){
 			var temp = My.pos.y + movementY;
-			if(temp > 0) temp = 0;
+
+			if(temp > 0){
+				temp = 0;
+				if(My.scale === 1) My._posNoScale.y = 0;
+			}
+			else My._posNoScale.y += movementY;
 
 			My.size.h = (My.origSize.h - temp) / My.scale;
 			My.pos.y = temp;
@@ -164,10 +177,6 @@ Space.model('container', function(My, include){
 				cancelContextMenu = true;
 
 			isMoved = false;
-
-			// Fix incorrect scaling when the movement was too fast
-			// My.size.w = (My.origSize.w - My.pos.x) / My.scale;
-			// My.size.h = (My.origSize.h - My.pos.y) / My.scale;
 		});
 	}
 
@@ -295,10 +304,15 @@ Space.model('container', function(My, include){
 
 	My.checkTouch = function(ev){
 		if(ev.touches.length === 2){
+			if(_stopSelect != null) _stopSelect(); // disable selection
+
 			ev.stopPropagation();
 			ev.preventDefault();
 
 			My.moveContainer({button: 1});
+
+			// My.$el.on('touchmove', scaleContainer)
+			// 	.off('touchend', scaleContainer);
 		}
 	}
 
@@ -321,29 +335,31 @@ Space.model('container', function(My, include){
 
 			// Mouse scroll delta Y
 			var delta = ev.scale;
-
-			My.scale += ev.scale;
-			var scale = My.scale;
+			var scale = My.scale + delta;
 		}
 		else{
 			// Mouse scroll delta Y
 			var delta = ev.deltaY/100 * (My.scale < 1 ? 0.05 : 0.1);
-
-			My.scale -= delta;
-			var scale = My.scale;
+			var scale = My.scale - delta;
 		}
 
+		My.scale = scale;
+
 		// ToDo: fix scaling, should scale with cursor as the middle scaling position
-		My.pos.x += Math.round(ev.clientX * delta);
-		My.pos.y += Math.round(ev.clientY * delta);
+		let x = My.pos.x + Math.round((ev.clientX - My._posNoScale.x - My.offset.x) * delta);
+		let y = My.pos.y + Math.round((ev.clientY - My._posNoScale.y - My.offset.y) * delta);
 
-		// My.pos will always negative or zero value
-		// hint on the object declaration
+		if(x > 0) x = 0;
+		if(y > 0) y = 0;
 
-		My.size.w = (My.origSize.w - My.pos.x) / scale;
-		My.size.h = (My.origSize.h - My.pos.y) / scale;
+		My.pos.x = x;
+		My.pos.y = y;
+
+		My.size.w = (My.origSize.w - x) / scale;
+		My.size.h = (My.origSize.h - y) / scale;
 
 		My.onScale && My.onScale(scale);
+		// My.onMove && My.onMove(My.pos);
 	}
 
 	// @gesture.capture="touchGesture(event)"
@@ -352,9 +368,12 @@ Space.model('container', function(My, include){
 		if(ev.type === "pointerup")
 			return;
 
+		if(_stopSelect != null) _stopSelect(); // disable selection
 		ev.preventDefault();
 		ev.stopPropagation();
 		moveContainer(ev);
+
+		// console.log(ev);
 
 		// ToDo: enable after middle scaling position was fixed
 		// My.scaleContainer(ev);
