@@ -1,3 +1,13 @@
+# 0.6.3
+
+### Bug Fix
+- Fix error when not using development mode
+- Fix incorrect position when trying to create node with dropdown menu
+- Fix incorrect location for some features when the container get scaled
+- Cancel selection when moving container for touchscreen
+- Fix scale and movement for different screen ratio
+- Fix some issue with container scaling
+
 # 0.6.2
 
 ### Bug Fix
