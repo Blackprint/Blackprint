@@ -310,9 +310,6 @@ Space.model('container', function(My, include){
 			ev.preventDefault();
 
 			My.moveContainer({button: 1});
-
-			// My.$el.on('touchmove', scaleContainer)
-			// 	.off('touchend', scaleContainer);
 		}
 	}
 
@@ -360,22 +357,5 @@ Space.model('container', function(My, include){
 
 		My.onScale && My.onScale(scale);
 		// My.onMove && My.onMove(My.pos);
-	}
-
-	// @gesture.capture="touchGesture(event)"
-	My.touchGesture = function(ev){
-		if(ev.pointerType === 'mouse') return;
-		if(ev.type === "pointerup")
-			return;
-
-		if(_stopSelect != null) _stopSelect(); // disable selection
-		ev.preventDefault();
-		ev.stopPropagation();
-		moveContainer(ev);
-
-		// console.log(ev);
-
-		// ToDo: enable after middle scaling position was fixed
-		// My.scaleContainer(ev);
 	}
 });
