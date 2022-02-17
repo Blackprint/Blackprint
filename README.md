@@ -46,8 +46,8 @@ If you just want to execute exported Blackprint JSON, you can just use the engin
 ## Available Shortcut for Blackprint Sketch
 | <div style="width:280px">Key</div> | <div style="width:280px">Touchscreen</div> | Target | Description |
 | --- | --- | --- | --- |
-| `LeftClick + move` | `1 tap and move` | Container | Select nodes and cable branch |
-| `Ctrl + MouseWheel` | `2 finger/pinch zoom` | Container | Zoom the container |
+| `LeftClick + move` | `2 tap and move` | Container | Select nodes and cable branch |
+| `Ctrl + MouseWheel` | - | Container | Zoom the container |
 | `RightClick` | `tap hold 1 sec` | Node, Cable, Container | Context menu |
 | `Ctrl + LeftClick` | - | Cable | Create cable branch |
 | `Ctrl + RightClick` | - | Port, Cable | Node suggestion |
