@@ -44,9 +44,10 @@ If you just want to execute exported Blackprint JSON, you can just use the engin
 - [Multiply - React](https://jsbin.com/watogus/edit?js,output)
 
 ## Available Shortcut for Blackprint Sketch
-| <div style="width:280px">Key</div> | <div style="width:280px">Touchscreen</div> | Target | Description |
+| <div style="width:300px">Mouse + Keyboard</div> | <div style="width:300px">Touchscreen</div> | Target | Description |
 | --- | --- | --- | --- |
-| `LeftClick + move` | `2 tap and move` | Container | Select nodes and cable branch |
+| `LeftClick + move` | `1 touch + move` | Container | Select nodes and cable branch |
+| `Middle/Right click + move` | `2 touch + move` | Container | Move the container |
 | `Ctrl + MouseWheel` | - | Container | Zoom the container |
 | `RightClick` | `tap hold 1 sec` | Node, Cable, Container | Context menu |
 | `Ctrl + LeftClick` | - | Cable | Create cable branch |
