@@ -153,6 +153,8 @@ class Cable extends Blackprint.Engine.Cable {
 			for (var i = 0; i < els.length; i++)
 				els[i].remove();
 		});
+
+		super.visualizeFlow();
 	}
 
 	moveCableHead(ev, single){
@@ -440,6 +442,9 @@ class Cable extends Blackprint.Engine.Cable {
 			for (var i = branch.length-1; i >= 0; i--)
 				branch[i]._delete(true);
 		}
+
+		if(Blackprint.settings._remoteSketch && !isDeep)
+			this._scope.sketch.emit('cable.deleted', {iface: this, cable:this});
 
 		_deleteFromList(this._scope('cables').list, this);
 		_deleteFromList(this._inputCable, this);

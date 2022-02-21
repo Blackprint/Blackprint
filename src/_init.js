@@ -543,6 +543,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		// Delete reference
 		delete this.iface[iface.id];
 		delete this.ref[iface.id];
+
+		this.emit('node.created', { iface });
 	}
 
 	clearNodes(){
@@ -645,6 +647,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			});
 		}
 
+		this.emit('node.created', { iface });
 		return iface;
 	}
 
