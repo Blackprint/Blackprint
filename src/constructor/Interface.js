@@ -135,8 +135,10 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 
 						let { head1, head2 } = cable;
 
-						head1[0] += x;
-						head1[1] += y;
+						if(cable.parentCable == null){
+							head1[0] += x;
+							head1[1] += y;
+						}
 
 						head2[0] += x;
 						head2[1] += y;
