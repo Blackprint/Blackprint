@@ -44,23 +44,40 @@ class Port extends Blackprint.Engine.Port {
 		cable.cableHeadClicked(e, true);
 		this.iface.emit('cable.created', {iface: this, cable});
 
+		if(!Blackprint.settings._remoteSketch)
+			this._scope.sketch.emit('cable.created', {iface: this, cable});
+
 		if(e.pointerType !== 'touch') return;
 
 		let targetEl = $(e.target);
 
-		targetEl.once('contextmenu', isContextMenu);
 		function isContextMenu() {
 			cable._delete();
 		}
 
+		targetEl.once('contextmenu', isContextMenu);
 		setTimeout(()=> {
 			targetEl.off('contextmenu', isContextMenu);
 		}, 4000);
 	}
 
-	connectCable(){
+	connectCable(cable){
 		if(this._ignoreConnect) return;
-		return super.connectCable.apply(this, arguments);
+		let res = super.connectCable(cable);
+
+		if(res === true && cable != null && this._scope != null){
+			let list = cable.input.iface.input._list;
+
+			if(list != null){
+				let rect = this.findPortElement(list.getElement(cable.input)).getBoundingClientRect();
+
+				let offset = this._scope('container').offset;
+				cable.head2[0] = rect.x - offset.x;
+				cable.head2[1] = rect.y - offset.y;
+			}
+		}
+
+		return res;
 	}
 
 	_cableConnectError(name, obj){
