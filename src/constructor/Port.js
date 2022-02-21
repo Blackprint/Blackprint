@@ -72,8 +72,8 @@ class Port extends Blackprint.Engine.Port {
 				let rect = this.findPortElement(list.getElement(cable.input)).getBoundingClientRect();
 
 				let offset = this._scope('container').offset;
-				cable.head2[0] = rect.x - offset.x;
-				cable.head2[1] = rect.y - offset.y;
+				cable.head2[0] = rect.x + rect.width/2 - offset.x;
+				cable.head2[1] = rect.y + rect.height/2 - offset.y;
 			}
 		}
 
