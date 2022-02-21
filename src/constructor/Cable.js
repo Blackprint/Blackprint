@@ -368,6 +368,9 @@ class Cable extends Blackprint.Engine.Cable {
 		this.branch.push(newCable);
 		newCable.parentCable = this;
 
+		if(!Blackprint.settings._remoteSketch)
+			this._scope.sketch.emit('cable.created.branch', { cable: newCable });
+
 		if(ev === void 0) return newCable;
 		newCable.cableHeadClicked(ev, true);
 	}
@@ -437,14 +440,14 @@ class Cable extends Blackprint.Engine.Cable {
 	}
 
 	_delete(isDeep){
+		if(Blackprint.settings._remoteSketch && !isDeep)
+			this._scope.sketch.emit('cable.deleted', {cable:this});
+
 		if(this.hasBranch){
 			let branch = this.branch;
 			for (var i = branch.length-1; i >= 0; i--)
 				branch[i]._delete(true);
 		}
-
-		if(Blackprint.settings._remoteSketch && !isDeep)
-			this._scope.sketch.emit('cable.deleted', {iface: this, cable:this});
 
 		_deleteFromList(this._scope('cables').list, this);
 		_deleteFromList(this._inputCable, this);

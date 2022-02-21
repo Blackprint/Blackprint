@@ -42,15 +42,16 @@ class Port extends Blackprint.Engine.Port {
 
 		// Default head index is "2" when creating new cable
 		cable.cableHeadClicked(e, true);
-		this.iface.emit('cable.created', {iface: this, cable});
+
+		let evTemp = {port: this, cable};
+		this.iface.emit('cable.created', evTemp);
 
 		if(!Blackprint.settings._remoteSketch)
-			this._scope.sketch.emit('cable.created', {iface: this, cable});
+			this._scope.sketch.emit('cable.created', evTemp);
 
 		if(e.pointerType !== 'touch') return;
 
 		let targetEl = $(e.target);
-
 		function isContextMenu() {
 			cable._delete();
 		}
