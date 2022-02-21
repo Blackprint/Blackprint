@@ -108,10 +108,12 @@ Blackprint Engine
   </tr>
   <tr>
     <td>Remote control</td>
-    <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
+    <td>🚧</td>  <td>🚧</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
   </tr>
 </tbody>
 </table>
+
+> 🚧 = Under development
 
 With remote control you can easily manage connection to the target environment (Node.js/PHP/etc) from the browser. But currently I'm still considering the most efficient and secure way to sync the data remotely, and also which data will be synced. So this will take some time before it's really implemented. Please always run your app inside of container (like Docker) if you allow someone to remote control your system.
 
