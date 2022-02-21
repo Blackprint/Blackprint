@@ -37,17 +37,17 @@ class Port extends Blackprint.Engine.Port {
 		// Put port reference to the cable
 		cable.owner = this;
 
+		let evTemp = {port: this, cable};
+		this.iface.emit('cable.created', evTemp);
+
+		if(Blackprint.settings._remoteSketch)
+			this._scope.sketch.emit('cable.created', evTemp);
+
 		// Stop here if this function wasn't triggered by user
 		if(isAuto) return cable;
 
 		// Default head index is "2" when creating new cable
 		cable.cableHeadClicked(e, true);
-
-		let evTemp = {port: this, cable};
-		this.iface.emit('cable.created', evTemp);
-
-		if(!Blackprint.settings._remoteSketch)
-			this._scope.sketch.emit('cable.created', evTemp);
 
 		if(e.pointerType !== 'touch') return;
 

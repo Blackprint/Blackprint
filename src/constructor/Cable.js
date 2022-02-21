@@ -349,6 +349,11 @@ class Cable extends Blackprint.Engine.Cable {
 		if(this.source !== 'output')
 			throw new Error("Cable branch currently can only be created from output port");
 
+		if(Blackprint.settings._remoteSketch){
+			var evTemp = { cable: this };
+			this._scope.sketch.emit('cable.created.branch', evTemp);
+		}
+
 		this.hasBranch = true;
 		this.cableTrunk ??= this;
 		this.branch ??= [];
@@ -368,11 +373,13 @@ class Cable extends Blackprint.Engine.Cable {
 		this.branch.push(newCable);
 		newCable.parentCable = this;
 
-		if(!Blackprint.settings._remoteSketch)
-			this._scope.sketch.emit('cable.created.branch', { cable: newCable });
+		if(Blackprint.settings._remoteSketch)
+			evTemp.newCable = newCable;
 
-		if(ev === void 0) return newCable;
-		newCable.cableHeadClicked(ev, true);
+		if(ev !== void 0)
+			newCable.cableHeadClicked(ev, true);
+
+		return newCable;
 	}
 
 	_touchCable(oldEv){
