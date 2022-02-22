@@ -202,8 +202,19 @@ class Cable extends Blackprint.Engine.Cable {
 	cableHeadClicked(ev, isCreating){
 		ev.stopPropagation();
 
-		if(!isCreating && ev.ctrlKey)
-			return this.createBranch(ev);
+		if(!isCreating && ev.ctrlKey){
+			if(Blackprint.settings._remoteSketch){
+				var evTemp = { event: ev, type: 'cableHead', cable: this };
+				this._scope.sketch.emit('cable.create.branch', evTemp);
+			}
+
+			let newCable = this.createBranch(ev);
+
+			if(Blackprint.settings._remoteSketch)
+				evTemp.newCable = newCable;
+
+			return newCable;
+		}
 
 		var container = this._container;
 		var cablesModel = this._cablesModel;
@@ -211,29 +222,31 @@ class Cable extends Blackprint.Engine.Cable {
 		var Ofst = ev.target.closest('sf-space').getBoundingClientRect();
 		var cable = this;
 
-		var elem = cablesModel.list.getElement(cable);
+		if(!ev.noMoveListen){
+			var elem = cablesModel.list.getElement(cable);
 
-		// Let the pointer pass thru the current svg group
-		if(elem !== void 0){
-			elem = $(elem);
-			elem.css('pointer-events', 'none');
+			// Let the pointer pass thru the current svg group
+			if(elem !== void 0){
+				elem = $(elem);
+				elem.css('pointer-events', 'none');
+			}
+
+			// Save current cable for referencing when cable connected into node's port
+			cablesModel.currentCable = cable;
+
+			var space = $(ev.target.closest('sf-space'));
+			space.on('pointermove', this.moveCableHead).once('pointerup', function(ev){
+				space.off('pointermove', this.moveCableHead);
+
+				// Add delay because it may be used for connecting port
+				setTimeout(function(){
+					cablesModel.currentCable = void 0;
+				}, 100);
+
+				if(elem !== void 0)
+					elem.css('pointer-events', '');
+			});
 		}
-
-		// Save current cable for referencing when cable connected into node's port
-		cablesModel.currentCable = cable;
-
-		var space = $(ev.target.closest('sf-space'));
-		space.on('pointermove', this.moveCableHead).once('pointerup', function(ev){
-			space.off('pointermove', this.moveCableHead);
-
-			// Add delay because it may be used for connecting port
-			setTimeout(function(){
-				cablesModel.currentCable = void 0;
-			}, 100);
-
-			if(elem !== void 0)
-				elem.css('pointer-events', '');
-		});
 
 		if(isCreating){
 			cable.head2 = [
@@ -250,6 +263,11 @@ class Cable extends Blackprint.Engine.Cable {
 			this._clicked = true
 			setTimeout(()=> this._clicked = void 0, 400);
 			return;
+		}
+
+		if(Blackprint.settings._remoteSketch){
+			var evTemp = { event: ev, type: 'cablePath', cable: this };
+			this._scope.sketch.emit('cable.create.branch', evTemp);
 		}
 
 		let current = this;
@@ -330,11 +348,15 @@ class Cable extends Blackprint.Engine.Cable {
 		current.cableHeadClicked({
 			stopPropagation(){ev.stopPropagation()},
 			type: ev.type,
+			noMoveListen: ev.noMoveListen,
 			pointerType: ev.pointerType,
 			target: current.pathEl,
 			clientX: ev.clientX,
 			clientY: ev.clientY,
 		}, true);
+
+		if(Blackprint.settings._remoteSketch)
+			evTemp.newCable = current;
 
 		// Don't use Object.assign
 		if(assignPosFor !== void 0){
@@ -348,11 +370,6 @@ class Cable extends Blackprint.Engine.Cable {
 	createBranch(ev, cable){
 		if(this.source !== 'output')
 			throw new Error("Cable branch currently can only be created from output port");
-
-		if(Blackprint.settings._remoteSketch){
-			var evTemp = { cable: this };
-			this._scope.sketch.emit('cable.created.branch', evTemp);
-		}
 
 		this.hasBranch = true;
 		this.cableTrunk ??= this;
@@ -372,9 +389,6 @@ class Cable extends Blackprint.Engine.Cable {
 		this._allBranch.push(newCable);
 		this.branch.push(newCable);
 		newCable.parentCable = this;
-
-		if(Blackprint.settings._remoteSketch)
-			evTemp.newCable = newCable;
 
 		if(ev !== void 0)
 			newCable.cableHeadClicked(ev, true);
