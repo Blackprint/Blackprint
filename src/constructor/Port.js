@@ -69,7 +69,7 @@ class Port extends Blackprint.Engine.Port {
 		if(res === true && cable != null && this._scope != null){
 			let list = cable.input.iface.input._list;
 
-			if(list != null){
+			if(list != null && !Blackprint.settings.windowless){
 				let rect = this.findPortElement(list.getElement(cable.input)).getBoundingClientRect();
 
 				let offset = this._scope('container').offset;
