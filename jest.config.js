@@ -8,7 +8,7 @@ module.exports = {
   // automock: false,
 
   // Stop running tests after `n` failures
-  // bail: 0,
+  bail: 3,
 
   // The directory where Jest should store its cached dependency information
   // cacheDirectory: "C:\\Users\\Stefans Workstation\\AppData\\Local\\Temp\\jest",
@@ -152,9 +152,11 @@ module.exports = {
   // ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  // testPathIgnorePatterns: [
-  //   "\\\\node_modules\\\\"
-  // ],
+  testPathIgnorePatterns: [
+    "\\\\node_modules\\\\",
+    "\\\\nodes\\\\",
+    "\\\\templates\\\\"
+  ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
   // testRegex: [],
