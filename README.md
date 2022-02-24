@@ -188,6 +188,19 @@ Blackprint will act as an interface for each engine. To use it on NodeJS, Deno, 
 ## Contributing
 To make things easier, please make sure to read the [Contributing Guide](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md) before creating a issue/request.
 
+If you want to compile this project on your machine, you can run the command below:
+
+```sh
+$ cd /your/project/folder
+$ git clone --depth 1 --recurse-submodules https://github.com/Blackprint/Blackprint.git .
+$ npm i
+$ npm start
+ >> [Browsersync] Access URLs:
+ >> -----------------------------------
+ >> Local: http://localhost:6789
+ >> -----------------------------------
+```
+
 ## License
 Blackprint is a **MIT licensed** open source project and completely free to use.
 
