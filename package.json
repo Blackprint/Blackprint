@@ -14,7 +14,7 @@
   "scripts": {
     "start": "gulp",
     "compile": "gulp compile",
-    "test": "jest ./tests/"
+    "test": "jest --verbose ./tests/"
   },
   "main": "dist/_entry.js",
   "module": "dist/_entry.mjs",

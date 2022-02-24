@@ -133,6 +133,9 @@ let SFC = require("scarletsframe-compiler")({
 		server:{
 			baseDir:'editor/',
 			index:'index.html',
+		    routes: {
+		        "/dist": "dist"
+		    }
 		}
 	},
 
