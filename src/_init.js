@@ -96,6 +96,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(window.sf && window.sf.loader)
 			await window.sf.loader.task;
 
+		if(this._remote != null && !this._remote._skipEvent)
+			return await this._remote.importJSON(json, false, true);
+
 		if(json.constructor === String)
 			json = JSON.parse(json);
 
@@ -520,6 +523,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				type: 'node_delete_not_found',
 				data: {iface}
 			});
+
+		if(Blackprint.settings._remoteSketch)
+			this.emit('node.delete', { iface });
 
 		iface.node.destroy && iface.node.destroy();
 		list.splice(i, 1); // iface.destroy will be called by SF
