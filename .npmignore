@@ -18,6 +18,7 @@ babel.config.json
 gulpfile.js
 dist/engine.*
 dist/nodes-*
+dist/remote-*
 cli-tools
 templates
 jest.config.js

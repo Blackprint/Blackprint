@@ -8,6 +8,7 @@ node_modules/
 /dist/blackprint.*
 /dist/engine.*
 /dist/nodes-*
+/dist/remote-*
 /parser/
 /cli-tools/
 /templates/
