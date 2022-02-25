@@ -32,19 +32,19 @@ let compileTargets = editorOnly ? {} : {
 		}
 	},
 	// Compiler for Blackprint Remote Engine
-	'remote-engine-js':{
+	'remote-control-js':{
 		versioning: !isCI && 'editor/dev.html',
 		// stripURL:'editor/',
 
 		js:{
-			file:'dist/remote-engine.min.js',
+			file:'dist/remote-control.min.js',
 			wrapped: true,
 			header:"/* Blackprint \n MIT Licensed */",
 			combine:[
-				'remote-engine/js/src/_init.js',
+				'remote-control/js/src/_init.js',
 
 				// Combine files from all directory recursively
-				'remote-engine/js/src/**/*.js',
+				'remote-control/js/src/**/*.js',
 			],
 		}
 	},

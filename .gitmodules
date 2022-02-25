@@ -4,6 +4,6 @@
 [submodule "editor"]
 	path = editor
 	url = https://github.com/Blackprint/blackprint.github.io
-[submodule "remote-engine"]
-	path = remote-engine
-	url = https://github.com/Blackprint/remote-engine
+[submodule "remote-control"]
+	path = remote-control
+	url = https://github.com/Blackprint/remote-control
