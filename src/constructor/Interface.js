@@ -54,6 +54,15 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 	get id(){ return this._id_ }
 	set id(val){
 		let {marks} = this.$decoration;
+
+		if(Blackprint.settings._remoteSketch){
+			this._scope.sketch.emit('node.id.changed', {
+				iface: this,
+				from: this._id_,
+				to: val
+			});
+		}
+
 		if(val){
 			if(val.constructor !== String)
 				val = ''+val;
