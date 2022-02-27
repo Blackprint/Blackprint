@@ -44,15 +44,15 @@ If you just want to execute exported Blackprint JSON, you can just use the engin
 - [Multiply - React](https://jsbin.com/watogus/edit?js,output)
 
 ## Available Shortcut for Blackprint Sketch
-| <div style="width:300px">Mouse + Keyboard</div> | <div style="width:300px">Touchscreen</div> | Target | Description |
+| Mouse + Keyboard | Touchscreen | Target | Description |
 | --- | --- | --- | --- |
-| `LeftClick + move` | `1 touch + move` | Container | Select nodes and cable branch |
+| `LeftClick + move` | `1 touch + move` | Container | Select nodes and cable<br>branch |
 | `Middle/Right click + move` | `2 touch + move` | Container | Move the container |
 | `Ctrl + MouseWheel` | - | Container | Zoom the container |
 | `RightClick` | `tap hold 1 sec` | Node, Cable, Container | Context menu |
 | `Ctrl + LeftClick` | - | Cable | Create cable branch |
 | `Ctrl + RightClick` | - | Port, Cable | Node suggestion |
-| `Ctrl + Alt + LeftClick` | - | Anything | ScarletsFrame's element inspector (development mode) |
+| `Ctrl + Alt + LeftClick` | - | Anything | ScarletsFrame's element<br>inspector (dev mode) |
 
 ---
 
@@ -104,18 +104,19 @@ Blackprint Engine
   </tr>
   <tr>
     <td>Pausable node data flow</td>
-    <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
+    <td>🚧</td>  <td>🚧</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
   </tr>
   <tr>
     <td>Remote control</td>
-    <td>🚧</td>  <td>🚧</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
+    <td>🧪</td>  <td>🧪</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
   </tr>
 </tbody>
 </table>
 
-> 🚧 = Under development
+> 🚧 = Under development<br>
+> 🧪 = Experimental (Being tested and have rapid changes)
 
-With remote control you can easily manage connection to the target environment (Node.js/PHP/etc) from the browser. But currently I'm still considering the most efficient and secure way to sync the data remotely, and also which data will be synced. So this will take some time before it's really implemented. Please always run your app inside of container (like Docker) if you allow someone to remote control your system.
+With remote control you can easily manage connection to the target environment (Node.js/PHP/etc) from the browser. Please always run your app inside of container (like Docker) if you allow someone to remote control your system.
 
 Example case where you may need remote control:
  - Creating Discord.js bot (because the library doesn't have support for browser)
@@ -128,18 +129,18 @@ Example case where you may need remote control:
 - [ ] Blackprint Sketch (this repository)
   - [x] Mirrored sketch on detachable window
   - [x] Mini sketch for preview
-  - [x] Hot Reload
+  - [x] Hot Reload 🧪
   - [x] Export single sketch to JSON
   - [x] Importable minimal sketch for different project
   - [x] Select and move multiple nodes at once
     - [x] Bulk delete
-    - [ ] Add feature to put nodes into a group
-    - [ ] Create a function from nodes
+    - [ ] Add feature to put nodes into a group 🚧
+    - [ ] Create a function from nodes 🚧
   - [x] Clicked nodes should be moved on front of the other nodes (z-index)
   - [x] Automatically put cable on suitable port when it's dropped on top of a node
   - [x] Add feature to arrange cable (cable branching)
-  - [ ] Add node for variables
-  - [ ] Add feature to hide some unused port on a node
+  - [ ] Add variable's node 🚧
+  - [ ] Add feature to hide some unused port on a node 🚧
   - [ ] Add feature to import node skeleton (use default node, and no execution)
     - [ ] Create addons for VS Code for previewing exported Blackprint
     - [ ] Add JSON preview for Visual Studio Code
@@ -147,7 +148,7 @@ Example case where you may need remote control:
   - [x] [Demo](https://blackprint.github.io)
   - [x] Basic nodes editor
   - [x] Detachable window (with ScarletsFrame)
-  - [x] Add Environment Variables editor
+  - [x] Add Environment Variables editor 🧪
   - [x] Import sketch from URL
   - [ ] Move current sketch with minimap
   - [ ] Node list editor (currently with right click)
