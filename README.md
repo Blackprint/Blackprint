@@ -189,7 +189,7 @@ Blackprint will act as an interface for each engine. To use it on NodeJS, Deno, 
 ## Contributing
 To make things easier, please make sure to read the [Contributing Guide](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md) before creating a issue/request.
 
-If you want to compile this project on your machine, you can run the command below:
+If you want to compile and start the editor's web server on your machine, you can run the command below:
 
 ```sh
 $ cd /your/project/folder
@@ -200,6 +200,17 @@ $ npm start
  >> -----------------------------------
  >> Local: http://localhost:6789
  >> -----------------------------------
+```
+
+### Build and run the unit test
+If you're trying to run the unit test, you can use `npm run compile` and then `npm test`.
+
+```sh
+$ cd /your/project/folder
+$ git clone --depth 1 --recurse-submodules https://github.com/Blackprint/Blackprint.git .
+$ npm i
+$ npm run compile
+$ npm test
 ```
 
 ## License
