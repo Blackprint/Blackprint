@@ -59,6 +59,11 @@ Space.model('container', function(My, include){
 		maxX += W + 50;
 		maxY += H + 50;
 
+		if(My.isMinimap && maxX < My.origSize.w && maxY < My.origSize.h){
+			maxX = My.origSize.w;
+			maxY = My.origSize.h;
+		}
+
 		My.size.w = maxX;
 		My.size.h = maxY;
 
