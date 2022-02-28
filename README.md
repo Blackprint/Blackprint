@@ -103,7 +103,7 @@ Blackprint Engine
     <td>✔️</td>  <td>✔️</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
   </tr>
   <tr>
-    <td>Pausable node data flow</td>
+    <td>Pausable and routable data flow</td>
     <td>🚧</td>  <td>🚧</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
   </tr>
   <tr>
@@ -113,8 +113,8 @@ Blackprint Engine
 </tbody>
 </table>
 
-> 🚧 = Under development<br>
-> 🧪 = Experimental (Being tested and have rapid changes)
+> 🚧 = Under development (In the current working plan)<br>
+> 🧪 = Experimental/Alpha stage (Being tested and may have rapid changes)
 
 With remote control you can easily manage connection to the target environment (Node.js/PHP/etc) from the browser. Please always run your app inside of container (like Docker) if you allow someone to remote control your system.
 

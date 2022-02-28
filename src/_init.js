@@ -97,7 +97,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			await window.sf.loader.task;
 
 		if(this._remote != null && !this._remote._skipEvent)
-			return await this._remote.importJSON(json, false, true);
+			return await this._remote.importJSON(json, options, false, true);
 
 		if(json.constructor === String)
 			json = JSON.parse(json);
@@ -542,7 +542,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			for(var port in portList){
 				if(port.slice(0, 1) === '_') continue;
-				portList[port].disconnectAll();
+				portList[port].disconnectAll(this._remote != null);
 			}
 		}
 
@@ -582,6 +582,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(isClass(func))
 			node = new func(this);
 		else func(node = new Blackprint.Node(this));
+
+		// Disable data flow on any node ports
+		if(this.disablePorts) node.disablePorts = true;
 
 		// Obtain iface from the node
 		let iface = node.iface;

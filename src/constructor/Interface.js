@@ -1,7 +1,7 @@
 let EngineInterface = Blackprint.Interface;
 
 // Override the Interface to make it compatible for Sketch and non-sketch
-Blackprint.Interface = class SketchInterface extends sf.Model {
+Blackprint.Interface = class Interface extends sf.Model {
 	/*
 	x = 0;
 	y = 0;
@@ -55,7 +55,7 @@ Blackprint.Interface = class SketchInterface extends sf.Model {
 	set id(val){
 		let {marks} = this.$decoration;
 
-		if(Blackprint.settings._remoteSketch){
+		if(Blackprint.settings._remoteSketch && this._scope != null){
 			this._scope.sketch.emit('node.id.changed', {
 				iface: this,
 				from: this._id_,
