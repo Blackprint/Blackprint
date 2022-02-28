@@ -5,8 +5,8 @@
     @mousewheel="scaleContainer(event)"
     @touchstart.capture="checkTouch(event)"
     style="
-      width: {{ size.w }}px;
-      height: {{ size.h }}px;
+      min-width: {{ size.w }}px;
+      min-height: {{ size.h }}px;
       transform: translate3d({{ pos.x }}px, {{ pos.y }}px, 0px)
                  scale({{ scale }})"
   >

@@ -10,15 +10,7 @@ Space.model('container', function(My, include){
 	My.nodeScope = include('nodes');
 	My._isImporting = false;
 
-	// function onlyNegative(now){
-	// 	if(now > 0) return 0;
-	// }
-
-	My.pos = {x:0, y:0,
-		// Because origin is top left, viewport height and width are increased on bottom right
-		// Force to zero if there are no more space to be panned on left side
-		// on$x: onlyNegative, on$y: onlyNegative
-	};
+	My.pos = {x:0, y:0};
 
 	My.scale = 1;
 	My.size = {w:0, h:0};
@@ -343,6 +335,7 @@ Space.model('container', function(My, include){
 		My.scale = scale;
 
 		// ToDo: fix scaling, should scale with cursor as the middle scaling position
+		// - the bug will appear after the container was moved
 		let x = My.pos.x + Math.round((ev.clientX - My._posNoScale.x - My.offset.x) * delta);
 		let y = My.pos.y + Math.round((ev.clientY - My._posNoScale.y - My.offset.y) * delta);
 

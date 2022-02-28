@@ -7,8 +7,12 @@ Space.model('nodes', function(My, include){
 			var iface = resized.target.model;
 			if(iface === void 0) continue;
 
-			iface.h = resized.contentRect.height;
-			iface.w = resized.contentRect.width;
+			let {height, width} = resized.contentRect;
+			if(height > 0)
+				iface.h = height;
+
+			if(width > 0)
+				iface.w = width;
 
 			var Ofst = container.offset;
 
