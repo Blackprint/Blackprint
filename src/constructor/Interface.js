@@ -216,6 +216,8 @@ Blackprint.Interface = class Interface extends sf.Model {
 		let cableScope = container.cableScope;
 		let cable = cableScope.currentCable;
 
+		this._scope.sketch.emit('node.hover', { event, iface: this });
+
 		if(cable !== void 0){
 			// ToDo: show hidden ports
 			let el = event.target;
@@ -270,10 +272,12 @@ Blackprint.Interface = class Interface extends sf.Model {
 		}
 	}
 
-	nodeUnhovered(){
+	nodeUnhovered(event){
 		var container = this._container;
 		let cableScope = container.cableScope;
 		// let cable = cableScope.currentCable;
+
+		this._scope.sketch.emit('node.unhover', { event, iface: this });
 
 		if(this.__onCableDrop !== void 0){
 			this.$el.off('pointerup', this.__onCableDrop);

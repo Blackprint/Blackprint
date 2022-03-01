@@ -95,8 +95,7 @@ class Port extends Blackprint.Engine.Port {
 
 		var portElem = this.findPortElement(event.target);
 
-		// ToDo: on touch device, hover/unhover isn't triggered properly
-		// Currently I don't have solution for it
+		this._scope.sketch.emit('port.hover', { event, port: this });
 
 		// For magnet sensation when the cable reach the port
 		this._scope('cables').hoverPort = {
@@ -111,6 +110,7 @@ class Port extends Blackprint.Engine.Port {
 		if(event.pointerType === 'touch')
 			return;
 
+		this._scope.sketch.emit('port.unhover', { event, port: this });
 		this._scope('cables').hoverPort = false;
 	}
 
