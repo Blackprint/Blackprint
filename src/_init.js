@@ -718,6 +718,8 @@ Blackprint.registerNode = function(namespace, func){
 
 		ref = Blackprint.nodes[namespace[0]];
 		if(ref._length === void 0){
+			Object.defineProperty(ref, 'hidden', {writable: true, value: false});
+			Object.defineProperty(ref, 'disabled', {writable: true, value: false});
 			Object.defineProperty(ref, '_length', {writable: true, value: 0});
 			Object.defineProperty(ref, '_visibleNode', {writable: true, value: 0});
 		}
