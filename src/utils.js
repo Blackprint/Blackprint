@@ -13,30 +13,8 @@ function getPortRect(RP, name){
 	return _list.getElement(RP[name]).querySelector('.port').getBoundingClientRect();
 }
 
-function deepProperty(obj, path, value, onCreate){
-	var temp;
-	if(value !== void 0){
-		for(var i = 0, n = path.length-1; i < n; i++){
-			temp = path[i];
-			if(obj[temp] === void 0){
-				obj[temp] = {};
-				onCreate && onCreate(obj[temp]);
-			}
-
-			obj = obj[temp];
-		}
-
-		obj[path[i]] = value;
-		return;
-	}
-
-	for(var i = 0; i < path.length; i++){
-		if((obj = obj[path[i]]) === void 0)
-			return;
-	}
-
-	return obj;
-}
+// deepProperty(obj, path, value, onCreate)
+let deepProperty = Blackprint._utils.deepProperty;
 
 function deepCopy(target, source){
 	for(var key in source){
