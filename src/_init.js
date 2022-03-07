@@ -6,6 +6,8 @@ var NOOP = function(){};
 let { $ } = sf; // sQuery shortcut
 var Blackprint = window.Blackprint;
 
+let onModuleConflict = Blackprint._utils.onModuleConflict;
+
 Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	static _iface = {'BP/default': NOOP};
 
@@ -39,10 +41,19 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		// Return for Decorator
 		if(func === void 0){
-			return function(claz){
-				Blackprint.Sketch.registerInterface(templatePath, options, claz);
+			// this == Blackprint.Sketch
+			return claz => {
+				this.registerInterface(templatePath, options, claz);
+				return claz;
 			}
 		}
+
+		// Pause registration if have conflict
+		let info = onModuleConflict.pending.get(this._scopeURL);
+		if(info != null) return info.pending.push({
+			namespace: templatePath,
+			_call: ()=> this.registerInterface.apply(this, arguments),
+		});
 
 		options.keepTemplate = true;
 
@@ -686,8 +697,8 @@ Blackprint.registerNode = function(namespace, func){
 
 	// Return for Decorator
 	if(func === void 0){
-		return function(claz){
-			Blackprint.registerNode(namespace, claz);
+		return claz => {
+			this.registerNode(namespace, claz);
 			return claz;
 		}
 	}
@@ -701,7 +712,9 @@ Blackprint.registerNode = function(namespace, func){
 	let isExist = deepProperty(Blackprint.nodes, namespace);
 	if(isExist){
 		if(this._scopeURL && isExist._scopeURL !== this._scopeURL){
-			throw `Conflicting nodes with similar name was found\nNamespace: ${namespace.join('/')}\nFirst register from: ${isExist._scopeURL}\nTrying to register again from: ${this._scopeURL}`;
+			let _call = ()=> this.registerNode.apply(this, arguments);
+			onModuleConflict(namespace.join('/'), isExist._scopeURL, this._scopeURL, _call);
+			return;
 		}
 
 		if(isExist._hidden)
@@ -762,11 +775,18 @@ Blackprint.registerInterface = function(templatePath, options, func){
 
 	// Return for Decorator
 	if(func === void 0){
-		return function(claz){
-			Blackprint.registerInterface(templatePath, options, claz);
+		return claz => {
+			this.registerInterface(templatePath, options, claz);
 			return claz;
 		}
 	}
+
+	// Pause registration if have conflict
+	let info = onModuleConflict.pending.get(this._scopeURL);
+	if(info != null) return info.pending.push({
+		namespace: templatePath,
+		_call: ()=> this.registerInterface.apply(this, arguments),
+	});
 
 	let isExist = Blackprint._iface[templatePath];
 	if(isExist !== void 0){
@@ -776,7 +796,7 @@ Blackprint.registerInterface = function(templatePath, options, func){
 			window.sf$hotReload?.replaceClass(isExist.extend, options.extend);
 	}
 
-	_registerInterface(templatePath, options, func);
+	_registerInterface.call(this, templatePath, options, func);
 }
 
 Blackprint.loadModuleFromURL.browser = function(url, options){
@@ -800,9 +820,11 @@ Blackprint.loadScope = function(options){
 	let cleanURL = options.url.replace(/[?#].*?$/gm, '');
 
 	let temp = Object.create(Blackprint);
+	temp.Sketch = Object.create(Blackprint.Sketch);
 	let isInterfaceModule = /\.sf\.mjs$/m.test(cleanURL);
 
-	temp._scopeURL = cleanURL.replace(/\.sf\.mjs$/m, '.min.mjs');
+	// Save URL to the object
+	temp.Sketch._scopeURL = temp._scopeURL = cleanURL.replace(/\.sf\.mjs$/m, '.min.mjs');
 
 	if(Blackprint.loadBrowserInterface && !isInterfaceModule){
 		if(window.sf === void 0)
