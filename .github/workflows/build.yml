@@ -15,12 +15,12 @@ jobs:
         with:
           submodules: true
 
-      - name: Install pnpm
+      - name: ⚙ Install pnpm
         uses: pnpm/action-setup@v2.0.1
         with:
           version: 6.15.1
 
-      - name: Set node version to 16
+      - name: ⚙ Set node version to 16
         uses: actions/setup-node@v2
         with:
           node-version: 16
@@ -28,8 +28,8 @@ jobs:
 
       - run: pnpm install
 
-      - name: Compile sketch and engine
+      - name: 🛠 Compile sketch and engine
         run: npm run compile
 
-      - name: Run unit tests
+      - name: 🔥 Run unit tests
         run: npm run test

@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      engine:
+        description: "Set this to dryRun if you didn't plan to publish the engine"
+        required: true
+        default: 'dryRun'
+      sketch:
+        description: "Set this to dryRun if you didn't plan to publish the sketch"
+        required: true
+        default: 'dryRun'
+  # release:
+    # This specifies that the build will be triggered when we publish a release
+    # types: [published]
+
+jobs:
+  build:
+    name: Build Blackprint Modules
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: ⚙ Install pnpm
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.15.1
+
+      - name: ⚙ Set node version to 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'pnpm'
+
+      - run: pnpm install
+
+      - name: 🛠 Compile sketch and engine
+        run: npm run compile
+
+      - name: 🔥 Run unit tests
+        run: npm run test
+
+      - name: 📦 Dry Run Sketch
+        if: github.event.inputs.sketch == 'dryRun'
+        run: npm publish --dry-run
+
+      - name: 📦 Publish Sketch
+        if: github.event.inputs.sketch != 'dryRun'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - run: cd ./engine-js
+      - run: node ./utils/copy-es6.js
+
+      - name: 📦 Dry Run Engine
+        if: github.event.inputs.engine == 'dryRun'
+        run: npm publish --dry-run
+
+      - name: 📦 Publish Engine
+        if: github.event.inputs.engine != 'dryRun'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
