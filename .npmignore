@@ -22,3 +22,4 @@ dist/remote-*
 cli-tools
 templates
 jest.config.js
+remote-control

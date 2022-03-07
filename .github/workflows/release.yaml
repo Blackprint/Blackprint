@@ -11,6 +11,10 @@ on:
         description: "Set this to dryRun if you didn't plan to publish the sketch"
         required: true
         default: 'dryRun'
+      remoteControl:
+        description: "Set this to dryRun if you didn't plan to publish the remote control"
+        required: true
+        default: 'dryRun'
   # release:
     # This specifies that the build will be triggered when we publish a release
     # types: [published]
@@ -44,6 +48,8 @@ jobs:
       - name: 🔥 Run unit tests
         run: npm run test
 
+
+
       - name: 📦 Dry Run Sketch
         if: github.event.inputs.sketch == 'dryRun'
         run: npm publish --dry-run
@@ -54,15 +60,38 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - run: cd ./engine-js
-      - run: node ./utils/copy-es6.js
+
+
+      - name: 🛠 Running prepublish scripts for Engine
+        working-directory: ./engine-js
+        run: node ./utils/prepublish.js
 
       - name: 📦 Dry Run Engine
         if: github.event.inputs.engine == 'dryRun'
+        working-directory: ./engine-js
         run: npm publish --dry-run
 
       - name: 📦 Publish Engine
         if: github.event.inputs.engine != 'dryRun'
+        working-directory: ./engine-js
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+
+
+      - name: 🛠 Running prepublish scripts for Remote-Control
+        working-directory: ./remote-control
+        run: node ./utils/prepublish.js
+
+      - name: 📦 Dry Run Remote Control
+        if: github.event.inputs.remoteControl == 'dryRun'
+        working-directory: ./remote-control
+        run: npm publish --dry-run
+
+      - name: 📦 Publish Remote Control
+        if: github.event.inputs.remoteControl != 'dryRun'
+        working-directory: ./remote-control
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
