@@ -62,6 +62,8 @@ Space.model('nodes', function(My, include){
 				}
 			}
 		}
+
+		include.sketch.emit('node.resize', { items });
 	});
 
 	// Check if the container was a minimap
