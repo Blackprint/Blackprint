@@ -81,17 +81,17 @@ jobs:
 
 
       - name: 🛠 Running prepublish scripts for Remote-Control
-        working-directory: ./remote-control
+        working-directory: ./remote-control/js
         run: node ./utils/prepublish.js
 
       - name: 📦 Dry Run Remote Control
         if: github.event.inputs.remoteControl == 'dryRun'
-        working-directory: ./remote-control
+        working-directory: ./remote-control/js
         run: npm publish --dry-run
 
       - name: 📦 Publish Remote Control
         if: github.event.inputs.remoteControl != 'dryRun'
-        working-directory: ./remote-control
+        working-directory: ./remote-control/js
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
