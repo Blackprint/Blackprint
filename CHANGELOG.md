@@ -1,3 +1,23 @@
+# 0.6.4
+
+### Bug Fix
+- Avoid zoom in for minimap
+- Use import from remote instance instead if exist
+- Fix incorrect event name when deleting node
+- Minor changes for fixing remote sketch
+- Avoid moving cable that connected to branch
+- Fix cable event for remote sketch
+- Minor code changes to make it efficient
+- Fix middle position for connected cable
+- Fix incorrect cable location when connect using script
+
+### Features
+- Add event emit when the node or port was hovered
+- Add information on how to run unit test
+- Remote control is now in `Alpha Stage`
+- Emit remote event on `id` changes
+- Update keyboard shortcut
+
 # 0.6.3
 
 ### Bug Fix
