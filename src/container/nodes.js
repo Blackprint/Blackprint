@@ -121,4 +121,19 @@ Space.model('nodes', function(My, include){
 		let menu = createNodesMenu(Blackprint.availableNode, My.$space.sketch, ev);
 		include('dropdown').show(menu, {x: ev.clientX, y: ev.clientY, event: ev});
 	}
+
+	let lastHoverItem;
+	My.pointerOver = function(ev, item){
+		if(lastHoverItem === item) return;
+		lastHoverItem = item;
+
+		item.hideUnusedPort = false;
+	}
+
+	My.pointerOut = function(ev){
+		if(lastHoverItem == null) return;
+
+		lastHoverItem.hideUnusedPort = container.hideUnusedPort;
+		lastHoverItem = null;
+	}
 });

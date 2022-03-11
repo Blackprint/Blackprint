@@ -17,6 +17,7 @@
       <!-- list: ./container/nodes.js -->
       <svg
         @contextmenu.stop.prevent="container.nodeScope.menu(event)"
+        @pointerover.capture="container.nodeScope.pointerOut(event)"
         @pointerdown="container.moveContainer(event)"
       >
         <g sf-each="x in list" class="
@@ -45,7 +46,9 @@
     <!-- Nodes goes here -->
     <sf-m name="nodes" class="nodes" style="user-select:none;">
       <!-- Handled on ./nodes.js -->
-      <div sf-each="item in list" class="{{ item._nodeSelected && 'selected' }}" @pointerup="checkNodeClick(event)">
+      <div sf-each="item in list" class="{{ item._nodeSelected ? 'selected' : '' }}"
+        @pointerover.capture="pointerOver(event, item)"
+        @pointerup="checkNodeClick(event)">
         {{@exec
           // Capitalize each word
           var name = item.interface.split('.sf')[0].replace(/[\/.,<>:\[\]{}+_=`~!@#$%^*(\\|)]/g, '-').toLowerCase();
