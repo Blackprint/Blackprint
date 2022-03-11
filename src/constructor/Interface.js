@@ -44,8 +44,10 @@ Blackprint.Interface = class Interface extends sf.Model {
 			this._scope = node._instance.scope;
 			this._nodeSelected = false;
 
-			if(this._scope !== void 0)
+			if(this._scope !== void 0){
 				this._container = this._scope('container');
+				this.hideUnusedPort = this._container.hideUnusedPort;
+			}
 
 			this.$decoration = new IFaceDecoration(this);
 		}
@@ -216,6 +218,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 		let cableScope = container.cableScope;
 		let cable = cableScope.currentCable;
 
+		this.hideUnusedPort = false;
 		this._scope.sketch.emit('node.hover', { event, iface: this });
 
 		if(cable !== void 0){
@@ -276,6 +279,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 		var container = this._container;
 		let cableScope = container.cableScope;
 		// let cable = cableScope.currentCable;
+		this.hideUnusedPort = container.hideUnusedPort;
 
 		this._scope.sketch.emit('node.unhover', { event, iface: this });
 

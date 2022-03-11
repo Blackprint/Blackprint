@@ -427,6 +427,9 @@ sf-space[blackprint]{
             box-shadow: 0 0 4px white;
           }
         }
+        &.unused {
+          display: none;
+        }
 
         .port{
           z-index: 200;

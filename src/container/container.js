@@ -9,6 +9,7 @@ Space.model('container', function(My, include){
 	My.cableScope = include('cables');
 	My.nodeScope = include('nodes');
 	My._isImporting = false;
+	My.hideUnusedPort = false;
 
 	My.pos = {x:0, y:0};
 
