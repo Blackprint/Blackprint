@@ -30,6 +30,7 @@ class Cable extends Blackprint.Engine.Cable {
 		this.hasBranch = false;
 		this.selected = false;
 		this._destroyed = false;
+		this.beforeConnect = null;
 
 		var container = this._container = port._scope('container');
 		this._cablesModel = this._scope('cables');
@@ -171,6 +172,17 @@ class Cable extends Blackprint.Engine.Cable {
 				(hoverPort.rect.x + center - pos.x - _Ofst.x) / scale,
 				(hoverPort.rect.y + center - pos.y - _Ofst.y) / scale
 			];
+
+			this.beforeConnect = null;
+			this._scope.sketch.emit('port.cable.test', {
+				cable: this,
+				port: this.owner,
+				target: hoverPort.item,
+				instance: this._scope.sketch,
+				handler: fn => {
+					this.beforeConnect = fn;
+				}
+			});
 		}
 
 		// Follow pointer
@@ -187,6 +199,8 @@ class Cable extends Blackprint.Engine.Cable {
 				this.head2[0] += ev.movementX / scale;
 				this.head2[1] += ev.movementY / scale;
 			}
+
+			this.beforeConnect = null;
 		}
 
 		if(branch !== void 0 && branch.length !== 0){
