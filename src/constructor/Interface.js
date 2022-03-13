@@ -221,7 +221,6 @@ Blackprint.Interface = class Interface extends sf.Model {
 		this._scope.sketch.emit('node.hover', { event, iface: this });
 
 		if(cable !== void 0){
-			// ToDo: show hidden ports
 			let el = event.target;
 
 			// Return if already targeting to any port

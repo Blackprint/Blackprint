@@ -123,27 +123,25 @@ Space.model('container', function(My, include){
 		if(!(My.pos.x >= 0 && movementX > 0)){
 			var temp = My.pos.x + movementX;
 
-			if(temp > 0){
-				temp = 0;
-				if(My.scale === 1) My._posNoScale.x = 0;
-			}
-			else My._posNoScale.x += movementX;
+			if(temp > 0) temp = 0;
+			else My._posNoScale.x += movementX / My.scale;
 
 			My.size.w = (My.origSize.w - temp) / My.scale;
 			My.pos.x = temp;
+
+			if(My.scale === 1) My._posNoScale.x = temp;
 		}
 
 		if(!(My.pos.y >= 0 && movementY > 0)){
 			var temp = My.pos.y + movementY;
 
-			if(temp > 0){
-				temp = 0;
-				if(My.scale === 1) My._posNoScale.y = 0;
-			}
-			else My._posNoScale.y += movementY;
+			if(temp > 0) temp = 0;
+			else My._posNoScale.y += movementY / My.scale;
 
 			My.size.h = (My.origSize.h - temp) / My.scale;
 			My.pos.y = temp;
+
+			if(My.scale === 1) My._posNoScale.y = temp;
 		}
 
 		My.onMove && My.onMove(My.pos);
@@ -367,6 +365,9 @@ Space.model('container', function(My, include){
 
 		My.pos.x = x;
 		My.pos.y = y;
+
+		My._posNoScale.x = x / scale;
+		My._posNoScale.y = y / scale;
 
 		My.size.w = (My.origSize.w - x) / scale;
 		My.size.h = (My.origSize.h - y) / scale;
