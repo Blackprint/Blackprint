@@ -105,11 +105,14 @@ Space.model('nodes', function(My, include){
 		// Check if he dropped the cable behind current node
 		var cable = include('cables').currentCable;
 		if(cable){
-			if(cable.branch == null || cable.branch.length === 0)
-				return;
+			setTimeout(()=> {
+				if(cable.connected || cable._destroyed) return;
+				if(cable.branch != null && cable.branch.length !== 0)
+					return;
 
-			var rect = node.getBoundingClientRect();
-			cable.head2[1] = -container.pos.y + rect.bottom + 15; // Put it on bottom of node
+				var rect = node.getBoundingClientRect();
+				cable.head2[1] = -container.pos.y + rect.bottom + 15; // Put it on bottom of node
+			}, 300);
 		}
 	}
 
