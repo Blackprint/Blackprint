@@ -312,11 +312,28 @@ Space.model('container', function(My, include){
 	}
 
 	// My.onScale = callback
+	let disableShadowTimer;
+	let disableShadowFunc = ()=> {
+		$(document.body).removeClass('blackprint-no-vfx');
+		disableShadowTimer = null;
+	};
+
+	function disableShadow(){
+		let body = $(document.body);
+		if(!disableShadowTimer && body.hasClass('blackprint-no-vfx')) return;
+
+		if(!disableShadowTimer)
+			body.addClass('blackprint-no-vfx');
+
+		clearTimeout(disableShadowTimer);
+		disableShadowTimer = setTimeout(disableShadowFunc, 1000);
+	}
 
 	My.scaleContainer = function(ev){
-		if(ev.ctrlKey === false && ev.scale === void 0) return;
+		if(ev.buttons !== 2 && ev.ctrlKey === false && ev.scale === void 0) return;
 		if(My.config.scale === false) return;
 		ev.preventDefault();
+		disableShadow();
 
 		if(ev.deltaY > 0 && My.scale < 0.21)
 			return;
