@@ -396,6 +396,7 @@ sf-space[blackprint]{
         left: -1px;
         justify-items: center;
         right: -1px;
+        z-index: -1;
 
         .list{
           display: grid;
