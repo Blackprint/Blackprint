@@ -72,9 +72,9 @@ class Port extends Blackprint.Engine.Port {
 			if(list != null && !Blackprint.settings.windowless){
 				let rect = this.findPortElement(list.getElement(cable.input)).getBoundingClientRect();
 
-				let { offset, pos } = this._scope('container');
-				cable.head2[0] = rect.x + rect.width/2 - offset.x - pos.x;
-				cable.head2[1] = rect.y + rect.height/2 - offset.y - pos.y;
+				let { offset, pos, scale } = this._scope('container');
+				cable.head2[0] = (rect.x + rect.width/2 - offset.x - pos.x) / scale;
+				cable.head2[1] = (rect.y + rect.height/2 - offset.y - pos.y) / scale;
 			}
 		}
 
