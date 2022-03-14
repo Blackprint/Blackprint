@@ -188,7 +188,7 @@ class Port extends Blackprint.Engine.Port {
 	}
 
 	insertComponent(beforeSelector, compName, item, callback, _repeat, _reinit){
-		var portList = this.iface[this.source];
+		var portList = this.iface[this.source]._list;
 		var that = this;
 
 		if(portList.getElement === void 0){
@@ -222,6 +222,7 @@ class Port extends Blackprint.Engine.Port {
 			});
 		}
 
+		let _compName = compName;
 		if(compName.constructor === String){
 			compName = compName.split('-');
 			for (var i = 0; i < compName.length; i++)
@@ -229,7 +230,7 @@ class Port extends Blackprint.Engine.Port {
 		}
 
 		var comp = window['$'+compName.join('')];
-		var beforeEl = portList.getElements(this.name);
+		var beforeEl = portList.getElements(this);
 		for (var i = 0; i < beforeEl.length; i++) {
 			var before = beforeEl[i];
 			if(before.bp$insertItem === item)
@@ -238,8 +239,12 @@ class Port extends Blackprint.Engine.Port {
 			before.bp$insertItem = item;
 			var el = new comp(item, Blackprint.space, true);
 
-			if(beforeSelector !== null)
+			if(beforeSelector !== null){
+				if(beforeSelector === '.name' && _compName === 'comp-port-input')
+					el.style.marginRight = '-5px';
+
 				before.insertBefore(el, before.querySelector(beforeSelector));
+			}
 			else
 				before.appendChild(el);
 
