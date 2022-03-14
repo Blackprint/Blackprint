@@ -208,6 +208,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 	swapZIndex(ev){
 		var container = this._container;
 		let ifaceList = container.nodeScope.list;
+		this._scope.sketch.emit('node.click', ev);
 
 		if(ifaceList.swap)
 			ifaceList.swap(ifaceList.indexOf(this), ifaceList.length-1);
