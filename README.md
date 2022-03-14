@@ -29,7 +29,7 @@ Default Node's UI design was inspired by UE4 Blueprint and can be modified with 
 ## Documentation
 > Warning: This project haven't reach it stable version
 
-The documentation haven't been finished, but there are inline documentation on [the template](https://github.com/Blackprint/template-js) and some information on [CONTRIBUTING.md](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md#version-conventions) if you want to use Blackprint before reaching v1.0.0.
+The [documentation](https://stefansarya.gitbook.io/blackprint) haven't been finished, there are inline documentation on [the template](https://github.com/Blackprint/template-js) and some information on [CONTRIBUTING.md](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md#version-conventions) if you want to use Blackprint before reaching v1.0.0.
 
 ## Example
 
@@ -48,7 +48,7 @@ If you just want to execute exported Blackprint JSON, you can just use the engin
 | --- | --- | --- | --- |
 | `LeftClick + move` | `1 touch + move` | Container | Select nodes and cable<br>branch |
 | `Middle/Right click + move` | `2 touch + move` | Container | Move the container |
-| `Ctrl + MouseWheel` | - | Container | Zoom the container |
+| `Ctrl + MouseWheel`<br>`RightClick + MouseWheel` | - | Container | Zoom the container |
 | `RightClick` | `tap hold 1 sec` | Node, Cable, Container | Context menu |
 | `Ctrl + LeftClick` | - | Cable | Create cable branch |
 | `Ctrl + RightClick` | - | Port, Cable | Node suggestion |
@@ -114,7 +114,7 @@ Blackprint Engine
 </table>
 
 > 🚧 = Under development (In the current working plan)<br>
-> 🧪 = Experimental/Alpha stage (Being tested and may have rapid changes)
+> 🧪 = Experimental/Alpha stage (Being tested and may have rapid changes)<br>
 
 With remote control you can easily manage connection to the target environment (Node.js/PHP/etc) from the browser. Please always run your app inside of container (like Docker) if you allow someone to remote control your system.
 
@@ -161,6 +161,7 @@ Example case where you may need remote control:
   - [ ] Add example for using ES6 modules importing system
     - It's possible to use Snowpack or something else, but it currently can't compile `.sf`
 - [ ] Better documentation
+  - [ ] Add TypeScript definition file
 - [ ] Nodes docs generator
 - [ ] Blackprint Nodes Package Manager
   - [x] Use NPM registry for Node.js/Deno/Browser

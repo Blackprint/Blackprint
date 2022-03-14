@@ -1,3 +1,20 @@
+# 0.6.5
+
+### Bug Fix
+- Automatically move the cable if it's dropped behind any node
+- Fix nodes that can't be moved when have decoration
+- Fix unscaled position value and remove ToDo comment
+- Fix incorrect cable position when dropped on header
+- Fix hide port on pointerleave
+- Fix incorrect cable position when dropped on header
+
+### Features
+- Add `node.click` event when a node header was clicked
+- Add `port.cable.test` event 
+- Add new shortcut for scaling container (right click + mouse wheel)
+- Add feature to hide unused port
+- Prepare feature for variable and function node
+
 # 0.6.4
 
 ### Bug Fix
