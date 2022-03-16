@@ -182,8 +182,6 @@ Space.model('container', function(My, include){
 	let nodeList = My.nodeScope.list;
 
 	My.moveSelection = function(ev, skip){
-		var scale = My.scale;
-
 		for (var i = 0; i < cableSelect.length; i++) {
 			let temp = cableSelect[i];
 			if(skip === temp) continue;
@@ -291,10 +289,18 @@ Space.model('container', function(My, include){
 
 				if(ox >= sx && x <= ex
 				&& oy >= sy && y <= ey){
+					if(temp.onSelect?.({ x, y, sx, sy, ox, oy }) === false)
+						continue;
+
 					temp._nodeSelected = true;
 					nodeSelect.push(temp);
 				}
 			}
+
+			My.$space.sketch.emit('container.selection', {
+				cables: cableSelect,
+				nodes: nodeSelect,
+			});
 		};
 	}
 
