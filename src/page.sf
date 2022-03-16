@@ -61,7 +61,7 @@
 
           // Create from Blackprint's namespace and (true = let the item become the scope)
           Blackprint._reuseIFace = item;
-          @return new node(item, Blackprint.space);
+          @return new node(item, $space);
         }}
       </div>
     </sf-m>

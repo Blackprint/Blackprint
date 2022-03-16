@@ -2,6 +2,8 @@ Space.model('nodes', function(My, include){
 	let container = My.container = include('container');
 
 	var sizeObserve = new ResizeObserver(function(items){
+		if(My.$space.sketch == null) return;
+
 		for (var i = 0; i < items.length; i++){
 			var resized = items[i];
 			var iface = resized.target.model;
@@ -63,7 +65,7 @@ Space.model('nodes', function(My, include){
 			}
 		}
 
-		include.sketch.emit('node.resize', { items });
+		My.$space.sketch.emit('node.resize', { items });
 	});
 
 	// Check if the container was a minimap
