@@ -205,13 +205,13 @@ Blackprint.Interface = class Interface extends sf.Model {
 		scope('dropdown').show(menu, {x: ev.clientX, y: ev.clientY, event: ev});
 	}
 
-	swapZIndex(ev){
+	swapZIndex(ev, disableSwap){
 		var container = this._container;
 		let ifaceList = container.nodeScope.list;
 		this._scope.sketch.emit('node.click', { event: ev, iface: this});
 
-		if(ifaceList.swap)
-			ifaceList.swap(ifaceList.indexOf(this), ifaceList.length-1);
+		if(!disableSwap)
+			ifaceList.push(ifaceList.splice(ifaceList.indexOf(this), 1)[0]);
 	}
 
 	nodeHovered(event){
