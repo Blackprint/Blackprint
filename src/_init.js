@@ -579,7 +579,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	// @return node scope
 	createNode(namespace, options, handlers){
 		var func = deepProperty(Blackprint.nodes, namespace.split('/'));
-		if(func === void 0){
+		if(func == null){
 			return this.emit('error', {
 				type: 'node_not_found',
 				data: {namespace}
@@ -590,9 +590,15 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		// Call the registered func (from this.registerNode)
 		var node;
-		if(isClass(func))
-			node = new func(this);
-		else func(node = new Blackprint.Node(this));
+
+		try{
+			if(isClass(func))
+				node = new func(this);
+			else func(node = new Blackprint.Node(this));
+		} catch(e){
+			console.error("Error when processing:", namespace);
+			throw e;
+		}
 
 		// Disable data flow on any node ports
 		if(this.disablePorts) node.disablePorts = true;
