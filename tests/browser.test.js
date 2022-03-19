@@ -1,6 +1,6 @@
-require("../dist/engine.min.js");
-window.sf = require("scarletsframe/dist/scarletsframe.min.js");
 window.ResizeObserver = class{};
+window.sf = require("scarletsframe/dist/scarletsframe.min.js");
+require("../dist/engine.min.js");
 require("../dist/blackprint.min.js");
 require("../dist/blackprint.sf.js");
 
@@ -289,6 +289,36 @@ describe("Blackprint create node with JavaScript", () => {
 				expect(fn1).toHaveBeenCalledTimes(1);
 				expect(fn2).toHaveBeenCalledTimes(1);
 			});
+
+			test('Create ghost ports', (done) => {
+				let dummy = sketch.createNode('Test/Node2');
+				let Out = new Blackprint.OutputPort(Number);
+				let In = new Blackprint.InputPort(String);
+
+				Out.value = 123;
+				dummy.ref.Output.Out = "123";
+
+				dummy.input.In.once('value', ev => {
+					expect(ev.cable.value).toBe(123);
+				});
+
+				Out.once('value', ev => {
+					expect(ev.port.value).toBe(123);
+				});
+
+				dummy.output.Out.once('value', ev => {
+					expect(ev.port.value).toBe(123);
+				});
+
+				In.once('value', ev => {
+					expect(ev.cable.value).toBe("123");
+					sketch.deleteNode(dummy);
+					done();
+				});
+
+				Out.connectPort(dummy.input.In);
+				dummy.output.Out.connectPort(In);
+			});
 		});
 	});
 
@@ -389,6 +419,36 @@ describe("Blackprint create node with JavaScript", () => {
 
 				expect(fn1).toHaveBeenCalledTimes(1);
 				expect(fn2).toHaveBeenCalledTimes(1);
+			});
+
+			test('Create ghost ports', (done) => {
+				let dummy = engine.createNode('Test/Node2');
+				let Out = new Blackprint.OutputPort(Number);
+				let In = new Blackprint.InputPort(String);
+
+				Out.value = 123;
+				dummy.ref.Output.Out = "123";
+
+				dummy.input.In.once('value', ev => {
+					expect(ev.cable.value).toBe(123);
+				});
+
+				Out.once('value', ev => {
+					expect(ev.port.value).toBe(123);
+				});
+
+				dummy.output.Out.once('value', ev => {
+					expect(ev.port.value).toBe(123);
+				});
+
+				In.once('value', ev => {
+					expect(ev.cable.value).toBe("123");
+					engine.deleteNode(dummy);
+					done();
+				});
+
+				Out.connectPort(dummy.input.In);
+				dummy.output.Out.connectPort(In);
 			});
 		});
 	});
