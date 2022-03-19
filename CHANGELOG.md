@@ -1,3 +1,14 @@
+# 0.6.6
+
+### Bug Fix
+- Fix feature for inserting component into a port
+- Fix sf-space reference
+
+### Features
+- Add parameter to disable swap
+- Add event when selecting nodes or cables
+- Show namespace on error when creating node
+
 # 0.6.5
 
 ### Bug Fix

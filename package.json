@@ -1,7 +1,7 @@
 {
   "name": "@blackprint/sketch",
   "description": "Blackprint sketch for browser",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "author": "Blackprint",
   "license": "MIT",
   "repository": {
