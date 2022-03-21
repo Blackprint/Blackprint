@@ -422,8 +422,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 							if(cable.branch){
 								let branch = cable.branch;
 
-								save.x = cable.head2[0];
-								save.y = cable.head2[1];
+								save.x = Math.round(cable.head2[0]);
+								save.y = Math.round(cable.head2[1]);
 								save.branch = [];
 
 								for (let z = 0; z < branch.length; z++){
@@ -573,6 +573,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		list.splice(0);
 		this.scope('cables').list.splice(0);
+
+		super.clearNodes();
 	}
 
 	// Create new node that will be inserted to the container
@@ -676,12 +678,13 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		this.emit('node.created', { iface });
 		return iface;
 	}
+}
 
-	destroy(){
-		this.iface = {};
-		this.ifaceList.splice(0);
-		this.clearNodes();
-	}
+// ToDo: remove this after the new engine was published
+Blackprint.Engine.prototype.destroy ??= function(){
+	this.iface = {};
+	this.ifaceList.splice(0);
+	this.clearNodes();
 }
 
 // Replace function from Blackprint Engine
