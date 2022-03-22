@@ -1,3 +1,10 @@
+# 0.6.7
+
+### Bug Fix
+- Fix iface init that wasn't being called on windowless mode
+- Fix `instance.clearNodes`
+- Round the position of cable branch when exporting to JSON
+
 # 0.6.6
 
 ### Bug Fix
