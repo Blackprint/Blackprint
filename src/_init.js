@@ -668,6 +668,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		else if(node.init !== void 0)
 			node.init();
 
+		if(Blackprint.settings.windowless)
+			iface.init?.();
+
 		time = Date.now() - time;
 		if(time > 500){
 			this.emit('node.slow_creation', {
