@@ -1,3 +1,10 @@
+# 0.6.8
+
+### Bug Fix
+- Add `cable.dropped` event
+- Fix `hidden` property that was not being set
+- Make some properties configurable
+
 # 0.6.7
 
 ### Bug Fix
