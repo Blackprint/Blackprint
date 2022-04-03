@@ -249,7 +249,7 @@ class Cable extends Blackprint.Engine.Cable {
 			cablesModel.currentCable = cable;
 
 			var space = $(ev.target.closest('sf-space'));
-			space.on('pointermove', this.moveCableHead).once('pointerup', function(ev){
+			space.on('pointermove', this.moveCableHead).once('pointerup', ev => {
 				space.off('pointermove', this.moveCableHead);
 
 				// Add delay because it may be used for connecting port
@@ -259,6 +259,13 @@ class Cable extends Blackprint.Engine.Cable {
 
 				if(elem !== void 0)
 					elem.css('pointer-events', '');
+
+				this._scope.sketch.emit('cable.dropped', {
+					event: ev,
+					port: cable.owner,
+					cable,
+					afterCreated: isCreating
+				});
 			});
 		}
 
