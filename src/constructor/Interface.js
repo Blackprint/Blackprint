@@ -105,7 +105,8 @@ Blackprint.Interface = class Interface extends sf.Model {
 		this.x += x;
 		this.y += y;
 
-		if(!single) container.moveSelection(e, this);
+		if(!single && this._nodeSelected)
+			container.moveSelection(e, this);
 
 		if(container.onNodeMove !== void 0)
 			container.onNodeMove(e, this);
