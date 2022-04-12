@@ -320,14 +320,14 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	exportJSON(options){
 		var ifaces;
 
-		if(options.selectedOnly)
-			ifaces = SketchList[0].scope('nodes').selected;
-		else ifaces = this.scope('nodes').list;
-
 		var json = {};
 		var exclude = [];
 		options ??= {};
 		let metadata = json._ = {};
+
+		if(options.selectedOnly)
+			ifaces = SketchList[0].scope('nodes').selected;
+		else ifaces = this.scope('nodes').list;
 
 		if(options.exclude)
 			exclude = options.exclude;
