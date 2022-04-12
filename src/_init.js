@@ -318,7 +318,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	}
 
 	exportJSON(options){
-		var ifaces = this.scope('nodes').list;
+		var ifaces;
+
+		if(options.selectedOnly)
+			ifaces = SketchList[0].scope('nodes').selected;
+		else ifaces = this.scope('nodes').list;
+
 		var json = {};
 		var exclude = [];
 		options ??= {};
@@ -392,7 +397,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 							continue; // Not connected to any port, let's continue
 
 						var _i = ifaces.indexOf(target.iface);
-						if(exclude.includes(ifaces[_i].namespace))
+						if(_i == -1 || exclude.includes(ifaces[_i].namespace))
 							continue; // Being excluded from export
 
 						let temp = {
