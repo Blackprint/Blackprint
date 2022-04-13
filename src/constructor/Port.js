@@ -119,6 +119,7 @@ class Port extends Blackprint.Engine.Port {
 		var portElem = this.findPortElement(event.target);
 
 		this._scope.sketch.emit('port.hover', { event, port: this });
+		this.iface.emit('port.hover', { event, port: this });
 
 		// For magnet sensation when the cable reach the port
 		this._scope('cables').hoverPort = {
@@ -129,11 +130,13 @@ class Port extends Blackprint.Engine.Port {
 	}
 
 	// PointerOut event handler
-	portUnhovered(){
+	portUnhovered(event){
 		if(event.pointerType === 'touch')
 			return;
 
 		this._scope.sketch.emit('port.unhover', { event, port: this });
+		this.iface.emit('port.unhover', { event, port: this });
+
 		this._scope('cables').hoverPort = false;
 	}
 
