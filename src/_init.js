@@ -314,6 +314,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			handlers[i].init && handlers[i].init();
 
 		containerModel._isImporting = false;
+		this.emit("json.imported", {appendMode: options.appendMode, nodes: inserted, raw: json});
+
 		return inserted;
 	}
 
