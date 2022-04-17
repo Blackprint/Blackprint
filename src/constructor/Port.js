@@ -94,7 +94,7 @@ class Port extends Blackprint.Engine.Port {
 				}
 
 				list = cable.output.iface.output._list;
-				if(list != null){
+				if(list != null && cable.parentCable == null){
 					let rect = this.findPortElement(list.getElement(cable.output)).getBoundingClientRect();
 	
 					let { offset, pos, scale } = this._scope('container');
