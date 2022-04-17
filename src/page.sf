@@ -249,7 +249,7 @@ sf-space[blackprint]{
         display: block;
       }
 
-      .has-branch.selected circle{
+      g.selected circle{
         r: 8;
         fill: white;
       }

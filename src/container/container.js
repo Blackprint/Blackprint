@@ -150,6 +150,12 @@ Space.model('container', function(My, include){
 	My.moveContainer = function(ev){
 		if(My.config.move === false) return;
 		if(ev.button === 0){ // left click
+			if(ev.shiftKey) {
+				// Disconnect cable
+				// My.$el.on('pointermove', moveContainer);
+				return;
+			}
+
 			My.beginSelecting(ev);
 			return;
 		}
@@ -269,7 +275,7 @@ Space.model('container', function(My, include){
 
 			for (var i = 0; i < cableList.length; i++) {
 				let temp = cableList[i];
-				if(temp.hasBranch === false) continue;
+				if(temp.hasBranch === false && temp.connected) continue;
 
 				let [x, y] = temp.head2;
 				if(x >= sx && x <= ex
