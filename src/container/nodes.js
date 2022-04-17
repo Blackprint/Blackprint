@@ -95,6 +95,13 @@ Space.model('nodes', function(My, include){
 	};
 
 	My.selected = [];
+	My.unselectAll = function(){
+		let list = My.selected;
+		for (let i = 0; i < list.length; i++)
+			list[i]._nodeSelected = false;
+
+		list.splice(0);
+	}
 
 	My.checkNodeClick = function(ev){
 		if(ev.target.closest('.ports'))

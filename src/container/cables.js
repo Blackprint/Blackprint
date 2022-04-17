@@ -26,6 +26,13 @@ Space.model('cables', function(My, include){
 	My.currentCable = void 0;
 
 	My.selected = [];
+	My.unselectAll = function(){
+		let list = My.selected;
+		for (let i = 0; i < list.length; i++)
+			list[i].selected = false;
+
+		list.splice(0);
+	}
 
 	// This will run everytime the cable was moving
 	// used on: ../page.sf
