@@ -1,3 +1,23 @@
+## scss-global
+sf-space[blackprint] .nodes {
+	bpic-bp-var-get, bpic-bp-var-set{
+		.content {
+			.center{
+				text-align: center;
+				background: #00f3ff4d;
+				padding: 4px;
+				margin-bottom: 2px;
+				border-radius: 50px;
+			}
+
+			.ports > .name {
+				display: none;
+			}
+		}
+	}
+}
+
+## js-global
 let BPVar = {html: `<div class="node {{ type }}" style="transform:translate({{ x }}px,{{ y }}px)">
   <div class="content">
   	<div class="center"
