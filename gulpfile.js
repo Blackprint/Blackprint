@@ -28,6 +28,7 @@ let compileTargets = editorOnly ? {} : {
 
 				// Combine files from all directory recursively
 				'engine-js/src/**/*.js',
+				'engine-js/src/nodes/*.js',
 			],
 		}
 	},
@@ -142,14 +143,14 @@ let SFC = require("scarletsframe-compiler")({
 	// Recompile some files before being watched on startup
 	// You may want to check if the git history was changed
 	// And then set this to true with JavaScript
-	startupCompile: false,
+	startupCompile: !false,
 
 	// Choose your default editor
 	// You must register "subl" or "code" to the PATH environment variable.
 	// https://www.sublimetext.com/docs/command_line.html
 	//
 	// https://code.visualstudio.com/docs/editor/command-line#_code-is-not-recognized-as-an-internal-or-external-command
-	editor: 'sublime', // only 'sublime' or 'vsc' that currently supported
+	editor: 'vsc', // only 'sublime' or 'vsc' that currently supported
 
 	// Optional if you want to remove source map on production mode
 	includeSourceMap: process.env.production || true,
