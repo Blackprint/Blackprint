@@ -591,7 +591,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	// @return node scope
 	createNode(namespace, options, handlers){
 		var node, func;
-		if(!(namespace instanceof Blackprint.Node)){
+		if(!(namespace.prototype instanceof Blackprint.Node)){
 			var func = deepProperty(Blackprint.nodes, namespace.split('/'));
 			if(func == null){
 				return this.emit('error', {
@@ -600,7 +600,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				});
 			}
 		}
-		else func = namespace;
+		else{
+			func = namespace;
+			namespace = "BPInternal/" + func.namespace;
+		}
 
 		let time = Date.now();
 
