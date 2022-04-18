@@ -374,7 +374,7 @@ sf-space[blackprint]{
 
         &.small{
             position: absolute;
-            height: 96%;
+            height: calc(100% - 5px);
             border-radius: 5px 0 0 5px;
         }
       }

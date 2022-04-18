@@ -36,14 +36,43 @@ let BPVar = {html: `<div class="node {{ type }}" style="transform:translate({{ x
       <sf-template path="Blackprint/nodes/template/output-port.sf"></sf-template>
     </div>
   </div>
+  <sf-template path="Blackprint/nodes/template/other.sf"></sf-template>
 </div>`};
 
-let BPFn = {template: 'Blackprint/nodes/default.sf'};
+let BPFn = {html: `<div class="node {{ type }}" style="transform:translate({{ x }}px,{{ y }}px)">
+  <div class="content">
+  	<div class="center"
+		@contextmenu.stopAll.prevent="nodeMenu(event)"
+		@dragmove="moveNode(event)"
+		@pointerdown="swapZIndex(event)"
+		@pointerover="nodeHovered(event)"
+	  	@pointerout="nodeUnhovered(event)"
+	  	@dblclick="openFunction(event)"
+	>{{ title }}</div>
+
+    <div class="left-port">
+      <sf-template path="Blackprint/nodes/template/input-port.sf"></sf-template>
+    </div>
+
+    <div class="right-port">
+      <sf-template path="Blackprint/nodes/template/output-port.sf"></sf-template>
+    </div>
+  </div>
+  <sf-template path="Blackprint/nodes/template/other.sf"></sf-template>
+</div>`};
 
 $(function(){
 	Blackprint.Sketch.registerInterface('BPIC/BP/Var/Get', BPVar, Blackprint._iface['BPIC/BP/Var/Get']);
 	Blackprint.Sketch.registerInterface('BPIC/BP/Var/Set', BPVar, Blackprint._iface['BPIC/BP/Var/Set']);
-	Blackprint.Sketch.registerInterface('BPIC/BP/Fn/Main', BPFn, Blackprint._iface['BPIC/BP/Fn/Main']);
 	Blackprint.Sketch.registerInterface('BPIC/BP/Fn/Input', BPFn, Blackprint._iface['BPIC/BP/Fn/Input']);
 	Blackprint.Sketch.registerInterface('BPIC/BP/Fn/Output', BPFn, Blackprint._iface['BPIC/BP/Fn/Output']);
+
+	Blackprint.Sketch.registerInterface('BPIC/BP/Fn/Main', BPFn,
+	class extends Blackprint._iface['BPIC/BP/Fn/Main'] {
+		openFunction(event){
+			this.node._instance.emit("node.function.open", {
+				event, iface: this, function: this._funcInstance
+			});
+		}
+	});
 });
