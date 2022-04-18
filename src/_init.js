@@ -446,6 +446,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 							if(cable.connected === false) return;
 
 							let temp = parentMap.get(cable);
+							if(options.selectedOnly && temp == null)
+								return;
+
 							save.id = temp.parentId = parentCable++;
 						}
 
@@ -587,19 +590,21 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	// Create new node that will be inserted to the container
 	// @return node scope
 	createNode(namespace, options, handlers){
-		var func = deepProperty(Blackprint.nodes, namespace.split('/'));
-		if(func == null){
-			return this.emit('error', {
-				type: 'node_not_found',
-				data: {namespace}
-			});
+		var node, func;
+		if(!(namespace instanceof Blackprint.Node)){
+			var func = deepProperty(Blackprint.nodes, namespace.split('/'));
+			if(func == null){
+				return this.emit('error', {
+					type: 'node_not_found',
+					data: {namespace}
+				});
+			}
 		}
+		else func = namespace;
 
 		let time = Date.now();
 
 		// Call the registered func (from this.registerNode)
-		var node;
-
 		try{
 			if(isClass(func))
 				node = new func(this);
@@ -687,6 +692,14 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		this.emit('node.created', { iface });
 		return iface;
+	}
+
+	createVariable(id, options){
+		super.createVariable(id, options);
+	}
+
+	createFunction(id, options){
+		super.createFunction(id, options);
 	}
 }
 
