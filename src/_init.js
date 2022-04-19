@@ -507,6 +507,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(options.module === false && options.environment === false)
 			delete json._;
 
+		if(options.toRawObject) return json;
+
 		json = JSON.stringify(json, options.replacer, options.space);
 
 		if(options.toJS)
@@ -589,6 +591,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 	// Create new node that will be inserted to the container
 	// @return node scope
+	// ToDo: turn this into async and wait call to `iface.imported`
 	createNode(namespace, options, handlers){
 		var node, func;
 		if(!(namespace.prototype instanceof Blackprint.Node)){
@@ -699,10 +702,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 	createVariable(id, options){
 		super.createVariable(id, options);
+		this.variables.refresh?.();
 	}
 
 	createFunction(id, options){
 		super.createFunction(id, options);
+		this.functions.refresh?.();
 	}
 }
 

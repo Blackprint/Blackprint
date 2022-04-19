@@ -318,6 +318,7 @@ sf-space[blackprint]{
 
       @include headerColor('event', #a05f5f, rgba(226, 18, 18, 0.7), rgba(229, 41, 41, 0.2), rgba(229, 32, 32, 0.1));
       @include headerColor('input', #75a05f, rgba(108, 232, 93, 0.7), rgba(103, 255, 108, 0.2), rgba(130, 226, 124, 0.1));
+      @include headerColor('func-in-out', #b030ff, #9600c7b3, #42006ab3, #8332dbb3);
 
       .header{
         display: block;
