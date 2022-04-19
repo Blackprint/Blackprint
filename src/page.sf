@@ -234,7 +234,7 @@ sf-space[blackprint]{
       backface-visibility: hidden;
       height: 100%;
       width: 100%;
-      transform: translateZ(1px);
+      transform: translateZ(0px);
 
       path, circle{
         transition: 0.1s ease-in;
@@ -307,7 +307,7 @@ sf-space[blackprint]{
       position: absolute;
       background: rgba(0,0,0,0.7);
       backface-visibility: hidden;
-      transform: translateZ(1px);
+      transform: translateZ(0px);
 
       @mixin headerColor($type, $borderColor, $bgA, $bgB, $bgC) {
         &.#{$type} .header{
