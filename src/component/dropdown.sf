@@ -6,7 +6,7 @@
   ">
   <div class="first" style="display: {{ !title && 'none' }}">{{ title || '' }}</div>
   <ul>
-    <li sf-each="x in options" :class="{{ x.divider ? 'divider' : '' }} {{ x.disabled && 'disabled' }}" title="{{ x.info || '' }}">
+    <li sf-each="x in options" :class="{{ x.divider ? 'divider' : '' }} {{ x.disabled ? 'disabled' : '' }}" title="{{ x.info || '' }}">
       {{@if x.title !== undefined:
       	{[ <a> ]} // Begin
 
