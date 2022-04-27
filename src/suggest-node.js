@@ -96,6 +96,7 @@ function checkTypeInstance(source, clazz, target){
 
 	if(source === 'output'){
 		if(clazz === Object) return false;
+		if(clazz.any || target.any) return true;
 
 		if(clazz.constructor === Array){
 			for (var i = 0; i < clazz.length; i++) {
@@ -112,6 +113,7 @@ function checkTypeInstance(source, clazz, target){
 
 	if(source === 'input'){
 		if(target === Object) return false;
+		if(clazz.any || target.any) return true;
 
 		if(target.constructor === Array){
 			for (var i = 0; i < target.length; i++) {
