@@ -102,3 +102,19 @@ function createNodesMenu(list, sketch, ev, pos){
 	menu.event = ev;
 	return menu;
 }
+
+Blackprint.utils.setEnumerablePrototype = function(clazz, props){
+	let temp = clazz.prototype;
+	let desc = Object.getOwnPropertyDescriptors(temp);
+
+	for(let key in props){
+		let ref = desc[key];
+		if(ref == null){
+			console.error("Error:", key, desc);
+			throw new Error(`"${key}" property was not found on the prototype`);
+		}
+		ref.enumerable = props[key];
+	}
+
+	Object.defineProperties(temp, desc);
+}
