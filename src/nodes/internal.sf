@@ -76,7 +76,7 @@ let BPFnInOut = {html: `<div class="node func-in-out {{ type }}" style="transfor
 			@contextmenu.stopAll.prevent="nodeMenu(event)"
 			@dragmove="moveNode(event)"
 			@pointerdown="swapZIndex(event)"
-			@pointerup="useType(true)"
+			@pointerup="addPort(true)"
 			@pointerover="nodeHovered(event)"
 			@pointerout="nodeUnhovered(event)"
 		>
@@ -103,9 +103,20 @@ $(function(){
 	Blackprint.Sketch.registerInterface('BPIC/BP/Fn/Main', BPFn,
 	class extends Blackprint._iface['BPIC/BP/Fn/Main'] {
 		openFunction(event){
+			let instance = this.bpInstance;
 			this.node._instance.emit("node.function.open", {
 				event, iface: this, function: this.node._funcInstance
 			});
+
+			if(instance.pendingRender){
+				setTimeout(function(){
+					$.afterRepaint().then(() => {
+						setTimeout(function(){
+							instance.recalculatePosition();
+						}, 10);
+					});
+				}, 10);
+			}
 		}
 	});
 });
