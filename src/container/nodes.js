@@ -1,7 +1,7 @@
 Space.model('nodes', function(My, include){
 	let container = My.container = include('container');
 
-	var sizeObserve = new ResizeObserver(function(items){
+	var sizeObserve = new ResizeObserver(My._recalculate = function(items, noEvent){
 		if(My.$space.sketch == null) return;
 
 		for (var i = 0; i < items.length; i++){
@@ -55,8 +55,10 @@ Space.model('nodes', function(My, include){
 
 						if(cable.owner.iface === iface && which === 'output')
 							cable = cable.head1;
-						else
+						else{
+							if(!cable.connected && which === 'input') continue;
 							cable = cable.head2;
+						}
 
 						cable[0] = portX;
 						cable[1] = portY;
@@ -65,7 +67,7 @@ Space.model('nodes', function(My, include){
 			}
 		}
 
-		My.$space.sketch.emit('node.resize', { items });
+		if(noEvent !== true) My.$space.sketch.emit('node.resize', { items });
 	});
 
 	// Check if the container was a minimap

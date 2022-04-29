@@ -275,6 +275,18 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			branchMap.get(linkPortA)[temp.id] = cable;
 		}
 
+		let _getPortRect, _windowless = Blackprint.settings.windowless;
+		if(options.pendingRender){
+			this.pendingRender = true;
+
+			let temp = {x:50,y:50,width:50,height:50,left:50,right:50,top:50,bottom:50};
+			Object.setPrototypeOf(temp, DOMRect.prototype);
+			_getPortRect = () => temp;
+
+			Blackprint.settings.windowless = true;
+		}
+		else _getPortRect = getPortRect;
+
 		await $.afterRepaint();
 		for (var i = 0; i < cableConnects.length; i++) {
 			let {output, portName, linkPortA, input, target, linkPortB} = cableConnects[i];
@@ -286,7 +298,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 					branchPrepare.set(linkPortA, true);
 
 					// Create cable from NodeA
-					let rectA = getPortRect(output, portName);
+					let rectA = _getPortRect(output, portName);
 
 					// Create branches
 					for (let z = 0; z < _cable.length; z++)
@@ -298,10 +310,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			// Create cable from NodeA
 			if(cable === void 0)
-				cable = linkPortA.createCable(getPortRect(output, portName));
+				cable = linkPortA.createCable(_getPortRect(output, portName));
 
 			// Positioning the cable head2 into target port position from NodeB
-			var rectB = getPortRect(input, target.name);
+			var rectB = _getPortRect(input, target.name);
 			var center = rectB.width / 2;
 			cable.head2 = [rectB.x + center, rectB.y + center];
 
@@ -316,6 +328,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		containerModel._isImporting = false;
 		this.emit("json.imported", {appendMode: options.appendMode, nodes: inserted, raw: json});
 
+		if(this.pendingRender) Blackprint.settings.windowless = _windowless;
 		return inserted;
 	}
 
@@ -595,9 +608,21 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	createNode(namespace, options, handlers){
 		var node, func;
 		if(!(namespace.prototype instanceof Blackprint.Node)){
-			var func = deepProperty(Blackprint.nodes, namespace.split('/'));
+			func = deepProperty(Blackprint.nodes, namespace.split('/'));
+
 			if(func == null){
-				return this.emit('error', {
+				if(namespace.startsWith("BPI/F/")){
+					func = deepProperty(this.functions, namespace.slice(6).split('/'));
+
+					if(func != null){
+						func = func.node;
+					}
+					else return this.emit('error', {
+						type: 'node_not_found',
+						data: {namespace}
+					});
+				}
+				else return this.emit('error', {
 					type: 'node_not_found',
 					data: {namespace}
 				});
@@ -605,7 +630,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		}
 		else{
 			func = namespace;
-			namespace = "BPInternal/" + func.namespace;
+			if(func.type === 'function')
+				namespace = "BPI/F/" + func.namespace;
+			else throw new Error("Unrecognized node");
 		}
 
 		let time = Date.now();
@@ -708,6 +735,22 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	createFunction(id, options){
 		super.createFunction(id, options);
 		this.functions.refresh?.();
+	}
+
+	recalculatePosition(){
+		let body = $(document.body);
+		let vfxAlreadyOff = body.hasClass('blackprint-no-vfx');
+		if(!vfxAlreadyOff) body.addClass('blackprint-no-vfx');
+
+		let list = this.ifaceList.map(v => ({
+			target: {model: v},
+			contentRect: v.$el[0].getBoundingClientRect()
+		}));
+
+		this.scope('nodes')._recalculate(list, true);
+		if(!vfxAlreadyOff) body.removeClass('blackprint-no-vfx');
+
+		this.pendingRender = false;
 	}
 }
 

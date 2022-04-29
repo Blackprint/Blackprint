@@ -135,8 +135,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 
 					// Avoid moving branch cable
 					if(cable._allBranch !== void 0){
-						if(which === 'output'
-						   && (cable.cableTrunk !== cable || cable.parentCable !== void 0))
+						if(which === 'output' && (cable.cableTrunk !== cable || cable.parentCable !== void 0))
 							continue;
 					}
 
