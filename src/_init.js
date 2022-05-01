@@ -268,20 +268,21 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 									if(linkPortB === void 0)
 										throw new Error(`Can't create output port (${target.name}) for function (${targetNode._funcMain.node._funcInstance.id})`);
 								}
-								else if(iface.namespace === "BP/Var/Set"){
-									let target = this._getTargetPortType(this, 'output', port);
-									iface.useType(target);
-									linkPortB = targetNode.input[target.name];
-								}
 								else{
-									this.emit('error', {
-										type: 'node_port_not_found',
-										data: {
-											iface: targetNode,
-											portName: target.name
-										}
-									});
-									continue;
+									if(targetNode.namespace === "BP/Var/Set"){
+										targetNode.useType(linkPortA);
+										linkPortB = targetNode.input[target.name];
+									}
+									else {
+										this.emit('error', {
+											type: 'node_port_not_found',
+											data: {
+												iface: targetNode,
+												portName: target.name
+											}
+										});
+										continue;
+									}
 								}
 							}
 
