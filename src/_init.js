@@ -139,6 +139,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				})));
 			}
 
+			let mjs;
+			if(metadata.functions != null) mjs = metadata.moduleJS.slice(0) || [];
+
 			if(metadata.moduleJS !== void 0 && !options.noModuleJS){
 				try{
 					// wait for .min.mjs
@@ -163,8 +166,14 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			if(metadata.functions != null){
 				let functions = metadata.functions;
 
-				for (let key in functions)
-					this.createFunction(key, functions[key]);
+				for (let key in functions){
+					let temp = this.createFunction(key, functions[key]);
+
+					// Required to be included on JSON export if this function isn't modified
+					// ToDo: use better mapping for moduleJS
+					let other = temp.structure._ = {};
+					other.moduleJS = mjs;
+				}
 			}
 
 			if(metadata.variables != null){
@@ -595,7 +604,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			if(hasFunc) metadata.functions = functions;
 
 			if(options.module !== false)
-				metadata.moduleJS = Array.from(moduleJS);
+				metadata.moduleJS = [...moduleJS];
 		}
 
 		if(options.exportVariables !== false){
@@ -831,13 +840,15 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	}
 
 	createVariable(id, options){
-		super.createVariable(id, options);
+		let temp = super.createVariable(id, options);
 		this.variables.refresh?.();
+		return temp;
 	}
 
 	createFunction(id, options){
-		super.createFunction(id, options);
+		let temp = super.createFunction(id, options);
 		this.functions.refresh?.();
+		return temp;
 	}
 
 	recalculatePosition(){
