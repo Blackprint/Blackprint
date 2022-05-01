@@ -159,6 +159,20 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 					throw e;
 				}
 			}
+
+			if(metadata.functions != null){
+				let functions = metadata.functions;
+
+				for (let key in functions)
+					this.createFunction(key, functions[key]);
+			}
+
+			if(metadata.variables != null){
+				let variables = metadata.variables;
+
+				for (let key in variables)
+					this.createVariable(key, variables[key]);
+			}
 		}
 
 		var inserted = this.ifaceList;
@@ -173,7 +187,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				// Every nodes that using this namespace name
 				for (var a = 0; a < nodes.length; a++){
 					let temp = nodes[a];
-					this.createNode(namespace, {
+					let iface = this.createNode(namespace, {
 						x: temp.x,
 						y: temp.y,
 						id: temp.id, // Named ID (if exist)
@@ -182,6 +196,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 						data: temp.data, // if exist
 						oldIface: oldIfaces[temp.id],
 					}, handlers);
+
+					// For custom function node
+					await iface._BpFnInit?.();
 				}
 			}
 		} catch(e) {
@@ -209,16 +226,30 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 					// Every output port that have connection
 					for(var portName in out){
+						var port = out[portName];
+
 						var linkPortA = iface.output[portName];
 						if(linkPortA === void 0){
-							this.emit('error', {
-								type: 'node_port_not_found',
-								data: {iface, portName}
-							});
-							continue;
-						}
+							if(iface.namespace === "BP/Fn/Input"){
+								let target = this._getTargetPortType(iface.node._instance, 'input', port);
+								linkPortA = iface.addPort(target, portName);
 
-						var port = out[portName];
+								if(linkPortA === void 0)
+									throw new Error(`Can't create output port (${portName}) for function (${iface._funcMain.node._funcInstance.id})`);
+							}
+							else if(iface.namespace === "BP/Var/Get"){
+								let target = this._getTargetPortType(this, 'input', port);
+								iface.useType(target);
+								linkPortA = iface.output[portName];
+							}
+							else{
+								this.emit('error', {
+									type: 'node_port_not_found',
+									data: {iface, portName}
+								});
+								continue;
+							}
+						}
 
 						if(_cableMeta)
 							branchPrepare.set(linkPortA, _cableMeta[portName])
@@ -231,14 +262,27 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 							// Output can only meet input port
 							var linkPortB = targetNode.input[target.name];
 							if(linkPortB === void 0){
-								this.emit('error', {
-									type: 'node_port_not_found',
-									data: {
-										iface: targetNode,
-										portName: target.name
-									}
-								});
-								continue;
+								if(targetNode.namespace === "BP/Fn/Output"){
+									linkPortB = targetNode.addPort(linkPortA, target.name);
+
+									if(linkPortB === void 0)
+										throw new Error(`Can't create output port (${target.name}) for function (${targetNode._funcMain.node._funcInstance.id})`);
+								}
+								else if(iface.namespace === "BP/Var/Set"){
+									let target = this._getTargetPortType(this, 'output', port);
+									iface.useType(target);
+									linkPortB = targetNode.input[target.name];
+								}
+								else{
+									this.emit('error', {
+										type: 'node_port_not_found',
+										data: {
+											iface: targetNode,
+											portName: target.name
+										}
+									});
+									continue;
+								}
 							}
 
 							cableConnects.push({
@@ -275,6 +319,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			branchMap.get(linkPortA)[temp.id] = cable;
 		}
 
+		await $.afterRepaint();
+
 		let _getPortRect, _windowless = Blackprint.settings.windowless;
 		if(options.pendingRender){
 			this.pendingRender = true;
@@ -287,7 +333,6 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		}
 		else _getPortRect = getPortRect;
 
-		await $.afterRepaint();
 		for (var i = 0; i < cableConnects.length; i++) {
 			let {output, portName, linkPortA, input, target, linkPortB} = cableConnects[i];
 
@@ -516,6 +561,64 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				metadata.moduleJS = [...modules];
 		}
 
+		if(options.exportFunctions !== false){
+			let hasFunc = false, functions = {};
+			let funcs = this.functions;
+			let moduleJS = new Set(metadata.moduleJS || []);
+
+			let dive = function(list, path){
+				for (let key in list) {
+					hasFunc = true;
+
+					let bpFunc = list[key];
+					if(bpFunc instanceof Blackprint._utils.BPFunction){
+						let temp = functions[path+key] = {};
+						temp.id = bpFunc.id;
+						temp.title = bpFunc.title;
+						temp.description = bpFunc.description;
+
+						let copy = temp.structure = Object.assign({}, bpFunc.structure);
+						let mjs = copy._?.moduleJS;
+						if(mjs != null){
+							for (let i=0; i < mjs.length; i++)
+								moduleJS.add(mjs[i]);
+						}
+
+						delete copy._;
+					}
+					else dive(bpFunc, path+key+'/');
+				}
+			}
+
+			dive(funcs, '');
+			if(hasFunc) metadata.functions = functions;
+
+			if(options.module !== false)
+				metadata.moduleJS = Array.from(moduleJS);
+		}
+
+		if(options.exportVariables !== false){
+			let hasVar = false, variables = {};
+			let vars = this.variables;
+
+			let dive = function(list, path){
+				for (let key in list) {
+					hasVar = true;
+
+					let bpVar = list[key];
+					if(bpVar instanceof Blackprint._utils.BPVariable){
+						let temp = variables[path+key] = {};
+						temp.id = bpVar.id;
+						temp.title = bpVar.title;
+					}
+					else dive(bpVar, path+key+'/');
+				}
+			}
+
+			dive(vars, '');
+			if(hasVar) metadata.variables = variables;
+		}
+
 		// Remove metadata if empty
 		if(options.module === false && options.environment === false)
 			delete json._;
@@ -604,7 +707,6 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 	// Create new node that will be inserted to the container
 	// @return node scope
-	// ToDo: turn this into async and wait call to `iface.imported`
 	createNode(namespace, options, handlers){
 		var node, func;
 		if(!(namespace.prototype instanceof Blackprint.Node)){
@@ -705,8 +807,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		iface.importing = false;
 		iface.comment = options.comment || '';
 
-		iface.imported && iface.imported(savedData);
-		node.imported && node.imported(savedData);
+		if(iface.imported) iface.imported(savedData);
+		if(node.imported) node.imported(savedData);
 
 		if(handlers !== void 0)
 			handlers.push(node);
