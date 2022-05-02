@@ -1,7 +1,39 @@
-# 0.6.8
+# 0.6.9
+
+### Features
+- Add support for exporting custom function and variable
+- Add feature to recalculate cable position
+- Add utils to modify enumerable property
+- Add feature for creating custom function node
+- Rename file and add styles for variable node
+- Add feature to export selected nodes only
+- Emit event when double clicking a function node
+- Emit event when JSON was imported
+- Emit port hover event on iface
+- Finishing custom variable and function node
 
 ### Bug Fix
+- Fix module list for custom function node
+- Fix import for custom variable nodes
+- Fix for copying custom function node
+- Fix node suggestion for any type data
+- Small CSS fix for safari browser 
+- Fix cable position when being connected to a port
+- Fix selection on disconnected cable
+- Fix incorrect node order
+- Fix cable position when using connectCable
+- Fix `undefined` class value
+- Skip connection if no cable found
+- Use internal namespace when using unregistered node
+- Deselect nodes and cable when creating cable
+- Avoid moving other node when the node is not selected
+
+# 0.6.8
+
+### Features
 - Add `cable.dropped` event
+
+### Bug Fix
 - Fix `hidden` property that was not being set
 - Make some properties configurable
 
