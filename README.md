@@ -134,13 +134,13 @@ Example case where you may need remote control:
   - [x] Importable minimal sketch for different project
   - [x] Select and move multiple nodes at once
     - [x] Bulk delete
-    - [ ] Add feature to put nodes into a group 🚧
+    - [x] Add feature to put nodes into a group
     - [ ] Create a function from nodes 🚧
   - [x] Clicked nodes should be moved on front of the other nodes (z-index)
   - [x] Automatically put cable on suitable port when it's dropped on top of a node
   - [x] Add feature to arrange cable (cable branching)
-  - [ ] Add variable's node 🚧
-  - [ ] Add feature to hide some unused port on a node 🚧
+  - [x] Add variable's node
+  - [x] Add feature to hide some unused port on a node
   - [ ] Add feature to import node skeleton (use default node, and no execution)
     - [ ] Create addons for VS Code for previewing exported Blackprint
     - [ ] Add JSON preview for Visual Studio Code
@@ -151,7 +151,7 @@ Example case where you may need remote control:
   - [x] Add Environment Variables editor 🧪
   - [x] Import sketch from URL
   - [ ] Move current sketch with minimap
-  - [ ] Node list editor (currently with right click)
+  - [x] Node list editor (right click and from side panel)
   - [x] Error/log popup or overlay
   - [x] Show overview or notice when importing nodes from URL
   - [ ] Multiple sketch workspaces or tabs
