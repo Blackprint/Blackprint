@@ -126,17 +126,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		if(metadata !== void 0){
 			if(metadata.env !== void 0 && !options.noEnv){
-				let temp = Blackprint.Environment;
-				Object.assign(temp.map, metadata.env);
-
-				// Because the array is a ReactiveArray
-				// We need to use splice & push to avoid using different object reference
-				// *For Browser Sketch only
-				temp.list.splice(0);
-				temp.list.push(...Object.entries(temp.map).map(([k, v]) => ({
-					key: k,
-					value: v
-				})));
+				let Env = Blackprint.Environment;
+				let temp = metadata.env;
+				
+				for (let key in temp) {
+					Env.set(key, temp[key]);
+				}
 			}
 
 			let mjs;
