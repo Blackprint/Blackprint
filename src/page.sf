@@ -56,12 +56,12 @@
 
           if(node === void 0){
             throw new Error("Node element with interface '"+name+"' ("+item.interface+") was not found");
-            @return null;
+            return null;
           }
 
           // Create from Blackprint's namespace and (true = let the item become the scope)
           Blackprint._reuseIFace = item;
-          @return new node(item, $space);
+          return new node(item, $space);
         }}
       </div>
     </sf-m>
