@@ -1,18 +1,40 @@
 ## scss-global
 sf-space[blackprint] .nodes {
-	bpic-bp-var-get, bpic-bp-var-set{
+	bpic-bp-env-get, bpic-bp-env-set, bpic-bp-var-get, bpic-bp-var-set{
 		.content {
 			.center{
 				text-align: center;
 				background: #00f3ff4d;
-				padding: 4px;
-				margin-bottom: 2px;
-				border-radius: 50px;
+				display: inline-block;
+				padding: 4px 12px;
+				border-radius: 5px;
+				font-size: 15px;
+
+				.description {
+					font-size: 12px;
+					color: darkgray;
+				}
 			}
 
-			.ports > .name {
+			.ports{
+				margin-top: 10px;
+			}
+
+			.ports > div.name {
 				display: none;
 			}
+		}
+	}
+	bpic-bp-env-get, bpic-bp-var-get {
+		.content .center {
+			margin-left: -25px;
+			margin-right: -15px;
+		}
+	}
+	bpic-bp-env-set, bpic-bp-var-set {
+		.content .center {
+			margin-left: -15px;
+			margin-right: -25px;
 		}
 	}
 }
@@ -20,6 +42,10 @@ sf-space[blackprint] .nodes {
 ## js-global
 let BPVar = {html: `<div class="node {{ type }}" style="transform:translate({{ x }}px,{{ y }}px)">
 	<div class="content">
+		<div class="left-port">
+			<sf-template path="Blackprint/nodes/template/input-port.sf"></sf-template>
+		</div>
+
 		<div class="center"
 			@contextmenu.stopAll.prevent="nodeMenu(event)"
 			@dragmove="moveNode(event)"
@@ -27,11 +53,28 @@ let BPVar = {html: `<div class="node {{ type }}" style="transform:translate({{ x
 			@pointerup="useType(true)"
 			@pointerover="nodeHovered(event)"
 			@pointerout="nodeUnhovered(event)"
-		>{{ title }}</div>
+		>{{ data.name }} <div class="description">Variable</div></div>
 
+		<div class="right-port">
+			<sf-template path="Blackprint/nodes/template/output-port.sf"></sf-template>
+		</div>
+	</div>
+	<sf-template path="Blackprint/nodes/template/other.sf"></sf-template>
+</div>`};
+
+let BPEnv = {html: `<div class="node {{ type }}" style="transform:translate({{ x }}px,{{ y }}px)">
+	<div class="content">
 		<div class="left-port">
 			<sf-template path="Blackprint/nodes/template/input-port.sf"></sf-template>
 		</div>
+
+		<div class="center"
+			@contextmenu.stopAll.prevent="nodeMenu(event)"
+			@dragmove="moveNode(event)"
+			@pointerdown="swapZIndex(event)"
+			@pointerover="nodeHovered(event)"
+			@pointerout="nodeUnhovered(event)"
+		>{{ data.name }} <div class="description">Environment</div></div>
 
 		<div class="right-port">
 			<sf-template path="Blackprint/nodes/template/output-port.sf"></sf-template>
@@ -97,6 +140,8 @@ let BPFnInOut = {html: `<div class="node func-in-out {{ type }}" style="transfor
 $(function(){
 	Blackprint.Sketch.registerInterface('BPIC/BP/Var/Get', BPVar, Blackprint._iface['BPIC/BP/Var/Get']);
 	Blackprint.Sketch.registerInterface('BPIC/BP/Var/Set', BPVar, Blackprint._iface['BPIC/BP/Var/Set']);
+	Blackprint.Sketch.registerInterface('BPIC/BP/Env/Get', BPEnv, Blackprint._iface['BPIC/BP/Env/Get']);
+	Blackprint.Sketch.registerInterface('BPIC/BP/Env/Set', BPEnv, Blackprint._iface['BPIC/BP/Env/Set']);
 	Blackprint.Sketch.registerInterface('BPIC/BP/Fn/Input', BPFnInOut, Blackprint._iface['BPIC/BP/Fn/Input']);
 	Blackprint.Sketch.registerInterface('BPIC/BP/Fn/Output', BPFnInOut, Blackprint._iface['BPIC/BP/Fn/Output']);
 
