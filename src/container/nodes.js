@@ -21,7 +21,7 @@ Space.model('nodes', function(My, include){
 			var ports = Blackprint.Interface._ports;
 			for(var a = 0; a < ports.length; a++){
 				let which = ports[a];
-				var _list = iface[which]?._list;
+				var _list = iface[which]?._portList;
 
 				if(_list === void 0)
 					continue;

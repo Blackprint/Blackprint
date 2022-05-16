@@ -1,6 +1,6 @@
 ## html
 <div class="input" @pointerover="nodeHovered(event)" @pointerout="nodeUnhovered(event)">
-  <div sf-each="val in input._list"
+  <div sf-each="val in input._portList"
         class="ports {{ hideUnusedPort && val.cables.length === 0 ? 'unused' : '' }} {{ val.classAdd + val.type.name }} {{ val.inactive ? 'inactive' : ''}}"
         @contextmenu.stop.prevent="val.portRightClick(event)"
         @pointerdown.left.stop="val.createCable(event)"

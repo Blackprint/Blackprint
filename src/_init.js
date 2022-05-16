@@ -429,7 +429,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			if(iface.output !== void 0){
 				var output = data.output = {};
-				var _list = iface.output._list;
+				var _list = iface.output._portList;
 
 				var haveValue = false;
 				for (var g = 0; g < _list.length; g++) {
@@ -768,23 +768,23 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(options.oldIface !== void 0 && options.oldIface.namespace === iface.namespace){
 			Blackprint.Interface._reuse(iface, options.oldIface);
 
-			iface.input ??= {_list: []};
-			iface.output ??= {_list: []};
-			iface.property ??= {_list: []};
+			iface.input ??= {_portList: []};
+			iface.output ??= {_portList: []};
+			iface.property ??= {_portList: []};
 		}
 
 		// Create the linker between the node and the iface
 		else{
 			Blackprint.Interface._prepare(node, iface);
 
-			iface.input ??= {_list: []};
-			iface.output ??= {_list: []};
-			iface.property ??= {_list: []};
+			iface.input ??= {_portList: []};
+			iface.output ??= {_portList: []};
+			iface.property ??= {_portList: []};
 
 			// Replace port prototype (intepreter port -> visual port)
 			let _ports = Blackprint.Interface._ports;
 			for (var i = 0; i < _ports.length; i++) {
-				var localPorts = iface[_ports[i]]._list;
+				var localPorts = iface[_ports[i]]._portList;
 
 				if(localPorts === void 0) continue;
 				for (var z = 0; z < localPorts.length; z++)

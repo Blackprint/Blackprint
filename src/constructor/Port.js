@@ -87,7 +87,7 @@ class Port extends Blackprint.Engine.Port {
 		let res = super.connectCable(cable);
 		if(res === true && cable != null && this._scope != null){
 			if(!Blackprint.settings.windowless){
-				let list = cable.input.iface.input._list;
+				let list = cable.input.iface.input._portList;
 				if(list != null){
 					let rect = this.findPortElement(list.getElement(cable.input)).getBoundingClientRect();
 	
@@ -96,7 +96,7 @@ class Port extends Blackprint.Engine.Port {
 					cable.head2[1] = (rect.y + rect.height/2 - offset.y - pos.y) / scale;
 				}
 
-				list = cable.output.iface.output._list;
+				list = cable.output.iface.output._portList;
 				if(list != null && cable.parentCable == null){
 					let rect = this.findPortElement(list.getElement(cable.output)).getBoundingClientRect();
 	
@@ -207,7 +207,7 @@ class Port extends Blackprint.Engine.Port {
 	}
 
 	insertComponent(beforeSelector, compName, item, callback, _repeat, _reinit){
-		var portList = this.iface[this.source]._list;
+		var portList = this.iface[this.source]._portList;
 		var that = this;
 
 		if(portList.getElement === void 0){

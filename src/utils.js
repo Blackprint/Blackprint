@@ -6,7 +6,7 @@ function getPortRect(RP, name){
 		return temp;
 	}
 
-	let _list = RP._list;
+	let _list = RP._portList;
 	if(_list.getElement === void 0)
 		console.error("It seems the JSON was imported when sketch view haven't been loaded");
 

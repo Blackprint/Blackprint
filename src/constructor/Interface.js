@@ -115,7 +115,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 		var ports = Blackprint.Interface._ports;
 		for(var i = 0; i < ports.length; i++){
 			let which = ports[i];
-			var _list = this[which]?._list;
+			var _list = this[which]?._portList;
 
 			if(_list === void 0)
 				continue;
@@ -250,7 +250,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 
 			if(targetPorts == null) return;
 
-			let _list = targetPorts._list;
+			let _list = targetPorts._portList;
 			for (var i = 0; i < _list.length; i++) {
 				let port = _list[i];
 
