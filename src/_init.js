@@ -7,6 +7,7 @@ let { $ } = sf; // sQuery shortcut
 var Blackprint = window.Blackprint;
 
 let onModuleConflict = Blackprint._utils.onModuleConflict;
+let _InternalNodeEnum = Blackprint._InternalNodeEnum;
 
 Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	static _iface = {'BP/default': NOOP};
@@ -234,14 +235,14 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 						var linkPortA = iface.output[portName];
 						if(linkPortA === void 0){
-							if(iface.namespace === "BP/Fn/Input"){
+							if(iface.enum === _InternalNodeEnum.BPFnInput){
 								let target = this._getTargetPortType(iface.node._instance, 'input', port);
 								linkPortA = iface.addPort(target, portName);
 
 								if(linkPortA === void 0)
 									throw new Error(`Can't create output port (${portName}) for function (${iface._funcMain.node._funcInstance.id})`);
 							}
-							else if(iface.namespace === "BP/Var/Get"){
+							else if(iface.enum === _InternalNodeEnum.BPVarGet){
 								let target = this._getTargetPortType(this, 'input', port);
 								iface.useType(target);
 								linkPortA = iface.output[portName];
@@ -266,14 +267,14 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 							// Output can only meet input port
 							var linkPortB = targetNode.input[target.name];
 							if(linkPortB === void 0){
-								if(targetNode.namespace === "BP/Fn/Output"){
+								if(targetNode.enum === _InternalNodeEnum.BPFnOutput){
 									linkPortB = targetNode.addPort(linkPortA, target.name);
 
 									if(linkPortB === void 0)
 										throw new Error(`Can't create output port (${target.name}) for function (${targetNode._funcMain.node._funcInstance.id})`);
 								}
 								else{
-									if(targetNode.namespace === "BP/Var/Set"){
+									if(targetNode.enum === _InternalNodeEnum.BPVarSet){
 										targetNode.useType(linkPortA);
 										linkPortB = targetNode.input[target.name];
 									}
