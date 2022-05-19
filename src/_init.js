@@ -1,4 +1,3 @@
-// ToDo: Export as module instead to window
 if(window.Blackprint === void 0)
 	throw "Blackprint Engine must be loaded before Blackprint Sketch";
 
@@ -273,21 +272,19 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 									if(linkPortB === void 0)
 										throw new Error(`Can't create output port (${target.name}) for function (${targetNode._funcMain.node._funcInstance.id})`);
 								}
-								else{
-									if(targetNode.enum === _InternalNodeEnum.BPVarSet){
-										targetNode.useType(linkPortA);
-										linkPortB = targetNode.input[target.name];
-									}
-									else {
-										this.emit('error', {
-											type: 'node_port_not_found',
-											data: {
-												iface: targetNode,
-												portName: target.name
-											}
-										});
-										continue;
-									}
+								else if(targetNode.enum === _InternalNodeEnum.BPVarSet){
+									targetNode.useType(linkPortA);
+									linkPortB = targetNode.input[target.name];
+								}
+								else {
+									this.emit('error', {
+										type: 'node_port_not_found',
+										data: {
+											iface: targetNode,
+											portName: target.name
+										}
+									});
+									continue;
 								}
 							}
 
@@ -582,6 +579,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 						temp.id = bpFunc.id;
 						temp.title = bpFunc.title;
 						temp.description = bpFunc.description;
+						temp.vars = Object.keys(bpFunc.variables);
+						temp.privateVars = bpFunc.privateVars;
 
 						let copy = temp.structure = Object.assign({}, bpFunc.structure);
 						let mjs = copy._?.moduleJS;
@@ -852,6 +851,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		let vfxAlreadyOff = body.hasClass('blackprint-no-vfx');
 		if(!vfxAlreadyOff) body.addClass('blackprint-no-vfx');
 
+		if(this.ifaceList.length === 0 || this.ifaceList[0].$el == null)
+			return;
+
 		let list = this.ifaceList.map(v => ({
 			target: {model: v},
 			contentRect: v.$el[0].getBoundingClientRect()
@@ -862,13 +864,6 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		this.pendingRender = false;
 	}
-}
-
-// ToDo: remove this after the new engine was published
-Blackprint.Engine.prototype.destroy ??= function(){
-	this.iface = {};
-	this.ifaceList.splice(0);
-	this.clearNodes();
 }
 
 // Replace function from Blackprint Engine
