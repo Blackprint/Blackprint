@@ -125,7 +125,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		delete json._;
 
 		if(metadata !== void 0){
-			if(metadata.env !== void 0 && !options.noEnv){
+			if(metadata.env !== void 0 && options.importEnvironment){
 				let Env = Blackprint.Environment;
 				let temp = metadata.env;
 				
@@ -181,6 +181,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		var inserted = this.ifaceList;
 		var handlers = []; // nodes
+		let isCleanImport = inserted.length === 0;
 
 		// Prepare all nodes depend on the namespace
 		// before we create cables for them
@@ -194,6 +195,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 					let iface = this.createNode(namespace, {
 						x: temp.x,
 						y: temp.y,
+						z: temp.z,
+						forceZIndex: isCleanImport,
 						id: temp.id, // Named ID (if exist)
 						i: temp.i, // List Index
 						comment: temp.comment,
@@ -388,9 +391,11 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		options ??= {};
 		let metadata = json._ = {};
 
+		let zPlacement = this.scope('nodes').list;
+
 		if(options.selectedOnly)
-			ifaces = SketchList[0].scope('nodes').selected;
-		else ifaces = this.scope('nodes').list;
+			ifaces = this.scope('nodes').selected;
+		else ifaces = this.ifaceList;
 
 		if(options.exclude)
 			exclude = options.exclude;
@@ -408,6 +413,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			if(options.position !== false){
 				data.x = Math.round(iface.x);
 				data.y = Math.round(iface.y);
+				data.z = zPlacement.indexOf(iface); // kind of z-index
 			}
 
 			if(iface.id !== void 0)
@@ -541,7 +547,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		}
 
 		// Inject environment data if exist to JSON
-		if(options.environment !== false && Blackprint.Environment.list.length !== 0)
+		if(options.environment !== false && Blackprint.Environment._list.length !== 0)
 			metadata.env = Blackprint.Environment.map;
 
 		// Find modules
@@ -668,8 +674,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				data: {iface}
 			});
 
-		if(Blackprint.settings._remoteSketch)
-			this.emit('node.delete', { iface });
+		iface._bpDestroy = true;
+
+		let eventData = { iface };
+		this.emit('node.delete', eventData);
 
 		iface.node.destroy && iface.node.destroy();
 		list.splice(i, 1); // iface.destroy will be called by SF
@@ -694,7 +702,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		delete this.iface[iface.id];
 		delete this.ref[iface.id];
 
-		this.emit('node.deleted', { iface });
+		this.emit('node.deleted', eventData);
 	}
 
 	clearNodes(){
@@ -800,7 +808,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		// Node is become the component scope
 		// equal to calling registerInterface's registered function
-		this.scope('nodes').list.push(iface);
+		if(options.forceZIndex && options.z !== void 0){
+			this.scope('nodes').list[options.z] = iface;
+		}
+		else this.scope('nodes').list.push(iface);
 
 		if(iface.id !== void 0)
 			this.iface[iface.id] = iface;
