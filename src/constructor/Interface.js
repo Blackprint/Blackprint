@@ -166,36 +166,44 @@ Blackprint.Interface = class Interface extends sf.Model {
 				}
 			}
 		}
+
+		if(e.type === "pointerup")
+			this.node._instance.emit('node.move', {iface: this, event: e});
 	}
 
 	nodeMenu(ev){
 		var scope = this._scope;
 		var container = this._container;
 		let iface = this;
-		var menu = [{
-			title: 'New Node',
-			callback(){
-				scope.sketch.createNode(iface.namespace, {
-					x: iface.x + 10, y: iface.y + 10
-				});
-			}
-		}, {
-			title: 'Delete',
-			callback(){
-				// delete selected
-				let selected = container.nodeScope.selected;
-				if(selected.length !== 0){
-					for (var i = selected.length - 1; i >= 0; i--)
-						scope.sketch.deleteNode(selected[i]);
+		let menu;
 
-					selected.splice(0);
-					container.cableScope.selected.splice(0);
-					return;
+		if(this.namespace.startsWith('BP/Fn/')) menu = [];
+		else {
+			menu = [{
+				title: 'New Node',
+				callback(){
+					scope.sketch.createNode(iface.namespace, {
+						x: iface.x + 10, y: iface.y + 10
+					});
 				}
-
-				scope.sketch.deleteNode(iface);
-			}
-		}];
+			}, {
+				title: 'Delete',
+				callback(){
+					// delete selected
+					let selected = container.nodeScope.selected;
+					if(selected.length !== 0){
+						for (var i = selected.length - 1; i >= 0; i--)
+							scope.sketch.deleteNode(selected[i]);
+	
+						selected.splice(0);
+						container.cableScope.selected.splice(0);
+						return;
+					}
+	
+					scope.sketch.deleteNode(iface);
+				}
+			}];
+		}
 
 		let event = {iface: this, instance: scope.sketch, menu};
 
