@@ -325,6 +325,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			branchMap.get(linkPortA)[temp.id] = cable;
 		}
 
+		// If windowless or pendingRender is set to true, this will be skipped
+		if(isCleanImport)
+			this.scope('nodes').list.refresh?.();
+
 		await $.afterRepaint();
 
 		let _getPortRect, _windowless = Blackprint.settings.windowless;
@@ -419,7 +423,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			if(iface.id !== void 0)
 				data.id = iface.id;
 
-			if(iface.comment != false) // is not empty string or undefined
+			if(options.comment !== false && iface.comment)
 				data.comment = iface.comment;
 
 			if(iface.data !== void 0){
@@ -593,6 +597,25 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 						if(mjs != null){
 							for (let i=0; i < mjs.length; i++)
 								moduleJS.add(mjs[i]);
+						}
+
+						if(options.position === false || options.comment === false){
+							for (let key in copy) {
+								if(key === '_') continue;
+
+								let temp = copy[key] = copy[key].slice(0);
+								for (let i=0; i < temp.length; i++) {
+									let item = temp[i] = Object.assign({}, temp[i])
+									if(options.position === false){
+										delete item.x;
+										delete item.y;
+										delete item.z;
+									}
+
+									if(options.comment === false)
+										delete item.comment;
+								}
+							}
 						}
 
 						delete copy._;
