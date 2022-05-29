@@ -325,12 +325,11 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			branchMap.get(linkPortA)[temp.id] = cable;
 		}
 
-		// If windowless or pendingRender is set to true, this will be skipped
 		if(isCleanImport)
 			this.scope('nodes').list.refresh?.();
-
+		
 		await $.afterRepaint();
-
+		
 		let _getPortRect, _windowless = Blackprint.settings.windowless;
 		if(options.pendingRender){
 			this.pendingRender = true;
@@ -342,6 +341,15 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			Blackprint.settings.windowless = true;
 		}
 		else _getPortRect = getPortRect;
+
+		if(isCleanImport && !Blackprint.settings.windowless){
+			let list = this.scope('nodes').list;
+			
+			// Init after pushed into DOM tree
+			for (let i=0; i < list.length; i++) {
+				list[i].node.routes._initForSketch();
+			}
+		}
 
 		for (var i = 0; i < cableConnects.length; i++) {
 			let {output, portName, linkPortA, input, target, linkPortB} = cableConnects[i];
@@ -834,7 +842,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(options.forceZIndex && options.z !== void 0){
 			this.scope('nodes').list[options.z] = iface;
 		}
-		else this.scope('nodes').list.push(iface);
+		else{
+			this.scope('nodes').list.push(iface);
+
+			// Init after pushed into DOM tree
+			node.routes._initForSketch();
+		}
 
 		if(iface.id !== void 0)
 			this.iface[iface.id] = iface;

@@ -166,6 +166,12 @@ sf-space[blackprint]{
   @include portType("String", #55ff52);
   @include portType("BP-Union", white);
 
+  .cables > svg > g.bp-route path {
+    stroke-dasharray: 10px;
+    stroke: orange;
+    stroke-linecap: round;
+  }
+
   .glow-cable{
     position: absolute;
     top: 0;
@@ -181,6 +187,9 @@ sf-space[blackprint]{
     transform: translate(-5px, -5px); // Hide it first on out of bound container
     background: yellow;
     visibility: hidden;
+    // &::after{
+    //   content: '🍒';
+    // }
   }
 
   .nodes .node .ports.ArrayOf > .port {
@@ -220,6 +229,24 @@ sf-space[blackprint]{
     }
 
     .highlight .node:before{
+      opacity: 1;
+    }
+
+    .routes div {
+      transform: rotate(45deg);
+      background: #ffac7b;
+      width: 10px;
+      border-radius: 3px;
+      box-shadow: 0 0 3px 0 black;
+      height: 10px;
+      border: 1px solid black;
+      position: absolute;
+      top: -7px;
+      &.in { left: -7px; }
+      &.out { right: -7px; }
+      &.hide { opacity: 0; }
+    }
+    .routes.show div.hide{
       opacity: 1;
     }
   }

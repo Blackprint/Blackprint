@@ -21,7 +21,7 @@ function _resetCableZIndex(branch, cableList){
 }
 
 class Cable extends Blackprint.Engine.Cable {
-	constructor(obj, port){
+	constructor(obj, port, _unshift=false){
 		super(port);
 		this._scope = port._scope;
 
@@ -36,12 +36,10 @@ class Cable extends Blackprint.Engine.Cable {
 		this._cablesModel = this._scope('cables');
 
 		var Ofst = container.offset;
-
-		let unshift = false;
 		if(obj instanceof Cable){
 			this.parentCable = obj;
 			obj = {x: obj.head2[0], y: obj.head2[1]};
-			unshift = true;
+			_unshift = true;
 		}
 
 		let windowless = Blackprint.settings.windowless;
@@ -59,7 +57,7 @@ class Cable extends Blackprint.Engine.Cable {
 		// Push to cable list
 		var list = port._scope('cables').list;
 
-		if(unshift)
+		if(_unshift)
 			list.unshift(this);
 		else list.push(this);
 
@@ -70,6 +68,7 @@ class Cable extends Blackprint.Engine.Cable {
 	}
 
 	// ToDo: Improve performance by caching the dotGlow.cloneNode()
+	// ToDo: Make the animation more better
 	async visualizeFlow(){
 		if(this.animating || window.Timeplate === void 0)
 			return;
@@ -391,7 +390,7 @@ class Cable extends Blackprint.Engine.Cable {
 	}
 
 	createBranch(ev, cable){
-		if(this.source !== 'output')
+		if(this.source !== 'output' || this.isRoute)
 			throw new Error("Cable branch currently can only be created from output port");
 
 		this.hasBranch = true;
@@ -551,7 +550,7 @@ class Cable extends Blackprint.Engine.Cable {
 			}
 		}];
 
-		if(target === void 0){
+		if(target === void 0 && !this.isRoute){
 			menu.push({
 				title: "Suggested Node",
 				callback(){ setTimeout(suggestNode, 220) },

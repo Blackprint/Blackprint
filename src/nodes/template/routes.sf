@@ -1,0 +1,11 @@
+## html
+<div class="routes {{ _nodeHovered || node.routes._hovered ? 'show' : '' }}"
+	@pointerover="node.routes._hover(event)"
+	@pointerout="node.routes._unhover(event)"
+    @contextmenu.stop.prevent="node.routes.rightClick(event)"
+    @pointerdown.left.stop="node.routes.createCable(event)"
+    @pointerup.left="node.routes.connectCable()"
+>
+	<div class="in {{ node.routes.in.length === 0 ? 'hide' : '' }}"></div>
+	<div class="out {{ node.routes.out == null ? 'hide' : '' }}"></div>
+</div>

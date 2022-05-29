@@ -8,6 +8,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 
 	input = {};
 	output = {};
+	routes = {};
 	*/
 
 	static _ports = ['input', 'output'];
@@ -43,6 +44,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 			this.node = node;
 			this._scope = node._instance.scope;
 			this._nodeSelected = false;
+			this._nodeHovered = false;
 
 			if(this._scope !== void 0){
 				this._container = this._scope('container');
@@ -126,49 +128,59 @@ Blackprint.Interface = class Interface extends sf.Model {
 				if(cables.length === 0)
 					continue;
 
-				var head;
 				for (var a = 0; a < cables.length; a++) {
-					let cable = cables[a];
-
-					// Avoid moving ghost cable
-					if(cable._ghost) continue;
-
-					// Avoid moving branch cable
-					if(cable._allBranch !== void 0){
-						if(which === 'output' && (cable.cableTrunk !== cable || cable.parentCable !== void 0))
-							continue;
-					}
-
-					// If the source and target is in current node
-					if(cable.owner.iface === this && (cable.target && cable.target.iface === this)){
-						if(which === 'output')
-							continue;
-
-						let { head1, head2 } = cable;
-
-						if(cable.parentCable == null){
-							head1[0] += x;
-							head1[1] += y;
-						}
-
-						head2[0] += x;
-						head2[1] += y;
-						continue;
-					}
-
-					if(cable.owner.iface === this)
-						head = cable.head1;
-					else
-						head = cable.head2;
-
-					head[0] += x;
-					head[1] += y;
+					this._cableMove(which, cables[a], x, y, this);
 				}
 			}
 		}
 
+		let { routes } =  this.node;
+		if(routes.out) this._cableMove('output', routes.out, x, y, this);
+
+		let routesIn = routes.in;
+		for (let i=0; i < routesIn.length; i++) {
+			this._cableMove('input', routesIn[i], x, y, this);
+		}
+
 		if(e.type === "pointerup")
 			this.node._instance.emit('node.move', {iface: this, event: e});
+	}
+
+	_cableMove(which, cable, x, y, iface){
+		// Avoid moving ghost cable
+		if(cable._ghost) return;
+
+		// Avoid moving branch cable
+		if(cable._allBranch !== void 0){
+			if(which === 'output' && (cable.cableTrunk !== cable || cable.parentCable !== void 0))
+				return;
+		}
+
+		// If the source and target is in current node
+		if(cable.owner.iface === iface && (cable.target && cable.target.iface === iface)){
+			if(which === 'output')
+				return;
+
+			let { head1, head2 } = cable;
+
+			if(cable.parentCable == null){
+				head1[0] += x;
+				head1[1] += y;
+			}
+
+			head2[0] += x;
+			head2[1] += y;
+			return;
+		}
+
+		var head;
+		if(cable.owner.iface === iface)
+			head = cable.head1;
+		else
+			head = cable.head2;
+
+		head[0] += x;
+		head[1] += y;
 	}
 
 	nodeMenu(ev){
@@ -226,6 +238,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 		var container = this._container;
 		let cableScope = container.cableScope;
 		let cable = cableScope.currentCable;
+		this._nodeHovered = true;
 
 		this._scope.sketch.emit('node.hover', { event, iface: this });
 
@@ -258,6 +271,28 @@ Blackprint.Interface = class Interface extends sf.Model {
 
 			if(targetPorts == null) return;
 
+			if(cable.isRoute){
+				let portElem = this.node.routes._inElement?.[0];
+				if(portElem == null) return;
+
+				let rect = portElem.getBoundingClientRect();
+				let temp = rect => {
+					cableScope.hoverPort = {
+						elem: portElem,
+						rect,
+						item: this.node.routes,
+					};
+				}
+
+				if(rect.x === 0 && rect.y === 0){
+					setTimeout(() => temp(portElem.getBoundingClientRect()), 100);
+					return;
+				}
+
+				temp(rect);
+				return;
+			}
+
 			let _list = targetPorts._portList;
 			for (var i = 0; i < _list.length; i++) {
 				let port = _list[i];
@@ -286,6 +321,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 		var container = this._container;
 		let cableScope = container.cableScope;
 		// let cable = cableScope.currentCable;
+		this._nodeHovered = false;
 
 		this._scope.sketch.emit('node.unhover', { event, iface: this });
 
