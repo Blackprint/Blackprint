@@ -7,7 +7,7 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 	constructor(iface){
 		super(iface);
 		this._hovered = false;
-		this.type = {_bpRoute: true, name: 'bp-route'};
+		this.type = {_bpRoute: true, name: 'BP-Route'};
 	}
 
 	_initForSketch(){
@@ -17,18 +17,11 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 		let iface = this.iface;
 		this._inElement = iface.$el('.routes .in');
 		this._outElement = iface.$el('.routes .out');
-		this._scope = this.iface.$space;
+		this._scope = iface.$space;
 	}
 
 	_unhover(ev){ this._hovered = false; }
-	_hover(ev){
-		let cable = this._scope('cables').currentCable;
-		if(cable != null){
-			1
-		}
-
-		this._hovered = true;
-	}
+	_hover(ev){ this._hovered = true; }
 
 	rightClick(event){ }
 

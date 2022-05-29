@@ -27,9 +27,15 @@ class Port extends Blackprint.Engine.Port {
 
 		// Create cable and save the reference
 		var cable = new Cable({
-			x:rect.x + center + Ofst.x,
-			y:rect.y + center + Ofst.y
+			x: rect.x + center + Ofst.x,
+			y: rect.y + center + Ofst.y
 		}, this);
+
+		if(this.isRoute){
+			cable.isRoute = true;
+			cable.output = this;
+			this.cables[0]?.disconnect();
+		}
 
 		// Connect this cable into port's cable list
 		if(!noPush) this.cables.push(cable);
@@ -129,9 +135,9 @@ class Port extends Blackprint.Engine.Port {
 
 		// For magnet sensation when the cable reach the port
 		this._scope('cables').hoverPort = {
-			elem:portElem,
-			rect:portElem.getBoundingClientRect(),
-			item:this
+			elem: portElem,
+			rect: portElem.getBoundingClientRect(),
+			item: this
 		};
 	}
 
@@ -208,12 +214,11 @@ class Port extends Blackprint.Engine.Port {
 
 	insertComponent(beforeSelector, compName, item, callback, _repeat, _reinit){
 		var portList = this.iface[this.source]._portList;
-		var that = this;
 
 		if(portList.getElement === void 0){
-			return setTimeout(function(){
+			return setTimeout(() => {
 				if(_repeat === void 0)
-					that.insertComponent(beforeSelector, compName, item, callback, true)
+					this.insertComponent(beforeSelector, compName, item, callback, true)
 			}, 100);
 		}
 
@@ -236,8 +241,8 @@ class Port extends Blackprint.Engine.Port {
 				this.iface.initClone.bp$insertComponent = reinitList;
 			}
 
-			this.iface.initClone.bp$insertComponent.push(function(){
-				that.insertComponent(beforeSelector, compName, item, callback, true, true);
+			this.iface.initClone.bp$insertComponent.push(() => {
+				this.insertComponent(beforeSelector, compName, item, callback, true, true);
 			});
 		}
 
@@ -264,8 +269,7 @@ class Port extends Blackprint.Engine.Port {
 
 				before.insertBefore(el, before.querySelector(beforeSelector));
 			}
-			else
-				before.appendChild(el);
+			else before.appendChild(el);
 
 			callback && callback(item, el);
 		}

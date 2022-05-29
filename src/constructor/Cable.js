@@ -94,7 +94,7 @@ class Cable extends Blackprint.Engine.Cable {
 		function r(a, b){return Math.round(Math.random()*(b-a)*1000)/1000+a}
 
 		var offsetPath = `path('${this.pathEl.getAttribute('d')}')`;
-		var first = {offset:0, offsetPath, offsetDistance:'1%'};
+		var first = {offset: 0, offsetPath, offsetDistance: '1%'};
 		var last = {offset: 1, translate: 0, offsetPath, scale: 1, offsetDistance: '100%'};
 
 		// reverse if owner is not the output port
@@ -148,9 +148,8 @@ class Cable extends Blackprint.Engine.Cable {
 		anim.restart();
 
 		// Remove from DOM tree
-		var that = this;
-		anim.once('finish', function(){
-			that.animating = false;
+		anim.once('finish', ()=> {
+			this.animating = false;
 
 			for (var i = 0; i < els.length; i++)
 				els[i].remove();
