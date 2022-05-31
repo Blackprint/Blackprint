@@ -27,6 +27,7 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 
 	// For creating output cable
 	createCable(event){
+		if(!this._init) this._initForSketch();
 		var cable;
 
 		if(event != null){
@@ -57,6 +58,8 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 
 	// Connect to input route
 	connectCable(cable){
+		if(!this._init) this._initForSketch();
+
 		let cables = this._scope('cables');
 		if(cable == null)
 			cable = cables.currentCable;

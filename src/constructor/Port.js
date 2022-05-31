@@ -81,7 +81,8 @@ class Port extends Blackprint.Engine.Port {
 		// Ignore if no cable found
 		if(_cable === void 0) return;
 
-		if(_cable.beforeConnect != null){
+		let res = super.connectCable(cable);
+		if(res && _cable.beforeConnect != null){
 			let temp = _cable.beforeConnect;
 			_cable.beforeConnect = null;
 
@@ -90,7 +91,6 @@ class Port extends Blackprint.Engine.Port {
 				return;
 		}
 
-		let res = super.connectCable(cable);
 		if(res === true && cable != null && this._scope != null){
 			if(!Blackprint.settings.windowless){
 				let list = cable.input.iface.input._portList;
