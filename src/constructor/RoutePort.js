@@ -15,9 +15,12 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 		this._init = true;
 
 		let iface = this.iface;
-		this._inElement = iface.$el('.routes .in');
-		this._outElement = iface.$el('.routes .out');
 		this._scope = iface.$space;
+
+		if(!Blackprint.settings.windowless){
+			this._inElement = iface.$el('.routes .in');
+			this._outElement = iface.$el('.routes .out');
+		}
 	}
 
 	_unhover(ev){ this._hovered = false; }
