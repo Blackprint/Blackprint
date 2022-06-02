@@ -61,10 +61,22 @@ class Cable extends Blackprint.Engine.Cable {
 			list.unshift(this);
 		else list.push(this);
 
-		// Get SVG Path element
-		this.pathEl = windowless ? {} : list.getElement(this).firstElementChild;
-
+		this._ownerCableList = list;
 		this.moveCableHead = this.moveCableHead.bind(this);
+	}
+
+	// Get SVG Path element
+	get pathEl(){
+		if(Blackprint.settings.windowless) return null;
+
+		if(this._pathEl == null){
+			let temp = this._ownerCableList.getElement(this);
+			if(temp == null) return null;
+
+			this._pathEl = temp.firstElementChild;
+		}
+
+		return this._pathEl;
 	}
 
 	// ToDo: Improve performance by caching the dotGlow.cloneNode()
@@ -73,7 +85,7 @@ class Cable extends Blackprint.Engine.Cable {
 		if(this.animating || window.Timeplate === void 0)
 			return;
 
-		if(this.pathEl.getAttribute == null) return;
+		if(this.pathEl == null) return;
 
 		this.animating = true;
 		let cableScope = this._scope('cables');
