@@ -4,7 +4,7 @@
 	@dragmove="moveNode(event)"
 	@pointerdown="swapZIndex(event)"
 	@pointerover="nodeHovered(event)"
-  @pointerout="nodeUnhovered(event)"
+	@pointerout="nodeUnhovered(event)"
 >
   <div class="icon"></div>
   <div class="extra">
