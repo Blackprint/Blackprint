@@ -48,12 +48,12 @@ Space.model('container', function(My, include){
 			let node = nodes[i];
 			if(maxX < node.x){
 				maxX = node.x;
-				W = node.w;
+				W = node.w || 0;
 			}
 
 			if(maxY < node.y){
 				maxY = node.y;
-				H = node.h;
+				H = node.h || 0;
 			}
 		}
 
