@@ -40,7 +40,6 @@ Blackprint.Interface = class Interface extends sf.Model {
 			this.importing = true;
 			this.comment = '';
 			this.type = false; // default node type: general
-			this.env = Blackprint.Environment.map;
 			this.node = node;
 			this._scope = node._instance.scope;
 			this._nodeSelected = false;
@@ -265,12 +264,6 @@ Blackprint.Interface = class Interface extends sf.Model {
 
 			this.$el.once('pointerup', this.__onCableDrop);
 
-			// Search suitable port for the hovering cable
-			let owner = cable.owner; // source port
-			let targetPorts = owner.source === "input" ? this.output : this.input;
-
-			if(targetPorts == null) return;
-
 			if(cable.isRoute){
 				let portElem = this.node.routes._inElement?.[0];
 				if(portElem == null) return;
@@ -292,6 +285,12 @@ Blackprint.Interface = class Interface extends sf.Model {
 				temp(rect);
 				return;
 			}
+
+			// Search suitable port for the hovering cable
+			let owner = cable.owner; // source port
+			let targetPorts = owner.source === "input" ? this.output : this.input;
+
+			if(targetPorts == null) return;
 
 			let _list = targetPorts._portList;
 			for (var i = 0; i < _list.length; i++) {
