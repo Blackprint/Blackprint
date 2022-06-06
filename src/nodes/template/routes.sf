@@ -1,5 +1,5 @@
 ## html
-<div class="routes {{ _nodeHovered || node.routes._hovered ? 'show' : '' }}"
+<div class="routes {{ _nodeHovered || node.routes._hovered ? 'show' : '' }} {{ node.routes.disabled ? 'disabled' : '' }} {{ node.routes.noUpdate ? 'no-update' : '' }}"
 	@pointerover="node.routes._hover(event)"
 	@pointerout="node.routes._unhover(event)"
     @contextmenu.stop.prevent="node.routes.rightClick(event)"

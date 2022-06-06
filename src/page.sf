@@ -261,6 +261,13 @@ sf-space[blackprint]{
     .routes.show div.hide{
       opacity: 1;
     }
+
+    .routes.no-update div {
+      &.in { background: #727272; }
+    }
+    .routes.disabled div {
+      display: none;
+    }
   }
 
   .cables{
