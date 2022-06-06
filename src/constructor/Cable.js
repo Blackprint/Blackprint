@@ -70,7 +70,7 @@ class Cable extends Blackprint.Engine.Cable {
 		if(Blackprint.settings.windowless) return null;
 
 		if(this._pathEl == null){
-			let temp = this._ownerCableList.getElement(this);
+			let temp = this._ownerCableList.getElement?.(this);
 			if(temp == null) return null;
 
 			this._pathEl = temp.firstElementChild;
