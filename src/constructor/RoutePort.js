@@ -8,19 +8,27 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 		super(iface);
 		this._hovered = false;
 		this.type = {_bpRoute: true, name: 'BP-Route'};
+
+		// Return true if 'node.update' was not defined
+		this.noUpdate = iface.node.update == null;
 	}
 
 	_initForSketch(){
-		if(this._init) return;
-		this._init = true;
-
 		let iface = this.iface;
-		this._scope = iface.$space;
 
-		if(!Blackprint.settings.windowless){
-			this._inElement = iface.$el('.routes .in');
-			this._outElement = iface.$el('.routes .out');
-		}
+		if(this._init || iface.$el == null) return;
+		this._init = true;
+		this._scope = iface.$space;
+	}
+
+	get _inElement(){
+		if(Blackprint.settings.windowless) return null;
+		return this.__inElement ??= this.iface.$el('.routes .in');
+	}
+
+	get _outElement(){
+		if(Blackprint.settings.windowless) return null;
+		return this.__outElement ??= this.iface.$el('.routes .out');
 	}
 
 	_unhover(ev){ this._hovered = false; }
