@@ -48,6 +48,8 @@ sf-space[blackprint] .nodes {
 
 ## js-global
 let BPVar = {html: `<div class="node {{ type }}" style="transform:translate({{ x }}px,{{ y }}px)">
+	<sf-template path="Blackprint/nodes/template/routes.sf"></sf-template>
+
 	<div class="content">
 		<div class="left-port">
 			<sf-template path="Blackprint/nodes/template/input-port.sf"></sf-template>
@@ -70,6 +72,8 @@ let BPVar = {html: `<div class="node {{ type }}" style="transform:translate({{ x
 </div>`};
 
 let BPEnv = {html: `<div class="node {{ type }}" style="transform:translate({{ x }}px,{{ y }}px)">
+	<sf-template path="Blackprint/nodes/template/routes.sf"></sf-template>
+
 	<div class="content">
 		<div class="left-port">
 			<sf-template path="Blackprint/nodes/template/input-port.sf"></sf-template>
@@ -91,6 +95,8 @@ let BPEnv = {html: `<div class="node {{ type }}" style="transform:translate({{ x
 </div>`};
 
 let BPFnVar = {html: `<div class="node {{ type }}" style="transform:translate({{ x }}px,{{ y }}px)">
+	<sf-template path="Blackprint/nodes/template/routes.sf"></sf-template>
+
 	<div class="content">
 		<div class="left-port">
 			<sf-template path="Blackprint/nodes/template/input-port.sf"></sf-template>
@@ -112,7 +118,8 @@ let BPFnVar = {html: `<div class="node {{ type }}" style="transform:translate({{
 </div>`};
 
 let BPFn = {html: `<div class="node {{ type }}" style="transform:translate({{ x }}px,{{ y }}px)">
-  	<sf-template path="Blackprint/nodes/template/routes.sf"></sf-template>
+	<sf-template path="Blackprint/nodes/template/routes.sf"></sf-template>
+
 	<div class="content">
 		<div class="header"
 			@dblclick="openFunction(event)"
@@ -143,7 +150,8 @@ let BPFn = {html: `<div class="node {{ type }}" style="transform:translate({{ x 
 </div>`};
 
 let BPFnInOut = {html: `<div class="node func-in-out {{ type }}" style="transform:translate({{ x }}px,{{ y }}px)">
-  	<sf-template path="Blackprint/nodes/template/routes.sf"></sf-template>
+	<sf-template path="Blackprint/nodes/template/routes.sf"></sf-template>
+
 	<div class="content">
 		<div class="header"
 			@contextmenu.stopAll.prevent="nodeMenu(event)"
