@@ -18,6 +18,7 @@
   },
   "main": "dist/_entry.js",
   "module": "dist/_entry.mjs",
+  "types": "src/index.d.ts",
   "homepage": "https://blackprint.github.io/",
   "devDependencies": {
     "@babel/core": "^7.16.0",
