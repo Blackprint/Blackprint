@@ -26,8 +26,8 @@ import {
 	InputPort,
 	RemoteControl,
 	RemoteEngine,
-// } from "@blackprint/engine-js";
-} from "../engine-js/src";
+} from "@blackprint/engine-js";
+// } from "../engine-js/src";
 
 export {
 	settings,
@@ -46,14 +46,22 @@ export {
 	Environment,
 	utils,
 	Engine,
-	Interface as EngineInterface,
 	Node,
 	OutputPort,
 	InputPort,
 	RemoteControl,
 	RemoteEngine,
-// } from "@blackprint/engine-js";
-} from "../engine-js/src";
+} from "@blackprint/engine-js";
+// } from "../engine-js/src";
+
+type Docs = {
+	tags: {summary: string},
+	description: string,
+	input:{[key: string]: {description: string}},
+	output:{[key: string]: {description: string}},
+};
+
+type DocsPath = {[key: string]: DocsPath | Docs};
 
 export namespace Sketch {
 	/**
@@ -67,6 +75,14 @@ export namespace Sketch {
 		html?: String,
 		template?: String,
 	}, clazz: Function): void;
+
+	/**
+	 * Register interface to Blackprint (For browser only)
+	 * @param icNamespace Interface component's namespace
+	 * @param options You may need to specify either html or template for the Sketch UI
+	 * @param clazz Class that extends Blackprint.Interface
+	 */
+	export function registerDocs(docs: DocsPath): void;
 
 	/**
 	 * Get nodes suggestion that can be connected with the specified data type

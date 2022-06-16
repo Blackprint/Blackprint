@@ -877,6 +877,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			});
 		}
 
+		iface._updateDocs();
+
 		this.emit('node.created', { iface });
 		return iface;
 	}
@@ -1062,23 +1064,44 @@ Blackprint.loadScope = function(options){
 	// Save URL to the object
 	temp.Sketch._scopeURL = temp._scopeURL = cleanURL.replace(/\.sf\.mjs$/m, '.min.mjs');
 
-	if(Blackprint.loadBrowserInterface && !isInterfaceModule){
+	if(Blackprint.loadBrowserInterface){
 		if(window.sf === void 0)
 			return console.log("[Blackprint] ScarletsFrame was not found, node interface for Blackprint Editor will not being loaded. You can also set `Blackprint.loadBrowserInterface` to false if you don't want to use node interface for Blackprint Editor.");
 
-		let noStyle = Blackprint.loadBrowserInterface === 'without-css';
-		if(options != null && options.css === false)
-			noStyle = false;
-
 		let url = temp._scopeURL.replace(/(|\.min|\.es6)\.(js|mjs|ts)$/m, '');
 
-		if(!noStyle)
-			sf.loader.css([url+'.sf.css']);
+		if(!isInterfaceModule && options.hasInterface){
+			let noStyle = Blackprint.loadBrowserInterface === 'without-css';
+			if(options != null && options.css === false)
+				noStyle = false;
 
-		sf.loader.mjs([url+'.sf.mjs']);
+			if(!noStyle)
+				sf.loader.css([url+'.sf.css']);
+
+			sf.loader.mjs([url+'.sf.mjs']);
+		}
+	}
+
+	if(options.hasDocs){
+		let url = temp._scopeURL.replace(/(|\.min|\.es6)\.(js|mjs|ts)$/m, '');
+		sf.$.getJSON(url+'.docs.json').then(Blackprint.Sketch.registerDocs);
 	}
 
 	return temp;
+}
+
+Blackprint._docs = {};
+Blackprint.Sketch.registerDocs = function(obj){
+	deepMerge(Blackprint._docs, obj);
+
+	// Update every nodes that already been added to any active sketch instance
+	let modelList = Blackprint.space.modelList;
+	for (let key in modelList) {
+		let ifaces = modelList[key].nodes.list;
+		for (let i=0; i < ifaces.length; i++) {
+			ifaces[i]._updateDocs();
+		}
+	}
 }
 
 Blackprint.availableNode = Blackprint.nodes; // To display for available dropdown nodes

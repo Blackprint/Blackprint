@@ -34,7 +34,8 @@ Blackprint.Interface = class Interface extends sf.Model {
 
 			super();
 			this.title = 'No Title';
-			this.description = '';
+			this.description = '';  // summary
+			this._description = ''; // bpDocs
 			this.x = 0;
 			this.y = 0;
 			this.importing = true;
@@ -86,6 +87,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 		var temp = new Blackprint.Engine.Port(portName, type, def, which, this, haveFeature);
 		temp._scope = this._scope;
 		temp.inactive = false;
+		temp._description = '';
 		Object.setPrototypeOf(temp, Port.prototype);
 
 		if(type.constructor === Array && type.name.includes(' '))
@@ -330,6 +332,35 @@ Blackprint.Interface = class Interface extends sf.Model {
 		}
 
 		cableScope.hoverPort = false;
+	}
+
+	_updateDocs(){
+		let docs = Blackprint._docs;
+		let exist = deepProperty(docs, this.namespace.split('/'));
+		if(exist == null) return;
+
+		this._description = exist.description;
+
+		let { input, output, tags } = exist;
+		if(input != null){
+			for (let key in input) {
+				let port = this.input[key];
+				if(port == null) continue;
+
+				port._description = input[key].description;
+			}
+		}
+
+		if(output != null){
+			for (let key in output) {
+				let port = this.output[key];
+				if(port == null) continue;
+
+				port._description = output[key].description;
+			}
+		}
+
+		if(tags?.summary != null) this.description = tags.summary;
 	}
 };
 
