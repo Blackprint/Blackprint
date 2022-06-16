@@ -339,7 +339,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 		let exist = deepProperty(docs, this.namespace.split('/'));
 		if(exist == null) return;
 
-		this._description = exist.description;
+		this.docs = exist;
 
 		let { input, output, tags } = exist;
 		if(input != null){
@@ -347,7 +347,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 				let port = this.input[key];
 				if(port == null) continue;
 
-				port._description = input[key].description;
+				port.docs = input[key];
 			}
 		}
 
@@ -356,7 +356,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 				let port = this.output[key];
 				if(port == null) continue;
 
-				port._description = output[key].description;
+				port.docs = output[key];
 			}
 		}
 
