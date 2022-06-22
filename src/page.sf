@@ -568,7 +568,6 @@ sf-space[blackprint]{
         .Function .port{
           float: left;
           margin-left: -2px;
-          margin-right: 4px;
         }
       }
 

@@ -17,6 +17,25 @@ Space.model('nodes', function(My, include){
 				iface.w = width;
 
 			var Ofst = container.offset;
+			let oX = container.pos.x + Ofst.x;
+			let oY = container.pos.y + Ofst.y;
+
+			let routeCable = iface.node.routes.out;
+			if(routeCable != null){
+				if(routeCable.input != null){
+					let inp = routeCable.input.iface.$el('.routes .in')[0].getBoundingClientRect();
+					let inPortX = (inp.x+(inp.width/2) - oX) / container.scale;
+					let inPortY = (inp.y+(inp.height/2) - oY) / container.scale;
+					routeCable.head2 = [inPortX, inPortY];
+				}
+
+				if(routeCable.output != null){
+					let out = routeCable.output.iface.$el('.routes .out')[0].getBoundingClientRect();
+					let outPortX = (out.x+(out.width/2) - oX) / container.scale;
+					let outPortY = (out.y+(out.height/2) - oY) / container.scale;
+					routeCable.head1 = [outPortX, outPortY];
+				}
+			}
 
 			var ports = Blackprint.Interface._ports;
 			for(var a = 0; a < ports.length; a++){
@@ -36,8 +55,9 @@ Space.model('nodes', function(My, include){
 					var rect = _list.getElement(z).querySelector('.port');
 					rect = rect.getBoundingClientRect();
 
-					let portX = (rect.x+(rect.width/2) - container.pos.x - Ofst.x) / container.scale;
-					let portY = (rect.y+(rect.height/2) - container.pos.y - Ofst.y) / container.scale;
+					// ToDo: simplify this math
+					let portX = (rect.x+(rect.width/2) - oX) / container.scale;
+					let portY = (rect.y+(rect.height/2) - oY) / container.scale;
 
 					var cable;
 					for (var h = 0; h < cables.length; h++) {

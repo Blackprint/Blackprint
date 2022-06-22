@@ -53,7 +53,17 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 				y: rect.y + center,
 			}, this, true);
 		}
-		else cable = new Cable({x: 0, y: 0}, this, true);
+		else{
+			let rect;
+			if(this.iface.$el == null || Blackprint.settings.windowless)
+				rect = {x:0, y:0, height:0, width:0};
+			else rect = this.iface.$el('.routes .out')[0].getBoundingClientRect();
+
+			cable = new Cable({
+				x: rect.x + rect.width/2,
+				y: rect.y + rect.height/2
+			}, this, true);
+		}
 
 		cable.source = 'output';
 		super.createCable(cable);
