@@ -62,7 +62,7 @@ let BPVar = {html: `<div class="node {{ type }}" style="transform:translate({{ x
 			@pointerup="useType(true)"
 			@pointerover="nodeHovered(event)"
 			@pointerout="nodeUnhovered(event)"
-		>{{ data.name }} <div class="description">{{ data.scope.slice(0, 1).toUpperCase() + data.scope.slice(1) }} Variable</div></div>
+		>{{ data.name }} <div class="description">{{ data._scopeName.slice(0, 1).toUpperCase() + data._scopeName.slice(1) }} Variable</div></div>
 
 		<div class="right-port">
 			<sf-template path="Blackprint/nodes/template/output-port.sf"></sf-template>
@@ -189,7 +189,7 @@ $(function(){
 	class extends Blackprint._iface['BPIC/BP/Fn/Main'] {
 		openFunction(event){
 			let instance = this.bpInstance;
-			this.node._instance.emit("node.function.open", {
+			this.node.instance.emit("node.function.open", {
 				event, iface: this, function: this.node._funcInstance
 			});
 

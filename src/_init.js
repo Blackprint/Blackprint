@@ -214,6 +214,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		}
 
 		let cableConnects = [];
+		let routeConnects = [];
 		let branchPrepare = new Map();
 
 		// Create cable only from output and property
@@ -226,6 +227,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				let node = nodes[a];
 				var iface = inserted[node.i];
 
+				if(node.route != null)
+					routeConnects.push({from: iface, to: inserted[node.route.i]});
+
 				// If have output connection
 				if(node.output !== void 0){
 					var out = node.output;
@@ -237,14 +241,14 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 						var linkPortA = iface.output[portName];
 						if(linkPortA === void 0){
-							if(iface.enum === _InternalNodeEnum.BPFnInput){
-								let target = this._getTargetPortType(iface.node._instance, 'input', port);
+							if(iface._enum === _InternalNodeEnum.BPFnInput){
+								let target = this._getTargetPortType(iface.node.instance, 'input', port);
 								linkPortA = iface.addPort(target, portName);
 
 								if(linkPortA === void 0)
 									throw new Error(`Can't create output port (${portName}) for function (${iface._funcMain.node._funcInstance.id})`);
 							}
-							else if(iface.enum === _InternalNodeEnum.BPVarGet){
+							else if(iface._enum === _InternalNodeEnum.BPVarGet){
 								let target = this._getTargetPortType(this, 'input', port);
 								iface.useType(target);
 								linkPortA = iface.output[portName];
@@ -269,13 +273,13 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 							// Output can only meet input port
 							var linkPortB = targetNode.input[target.name];
 							if(linkPortB === void 0){
-								if(targetNode.enum === _InternalNodeEnum.BPFnOutput){
+								if(targetNode._enum === _InternalNodeEnum.BPFnOutput){
 									linkPortB = targetNode.addPort(linkPortA, target.name);
 
 									if(linkPortB === void 0)
 										throw new Error(`Can't create output port (${target.name}) for function (${targetNode._funcMain.node._funcInstance.id})`);
 								}
-								else if(targetNode.enum === _InternalNodeEnum.BPVarSet){
+								else if(targetNode._enum === _InternalNodeEnum.BPVarSet){
 									targetNode.useType(linkPortA);
 									linkPortB = targetNode.input[target.name];
 								}
@@ -351,6 +355,11 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			}
 		}
 
+		for (let i=0; i < routeConnects.length; i++) {
+			let { from, to } = routeConnects[i];
+			from.node.routes.routeTo(to);
+		}
+
 		for (var i = 0; i < cableConnects.length; i++) {
 			let {output, portName, linkPortA, input, target, linkPortB} = cableConnects[i];
 
@@ -386,7 +395,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		// Call node init after creation processes was finished
 		for (var i = 0; i < handlers.length; i++)
-			handlers[i].init && handlers[i].init();
+			handlers[i].init?.();
 
 		containerModel._isImporting = false;
 		this.emit("json.imported", {appendMode: options.appendMode, nodes: inserted, raw: json});
@@ -544,6 +553,11 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 					delete data.output;
 			}
 
+			let routeToIface = iface.node.routes?.out?.input?.iface;
+			if(routeToIface != null){
+				data.route = { i: ifaces.indexOf(routeToIface) };
+			}
+
 			if(hasCableMetadata)
 				data._cable = cableMetadata;
 
@@ -586,6 +600,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			let hasFunc = false, functions = {};
 			let funcs = this.functions;
 			let moduleJS = new Set(metadata.moduleJS || []);
+			let onlySelected = options.selectedOnly ? ifaces.map(v => v.namespace) : null;
 
 			let dive = function(list, path){
 				for (let key in list) {
@@ -593,6 +608,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 					let bpFunc = list[key];
 					if(bpFunc instanceof Blackprint._utils.BPFunction){
+						if(options.selectedOnly && !onlySelected.includes(`BPI/F/${path+key}`))
+							continue;
+
 						let temp = functions[path+key] = {};
 						temp.id = bpFunc.id;
 						temp.title = bpFunc.title;
@@ -729,9 +747,19 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			}
 		}
 
+		let routes = iface.node.routes;
+		if(routes.in.length !== 0){
+			let inp = routes.in;
+			for (let i=0; i < inp.length; i++) {
+				inp[i].disconnect();
+			}
+		}
+
+		if(routes.out !== null) routes.out.disconnect();
+
 		// Delete reference
 		delete this.iface[iface.id];
-		delete this.ref[iface.id];
+		// delete this.ref[iface.id];
 
 		this.emit('node.deleted', eventData);
 	}

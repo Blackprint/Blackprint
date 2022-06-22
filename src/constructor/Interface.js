@@ -42,7 +42,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 			this.comment = '';
 			this.type = false; // default node type: general
 			this.node = node;
-			this._scope = node._instance.scope;
+			this._scope = node.instance.scope;
 			this._nodeSelected = false;
 			this._nodeHovered = false;
 
@@ -144,7 +144,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 		}
 
 		if(e.type === "pointerup")
-			this.node._instance.emit('node.move', {iface: this, event: e});
+			this.node.instance.emit('node.move', {iface: this, event: e});
 	}
 
 	_cableMove(which, cable, x, y, iface){

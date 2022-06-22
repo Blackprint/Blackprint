@@ -216,6 +216,7 @@ Space.model('container', function(My, include){
 
 	let _stopSelect = null;
 	My.beginSelecting = function(ev){
+		if(My.offset == null) return;
 		My.select.show = true;
 
 		My.select.x = selectPivotPoint.x = (ev.clientX - My.pos.x - My.offset.x) / My.scale;
