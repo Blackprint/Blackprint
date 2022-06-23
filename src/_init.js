@@ -79,7 +79,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			Blackprint.Sketch._iface[templatePath] = func;
 
 			if(isExist !== void 0)
-				window.sf$hotReload?.replaceClass(isExist, func);
+				hotRefreshNodeClass(isExist, func);
 		}
 		else{
 			Blackprint.Sketch._iface[templatePath] = {func, options};
@@ -87,7 +87,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			if(options.extend === void 0)
 				options.extend = Blackprint.Interface;
 			else if(isExist !== void 0 && isExist.extend !== void 0)
-				window.sf$hotReload?.replaceClass(isExist.extend, options.extend);
+				hotRefreshNodeClass(isExist.extend, func.extend);
 		}
 
 		var nodeName = templatePath.replace(/[\/.,<>:\[\]{}+_=`~!@#$%^*(\\|)]/g, '-').toLowerCase();
@@ -1009,8 +1009,11 @@ Blackprint.registerNode = function(namespace, func){
 	if(isClass(func)){
 		let isExist = deepProperty(Blackprint.nodes, namespace);
 
-		if(isExist !== void 0)
-			window.sf$hotReload?.replaceClass(isExist, func);
+		if(isExist !== void 0){
+			hotRefreshNodePort('output', isExist, func);
+			hotRefreshNodePort('input', isExist, func);
+			hotRefreshNodeClass(isExist, func);
+		}
 	}
 
 	func._scopeURL = this._scopeURL;
@@ -1023,6 +1026,117 @@ Blackprint.registerNode = function(namespace, func){
 			Object.defineProperty(obj, '_visibleNode', {configurable: true, writable: true, value: 1});
 		}
 	});
+}
+
+function hotRefreshNodeClass(old, now){
+	let list = Blackprint.space.list;
+	for (let key in list) {
+		if(key === 'Space' || key === 'default') continue;
+		let ifaces = list[key]('nodes').list;
+
+		for (let i=0; i < ifaces.length; i++) {
+			let iface = ifaces[i];
+			if(iface.constructor === old)
+				Object.setPrototypeOf(iface, now.prototype);
+			else if(iface.node.constructor === old)
+				Object.setPrototypeOf(iface.node, now.prototype);
+			else if(iface.constructor.prototype instanceof old)
+				deepPrototypeFindAndSet(iface.constructor, old, now);
+			else if(iface.node.constructor.prototype instanceof old)
+				deepPrototypeFindAndSet(iface.node.constructor, old, now);
+		}
+	}
+}
+
+function deepPrototypeFindAndSet(objClazz, old, now){
+	if(objClazz == null) return;
+
+	let current = Object.getPrototypeOf(objClazz);
+	if(current === Object.prototype) return;
+
+	if(current === old){
+		Object.setPrototypeOf(objClazz.prototype, now.prototype);
+		Object.setPrototypeOf(objClazz, now);
+	}
+	else deepPrototypeFindAndSet(current, old, now);
+}
+
+function hotRefreshNodePort(which, oldClaz, newClaz){
+	let old = oldClaz[which];
+	let now = newClaz[which];
+
+	let remove = [];
+	for (let key in old) {
+		if(!isPortTypeSimilar(old[key], now[key])) remove.push(key);
+	}
+
+	let add = [];
+	for (let key in now) {
+		if(!isPortTypeSimilar(now[key], old[key])) add.push(key);
+	}
+
+	// Get Sketch instance list
+	let list = Blackprint.space.list;
+	for (let key in list) {
+		if(key === 'Space' || key === 'default') continue;
+		let ifaces = list[key]('nodes').list;
+
+		for (let i=0; i < ifaces.length; i++) {
+			let node = ifaces[i].node;
+			for (let a=0; a < remove.length; a++) {
+				node.deletePort(which, remove[a]);
+			}
+			for (let a=0; a < add.length; a++) {
+				let name = add[a];
+				node.createPort(which, name, now[name]);
+			}
+		}
+	}
+}
+
+function isPortTypeSimilar(old, now){
+	if(old === now) return true;
+
+	// Don't use != or ==
+	if((old !== null && now === null) || (now !== null && old === null) || (old === void 0 && now !== void 0) || (now === void 0 && old !== void 0))
+		return false;
+
+	if((old.isRoute && now.isRoute == null) || (now.isRoute && old.isRoute == null))
+		return false;
+
+	if((old.portFeature != null && now.portFeature == null) || now.portFeature != null && old.portFeature == null)
+		return false;
+	
+	if(old.portFeature !== now.portFeature || old.portFeature == null || now.portFeature == null)
+		return false;
+
+	let feature = old.portFeature;
+	let port = Blackprint.Port;
+
+	if(feature === port.Default){
+		if(old.portType !== now.portType || old.default !== now.default)
+			return false;
+	}
+	else if(feature === port.ArrayOf){
+		if(old.portType !== now.portType)
+			return false;
+	}
+	else if(feature === port.Trigger){
+		if(old.default.toString() !== now.default.toString())
+			return false;
+	}
+	else if(feature === port.Union){
+		if(old.portType.length !== now.portType.length)
+			return false;
+		
+		let temp = old.portType;
+		let temp2 = new Set(now.portType);
+		for (let i=0; i < temp.length; i++) {
+			if(!temp2.has(temp[i])) return false;
+		}
+	}
+
+	return true;
 }
 
 // Override just for supporting hot reload
@@ -1057,9 +1171,9 @@ Blackprint.registerInterface = function(templatePath, options, func){
 	let isExist = Blackprint._iface[templatePath];
 	if(isExist !== void 0){
 		if(isClass(func))
-			window.sf$hotReload?.replaceClass(isExist, func);
+			hotRefreshNodeClass(isExist, func);
 		else if(isExist !== void 0 && options.extend !== void 0)
-			window.sf$hotReload?.replaceClass(isExist.extend, options.extend);
+			hotRefreshNodeClass(isExist.extend, func.extend);
 	}
 
 	_registerInterface.call(this, templatePath, options, func);
