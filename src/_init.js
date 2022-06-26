@@ -30,7 +30,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		this._event = {$_fallback: BlackprintEventFallback};
 	}
 
-	static registerInterface(templatePath, options, func){
+	static registerInterface(templatePath, options, func, _fromDecorator=false){
 		if(templatePath.slice(0, 5) !== 'BPIC/')
 			throw new Error("The first parameter of 'registerInterface' must be started with BPIC to avoid name conflict. Please name the interface similar with 'templatePrefix' for your module that you have set on 'blackprint.config.js'.");
 
@@ -43,7 +43,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(func === void 0){
 			// this == Blackprint.Sketch
 			return claz => {
-				this.registerInterface(templatePath, options, claz);
+				this.registerInterface(templatePath, options, claz, true);
 				return claz;
 			}
 		}
@@ -95,6 +95,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		// Just like how we do it on ScarletsFrame component with namespace feature
 		Blackprint.space.component(nodeName, options, func || NOOP);
+
+		// For ScarletsFrame inspector
+		func.prototype.sf$resolveSrc ??= {
+			url: (new Error(1)).stack.split('\n')[_fromDecorator ? 3 : 2].split('://')[1],
+			rawText: templatePath
+		};
 	}
 
 	// Clone current container index
@@ -399,6 +405,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		containerModel._isImporting = false;
 		this.emit("json.imported", {appendMode: options.appendMode, nodes: inserted, raw: json});
+
+		if(!Blackprint.settings.windowless)
+			this.recalculatePosition();
 
 		if(this.pendingRender) Blackprint.settings.windowless = _windowless;
 		return inserted;
@@ -905,6 +914,14 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			});
 		}
 
+		if(handlers == null && !Blackprint.settings.windowless){
+			$.afterRepaint().then(()=>{
+				let rect = iface.$el[0].firstElementChild.getBoundingClientRect();
+				iface.w = rect.width;
+				iface.h = rect.height;
+			});
+		}
+
 		iface._updateDocs();
 
 		this.emit('node.created', { iface });
@@ -923,7 +940,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		return temp;
 	}
 
-	recalculatePosition(){
+	async recalculatePosition(){
 		let body = $(document.body);
 		let vfxAlreadyOff = body.hasClass('blackprint-no-vfx');
 		if(!vfxAlreadyOff) body.addClass('blackprint-no-vfx');
@@ -931,20 +948,31 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(this.ifaceList.length === 0 || this.ifaceList[0].$el == null)
 			return;
 
+		await $.afterRepaint();
+
 		let list = this.ifaceList.map(v => ({
 			target: {model: v},
-			contentRect: v.$el[0].getBoundingClientRect()
+			contentRect: v.$el[0].firstElementChild.getBoundingClientRect()
 		}));
 
 		this.scope('nodes')._recalculate(list, true);
 		if(!vfxAlreadyOff) body.removeClass('blackprint-no-vfx');
 
 		this.pendingRender = false;
+
+		// Also fix minimap
+		let spaceId = this.scope.id;
+		if(!spaceId.includes('+mini')){
+			let minimap = this.scope.Space.list[spaceId+'+mini'];
+			if(minimap != null){
+				minimap('container').fixScaling();
+			}
+		}
 	}
 }
 
 // Replace function from Blackprint Engine
-Blackprint.registerNode = function(namespace, func){
+Blackprint.registerNode = function(namespace, func, _fromDecorator=false){
 	if(this._scopeURL !== void 0){
 		let temp = Blackprint.modulesURL[this._scopeURL];
 
@@ -963,11 +991,12 @@ Blackprint.registerNode = function(namespace, func){
 	// Return for Decorator
 	if(func === void 0){
 		return claz => {
-			this.registerNode(namespace, claz);
+			this.registerNode(namespace, claz, true);
 			return claz;
 		}
 	}
 
+	let namespace_ = namespace;
 	namespace = namespace.split('/');
 
 	// Add with sf.Obj to trigger ScarletsFrame object binding update
@@ -1026,6 +1055,12 @@ Blackprint.registerNode = function(namespace, func){
 			Object.defineProperty(obj, '_visibleNode', {configurable: true, writable: true, value: 1});
 		}
 	});
+
+	// For ScarletsFrame inspector
+	func.prototype.sf$resolveSrc ??= {
+		url: (new Error(1)).stack.split('\n')[_fromDecorator ? 3 : 2].split('://')[1],
+		rawText: namespace_
+	};
 }
 
 function hotRefreshNodeClass(old, now){
@@ -1141,7 +1176,7 @@ function isPortTypeSimilar(old, now){
 
 // Override just for supporting hot reload
 let _registerInterface = Blackprint.registerInterface;
-Blackprint.registerInterface = function(templatePath, options, func){
+Blackprint.registerInterface = function(templatePath, options, func, _fromDecorator=false){
 	if(templatePath.slice(0, 5) !== 'BPIC/')
 		throw new Error("The first parameter of 'registerInterface' must be started with BPIC to avoid name conflict. Please name the interface similar with 'templatePrefix' for your module that you have set on 'blackprint.config.js'.");
 
@@ -1156,7 +1191,7 @@ Blackprint.registerInterface = function(templatePath, options, func){
 	// Return for Decorator
 	if(func === void 0){
 		return claz => {
-			this.registerInterface(templatePath, options, claz);
+			this.registerInterface(templatePath, options, claz, true);
 			return claz;
 		}
 	}
@@ -1177,6 +1212,12 @@ Blackprint.registerInterface = function(templatePath, options, func){
 	}
 
 	_registerInterface.call(this, templatePath, options, func);
+
+	// For ScarletsFrame inspector
+	func.prototype.sf$resolveSrc ??= {
+		url: (new Error(1)).stack.split('\n')[_fromDecorator ? 3 : 2].split('://')[1],
+		rawText: templatePath
+	};
 }
 
 Blackprint.loadModuleFromURL.browser = function(url, options){
