@@ -43,4 +43,7 @@ Blackprint.space.component('bpnode-header-info', {
 	My.type = "info";
 	My.text = "";
 	My.description = "";
+
+	// Mark this element as cloneable for Blackprint Sketch
+	My.$cloneable = true;
 });

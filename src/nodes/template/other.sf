@@ -1,7 +1,13 @@
 ## html
 <div class="other">
 	<div class="list">
-		<div class="item" sf-each="x in $decoration.other">{{@exec return x }}</div>
+		<div class="item" sf-each="x in $decoration.other">{{@exec
+			// Check if it's cloneable
+			if(x.model != null && x.model.$cloneable)
+				return x.cloneFrame(true);
+
+			return x;
+		}}</div>
 	</div>
 
 	<div class="item comment" style="display: {{ comment !== '' ? '' : 'none' }}">{{ comment }}</div>
