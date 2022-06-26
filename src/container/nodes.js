@@ -116,6 +116,12 @@ Space.model('nodes', function(My, include){
 		},
 	};
 
+	My.destroy = function(){
+		sizeObserve.disconnect();
+	}
+
+	$(window).once('beforeunload', My.destroy);
+
 	My.selected = [];
 	My.unselectAll = function(){
 		let list = My.selected;

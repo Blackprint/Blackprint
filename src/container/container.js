@@ -75,7 +75,7 @@ Space.model('container', function(My, include){
 	}
 
 	let fixScaling = My.fixScaling = async function(){
-		My.$el.css({width: '100%', height: '100%', transform: 'scale(1)'});
+		My.$el.css({minWidth: 0, minHeight: 0, width: '100%', height: '100%', transform: 'scale(1)'});
 		await $.afterRepaint();
 		await My.resetOffset();
 		My.size.w = My.offset.width;
