@@ -949,6 +949,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			return;
 
 		await $.afterRepaint();
+		this.scope('container').resetOffset();
+		await $.afterRepaint();
 
 		let list = this.ifaceList.map(v => ({
 			target: {model: v},
@@ -965,6 +967,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(!spaceId.includes('+mini')){
 			let minimap = this.scope.Space.list[spaceId+'+mini'];
 			if(minimap != null){
+				await $.afterRepaint();
 				minimap('container').fixScaling();
 			}
 		}

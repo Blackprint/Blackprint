@@ -92,15 +92,29 @@ Space.model('container', function(My, include){
 		else if(My.isMinimap) recalculateScale();
 	}
 
-	My.resetOffset = async function(){
-		await $.afterRepaint();
+	My.recheckOffset = function(ev){
+		let Ofst = My.offset;
+		if(Ofst == null) return;
+
+		// Reset offset if this was called from different container
+		if(ev.view != null && !(Ofst instanceof ev.view.DOMRect)){
+			My.resetOffset(ev.target.closest('sf-m[name="cables"], sf-m[name="nodes"]').getBoundingClientRect());
+			Ofst = My.offset;
+		}
+	}
+
+	My.resetOffset = async function(_rect){
+		if(_rect == null)
+			await $.afterRepaint();
 
 		let w = 0, h = 0;
 		let elements = My.$el;
-		My.offset = elements[0].getBoundingClientRect();
+		My.offset = (_rect || elements[0].firstElementChild.getBoundingClientRect());
+		My.offset.x -= My.pos.x;
+		My.offset.y -= My.pos.y;
 
 		for (var i = 0; i < elements.length; i++) {
-			let rect = elements[i].getBoundingClientRect();
+			let rect = elements[i].firstElementChild.getBoundingClientRect();
 
 			if(rect.width > w)
 				w = rect.width;

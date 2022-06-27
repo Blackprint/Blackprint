@@ -4,6 +4,7 @@
     class="{{ _isImporting ? 'importing-nodes' : '' }}"
     @mousewheel="scaleContainer(event)"
     @touchstart.capture="checkTouch(event)"
+    @pointerdown.capture="recheckOffset(event)"
     style="
       min-width: {{ size.w }}px;
       min-height: {{ size.h }}px;
@@ -271,9 +272,7 @@ sf-space[blackprint]{
   }
 
   .cables{
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: absolute;
     > svg{
       // Apply only on direct child of .cables
       filter: drop-shadow(0 0 2px black);

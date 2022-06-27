@@ -11,24 +11,16 @@ class Port extends Blackprint.Engine.Port {
 	}
 
 	createCable(e, noPush){
-		var isAuto = e.constructor === DOMRect;
+		var isAuto = e.target == null;
 
 		// Get size and position of the port
 		var rect = isAuto ? e : this.findPortElement(e.target).getBoundingClientRect();
-		var Ofst = {x:0, y:0};
-
-		if(!isAuto){
-			var container = this._scope('container');
-			if(e.target.closest('sf-space') !== container.$el[0].closest('sf-space'))
-				Ofst = container.offset;
-		}
-
 		var center = rect.width/2;
 
 		// Create cable and save the reference
 		var cable = new Cable({
-			x: rect.x + center + Ofst.x,
-			y: rect.y + center + Ofst.y
+			x: rect.x + center,
+			y: rect.y + center,
 		}, this);
 
 		if(this.isRoute){

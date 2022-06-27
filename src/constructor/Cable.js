@@ -171,18 +171,16 @@ class Cable extends Blackprint.Engine.Cable {
 	}
 
 	moveCableHead(ev, single){
-		this._Ofst ??= ev.target.closest('sf-space').getBoundingClientRect();
-
-		let { _Ofst, _container, branch } = this;
-		let { pos, scale } = this._container;
+		let { _container, branch } = this;
+		let { offset: Ofst, pos, scale } = this._container;
 		let { hoverPort } = this._cablesModel;
 
 		// Let's make a magnet sensation (fixed position when hovering node port)
 		if(!single && hoverPort !== false && (branch == null || branch.length === 0)){
 			var center = hoverPort.rect.width/2;
 			this.head2 = [
-				(hoverPort.rect.x + center - pos.x - _Ofst.x) / scale,
-				(hoverPort.rect.y + center - pos.y - _Ofst.y) / scale
+				(hoverPort.rect.x + center - pos.x - Ofst.x) / scale,
+				(hoverPort.rect.y + center - pos.y - Ofst.y) / scale
 			];
 
 			this.beforeConnect = null;
@@ -201,8 +199,8 @@ class Cable extends Blackprint.Engine.Cable {
 		else{
 			if(!single) {
 				this.head2 = [
-					(ev.clientX - pos.x - _Ofst.x) / scale,
-					(ev.clientY - pos.y - _Ofst.y) / scale
+					(ev.clientX - pos.x - Ofst.x) / scale,
+					(ev.clientY - pos.y - Ofst.y) / scale
 				];
 
 				_container.moveSelection(ev, this);
@@ -245,7 +243,7 @@ class Cable extends Blackprint.Engine.Cable {
 		var container = this._container;
 		var cablesModel = this._cablesModel;
 
-		var Ofst = ev.target.closest('sf-space').getBoundingClientRect();
+		var Ofst = container.offset;
 		var cable = this;
 
 		if(!ev.noMoveListen){
