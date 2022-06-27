@@ -4,6 +4,14 @@ Space.model('nodes', function(My, include){
 	var sizeObserve = new ResizeObserver(My._recalculate = function(items, noEvent){
 		if(My.$space.sketch == null) return;
 
+		// Use the main container's offset when having multiple container
+		if(container.$el.length > 1)
+			container.resetOffset(container.nodeScope.$el[0].getBoundingClientRect());
+
+		let {offset: Ofst, pos} = container;
+		let oX = pos.x + Ofst.x;
+		let oY = pos.y + Ofst.y;
+
 		for (var i = 0; i < items.length; i++){
 			var resized = items[i];
 			var iface = resized.target.model;
@@ -15,10 +23,6 @@ Space.model('nodes', function(My, include){
 
 			if(width > 0)
 				iface.w = width;
-
-			var Ofst = container.offset;
-			let oX = container.pos.x + Ofst.x;
-			let oY = container.pos.y + Ofst.y;
 
 			let routeCable = iface.node.routes.out;
 			if(routeCable != null){
@@ -47,13 +51,11 @@ Space.model('nodes', function(My, include){
 
 				for (var z = 0; z < _list.length; z++) {
 					let port = _list[z];
-
 					var cables = port.cables;
 					if(cables.length === 0)
 						continue;
 
-					var rect = _list.getElement(z).querySelector('.port');
-					rect = rect.getBoundingClientRect();
+					var rect = _list.getElement(port).querySelector('.port').getBoundingClientRect();
 
 					// ToDo: simplify this math
 					let portX = (rect.x+(rect.width/2) - oX) / container.scale;

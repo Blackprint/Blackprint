@@ -260,15 +260,17 @@ Blackprint.Interface = class Interface extends sf.Model {
 				if(cableScope.hoverPort === false || cable.connected || cable.selected)
 					return;
 
-				let port = cableScope.hoverPort.item;
-				port.connectCable(cable);
+				// item == Port
+				cableScope.hoverPort.item.connectCable(cable, ev);
 			};
 
 			this.$el.once('pointerup', this.__onCableDrop);
 
 			if(cable.isRoute){
-				let portElem = this.node.routes._inElement?.[0];
+				let portElem = this.node.routes._inElement;
 				if(portElem == null) return;
+
+				portElem = sf.Window.source(portElem, event);
 
 				let rect = portElem.getBoundingClientRect();
 				let temp = rect => {
@@ -304,7 +306,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 					|| (port.type.constructor === Array && port.type.includes(owner.type))
 					|| (owner.type.constructor === Array && owner.type.includes(port.type))
 				){
-					let portElem = _list.getElement(i).querySelector('.port');
+					let portElem = sf.Window.source(_list.getElements(port), event).querySelector('.port');
 					cableScope.hoverPort = {
 						elem: portElem,
 						rect: portElem.getBoundingClientRect(),

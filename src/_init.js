@@ -942,8 +942,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 	async recalculatePosition(){
 		let body = $(document.body);
-		let vfxAlreadyOff = body.hasClass('blackprint-no-vfx');
-		if(!vfxAlreadyOff) body.addClass('blackprint-no-vfx');
+		let switchVFX = !body.hasClass('blackprint-no-vfx');
+		if(switchVFX) body.addClass('blackprint-no-vfx');
 
 		if(this.ifaceList.length === 0 || this.ifaceList[0].$el == null)
 			return;
@@ -958,7 +958,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		}));
 
 		this.scope('nodes')._recalculate(list, true);
-		if(!vfxAlreadyOff) body.removeClass('blackprint-no-vfx');
+		if(switchVFX) body.removeClass('blackprint-no-vfx');
 
 		this.pendingRender = false;
 

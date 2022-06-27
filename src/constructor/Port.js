@@ -63,7 +63,7 @@ class Port extends Blackprint.Engine.Port {
 		}, 4000);
 	}
 
-	connectCable(cable){
+	connectCable(cable, _ev){
 		if(this._ignoreConnect) return;
 
 		let _cable = cable;
@@ -87,7 +87,13 @@ class Port extends Blackprint.Engine.Port {
 			if(!Blackprint.settings.windowless){
 				let list = cable.input.iface.input._portList;
 				if(list != null){
-					let rect = this.findPortElement(list.getElement(cable.input)).getBoundingClientRect();
+					let el;
+
+					if(_ev != null)
+						el = sf.Window.source(list.getElements(cable.input), _ev);
+					else el = list.getElement(cable.input);
+
+					let rect = this.findPortElement(el).getBoundingClientRect();
 	
 					let { offset, pos, scale } = this._scope('container');
 					cable.head2[0] = (rect.x + rect.width/2 - offset.x - pos.x) / scale;
@@ -96,7 +102,13 @@ class Port extends Blackprint.Engine.Port {
 
 				list = cable.output.iface.output._portList;
 				if(list != null && cable.parentCable == null){
-					let rect = this.findPortElement(list.getElement(cable.output)).getBoundingClientRect();
+					let el;
+
+					if(_ev != null)
+						el = sf.Window.source(list.getElements(cable.output), _ev);
+					else el = list.getElement(cable.output);
+
+					let rect = this.findPortElement(el).getBoundingClientRect();
 	
 					let { offset, pos, scale } = this._scope('container');
 					cable.head1[0] = (rect.x + rect.width/2 - offset.x - pos.x) / scale;
