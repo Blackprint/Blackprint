@@ -94,12 +94,12 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 		}
 
 		if(!Blackprint.settings.windowless){
-			let offset = this._scope('container').offset;
+			let { offset, pos } = this._scope('container');
 			let rect = this._inElement[0].getBoundingClientRect();
 			let center = rect.width / 2;
 
-			cable.head2[0] = rect.x + center - offset.x;
-			cable.head2[1] = rect.y + center - offset.y;
+			cable.head2[0] = rect.x + center - pos.x - offset.x;
+			cable.head2[1] = rect.y + center - pos.y - offset.y;
 		}
 
 		return super.connectCable(cable);
