@@ -24,8 +24,7 @@ Blackprint.Sketch.suggestNode = function(source, clazz, fromList){
 				that: for(let prop in metadata){
 					let temp = metadata[prop];
 
-					if(temp === undefined) continue;
-					if(temp === null){
+					if(temp === types.Any){
 						if(clazz === Function)
 							continue;
 
@@ -44,7 +43,7 @@ Blackprint.Sketch.suggestNode = function(source, clazz, fromList){
 								continue;
 							}
 
-							if(temp.portType === null){
+							if(temp.portType === types.Any){
 								if(clazz !== Function)
 									match = true;
 
