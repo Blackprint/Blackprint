@@ -78,7 +78,7 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 	}
 
 	// Connect to input route
-	connectCable(cable){
+	connectCable(cable, _ev){
 		if(!this._init) this._initForSketch();
 
 		let cables = this._scope('cables');
@@ -88,14 +88,19 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 		if(!cable) return false;
 		cables.currentCable = void 0;
 
-		if(cable.owner.iface === this.iface){
+		if(cable.owner.iface === this.iface || cable.isRoute === false){
 			cable.disconnect();
 			return false;
 		}
 
 		if(!Blackprint.settings.windowless){
 			let { offset, pos } = this._scope('container');
-			let rect = this._inElement[0].getBoundingClientRect();
+
+			let el_;
+			if(_ev == null) el_ = this._inElement[0];
+			else el_ = sf.Window.source(this._inElement, _ev);
+
+			let rect = el_.getBoundingClientRect();
 			let center = rect.width / 2;
 
 			cable.head2[0] = rect.x + center - pos.x - offset.x;

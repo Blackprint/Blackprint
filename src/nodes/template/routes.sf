@@ -4,7 +4,7 @@
 	@pointerout="node.routes._unhover(event)"
     @contextmenu.stop.prevent="node.routes.rightClick(event)"
     @pointerdown.left.stop="node.routes.createCable(event)"
-    @pointerup.left="node.routes.connectCable()"
+    @pointerup.left="node.routes.connectCable(null, event)"
 >
 	<div title="Route In" class="in {{ node.routes.in.length === 0 ? 'hide' : '' }}"></div>
 	<div title="Route Out" class="out {{ node.routes.disableOut ? 'disable' : ''}} {{ node.routes.out == null ? 'hide' : '' }}"></div>
