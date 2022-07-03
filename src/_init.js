@@ -842,7 +842,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		options ??= {};
 
 		if(options.oldIface !== void 0 && options.oldIface.namespace === iface.namespace){
-			Blackprint.Interface._reuse(iface, options.oldIface);
+			try {
+				Blackprint.Interface._reuse(iface, options.oldIface);
+			} catch (e) {
+				console.error("Failed to create node for:", namespace);
+				throw e;
+			}
 
 			iface.input ??= {_portList: []};
 			iface.output ??= {_portList: []};
@@ -851,7 +856,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		// Create the linker between the node and the iface
 		else{
-			Blackprint.Interface._prepare(node, iface);
+			try {
+				Blackprint.Interface._prepare(node, iface);
+			} catch (e) {
+				console.error("Failed to create node for:", namespace);
+				throw e;
+			}
 
 			iface.input ??= {_portList: []};
 			iface.output ??= {_portList: []};
@@ -1135,11 +1145,10 @@ function hotRefreshNodePort(which, oldClaz, newClaz){
 function isPortTypeSimilar(old, now){
 	if(old === now) return true;
 
-	// Don't use != or ==
-	if((old !== null && now === null) || (now !== null && old === null) || (old === void 0 && now !== void 0) || (now === void 0 && old !== void 0))
-		return false;
+	if(old == null || now == null)
+		throw new Error("Port type mustn't be null");
 
-	if((old.isRoute && now.isRoute == null) || (now.isRoute && old.isRoute == null))
+	if((old.isRoute && now.isRoute === false) || (now.isRoute && old.isRoute === false))
 		return false;
 
 	if((old.portFeature != null && now.portFeature == null) || now.portFeature != null && old.portFeature == null)
