@@ -764,11 +764,11 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			}
 		}
 
-		if(routes.out !== null) routes.out.disconnect();
+		routes.out?.disconnect();
 
 		// Delete reference
 		delete this.iface[iface.id];
-		// delete this.ref[iface.id];
+		delete this.ref[iface.id];
 
 		this.emit('node.deleted', eventData);
 	}
@@ -896,8 +896,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			node.routes._initForSketch();
 		}
 
-		if(iface.id !== void 0)
+		if(iface.id !== void 0){
 			this.iface[iface.id] = iface;
+			this.ref[iface.id] = iface.ref;
+		}
 
 		if(iface.i !== void 0)
 			this.ifaceList[iface.i] = iface;
