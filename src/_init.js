@@ -459,9 +459,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				data.comment = iface.comment;
 
 			if(iface.data !== void 0){
-				data.data = {};
-
-				deepCopy(data.data, iface.data);
+				if(iface.data.exportData != null)
+					data.data = iface.data.exportData();
+				else {
+					data.data = {};
+					deepCopy(data.data, iface.data);
+				}
 			}
 
 			let cableMetadata = {};
