@@ -62,17 +62,30 @@ Space.model('cables', function(My, include){
 				else if(cx < 50 && cx >= 0)
 					cx = 50;
 
-				if(item.source === 'input'){
+				let temp = item.overrideRot ?? (item.source === 'input' ? 'in-out' : 'out-in');
+				if(temp === 'out-in'){
 					if(x2 < x1)
-					  item.linePath = `${x1 + cx} ${y1} ${x2 - cx} ${y2}`;
+						item.linePath = `${x1 - cx} ${y1} ${x2 + cx} ${y2}`;
 					else
-					  item.linePath = `${x1 - cx} ${y1} ${x2 + cx} ${y2}`;
+						item.linePath = `${x1 + cx} ${y1} ${x2 - cx} ${y2}`;
 				}
-				else if(item.source === 'output'){
+				else if(temp === 'in-out'){
 					if(x2 < x1)
-					  item.linePath = `${x1 - cx} ${y1} ${x2 + cx} ${y2}`;
+						item.linePath = `${x1 + cx} ${y1} ${x2 - cx} ${y2}`;
 					else
-					  item.linePath = `${x1 + cx} ${y1} ${x2 - cx} ${y2}`;
+						item.linePath = `${x1 - cx} ${y1} ${x2 + cx} ${y2}`;
+				}
+				else if(temp === 'out-out'){
+					if(x2 < x1)
+						item.linePath = `${x1 - cx} ${y1} ${x2 - cx} ${y2}`;
+					else
+						item.linePath = `${x1 + cx} ${y1} ${x2 + cx} ${y2}`;
+				}
+				else if(temp === 'in-in'){
+					if(x2 < x1)
+						item.linePath = `${x1 + cx} ${y1} ${x2 + cx} ${y2}`;
+					else
+						item.linePath = `${x1 - cx} ${y1} ${x2 - cx} ${y2}`;
 				}
 			}
 			else{
@@ -83,9 +96,9 @@ Space.model('cables', function(My, include){
 					cy = 50;
 
 				if(y2 < y1)
-				  item.linePath = `${x1} ${y1 - cy} ${x2} ${y2 - cy}`;
+					item.linePath = `${x1} ${y1 - cy} ${x2} ${y2 - cy}`;
 				else
-				  item.linePath = `${x1} ${y1 + cy} ${x2} ${y2 + cy}`;
+					item.linePath = `${x1} ${y1 + cy} ${x2} ${y2 + cy}`;
 			}
 		}
 

@@ -322,6 +322,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				cable.head2[0] = temp.x;
 				cable.head2[1] = temp.y;
 
+				if(temp.overRot != null)
+					cable.overrideRot = temp.overRot;
+
 				let list = temp.branch;
 				for (let z = 0; z < list.length; z++)
 					deepCreate(list[z], cable.createBranch(), linkPortA);
@@ -389,6 +392,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			// Create cable from NodeA
 			if(cable === void 0)
 				cable = linkPortA.createCable(_getPortRect(output, portName));
+
+			if(target.overRot != null)
+				cable.overrideRot = target.overRot;
 
 			// Positioning the cable head2 into target port position from NodeB
 			var rectB = _getPortRect(input, target.name);
@@ -501,8 +507,11 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 						let temp = {
 							i: _i,
-							name: target.name
+							name: target.name,
 						};
+
+						if(cable.overrideRot != null)
+							temp.overRot = cable.overrideRot;
 
 						// Save this child/cable on the map
 						// so we can attach it to the parent later.
@@ -525,6 +534,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 						function deepBranch(cable, save){
 							if(cable.branch){
 								let branch = cable.branch;
+
+								if(cable.overrideRot != null)
+									save.overRot = cable.overrideRot;
 
 								save.x = Math.round(cable.head2[0]);
 								save.y = Math.round(cable.head2[1]);

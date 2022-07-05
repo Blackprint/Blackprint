@@ -566,6 +566,37 @@ class Cable extends Blackprint.Engine.Cable {
 			});
 		}
 
+		if(cable.branch !== void 0 || cable.parentCable !== void 0){
+			menu.push({
+				title: cable.overrideRot ? 'Reset rotation' : "Override rotation",
+				callback(){
+					if(cable.overrideRot != null)
+						delete cable.overrideRot;
+					else{
+						if(cable.parentCable == null){ // have direct connection to a port
+							if(cable.source === 'input')
+								cable.overrideRot = 'in-in';
+							else cable.overrideRot = 'out-out';
+						}
+						else{
+							if(cable.target == null){ // only a connection between cable
+								if(cable.source === 'input')
+									cable.overrideRot = 'out-in';
+								else cable.overrideRot = 'in-out';
+							}
+							else{ // have direct connection to a port
+								if(cable.source === 'input')
+									cable.overrideRot = 'out-out';
+								else cable.overrideRot = 'in-in';
+							}
+						}
+					}
+
+					cable._scope('cables').recalculatePath(cable);
+				},
+			});
+		}
+
 		if(cable.branch !== void 0 && cable.branch.length === 1){
 			menu.push({
 				title: "Merge cable",
