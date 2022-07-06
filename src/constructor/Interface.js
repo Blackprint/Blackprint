@@ -231,8 +231,14 @@ Blackprint.Interface = class Interface extends sf.Model {
 		let ifaceList = container.nodeScope.list;
 		this._scope.sketch.emit('node.click', { event: ev, iface: this});
 
-		if(!disableSwap)
-			ifaceList.push(ifaceList.splice(ifaceList.indexOf(this), 1)[0]);
+		if(!disableSwap){
+			if(ev.pointerType === 'touch'){
+				$(ev.target).once('pointerup', () => {
+					ifaceList.push(ifaceList.splice(ifaceList.indexOf(this), 1)[0]);
+				});
+			}
+			else ifaceList.push(ifaceList.splice(ifaceList.indexOf(this), 1)[0]);
+		}
 	}
 
 	nodeHovered(event){
@@ -270,6 +276,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 				let portElem = this.node.routes._inElement;
 				if(portElem == null) return;
 
+				event.view ??= window;
 				portElem = sf.Window.source(portElem, event);
 
 				let rect = portElem.getBoundingClientRect();
@@ -306,6 +313,8 @@ Blackprint.Interface = class Interface extends sf.Model {
 					|| (port.type.constructor === Array && port.type.includes(owner.type))
 					|| (owner.type.constructor === Array && owner.type.includes(port.type))
 				){
+					event.view ??= window;
+
 					let portElem = sf.Window.source(_list.getElements(port), event).querySelector('.port');
 					cableScope.hoverPort = {
 						elem: portElem,
