@@ -459,8 +459,8 @@ class Cable extends Blackprint.Engine.Cable {
 				container.cableScope.hoverPort = false;
 			}
 			else {
-				if(Math.abs(oldEv.clientX - ev.clientX) < 100
-				   && Math.abs(oldEv.clientY - ev.clientY) < 100){
+				if(Math.abs(oldEv.clientX - ev.clientX) < 20
+				   && Math.abs(oldEv.clientY - ev.clientY) < 20){
 					cable._delete();
 				}
 			}

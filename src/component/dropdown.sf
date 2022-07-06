@@ -342,7 +342,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 					}, 200);
 				});
 
-				elem.on('pointerdown', openDeep);
+				elem.on('click', openDeep);
 				continue;
 			}
 
@@ -361,7 +361,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 			});
 
 			if(opt.callback){
-				elem.on('pointerdown', function(ev){
+				elem.on('click', function(ev){
 					setTimeout(()=> {
 						if(opt.unhover !== void 0)
 							opt.unhover.apply(opt.context, opt.args);
