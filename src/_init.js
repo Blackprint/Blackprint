@@ -785,6 +785,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		delete this.iface[iface.id];
 		delete this.ref[iface.id];
 
+		let parent = iface.node.instance._funcMain;
+		if(parent != null)
+			delete parent.ref[iface.id];
+
 		this.emit('node.deleted', eventData);
 	}
 
@@ -914,6 +918,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(iface.id !== void 0){
 			this.iface[iface.id] = iface;
 			this.ref[iface.id] = iface.ref;
+
+			let parent = iface.node.instance._funcMain;
+			if(parent != null)
+				parent.ref[iface.id] = iface.ref;
 		}
 
 		if(iface.i !== void 0)
