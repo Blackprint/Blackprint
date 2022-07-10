@@ -1140,12 +1140,14 @@ function hotRefreshNodePort(namespace, which, oldClaz, newClaz){
 
 	let remove = [];
 	for (let key in old) {
-		if(!isPortTypeSimilar(old[key], now[key])) remove.push(key);
+		if(now[key] === void 0 || !isPortTypeSimilar(old[key], now[key]))
+			remove.push(key);
 	}
 
 	let add = [];
 	for (let key in now) {
-		if(!isPortTypeSimilar(now[key], old[key])) add.push(key);
+		if(old[key] === void 0 || !isPortTypeSimilar(now[key], old[key]))
+			add.push(key);
 	}
 
 	// Get Sketch instance list
