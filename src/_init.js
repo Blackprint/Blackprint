@@ -1077,8 +1077,8 @@ Blackprint.registerNode = function(namespace, func, _fromDecorator=false){
 		let isExist = deepProperty(Blackprint.nodes, namespace);
 
 		if(isExist !== void 0){
-			hotRefreshNodePort('output', isExist, func);
-			hotRefreshNodePort('input', isExist, func);
+			hotRefreshNodePort(namespace_, 'output', isExist, func);
+			hotRefreshNodePort(namespace_, 'input', isExist, func);
 			hotRefreshNodeClass(isExist, func);
 		}
 	}
@@ -1134,7 +1134,7 @@ function deepPrototypeFindAndSet(objClazz, old, now){
 	else deepPrototypeFindAndSet(current, old, now);
 }
 
-function hotRefreshNodePort(which, oldClaz, newClaz){
+function hotRefreshNodePort(namespace, which, oldClaz, newClaz){
 	let old = oldClaz[which];
 	let now = newClaz[which];
 
@@ -1156,6 +1156,8 @@ function hotRefreshNodePort(which, oldClaz, newClaz){
 
 		for (let i=0; i < ifaces.length; i++) {
 			let node = ifaces[i].node;
+			if(node.iface.namespace !== namespace) continue;
+
 			for (let a=0; a < remove.length; a++) {
 				node.deletePort(which, remove[a]);
 			}
