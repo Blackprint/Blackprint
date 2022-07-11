@@ -89,15 +89,29 @@ function createNodesMenu(list, sketch, ev, pos, opt){
 	}
 
 	let container = sketch.scope('container');
-	function createNode(namespace){
-		let iface = sketch.createNode(namespace, {
-			x: (pos ? pos.x : ev.clientX) / container.scale - container.offset.x - container.pos.x,
-			y: (pos ? pos.y : ev.clientY) / container.scale - container.offset.y - container.pos.y,
-		});
+	let position = {
+		x: (pos ? pos.x : ev.clientX),
+		y: (pos ? pos.y : ev.clientY),
+	};
+	let coordinate = {
+		x: position.x / container.scale - container.offset.x - container.pos.x,
+		y: position.y / container.scale - container.offset.y - container.pos.y,
+	};
 
-		opt?.onCreated?.(iface);
+	function createNode(namespace){
+		let iface = sketch.createNode(namespace, coordinate);
+		opt.onCreated?.(iface);
 	}
 
+	let cancelMenu = false;
+	Blackprint.emit('menu.create.node', { 
+		list, sketch, position, coordinate, isSuggestion: opt.suggest ?? false, 
+		preventDefault(){
+			cancelMenu = tree;
+		}
+	});
+
+	if(cancelMenu) return;
 	deep(list, menu);
 
 	menu = menu.sort((a, b) => a.title < b.title ? -1 : 1);

@@ -157,6 +157,7 @@ Space.model('nodes', function(My, include){
 
 	My.menu = function(ev, availableNode, options){
 		ev.preventDefault();
+		options ??= {};
 
 		let menu = createNodesMenu(availableNode ?? Blackprint.availableNode, My.$space.sketch, ev, null, options);
 		include('dropdown').show(menu, {x: ev.clientX, y: ev.clientY, event: ev});
