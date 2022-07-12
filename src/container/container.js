@@ -138,7 +138,7 @@ Space.model('container', function(My, include){
 			var temp = My.pos.x + movementX;
 
 			if(temp > 0) temp = 0;
-			else My._posNoScale.x += movementX / My.scale;
+			My._posNoScale.x = temp / My.scale;
 
 			My.size.w = (My.origSize.w - temp) / My.scale;
 			My.pos.x = temp;
@@ -150,7 +150,7 @@ Space.model('container', function(My, include){
 			var temp = My.pos.y + movementY;
 
 			if(temp > 0) temp = 0;
-			else My._posNoScale.y += movementY / My.scale;
+			My._posNoScale.y = temp / My.scale;
 
 			My.size.h = (My.origSize.h - temp) / My.scale;
 			My.pos.y = temp;
@@ -325,6 +325,28 @@ Space.model('container', function(My, include){
 		};
 	}
 
+	let lastTouch = null;
+	let NOOP = ()=>{};
+	function touchScale(ev){
+		let touch = ev.touches[2];
+		if(touch == null) return;
+		if(lastTouch === null) lastTouch = touch;
+
+		let dy = lastTouch.clientY - touch.clientY;
+
+		// ToDo: Fix container position when scaling
+		if(lastTouch.dy != null){
+			My.scaleContainer({
+				scale: (dy - lastTouch.dy) / 100,
+				clientX: lastTouch.clientX,
+				clientY: lastTouch.clientY,
+				preventDefault: NOOP,
+			});
+		}
+
+		lastTouch.dy = dy;
+	}
+
 	My.checkTouch = function(ev){
 		if(ev.touches.length === 2){
 			if(_stopSelect != null) _stopSelect(); // disable selection
@@ -333,6 +355,21 @@ Space.model('container', function(My, include){
 			ev.preventDefault();
 
 			My.moveContainer({button: 1});
+			My.$el.off('touchmove', touchScale);
+		}
+		else if(ev.touches.length === 3){
+			if(_stopSelect != null) _stopSelect(); // disable selection
+
+			ev.stopPropagation();
+			ev.preventDefault();
+
+			lastTouch = null;
+			My.$el.on('touchmove', touchScale);
+			My.$el.off('pointermove', moveContainer);
+		}
+		else{
+			My.$el.off('touchmove', touchScale);
+			My.$el.off('pointermove', moveContainer);
 		}
 	}
 
@@ -376,7 +413,7 @@ Space.model('container', function(My, include){
 		}
 		else{
 			// Mouse scroll delta Y
-			var delta = ev.deltaY/100 * (My.scale < 1 ? 0.05 : 0.1);
+			var delta = ev.deltaY/100 * (My.scale <= 1.05 ? 0.05 : 0.1);
 			var scale = My.scale - delta;
 		}
 
