@@ -277,6 +277,8 @@ class Cable extends Blackprint.Engine.Cable {
 					afterCreated: isCreating
 				});
 			});
+
+			this._scope.sketch.emit('cable.drag', { cable });
 		}
 
 		if(isCreating){
