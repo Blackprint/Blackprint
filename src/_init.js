@@ -980,9 +980,6 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		let switchVFX = !body.hasClass('blackprint-no-vfx');
 		if(switchVFX) body.addClass('blackprint-no-vfx');
 
-		if(this.ifaceList.length === 0 || this.ifaceList[0].$el == null)
-			return;
-
 		await $.afterRepaint();
 		this.scope('container').resetOffset();
 		await $.afterRepaint();
