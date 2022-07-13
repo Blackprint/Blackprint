@@ -94,17 +94,16 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 		}
 
 		if(!Blackprint.settings.windowless){
-			let { offset, pos } = this._scope('container');
+			let { offset, pos, scale } = this._scope('container');
 
 			let el_;
 			if(_ev == null) el_ = this._inElement[0];
 			else el_ = sf.Window.source(this._inElement, _ev);
 
 			let rect = el_.getBoundingClientRect();
-			let center = rect.width / 2;
-
-			cable.head2[0] = rect.x + center - pos.x - offset.x;
-			cable.head2[1] = rect.y + center - pos.y - offset.y;
+			
+			cable.head2[0] = (rect.x+(rect.width/2) - offset.x - pos.x) / scale;
+			cable.head2[1] = (rect.y+(rect.height/2) - offset.y - pos.y) / scale;
 		}
 
 		return super.connectCable(cable);
