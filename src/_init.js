@@ -188,6 +188,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		var inserted = this.ifaceList;
 		var handlers = []; // nodes
 		let isCleanImport = inserted.length === 0;
+		let appendLength = options.appendMode ? inserted.length : 0;
 
 		// Prepare all nodes depend on the namespace
 		// before we create cables for them
@@ -198,6 +199,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				// Every nodes that using this namespace name
 				for (var a = 0; a < nodes.length; a++){
 					let temp = nodes[a];
+					temp.i += appendLength;
+	
 					let iface = this.createNode(namespace, {
 						x: temp.x,
 						y: temp.y,
@@ -208,6 +211,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 						comment: temp.comment,
 						data: temp.data, // if exist
 						oldIface: oldIfaces[temp.id],
+						input_d: temp.input_d,
 					}, handlers);
 
 					// For custom function node
@@ -274,6 +278,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 						// Current output's available targets
 						for (var k = 0; k < port.length; k++) {
 							var target = port[k];
+							target.i += appendLength;
+			
 							var targetNode = inserted[target.i];
 
 							// Output can only meet input port
@@ -458,14 +464,18 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			if(options.comment !== false && iface.comment)
 				data.comment = iface.comment;
 
-			if(iface.data !== void 0){
-				if(iface.data.exportData != null)
-					data.data = iface.data.exportData();
-				else {
-					data.data = {};
-					deepCopy(data.data, iface.data);
-				}
+			if(iface.exportData != null){
+				let temp = iface.exportData();
+				if(temp != null) data.data = temp;
 			}
+			else if (iface.data !== void 0){
+				data.data = {};
+				deepCopy(data.data, iface.data);
+			}
+
+			let defaultInputData = iface._exportInputs();
+			if(defaultInputData != null)
+				data.input_d = defaultInputData;
 
 			let cableMetadata = {};
 			let hasCableMetadata = false;
@@ -868,9 +878,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				throw e;
 			}
 
-			iface.input ??= {_portList: []};
-			iface.output ??= {_portList: []};
-			iface.property ??= {_portList: []};
+			iface.input ??= createEmptyPortList();
+			iface.output ??= createEmptyPortList();
+			iface.property ??= createEmptyPortList();
 		}
 
 		// Create the linker between the node and the iface
@@ -882,9 +892,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				throw e;
 			}
 
-			iface.input ??= {_portList: []};
-			iface.output ??= {_portList: []};
-			iface.property ??= {_portList: []};
+			iface.input ??= createEmptyPortList();
+			iface.output ??= createEmptyPortList();
+			iface.property ??= createEmptyPortList();
 
 			// Replace port prototype (intepreter port -> visual port)
 			let _ports = Blackprint.Interface._ports;
@@ -898,7 +908,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		}
 
 		var savedData = options.data;
+		var defaultInputData = options.input_d;
 		delete options.data;
+		delete options.input_d;
 
 		// Assign the iface options (x, y, id, ...)
 		Object.assign(iface, options);
@@ -928,11 +940,16 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			this.ifaceList[iface.i] = iface;
 		else this.ifaceList.push(iface);
 
+		if(defaultInputData != null)
+			iface._importInputs(defaultInputData);
+
+		iface.initInputPort();
+
 		iface.importing = false;
 		iface.comment = options.comment || '';
 
-		if(iface.imported) iface.imported(savedData);
-		if(node.imported) node.imported(savedData);
+		iface.imported?.(savedData);
+		node.imported?.(savedData);
 
 		if(handlers !== void 0)
 			handlers.push(node);
@@ -1096,6 +1113,12 @@ Blackprint.registerNode = function(namespace, func, _fromDecorator=false){
 		url: (new Error(1)).stack.split('\n')[_fromDecorator ? 3 : 2].split('://')[1],
 		rawText: namespace_
 	};
+}
+
+function createEmptyPortList(){
+	let temp = {};
+	Object.defineProperty(temp, '_portList', {configurable: true, value: []});
+	return temp;
 }
 
 function hotRefreshNodeClass(old, now){

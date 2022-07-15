@@ -367,8 +367,73 @@ Blackprint.Interface = class Interface extends sf.Model {
 
 		if(tags?.summary != null) this.description = tags.summary;
 	}
+	async _recalculateSize(){
+		await $.afterRepaint();
+
+		this.$space('nodes')._recalculate([{
+			target: {model: this},
+			contentRect: this.$el[0].firstElementChild.getBoundingClientRect(),
+		}]);
+	}
+	initInputPort(){
+		let _debounce;
+		let inputs = this.input;
+		let update = ()=> this.node.update();
+
+		for(let key in inputs){
+			let port = inputs[key];
+			let type = 'string';
+
+			if(port.type === Number) type = 'number';
+			else if(port.type === Boolean) type = 'checkbox';
+			else if(port.type !== String) continue; // Skip if not Number/Boolean/String
+
+			let item = port._boxInput = {
+				value: port.default ?? '',
+				visible: true,
+				type,
+				whenChanged(now){
+					clearTimeout(_debounce);
+					_debounce = setTimeout(update, 700);
+
+					return port.default = type === 'number' ? +now : now;
+				}
+			};
+
+			port.insertComponent(null, 'comp-port-input', item);
+			port.on('connect', ()=> this._assignDefault(item, false, port));
+			port.on('disconnect', ()=> this._assignDefault(item, true, port));
+		}
+	}
+	_assignDefault(item, isDisconnect, port){
+		item.visible = isDisconnect;
+		if(isDisconnect)
+			port.default = port._defaultTemp;
+		else {
+			port._defaultTemp = port.default
+			port.default = undefined;
+		}
+
+		this._recalculateSize();
+	}
+	_exportInputs(){
+		let portData = {};
+		let inputs = this.input;
+		let hasData = false;
+
+		for(let key in inputs){
+			let port = inputs[key];
+			if(port.cables.length === 0 && port.default){
+				hasData = true;
+				portData[key] = port.default;
+			}
+		}
+
+		return hasData ? portData : null;
+	}
 };
 
+Blackprint.Interface.prototype._importInputs = EngineInterface.prototype._importInputs;
 
 var IFaceDecoration = Blackprint.Interface.Decoration = class IFaceDecoration {
 	constructor(iface){
