@@ -1,24 +1,33 @@
 ## html
-<comp-port-input>
-	(<input @pointerdown="click" @pointerup="click" sf-bind="default">)
+<comp-port-input style="display: {{ visible ? '' : 'none' }}">
+	(<input @pointerdown="click" @pointerup="click" sf-bind="value">)
 </comp-port-input>
 
 
 ## js-global
 Blackprint.space.component('comp-port-input', {
-	template: #this.path // 'Blackprint/component/comp-port-input.sf'
-}, function(My, include){
-	var whichBind = My.which;
-	My.default = My.obj[whichBind];
+	template: #this.path, // 'Blackprint/component/comp-port-input.sf'
+	extend: class extends sf.Model {
+		async beforeInit(){
+			let noData = this.noData = this.which == null;
 
-	My.v2m$default = My.whenChanged || function(now){
-		My.obj[whichBind] = now;
-	}
+			this.visible ??= true;
+			this.value ??= this.data[this.which];
 
-	My.click = function(ev){
-		ev.stopPropagation();
+			if(this.whenChanged != null)
+				this.v2m$value = this.whenChanged;
+		}
+
+		v2m$value(now){
+			if(this.noData) return;
+			this.data[this.which] = now;
+		}
+
+		click(ev){
+			ev.stopPropagation();
+		}
 	}
-});
+}, ()=> {});
 
 
 ## scss-global

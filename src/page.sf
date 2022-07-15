@@ -566,6 +566,7 @@ sf-space[blackprint]{
       .input{
         padding-right: 20px;
         margin-left: 5px;
+        white-space: nowrap;
 
         .Function .port{
           float: left;
