@@ -430,7 +430,6 @@ sf-space[blackprint]{
 
       .content{
         display: inline;
-        margin-top: 2px;
         width: 100%;
 
         &.header-small{
@@ -571,6 +570,17 @@ sf-space[blackprint]{
         .Function .port{
           float: left;
           margin-left: -2px;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+          -moz-appearance: textfield;
         }
       }
 
