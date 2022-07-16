@@ -1,6 +1,6 @@
 ## html
 <comp-port-input style="display: {{ visible ? '' : 'none' }}">
-	(<input @pointerdown="click" @pointerup="click" sf-bind="value">)
+	(<input @pointerdown="click" @pointerup="click" type="{{ type }}" sf-bind="value">)
 </comp-port-input>
 
 
@@ -12,6 +12,7 @@ Blackprint.space.component('comp-port-input', {
 			let noData = this.noData = this.which == null;
 
 			this.visible ??= true;
+			this.type ??= 'string';
 			this.value ??= this.data[this.which];
 
 			if(this.whenChanged != null)
