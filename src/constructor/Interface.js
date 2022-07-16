@@ -378,7 +378,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 	initInputPort(){
 		let _debounce;
 		let inputs = this.input;
-		let update = ()=> this.node.update();
+		let update = ()=> this.node.update?.();
 
 		for(let key in inputs){
 			let port = inputs[key];
