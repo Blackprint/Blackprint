@@ -142,6 +142,10 @@ sf-space[blackprint]{
       path{stroke: #{$color}}
     }
 
+    .BP-Hide{
+      display: none;
+    }
+
     .nodes .node .ports.#{$type} {
       & > .port {
         background: #{$color};

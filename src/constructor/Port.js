@@ -175,6 +175,20 @@ class Port extends Blackprint.Engine.Port {
 			scope('dropdown').show(menu, pos);
 		}
 
+		let { StructOf } = Blackprint.Port;
+		if(port.feature === StructOf){
+			menu.push({
+				title: "Split Struct",
+				callback(){ StructOf.split(port) },
+			});
+		}
+		else if(port._structSplitted){
+			menu.push({
+				title: "Unsplit Struct",
+				callback(){ StructOf.unsplit(port) },
+			});
+		}
+
 		let event = {iface: this, instance: scope.sketch, port, menu};
 		this.iface.emit('port.menu', event);
 		scope.sketch.emit('port.menu', event);

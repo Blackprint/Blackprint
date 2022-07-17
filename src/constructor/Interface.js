@@ -368,6 +368,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 		if(tags?.summary != null) this.description = tags.summary;
 	}
 	async _recalculateSize(){
+		if(Blackprint.settings.windowless) return;
 		await $.afterRepaint();
 
 		this.$space('nodes')._recalculate([{
@@ -387,6 +388,8 @@ Blackprint.Interface = class Interface extends sf.Model {
 			if(port.type === Number) type = 'number';
 			else if(port.type === Boolean) type = 'checkbox';
 			else if(port.type !== String) continue; // Skip if not Number/Boolean/String
+
+			port._mainDefault = port.default;
 
 			let item = port._boxInput = {
 				value: port.default ?? '',
@@ -410,8 +413,8 @@ Blackprint.Interface = class Interface extends sf.Model {
 		if(isDisconnect)
 			port.default = port._defaultTemp;
 		else {
-			port._defaultTemp = port.default
-			port.default = undefined;
+			port._defaultTemp = port.default;
+			port.default = port._mainDefault;
 		}
 
 		this._recalculateSize();
@@ -423,7 +426,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 
 		for(let key in inputs){
 			let port = inputs[key];
-			if(port.cables.length === 0 && port.default){
+			if(port.cables.length === 0 && port.default != null){
 				hasData = true;
 				portData[key] = port.default;
 			}
