@@ -212,6 +212,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 						data: temp.data, // if exist
 						oldIface: oldIfaces[temp.id],
 						input_d: temp.input_d,
+						output_sp: temp.output_sp,
 					}, handlers);
 
 					// For custom function node
@@ -483,12 +484,19 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			if(iface.output !== void 0){
 				var output = data.output = {};
 				var _list = iface.output._portList;
+				var hasSplit = false;
+				var splittedPort = {};
 
 				var haveValue = false;
 				for (var g = 0; g < _list.length; g++) {
 					var port = _list[g];
 					var name = port.name;
 					var cables = port.cables;
+
+					if(port.splitted){
+						hasSplit = true;
+						splittedPort[port.name] = true;
+					}
 
 					if(cables.length === 0)
 						continue;
@@ -585,6 +593,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 				if(haveValue === false)
 					delete data.output;
+
+				if(hasSplit)
+					data.output_sp = splittedPort;
 			}
 
 			let routeToIface = iface.node.routes?.out?.input?.iface;
@@ -909,8 +920,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		var savedData = options.data;
 		var defaultInputData = options.input_d;
+		var splittedPort = options.output_sp;
 		delete options.data;
 		delete options.input_d;
+		delete options.output_sp;
 
 		// Assign the iface options (x, y, id, ...)
 		Object.assign(iface, options);
@@ -942,6 +955,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		if(defaultInputData != null)
 			iface._importInputs(defaultInputData);
+
+		if(splittedPort != null){
+			for (let key in splittedPort) {
+				Blackprint.Port.StructOf.split(iface.output[key]);
+			}
+		}
 
 		iface.initInputPort();
 
