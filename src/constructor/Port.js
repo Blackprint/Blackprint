@@ -179,13 +179,19 @@ class Port extends Blackprint.Engine.Port {
 		if(port.feature === StructOf){
 			menu.push({
 				title: "Split Struct",
-				callback(){ StructOf.split(port) },
+				callback(){
+					StructOf.split(port);
+					port.iface.node.instance.emit('_port.split', { port });
+				},
 			});
 		}
 		else if(port._structSplitted){
 			menu.push({
 				title: "Unsplit Struct",
-				callback(){ StructOf.unsplit(port) },
+				callback(){
+					StructOf.unsplit(port);
+					port.iface.node.instance.emit('_port.unsplit', { port });
+				},
 			});
 		}
 

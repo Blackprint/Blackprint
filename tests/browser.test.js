@@ -90,7 +90,20 @@ describe("Blackprint register", () => {
 				In: Number,
 				Dummy: String,
 			}
-			static output = { Out: String }
+			
+			static output = {
+				Out: String,
+				StructTest: Blackprint.Port.StructOf(Object, {
+					Num: {
+						type: Number,
+						handle(data){return data.num}
+					},
+					Str: {
+						type: String,
+						field: 'str'
+					},
+				}),
+			}
 
 			constructor(instance){
 				super(instance);
@@ -120,6 +133,23 @@ describe("Blackprint register", () => {
 				// test('Node2: check default port value')
 				expect(Input.In).toBe(0);
 				expect(Output.Out).toBe(undefined);
+
+				Output.StructTest = {str: 'hello1', num: 1234};
+				Blackprint.Port.StructOf.split(IOutput.StructTest);
+				expect(IOutput.StructTestStr).toBeDefined();
+				expect(IOutput.StructTestNum).toBeDefined();
+				expect(Output.StructTestStr).toBe('hello1');
+				expect(Output.StructTestNum).toBe(1234);
+
+				let temp = {str: 'hello', num: 123};
+				Output.StructTest = temp;
+				expect(Output.StructTestStr).toBe('hello');
+				expect(Output.StructTestNum).toBe(123);
+
+				Blackprint.Port.StructOf.unsplit(IOutput.StructTest);
+				expect(Output.StructTest).toBe(temp);
+				expect(IOutput.StructTestStr).not.toBeDefined();
+				expect(IOutput.StructTestNum).not.toBeDefined();
 			}
 
 			_destroyed = false;
