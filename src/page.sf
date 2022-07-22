@@ -136,14 +136,14 @@ sf-space[blackprint]{
     }
   }
 
+  .BP-Hide{
+    display: none;
+  }
+
   @mixin portType($type, $color) {
     .cables > svg > g.#{$type} {
       circle{fill: #{$color}}
       path{stroke: #{$color}}
-    }
-
-    .BP-Hide{
-      display: none;
     }
 
     .nodes .node .ports.#{$type} {
@@ -181,6 +181,34 @@ sf-space[blackprint]{
         width: 7px;
     }
   // BP-Route
+
+  // BP-StructOf
+  .nodes .node .ports {
+    &.BP-StructOf {
+      & > .port {
+          overflow: hidden;
+          &:after {
+            content: '';
+            background: #ffffff;
+            width: 100%;
+            height: 100%;
+            transform: translate(4px, -4px) rotate(45deg);
+            outline: 2px black dashed;
+          }
+      }
+      &.BP-Open {
+        display: none; // ToDo: remove me
+        margin: 10px 10px 0 0;
+        .port{
+          display: none;
+        }
+      }
+    }
+    &.BP-StructSplit.BP-Last {
+      margin-bottom: 10px;
+    }
+  }
+  // BP-StructOf
 
   .cables > svg > g.BP-Route path {
     stroke-dasharray: 10px;

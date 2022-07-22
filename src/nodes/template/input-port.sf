@@ -7,7 +7,7 @@
         @pointerup.left="val.connectCable()"
         @pointerover="val.portHovered(event)"
         @pointerout="val.portUnhovered(event)">
-    <div class="port" title="{{ val.classAdd + (val.type._name || val.type.name) }}"></div>
+    <div class="port" title="{{ val.classAdd.replace(/BP\-\w+/g, '') + (val.type._name || val.type.name) }}"></div>
     <div class="name">{{ val.name }}</div>
   </div>
 </div>
