@@ -1,3 +1,52 @@
+# 0.7.0
+
+### Features
+- Add feature to split port with structure
+- Add feature to use default input port data
+- Add type for input box in port's default value
+- Add zoom feature for touch screen
+- Add callback when a node was created from menu
+- Add feature to change cable orientation
+- Add JSDocs extractor for Blackprint documenter
+- Add `.registerDocs` for adding description to nodes and port
+- Add TypeScript definition file 
+- Add route port feature
+- Add default event handler for unsupported dynamic port
+- Add node for using function port as variable node
+- Emit event when constructing nodes menu
+- Emit event when the cable is being drag
+- Emit event when moving node and some modification
+- Emit internal event when splitting port and add unit test
+- Redesign node for variable and environment
+- Use data export handler if `.exportData` exist on iface
+
+### Bug Fix
+- Fix route error when there are no update function
+- Fix incorrect route cable position when the container was scaled
+- Fix error when the hot reload find an `undefined` port
+- Fix bug for touch screen
+- Fix dropdown event and cable for touch screen
+- Fix incorrect cable position when the container was moved
+- Fix cable position on cloned window and simplify implementation
+- Fix container offset when being used from different container style
+- Fix header info that was not cloned when using multiple container
+- Fix flow visualization when using multiple container
+- Fix style recalculation and source resolver
+- Fix hot reload
+- Fix recalculation for route cable and update style
+- Fix error when cable list haven't been initialized
+- Fix incorrect minimap container scale
+- Fix cable branch creation inside a function
+- Fix editor's left side panel
+- Fix `cable.disconnect` event that not emitted on iface
+- Fix minimal export for function and add option to skip comment
+- Fix import index and node `z-index`
+- Allow recalculation when no nodes on container
+- Skip flow visualization if cable path is not defined
+
+### Breaking Changes
+- Blackprint Engine v0.7 is required (for more information please see the changelog)
+
 # 0.6.9
 
 ### Features

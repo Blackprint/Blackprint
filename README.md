@@ -48,10 +48,17 @@ If you just want to execute exported Blackprint JSON, you can just use the engin
 | --- | --- | --- | --- |
 | `LeftClick + move` | `1 touch + move` | Container | Select nodes and cable<br>branch |
 | `Middle/Right click + move` | `2 touch + move` | Container | Move the container |
-| `Ctrl + MouseWheel`<br>`RightClick + MouseWheel` | - | Container | Zoom the container |
+| `Ctrl + MouseWheel`<br>`RightClick + MouseWheel` | `3 touch + move` | Container | Zoom the container |
 | `RightClick` | `tap hold 1 sec` | Node, Cable, Container | Context menu |
 | `Ctrl + LeftClick` | - | Cable | Create cable branch |
 | `Ctrl + RightClick` | - | Port, Cable | Node suggestion |
+
+## Available Shortcut for Blackprint Editor
+| Mouse + Keyboard | Touchscreen | Target | Description |
+| --- | --- | --- | --- |
+| `Ctrl + C` | - | Selected Node | Copy nodes |
+| `Ctrl + V` | - | Selected Node | Paste copied nodes |
+| `Delete` | - | Selected Node | Delete node |
 | `Ctrl + Alt + LeftClick` | - | Anything | ScarletsFrame's element<br>inspector (dev mode) |
 
 ---
@@ -66,7 +73,7 @@ Blackprint Engine
     <th rowspan="2">Name</th>
     <th colspan="2">JavaScript</th>
     <th rowspan="2">PHP</th>
-    <th rowspan="2">Golang</th>
+    <th rowspan="2" title="Please request on Discord if you want this updated">Golang</th>
     <th rowspan="2">Python</th>
     <th rowspan="2">C#</th>
   </tr>
@@ -96,25 +103,34 @@ Blackprint Engine
   </tr>
   <tr>
     <td>Environment variables</td>
-    <td>✔️</td>  <td>✔️</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
+    <td>✔️</td>  <td>✔️</td>  <td>✔️</td>  <td>-</td>  <td>-</td>  <td>-</td>
   </tr>
   <tr>
     <td>Import modules from URL</td>
-    <td>✔️</td>  <td>✔️</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
+    <td>✔️</td>  <td>✔️</td>  <td title="You need to use package manager to install node modules">✖</td>  <td title="You need to manually import the node module">✖</td>  <td title="You need to manually import the node module">✖</td>  <td title="You need to use package manager to install the node module">✖</td>
   </tr>
   <tr>
     <td>Pausable and routable data flow</td>
-    <td>🚧</td>  <td>🚧</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
+    <td>🧪</td>  <td>🧪</td>  <td>🧪</td>  <td>-</td>  <td>-</td>  <td>-</td>
   </tr>
   <tr>
     <td>Remote control</td>
-    <td>🧪</td>  <td>🧪</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
+    <td>🧪</td>  <td>🧪</td>  <td title="It may be useful for Socket application, but I think only useful for that">❔</td>  <td>-</td>  <td>-</td>  <td>-</td>
+  </tr>
+  <tr>
+    <td>Code generation</td>
+    <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
   </tr>
 </tbody>
 </table>
 
 > 🚧 = Under development (In the current working plan)<br>
 > 🧪 = Experimental/Alpha stage (Being tested and may have rapid changes)<br>
+> ✖  = Not supported (Either it can't be implemented or it has better solution)<br>
+> ❔  = Should we add the feature? (The feature may be skipped)<br>
+> -   = Haven't been decided<br>
+
+---
 
 With remote control you can easily manage connection to the target environment (Node.js/PHP/etc) from the browser. Please always run your app inside of container (like Docker) if you allow someone to remote control your system.
 
@@ -129,13 +145,12 @@ Example case where you may need remote control:
 - [ ] Blackprint Sketch (this repository)
   - [x] Mirrored sketch on detachable window
   - [x] Mini sketch for preview
-  - [x] Hot Reload 🧪
+  - [x] Hot Reload
   - [x] Export single sketch to JSON
   - [x] Importable minimal sketch for different project
   - [x] Select and move multiple nodes at once
     - [x] Bulk delete
     - [x] Add feature to put nodes into a group
-    - [ ] Create a function from nodes 🚧
   - [x] Clicked nodes should be moved on front of the other nodes (z-index)
   - [x] Automatically put cable on suitable port when it's dropped on top of a node
   - [x] Add feature to arrange cable (cable branching)
@@ -144,11 +159,12 @@ Example case where you may need remote control:
   - [ ] Add feature to import node skeleton (use default node, and no execution)
     - [ ] Create addons for VS Code for previewing exported Blackprint
     - [ ] Add JSON preview for Visual Studio Code
+  - [x] Add TypeScript definition file
 - [ ] Blackprint Editor ([repository](https://github.com/Blackprint/blackprint.github.io))
-  - [x] [Demo](https://blackprint.github.io)
+  - [x] [Online editor](https://blackprint.github.io)
   - [x] Basic nodes editor
-  - [x] Detachable window (with ScarletsFrame)
-  - [x] Add Environment Variables editor 🧪
+  - [x] Detachable window and minimap
+  - [x] Add Environment Variables editor
   - [x] Import sketch from URL
   - [ ] Move current sketch with minimap
   - [x] Node list editor (right click and from side panel)
@@ -159,10 +175,10 @@ Example case where you may need remote control:
 - [ ] Simplify node development for new developer
   - [x] Auto `blackprint.config.js` import
   - [ ] Add example for using ES6 modules importing system
-    - It's possible to use Snowpack or something else, but it currently can't compile `.sf`
 - [ ] Better documentation
-  - [ ] Add TypeScript definition file
-- [ ] Nodes docs generator
+  - [x] Add in-editor node documentation in a tooltip 🧪
+  - [ ] Nodes docs generator
+  - [x] Add TypeScript definition file
 - [ ] Blackprint Nodes Package Manager
   - [x] Use NPM registry for Node.js/Deno/Browser
 
