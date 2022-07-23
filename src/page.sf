@@ -140,6 +140,10 @@ sf-space[blackprint]{
     display: none;
   }
 
+  .BP-AllowResync {
+    color: yellow;
+  }
+
   @mixin portType($type, $color) {
     .cables > svg > g.#{$type} {
       circle{fill: #{$color}}

@@ -212,7 +212,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 						data: temp.data, // if exist
 						oldIface: oldIfaces[temp.id],
 						input_d: temp.input_d,
-						output_sp: temp.output_sp,
+						output_sw: temp.output_sw,
 					}, handlers);
 
 					// For custom function node
@@ -482,20 +482,24 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			let hasCableMetadata = false;
 
 			if(iface.output !== void 0){
-				var output = data.output = {};
-				var _list = iface.output._portList;
-				var hasSplit = false;
-				var splittedPort = {};
+				let output = data.output = {};
+				let _list = iface.output._portList;
+				let internalSwitch = {}; // 1 = splitted, 2 = allowResync
+				let hasSwitches = false;
 
-				var haveValue = false;
-				for (var g = 0; g < _list.length; g++) {
-					var port = _list[g];
-					var name = port.name;
-					var cables = port.cables;
+				let haveValue = false;
+				for (let g = 0; g < _list.length; g++) {
+					let port = _list[g];
+					let name = port.name;
+					let cables = port.cables;
+					let switches = 0;
 
-					if(port.splitted){
-						hasSplit = true;
-						splittedPort[port.name] = true;
+					if(port.splitted) switches |= 1;
+					if(port.allowResync) switches |= 2;
+
+					if(switches !== 0){
+						internalSwitch[port.name] = switches;
+						hasSwitches = true;
 					}
 
 					if(cables.length === 0)
@@ -594,8 +598,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				if(haveValue === false)
 					delete data.output;
 
-				if(hasSplit)
-					data.output_sp = splittedPort;
+				if(hasSwitches)
+					data.output_sw = internalSwitch;
 			}
 
 			let routeToIface = iface.node.routes?.out?.input?.iface;
@@ -920,10 +924,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		var savedData = options.data;
 		var defaultInputData = options.input_d;
-		var splittedPort = options.output_sp;
+		var portSwitches = options.output_sw;
 		delete options.data;
 		delete options.input_d;
-		delete options.output_sp;
+		delete options.output_sw;
 
 		// Assign the iface options (x, y, id, ...)
 		Object.assign(iface, options);
@@ -956,9 +960,18 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(defaultInputData != null)
 			iface._importInputs(defaultInputData);
 
-		if(splittedPort != null){
-			for (let key in splittedPort) {
-				Blackprint.Port.StructOf.split(iface.output[key]);
+		if(portSwitches != null){
+			for (let key in portSwitches) {
+				let temp = portSwitches[key];
+				let ref = iface.output[key];
+
+				if((temp | 1) === 1)
+					Blackprint.Port.StructOf.split(ref);
+
+				if((temp | 2) === 2){
+					ref.allowResync = true;
+					ref.classAdd += 'BP-AllowResync ' + ref.classAdd;
+				}
 			}
 		}
 

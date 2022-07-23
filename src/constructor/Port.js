@@ -195,6 +195,27 @@ class Port extends Blackprint.Engine.Port {
 			});
 		}
 
+		if(port.source === 'output'){
+			if(port.allowResync === false){
+				menu.push({
+					title: "Allow Resync",
+					callback(){
+						port.allowResync = true;
+						port.classAdd = "BP-AllowResync " + port.classAdd;
+					},
+				});
+			}
+			else {
+				menu.push({
+					title: "Disallow Resync",
+					callback(){
+						port.allowResync = false;
+						port.classAdd = port.classAdd.replace('BP-AllowResync ', '');
+					},
+				});
+			}
+		}
+
 		let event = {iface: this, instance: scope.sketch, port, menu};
 		this.iface.emit('port.menu', event);
 		scope.sketch.emit('port.menu', event);
