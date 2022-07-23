@@ -173,11 +173,22 @@ module.exports = function(SFC, Gulp){
 								slice.replace(/registerNode\(['"`](.*?)['"`].*(?=registerNode\()/gms, function(full, match){
 									namespace = match;
 									full.replace(/static (input|output)(.*?)}(;|\n)/gms, function(full, which, content){
-										content.replace(/\/\*\*(.*?)\*\/\s+(.*?):/gs, function(full, docs, portName){
+										// Obtain documentation for StructOf first
+										content.replace(/^(\s+).*?(\S+):.*?\bStructOf\(.*?{(.*?)\1}/gms, function(full, s, rootName, content){
+											content.replace(/\/\*\*(.*?)\*\/\s+(.*?):/gs, function(full, docs, portName){
+												hasIO[which] = true;
+	
+												let obj = which === 'output' ? output : input;
+												obj[rootName+portName] = {description: docs.replace(/^[ \t]+?\* /gm, '').trim()};
+											});
+
+											return full.replace(content, '');
+										})
+										.replace(/\/\*\*(.*?)\*\/\s+(.*?):/gs, function(full, docs, portName){
+											hasIO[which] = true;
+
 											let obj = which === 'output' ? output : input;
 											obj[portName] = {description: docs.replace(/^[ \t]+?\* /gm, '').trim()};
-
-											hasIO[which] = true;
 										});
 									});
 								});

@@ -320,3 +320,25 @@ class Port extends Blackprint.Engine.Port {
 		}
 	}
 }
+
+// Override for adding docs in Sketch
+;{
+	let StructOf = Blackprint.Port;
+	let StructOf_split = StructOf.split;
+
+	if(!StructOf.split._overriden){
+		StructOf.split = function(port){
+			StructOf_split(port);
+			let docs = port.iface.docs?.output;
+			if(docs == null) return;
+	
+			let { struct, structList } = port.struct;
+			for (let i=0; i < structList.length; i++) {
+				let key = structList[i];
+				struct[key].docs = docs[key];
+			}
+		}
+	
+		StructOf.split._overriden = true;
+	}
+};
