@@ -323,7 +323,7 @@ class Port extends Blackprint.Engine.Port {
 
 // Override for adding docs in Sketch
 ;{
-	let StructOf = Blackprint.Port;
+	let { StructOf } = Blackprint.Port;
 	let StructOf_split = StructOf.split;
 
 	if(!StructOf.split._overriden){
@@ -332,7 +332,7 @@ class Port extends Blackprint.Engine.Port {
 			let docs = port.iface.docs?.output;
 			if(docs == null) return;
 	
-			let { struct, structList } = port.struct;
+			let { struct, structList } = port;
 			for (let i=0; i < structList.length; i++) {
 				let key = structList[i];
 				struct[key].docs = docs[key];
