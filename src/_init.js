@@ -1358,7 +1358,7 @@ Blackprint.loadScope = function(options){
 		}
 	}
 
-	if(options.hasDocs){
+	if(options.hasDocs && !Blackprint.settings.windowless){
 		let url = temp._scopeURL.replace(/(|\.min|\.es6)\.(js|mjs|ts)$/m, '');
 		sf.$.getJSON(url+'.docs.json').then(Blackprint.Sketch.registerDocs);
 	}
