@@ -28,6 +28,8 @@ Blackprint.Sketch.suggestNode = function(source, clazz, fromList){
 						if(clazz === Function)
 							continue;
 
+						if(ref.skipSuggestTypeAny) continue;
+
 						match = true;
 						continue;
 					}
@@ -44,6 +46,8 @@ Blackprint.Sketch.suggestNode = function(source, clazz, fromList){
 							}
 
 							if(temp.portType === Blackprint.Types.Any){
+								if(ref.skipSuggestTypeAny) continue;
+
 								if(clazz !== Function)
 									match = true;
 
@@ -51,7 +55,7 @@ Blackprint.Sketch.suggestNode = function(source, clazz, fromList){
 							}
 
 							if(temp.portFeature === BP_Port.Union){
-								match = checkTypeInstance(source, clazz, temp.portType);
+								match = checkTypeInstance(source, clazz, temp.portType, ref);
 								if(match) break;
 
 								continue;
@@ -65,12 +69,13 @@ Blackprint.Sketch.suggestNode = function(source, clazz, fromList){
 						continue;
 
 					if(clazz.any != null){
-						if(temp === Function) continue;
+						if(temp === Function || ref.skipSuggestTypeAny) continue;
+
 						match = true;
 						break;
 					}
 
-					match = checkTypeInstance(source, clazz, temp);
+					match = checkTypeInstance(source, clazz, temp, ref);
 					if(match) break;
 				}
 
@@ -90,17 +95,20 @@ Blackprint.Sketch.suggestNode = function(source, clazz, fromList){
 	else return {};
 }
 
-function checkTypeInstance(source, clazz, target){
+function checkTypeInstance(source, clazz, target, nodeClass){
 	if(target === clazz)
 		return true;
 
 	if(source === 'output'){
 		if(clazz === Object) return false;
-		if(clazz.any || target.any) return true;
+		if(clazz.any || target.any){
+			if(nodeClass.skipSuggestTypeAny) return false;
+			return true;
+		}
 
 		if(clazz.constructor === Array){
 			for (var i = 0; i < clazz.length; i++) {
-				if(checkTypeInstance(source, clazz[i], target))
+				if(checkTypeInstance(source, clazz[i], target, nodeClass))
 					return true;
 			}
 
@@ -113,11 +121,14 @@ function checkTypeInstance(source, clazz, target){
 
 	if(source === 'input'){
 		if(target === Object) return false;
-		if(clazz.any || target.any) return true;
+		if(clazz.any || target.any){
+			if(nodeClass.skipSuggestTypeAny) return false;
+			return true;
+		}
 
 		if(target.constructor === Array){
 			for (var i = 0; i < target.length; i++) {
-				if(checkTypeInstance(source, target[i], clazz))
+				if(checkTypeInstance(source, target[i], clazz, nodeClass))
 					return true;
 			}
 
