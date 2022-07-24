@@ -427,6 +427,9 @@ Blackprint.Interface = class Interface extends sf.Model {
 		for(let key in inputs){
 			let port = inputs[key];
 			if(port.cables.length === 0 && port.default != null){
+				if(port.default instanceof Object || port.default.constructor === Symbol)
+					continue;
+
 				hasData = true;
 				portData[key] = port.default;
 			}
