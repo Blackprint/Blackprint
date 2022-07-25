@@ -212,11 +212,15 @@ Blackprint.Interface = class Interface extends sf.Model {
 			}];
 		}
 
-		let event = {iface: this, instance: scope.sketch, menu};
+		let skipMenu = false;
+		let event = {iface: this, instance: scope.sketch, menu, event: ev, preventDefault(){
+			skipMenu = true;
+		}};
 
 		this.emit('node.menu', event);
 		scope.sketch.emit('node.menu', event);
 
+		if(skipMenu) return;
 		scope('dropdown').show(menu, {x: ev.clientX, y: ev.clientY, event: ev});
 	}
 

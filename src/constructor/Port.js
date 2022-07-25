@@ -216,10 +216,6 @@ class Port extends Blackprint.Engine.Port {
 			}
 		}
 
-		let event = {iface: this, instance: scope.sketch, port, menu};
-		this.iface.emit('port.menu', event);
-		scope.sketch.emit('port.menu', event);
-
 		// Prepare default menu
 		var disconnect = {title:"Disconnect", deep:[]};
 
@@ -254,6 +250,16 @@ class Port extends Blackprint.Engine.Port {
 
 		var pos = this.findPortElement(ev.target).getClientRects()[0];
 		pos.event = ev;
+
+		let skipMenu = false;
+		let event = {iface: this, instance: scope.sketch, port, menu, event: ev, position: pos, preventDefault(){
+			skipMenu = true;
+		}};
+
+		this.iface.emit('port.menu', event);
+		scope.sketch.emit('port.menu', event);
+
+		if(skipMenu) return;
 		scope('dropdown').show(menu, pos);
 	}
 
