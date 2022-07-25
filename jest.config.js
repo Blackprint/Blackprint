@@ -155,6 +155,7 @@ module.exports = {
   testPathIgnorePatterns: [
     "(\\\\|/)node_modules(\\\\|/)",
     "(\\\\|/)nodes(\\\\|/)",
+    "(\\\\|/)template-js(\\\\|/)",
     "(\\\\|/)templates(\\\\|/)"
   ],
 

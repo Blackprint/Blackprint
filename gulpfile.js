@@ -129,11 +129,19 @@ let SFC = require("scarletsframe-compiler")({
 		ghostMode: false, // Use synchronization between browser?
 		ui: false,
 		open: false,
+		// https: true,
 
 		// Standalone server with BrowserSync
 		server:{
 			baseDir:'editor/',
 			index:'index.html',
+			middleware(req, res, next){
+				if(1) return next(); // Comment this to allow CORS
+
+				res.setHeader("Access-Control-Allow-Methods", "GET");
+				res.setHeader('Access-Control-Allow-Origin', '*');
+				next();
+			},
 		    routes: {
 		        "/dist": "dist"
 		    }
