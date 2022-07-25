@@ -151,68 +151,82 @@ module.exports = function(SFC, Gulp){
 						dir = dir.replace('@cwd', __dirname);
 
 					that.onEvent = {
-						fileCompiled(content){that.onEvent.fileModify(content)},
+						fileCompiled(content, rawContent){that.onEvent.fileModify(rawContent || content)},
 						fileModify(content, filePath){
-							content.replace(/\/\*\*(.*?)\*\//gs, function(full, match){
-								// Only process if "@blackprint" was found in the file content
-								if(!match.includes('@blackprint')) return;
+							let contents = [];
+							content.replace(/\/\*\*.*?\*\//gs, function(full, index){
+								if(!full.includes('* @blackprint')) return;
+								contents.push(index);
+							});
 
-								match = match
-									.replace(/\t+/g, '')
-									.replace(/^[ \t]+?\* /gm, '')
-									.replace(/^@blackprint.*?$\b/gm, '')
-									.trim();
+							for (let i=0; i < contents.length; i++)
+								contents[i] = content.slice(contents[i], contents[i+1]);
 
-								let output = {};
-								let input = {};
-								let hasIO = {input: false, output: false};
-								let namespace = '';
+							for (let i=0; i < contents.length; i++) {
+								content = contents[i]; // this have a purposes, don't delete before checking
+								content.replace(/\/\*\*(.*?)\*\//gs, function(full, match){
+									// Only process if "@blackprint" was found in the file content
+									if(!match.includes('@blackprint')) return;
 
-								// Get the class content below the docs
-								let slice = content.slice(content.indexOf(full)+full.length);
-								slice.replace(/registerNode\(['"`](.*?)['"`].*(?=registerNode\()/gms, function(full, match){
-									namespace = match;
-									full.replace(/static (input|output)(.*?)}(;|\n)/gms, function(full, which, content){
-										// Obtain documentation for StructOf first
-										content.replace(/^(\s+).*?(\S+):.*?\bStructOf\(.*?{(.*?)\1}/gms, function(full, s, rootName, content){
-											content.replace(/\/\*\*(.*?)\*\/\s+(.*?):/gs, function(full, docs, portName){
+									match = match
+										.replace(/\t+/g, '')
+										.replace(/^[ \t]+?\* /gm, '')
+										.replace(/^@blackprint.*?$\b/gm, '')
+										.trim();
+
+									let output = {};
+									let input = {};
+									let hasIO = {input: false, output: false};
+									let namespace = '';
+
+									// Get the class content below the docs
+									let slice = content.slice(content.indexOf(full)+full.length);
+									slice.replace(/\bregisterNode\(['"`](.*?)['"`].*?^}/gms, function(full, match){
+										namespace = match;
+										full.replace(/static (input|output)(.*?)}(;|\n)/gms, function(full, which, content){
+											// Obtain documentation for StructOf first
+											content.replace(/^(\s+).*?(\S+):.*?\bStructOf\(.*?{(.*?)\1}/gms, function(full, s, rootName, content){
+												content.replace(/\/\*\*(.*?)\*\/\s+(.*?):/gs, function(full, docs, portName){
+													hasIO[which] = true;
+
+													let obj = which === 'output' ? output : input;
+													obj[rootName+portName] = {description: docs.replace(/^[ \t]+?\* /gm, '').trim()};
+												});
+
+												return full.replace(content, '');
+											})
+											.replace(/\/\*\*(.*?)\*\/\s+(.*?):/gs, function(full, docs, portName){
 												hasIO[which] = true;
-	
+
 												let obj = which === 'output' ? output : input;
-												obj[rootName+portName] = {description: docs.replace(/^[ \t]+?\* /gm, '').trim()};
+												obj[portName] = {description: docs.replace(/^[ \t]+?\* /gm, '').trim()};
 											});
-
-											return full.replace(content, '');
-										})
-										.replace(/\/\*\*(.*?)\*\/\s+(.*?):/gs, function(full, docs, portName){
-											hasIO[which] = true;
-
-											let obj = which === 'output' ? output : input;
-											obj[portName] = {description: docs.replace(/^[ \t]+?\* /gm, '').trim()};
 										});
 									});
+
+									if(namespace === '') return;
+
+									let tags = {};
+									let hasTags = false;
+									let data = {
+										description: match.replace(/^@(\w+) (.*?)$/gm, function(full, name, desc){
+											hasTags = true;
+											tags[name] = desc;
+											return '';
+										}).trim(),
+									};
+
+									if(hasTags) data.tags = tags;
+									if(hasIO.input) data.input = input;
+									if(hasIO.output) data.output = output;
+
+									deepProperty(docs, namespace.split('/'), data);
 								});
-
-								if(namespace === '') return;
-
-								let tags = {};
-								let data = {
-									tags,
-									description: match.replace(/^@(\w+) (.*?)$/gm, function(full, name, desc){
-										tags[name] = desc;
-										return '';
-									}).trim(),
-								};
-
-								if(hasIO.input) data.input = input;
-								if(hasIO.output) data.output = output;
-
-								deepProperty(docs, namespace.split('/'), data);
-							});
+							}
 						},
 						scanFinish(){
 							fs.writeFileSync(dir, JSON.stringify(docs));
-							SFC.socketSync('bp-docs-append', docs, "Blackprint docs updated");
+							SFC.socketSync?.('bp-docs-append', docs, "Blackprint docs updated");
 						}
 					}
 				}
