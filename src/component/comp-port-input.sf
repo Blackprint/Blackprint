@@ -35,6 +35,7 @@ Blackprint.space.component('comp-port-input', {
 sf-space[blackprint]{
 	comp-port-input{
 		input{
+			display: inline-block;
 			max-width: 30px;
 			background: #000000a8;
 			color: white;
