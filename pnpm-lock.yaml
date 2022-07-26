@@ -1,6 +1,8 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 overrides:
+  chokidar: '>=3.0.0'
+  anymatch: '>=3.0.0'
   glob-parent@<5.1.2: '>=5.1.2'
   minimist@<1.2.6: '>=1.2.6'
   nanoid@>=3.0.0 <3.1.31: '>=3.1.31'
@@ -35,9 +37,11 @@ specifiers:
   gulp: ^4.0.2
   jest: ^28
   jest-environment-jsdom: ^28.1.2
+  marked: ^4.0.18
   node-notifier: ^9.0.1
   scarletsframe: 0.35.x
   scarletsframe-compiler: 0.6.21
+  vinyl: '*'
 
 dependencies:
   scarletsframe: 0.35.17
@@ -51,8 +55,10 @@ devDependencies:
   gulp: 4.0.2
   jest: 28.1.2_node-notifier@9.0.1
   jest-environment-jsdom: 28.1.2
+  marked: 4.0.18
   node-notifier: 9.0.1
-  scarletsframe-compiler: 0.6.21_@babel+core@7.18.5
+  scarletsframe-compiler: 0.6.21_i6dial6me4rzwuk2p2lwdazeni
+  vinyl: 2.2.1
 
 packages:
 
@@ -343,6 +349,8 @@ packages:
     resolution: {integrity: sha512-YZWVaglMiplo7v8f1oMQ5ZPQr0vn7HPeZXxXWsxXJRjGVrzUFn9OxFQl1sb5wzfootjA/yChhW84BV+383FSOw==}
     engines: {node: '>=6.0.0'}
     hasBin: true
+    dependencies:
+      '@babel/types': 7.18.4
     dev: true
 
   /@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression/7.17.12_@babel+core@7.18.5:
@@ -1826,13 +1834,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /anymatch/2.0.0:
-    resolution: {integrity: sha512-5teOsQWABXHHBFP9y3skS5P3d/WfWXpv3FUpy+LorMrNYaT9pI4oLMQX7jzQ2KklNpGpWHzdCXTDT2Y3XGlZBw==}
-    dependencies:
-      micromatch: 3.1.10
-      normalize-path: 2.1.1
-    dev: true
-
   /anymatch/3.1.2:
     resolution: {integrity: sha512-P43ePfOAIupkguHUycrc4qJ9kz8ZiuOUijaETwX7THt0Y/GNK7v0aa8rY816xWjZ7rJdA5XdMcpVFTKMq+RvWg==}
     engines: {node: '>= 8'}
@@ -1980,10 +1981,6 @@ packages:
   /async-each-series/0.1.1:
     resolution: {integrity: sha1-dhfBkXQB/Yykooqtzj266Yr+tDI=}
     engines: {node: '>=0.8.0'}
-    dev: true
-
-  /async-each/1.0.3:
-    resolution: {integrity: sha512-z/WhQ5FPySLdvREByI2vZiTWwCnF0moMJ1hK9YQwDTHKh6I7/uSckMetoRGb5UBZPC1z0jlw+n/XCgjeH7y1AQ==}
     dev: true
 
   /async-foreach/0.1.3:
@@ -2206,23 +2203,10 @@ packages:
       tweetnacl: 0.14.5
     dev: true
 
-  /binary-extensions/1.13.1:
-    resolution: {integrity: sha512-Un7MIEDdUC5gNpcGDV97op1Ywk748MpHcFTHoYs6qnj1Z3j7I53VG3nwZhKzoBZmbdRNnb6WRdFlwl7tSDuZGw==}
-    engines: {node: '>=0.10.0'}
-    dev: true
-
   /binary-extensions/2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
     dev: true
-
-  /bindings/1.5.0:
-    resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
-    requiresBuild: true
-    dependencies:
-      file-uri-to-path: 1.0.0
-    dev: true
-    optional: true
 
   /boolbase/1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
@@ -2249,6 +2233,8 @@ packages:
       snapdragon-node: 2.1.1
       split-string: 3.1.0
       to-regex: 3.0.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /braces/3.0.2:
@@ -2392,6 +2378,8 @@ packages:
       ssri: 8.0.1
       tar: 6.1.11
       unique-filename: 1.1.1
+    transitivePeerDependencies:
+      - bluebird
     dev: true
 
   /cache-base/1.0.1:
@@ -2516,25 +2504,6 @@ packages:
       parse5: 7.0.0
       parse5-htmlparser2-tree-adapter: 7.0.0
       tslib: 2.4.0
-    dev: true
-
-  /chokidar/2.1.8:
-    resolution: {integrity: sha512-ZmZUazfOzf0Nve7duiCKD23PFSCs4JPoYyccjUFF3aQkQadqBhfzhjkwBH2mNOG9cTBwhamM37EIsIkZw3nRgg==}
-    deprecated: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
-    dependencies:
-      anymatch: 2.0.0
-      async-each: 1.0.3
-      braces: 2.3.2
-      glob-parent: 6.0.2
-      inherits: 2.0.4
-      is-binary-path: 1.0.1
-      is-glob: 4.0.3
-      normalize-path: 3.0.0
-      path-is-absolute: 1.0.1
-      readdirp: 2.2.1
-      upath: 1.2.0
-    optionalDependencies:
-      fsevents: 1.2.13
     dev: true
 
   /chokidar/3.5.3:
@@ -2730,6 +2699,8 @@ packages:
       finalhandler: 1.1.0
       parseurl: 1.3.3
       utils-merge: 1.0.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /console-control-strings/1.1.0:
@@ -2888,16 +2859,28 @@ packages:
       debug: 3.2.7
       memoizee: 0.4.15
       object-assign: 4.1.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
     dependencies:
       ms: 2.0.0
     dev: true
 
   /debug/3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
     dependencies:
       ms: 2.1.3
     dev: true
@@ -3351,6 +3334,8 @@ packages:
       regex-not: 1.0.2
       snapdragon: 0.8.2
       to-regex: 3.0.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /expand-tilde/2.0.2:
@@ -3408,6 +3393,8 @@ packages:
       regex-not: 1.0.2
       snapdragon: 0.8.2
       to-regex: 3.0.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /extsprintf/1.3.0:
@@ -3447,12 +3434,6 @@ packages:
       bser: 2.1.1
     dev: true
 
-  /file-uri-to-path/1.0.0:
-    resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
-    requiresBuild: true
-    dev: true
-    optional: true
-
   /fill-range/4.0.0:
     resolution: {integrity: sha512-VcpLTWqWDiTerugjj8e3+esbg+skS3M9e54UuR3iCeIDMXCLTsAH8hTSzDQU/X6/6t3eYkOKoZSef2PlU6U1XQ==}
     engines: {node: '>=0.10.0'}
@@ -3481,6 +3462,8 @@ packages:
       parseurl: 1.3.3
       statuses: 1.3.1
       unpipe: 1.0.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /find-up/1.1.2:
@@ -3507,6 +3490,8 @@ packages:
       is-glob: 3.1.0
       micromatch: 3.1.10
       resolve-dir: 1.0.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /findup-sync/3.0.0:
@@ -3517,6 +3502,8 @@ packages:
       is-glob: 4.0.3
       micromatch: 3.1.10
       resolve-dir: 1.0.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /fined/1.2.0:
@@ -3630,18 +3617,6 @@ packages:
   /fs.realpath/1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
     dev: true
-
-  /fsevents/1.2.13:
-    resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
-    engines: {node: '>= 4.0'}
-    os: [darwin]
-    deprecated: fsevents 1 will break on node v14+ and could be using insecure binaries. Upgrade to fsevents 2.
-    requiresBuild: true
-    dependencies:
-      bindings: 1.5.0
-      nan: 2.16.0
-    dev: true
-    optional: true
 
   /fsevents/2.3.2:
     resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
@@ -3773,9 +3748,9 @@ packages:
     resolution: {integrity: sha512-zOZgGGEHPklZNjZQaZ9f41i7F2YwE+tS5ZHrDhbBCk3stwahn5vQxnFmBJZHoYdusR6R1bLSXeGUy/BhctwKzw==}
     engines: {node: '>= 0.10'}
     dependencies:
-      anymatch: 2.0.0
+      anymatch: 3.1.2
       async-done: 1.3.2
-      chokidar: 2.1.8
+      chokidar: 3.5.3
       is-negated-glob: 1.0.0
       just-debounce: 1.1.0
       normalize-path: 3.0.0
@@ -3907,6 +3882,8 @@ packages:
       semver-greatest-satisfied-range: 1.1.0
       v8flags: 3.2.0
       yargs: 7.1.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /gulp-concat/2.6.1:
@@ -3936,10 +3913,12 @@ packages:
       through2: 2.0.5
     dev: true
 
-  /gulp-html-to-js/0.0.7:
+  /gulp-html-to-js/0.0.7_vinyl@2.2.1:
     resolution: {integrity: sha512-P4iQ9roXfI15M6MXNo2cJvOEWI6VdIZZTeLmqtqMt0JhXihh2vO0EtuCvzFID+lTG3HtG0jbw1vPTFQzbCxUFw==}
     peerDependencies:
       vinyl: '*'
+    dependencies:
+      vinyl: 2.2.1
     dev: true
 
   /gulp-sourcemaps/3.0.0:
@@ -3957,6 +3936,8 @@ packages:
       source-map: 0.6.1
       strip-bom-string: 1.0.0
       through2: 2.0.5
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /gulp-terser/2.1.0:
@@ -3978,6 +3959,8 @@ packages:
       gulp-cli: 2.3.0
       undertaker: 1.3.0
       vinyl-fs: 3.0.3
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /gulplog/1.0.0:
@@ -4320,13 +4303,6 @@ packages:
 
   /is-arrayish/0.2.1:
     resolution: {integrity: sha512-zz06S8t0ozoDXMG+ube26zeCTNXcKIPJZJi8hBrF4idCLms4CG9QtK7qBl1boi5ODzFpjswb5JPmHCbMpjaYzg==}
-    dev: true
-
-  /is-binary-path/1.0.1:
-    resolution: {integrity: sha512-9fRVlXc0uCxEDj1nQzaWONSpbTfx0FmJfzHF7pwlI8DkWGoHBBea4Pg5Ky0ojwwxQmnSifgbKkI06Qv0Ljgj+Q==}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      binary-extensions: 1.13.1
     dev: true
 
   /is-binary-path/2.1.0:
@@ -5275,6 +5251,8 @@ packages:
       object.map: 1.0.1
       rechoir: 0.6.2
       resolve: 1.22.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /limiter/1.1.5:
@@ -5390,6 +5368,7 @@ packages:
       socks-proxy-agent: 6.2.1
       ssri: 8.0.1
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -5432,6 +5411,12 @@ packages:
       object-visit: 1.0.1
     dev: true
 
+  /marked/4.0.18:
+    resolution: {integrity: sha512-wbLDJ7Zh0sqA0Vdg6aqlbT+yPxqLblpAZh1mK2+AO2twQkPywvvqQNfEPVwSSRjZ7dZcdeVBIAgiO7MMp3Dszw==}
+    engines: {node: '>= 12'}
+    hasBin: true
+    dev: true
+
   /matchdep/2.0.0:
     resolution: {integrity: sha512-LFgVbaHIHMqCRuCZyfCtUOq9/Lnzhi7Z0KFUE2fhD54+JN2jLh3hC02RLkqauJ3U4soU6H1J3tfj/Byk7GoEjA==}
     engines: {node: '>= 0.10.0'}
@@ -5440,6 +5425,8 @@ packages:
       micromatch: 3.1.10
       resolve: 1.22.0
       stack-trace: 0.0.10
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /mdn-data/2.0.14:
@@ -5502,6 +5489,8 @@ packages:
       regex-not: 1.0.2
       snapdragon: 0.8.2
       to-regex: 3.0.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /micromatch/4.0.5:
@@ -5674,6 +5663,8 @@ packages:
       regex-not: 1.0.2
       snapdragon: 0.8.2
       to-regex: 3.0.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /natural-compare/1.4.0:
@@ -5711,6 +5702,7 @@ packages:
       tar: 6.1.11
       which: 2.0.2
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -5755,6 +5747,7 @@ packages:
       stdout-stream: 1.4.1
       true-case-path: 1.0.3
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -6237,6 +6230,11 @@ packages:
 
   /promise-inflight/1.0.1:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
     dev: true
 
   /promise-retry/2.0.1:
@@ -6368,15 +6366,6 @@ packages:
       inherits: 2.0.4
       string_decoder: 1.3.0
       util-deprecate: 1.0.2
-    dev: true
-
-  /readdirp/2.2.1:
-    resolution: {integrity: sha512-1JU/8q+VgFZyxwrJ+SVIOsh+KywWGpds3NTqikiKpDMZWScmAYyKIgqkO+ARvNWJfXeXR1zxz7aHF4u4CyH6vQ==}
-    engines: {node: '>=0.10'}
-    dependencies:
-      graceful-fs: 4.2.10
-      micromatch: 3.1.10
-      readable-stream: 2.3.7
     dev: true
 
   /readdirp/3.6.0:
@@ -6600,6 +6589,8 @@ packages:
     dependencies:
       debug: 2.6.9
       minimatch: 3.1.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /ret/0.1.15:
@@ -6666,7 +6657,7 @@ packages:
       xmlchars: 2.2.0
     dev: true
 
-  /scarletsframe-compiler/0.6.21_@babel+core@7.18.5:
+  /scarletsframe-compiler/0.6.21_i6dial6me4rzwuk2p2lwdazeni:
     resolution: {integrity: sha512-OSnTi6OHbjTwLoPF+EsDBgXdWuUrH3W+rYxsffL3l3HI1/3gidlXFNyzXEcl/XZIRprt6Q59kReUSaLQFHqf6g==}
     dependencies:
       autoprefixer: 10.4.7_postcss@8.4.14
@@ -6681,7 +6672,7 @@ packages:
       gulp-concat: 2.6.1
       gulp-csso: 4.0.1
       gulp-header: 2.0.9
-      gulp-html-to-js: 0.0.7
+      gulp-html-to-js: 0.0.7_vinyl@2.2.1
       gulp-sourcemaps: 3.0.0
       gulp-terser: 2.1.0
       html-minifier: 4.0.0
@@ -6699,6 +6690,7 @@ packages:
       vinyl-sourcemaps-apply: 0.2.1
     transitivePeerDependencies:
       - '@babel/core'
+      - bluebird
       - bufferutil
       - debug
       - supports-color
@@ -6764,6 +6756,8 @@ packages:
       on-finished: 2.3.0
       range-parser: 1.2.1
       statuses: 1.4.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /serve-index/1.9.1:
@@ -6777,6 +6771,8 @@ packages:
       http-errors: 1.6.3
       mime-types: 2.1.35
       parseurl: 1.3.3
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /serve-static/1.13.2:
@@ -6787,6 +6783,8 @@ packages:
       escape-html: 1.0.3
       parseurl: 1.3.3
       send: 0.16.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /server-destroy/1.0.1:
@@ -6877,6 +6875,8 @@ packages:
       source-map: 0.5.7
       source-map-resolve: 0.5.3
       use: 3.1.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /socket.io-adapter/2.4.0:
@@ -7641,11 +7641,6 @@ packages:
     dependencies:
       has-value: 0.3.1
       isobject: 3.0.1
-    dev: true
-
-  /upath/1.2.0:
-    resolution: {integrity: sha512-aZwGpamFO61g3OlfT7OQCHqhGnW43ieH9WZeP7QxN/G/jS4jfqUkZxoryvJgVPEcrl5NL/ggHsSmLMHuH64Lhg==}
-    engines: {node: '>=4'}
     dev: true
 
   /upper-case/1.1.3:

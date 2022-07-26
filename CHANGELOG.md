@@ -1,3 +1,18 @@
+# 0.7.1
+
+### Features
+- Add feature to allow output resyncronization
+- Add `skipSuggestTypeAny` for skip node suggestion
+- Add support for documenting ports with `StructOf` feature
+- Add dropdown menu for using to allow output resync
+- Add `preventDefault` on `menu` event
+
+### Bug Fix
+- Fix error when re-adding port documentation
+- Fix incorrect input element wrap
+- Skip exporting object or symbol
+- Skip importing docs when windowless settings is turned on
+
 # 0.7.0
 
 ### Features

@@ -1,7 +1,7 @@
 {
   "name": "@blackprint/sketch",
   "description": "Blackprint sketch for browser",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "author": "Blackprint",
   "license": "MIT",
   "repository": {
@@ -29,6 +29,8 @@
     "gulp": "^4.0.2",
     "jest": "^28",
     "jest-environment-jsdom": "^28.1.2",
+    "vinyl": "*",
+    "marked": "^4.0.18",
     "node-notifier": "^9.0.1",
     "scarletsframe-compiler": "0.6.21"
   },
@@ -44,6 +46,8 @@
   },
   "pnpm": {
     "overrides": {
+      "chokidar": ">=3.0.0",
+      "anymatch": ">=3.0.0",
       "glob-parent@<5.1.2": ">=5.1.2",
       "minimist@<1.2.6": ">=1.2.6",
       "nanoid@>=3.0.0 <3.1.31": ">=3.1.31",

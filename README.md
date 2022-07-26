@@ -211,7 +211,9 @@ If you want to compile and start the editor's web server on your machine, you ca
 ```sh
 $ cd /your/project/folder
 $ git clone --depth 1 --recurse-submodules https://github.com/Blackprint/Blackprint.git .
-$ npm i
+
+# You can also use npm or yarn instead of pnpm
+$ pnpm i
 $ npm start
  >> [Browsersync] Access URLs:
  >> -----------------------------------
@@ -225,10 +227,18 @@ If you're trying to run the unit test, you can use `npm run compile` and then `n
 ```sh
 $ cd /your/project/folder
 $ git clone --depth 1 --recurse-submodules https://github.com/Blackprint/Blackprint.git .
-$ npm i
+
+# You can also use npm or yarn instead of pnpm
+$ pnpm i
 $ npm run compile
 $ npm test
 ```
+
+## Stability
+Breaking changes may happen on `v0.x.0` increment, while `v0.0.x` usually will have new feature or bug fixes.
+
+After version v1.0.0 any feature addition may have long delay before actually being merged.<br>
+Feel free to request a feature or give a feedback at this moment.
 
 ## License
 Blackprint is a **MIT licensed** open source project and completely free to use.
