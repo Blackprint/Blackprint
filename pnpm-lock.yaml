@@ -37,10 +37,10 @@ specifiers:
   gulp: ^4.0.2
   jest: ^28
   jest-environment-jsdom: ^28.1.2
-  marked: ^4.0.18
   node-notifier: ^9.0.1
   scarletsframe: 0.35.x
   scarletsframe-compiler: 0.6.21
+  through2: ^4.0.2
   vinyl: '*'
 
 dependencies:
@@ -55,9 +55,9 @@ devDependencies:
   gulp: 4.0.2
   jest: 28.1.2_node-notifier@9.0.1
   jest-environment-jsdom: 28.1.2
-  marked: 4.0.18
   node-notifier: 9.0.1
   scarletsframe-compiler: 0.6.21_i6dial6me4rzwuk2p2lwdazeni
+  through2: 4.0.2
   vinyl: 2.2.1
 
 packages:
@@ -5409,12 +5409,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       object-visit: 1.0.1
-    dev: true
-
-  /marked/4.0.18:
-    resolution: {integrity: sha512-wbLDJ7Zh0sqA0Vdg6aqlbT+yPxqLblpAZh1mK2+AO2twQkPywvvqQNfEPVwSSRjZ7dZcdeVBIAgiO7MMp3Dszw==}
-    engines: {node: '>= 12'}
-    hasBin: true
     dev: true
 
   /matchdep/2.0.0:

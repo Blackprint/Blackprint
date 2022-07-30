@@ -1,5 +1,5 @@
 process.stdout.write("Loading scarletsframe-compiler\r");
-let compileEngineOnly = false;
+let compileEngineOnly = process.env.EDITOR_ONLY || false;
 let isCI = process.env.CI;
 let editorOnly = false;
 let withNodes = !editorOnly && true;
@@ -77,6 +77,8 @@ if(!compileEngineOnly){
 				combine:'editor/src/**/*.sf',
 			},
 		};
+
+		require('./editor/utils/build-docs.js')(Gulp, isCI);
 	}
 
 	if(!editorOnly){
@@ -121,7 +123,7 @@ if(!compileEngineOnly){
 	}
 }
 
-let SFC = require("scarletsframe-compiler")({
+var SFC = require("scarletsframe-compiler")({
 	// Start the server
 	browserSync:{
 		// proxy:'http://myjs.sandbox',
@@ -136,7 +138,9 @@ let SFC = require("scarletsframe-compiler")({
 			baseDir:'editor/',
 			index:'index.html',
 			middleware(req, res, next){
-				if(1) return next(); // Comment this to allow CORS
+				if(true) return next(); // Comment this to allow CORS for all domain
+				// Always disable this if you don't need it
+				// it can dangerous if you leave this active
 
 				res.setHeader("Access-Control-Allow-Methods", "GET");
 				res.setHeader('Access-Control-Allow-Origin', '*');

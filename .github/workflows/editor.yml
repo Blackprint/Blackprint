@@ -1,0 +1,44 @@
+name: 'build-editor'
+on:
+  workflow_dispatch:
+    inputs:
+      engine:
+        description: "Continue publishing the editor?"
+        required: true
+        default: 'yes'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+          persist-credentials: false
+
+      - name: ⚙ Install pnpm
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.15.1
+
+      - name: ⚙ Set node version to 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'pnpm'
+
+      - run: pnpm install
+
+      - name: 🛠 Compile the editor only
+        env:
+          EDITOR_ONLY: true
+        run: npm run compile
+
+      - name: 🚀 Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+          folder: editor
+          repository-name: Blackprint/blackprint.github.io
+          branch: gh-pages
+          single-commit: true

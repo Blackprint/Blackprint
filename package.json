@@ -29,10 +29,10 @@
     "gulp": "^4.0.2",
     "jest": "^28",
     "jest-environment-jsdom": "^28.1.2",
-    "vinyl": "*",
-    "marked": "^4.0.18",
     "node-notifier": "^9.0.1",
-    "scarletsframe-compiler": "0.6.21"
+    "scarletsframe-compiler": "0.6.21",
+    "through2": "^4.0.2",
+    "vinyl": "*"
   },
   "keywords": [
     "visual-programming",
