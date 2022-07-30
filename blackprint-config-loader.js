@@ -181,7 +181,7 @@ module.exports = function(SFC, Gulp){
 
 									// Get the class content below the docs
 									let slice = content.slice(content.indexOf(full)+full.length);
-									slice.replace(/\bregisterNode\(['"`](.*?)['"`].*?^}/gms, function(full, match){
+									slice.replace(/\bregisterNode\(['"`](.*?)['"`].*?^}/ms, function(full, match){
 										namespace = match;
 										full.replace(/static (input|output)(.*?)}(;|\n)/gms, function(full, which, content){
 											// Obtain documentation for StructOf first
