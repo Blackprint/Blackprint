@@ -16,6 +16,8 @@ jobs:
           submodules: true
           persist-credentials: false
 
+      - run: git submodule update
+
       - name: ⚙ Install pnpm
         uses: pnpm/action-setup@v2.0.1
         with:

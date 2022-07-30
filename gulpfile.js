@@ -1,7 +1,7 @@
 process.stdout.write("Loading scarletsframe-compiler\r");
-let compileEngineOnly = process.env.EDITOR_ONLY || false;
+let compileEngineOnly = false;
 let isCI = process.env.CI;
-let editorOnly = false;
+let editorOnly = process.env.EDITOR_ONLY || false;
 let withNodes = !editorOnly && true;
 
 let Gulp = require('gulp');
@@ -54,7 +54,7 @@ let compileTargets = editorOnly ? {} : {
 // Editor and Sketch library for Browser
 if(!compileEngineOnly){
 	// Use `default` if you're not exporting project as library/module
-	if(!isCI){
+	if(!isCI || editorOnly){
 		compileTargets.default = {
 			versioning: 'editor/dev.html',
 			stripURL: 'editor/',
