@@ -13,10 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          submodules: true
           persist-credentials: false
 
-      - run: git submodule update
+      - name: ⚙ Update submodules
+        run: git submodule update --init --recursive --remote
 
       - name: ⚙ Install pnpm
         uses: pnpm/action-setup@v2.0.1
