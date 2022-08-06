@@ -143,7 +143,7 @@ class Cable extends Blackprint.Engine.Cable {
 				keyframes[a] = {
 					offset: o*(a+i+1),
 					translate: [r(-15, 15)+'px', r(-15, 15)+'px'],
-					scale: r(0.5, 1.6),
+					// scale: r(0.5, 1.6),
 				};
 			}
 
