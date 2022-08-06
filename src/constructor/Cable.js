@@ -429,6 +429,28 @@ class Cable extends Blackprint.Engine.Cable {
 		return newCable;
 	}
 
+	detachPort(port){
+		super.disconnect();
+
+		// Reset some state
+		delete this.input;
+		delete this.output;
+		if(this.owner === port){
+			this.owner = this.target;
+
+			let { head1, head2 } = this;
+			let temp = head1.slice(0);
+			head1[0] = head2[0];
+			head1[1] = head2[1];
+			head2[0] = temp[0];
+			head2[1] = temp[1];
+		}
+
+		this.source = this.owner.source;
+		this.owner.cables.push(this);
+		delete this.target;
+	}
+
 	_touchCable(oldEv){
 		let lastEl = null;
 		function hoverSimulate(ev){

@@ -13,6 +13,17 @@ class Port extends Blackprint.Engine.Port {
 	createCable(e, noPush){
 		var isAuto = e.target == null;
 
+		// Shift + Left Click
+		if(isAuto === false && e.shiftKey && e.button === 0){
+			let cable = this.cables.pop();
+			cable.detachPort(this);
+
+			// Default head index is "2" when creating new cable
+			cable.cableHeadClicked(e, true);
+
+			return cable;
+		}
+
 		// Get size and position of the port
 		var rect = isAuto ? e : this.findPortElement(e.target).getBoundingClientRect();
 		var center = rect.width/2;
