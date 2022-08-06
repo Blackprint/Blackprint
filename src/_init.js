@@ -1373,7 +1373,9 @@ Blackprint.Sketch.registerDocs = function(obj){
 	// Update every nodes that already been added to any active sketch instance
 	let modelList = Blackprint.space.modelList;
 	for (let key in modelList) {
-		let ifaces = modelList[key].nodes.list;
+		let ifaces = modelList[key].nodes?.list;
+		if(ifaces == null) continue;
+
 		for (let i=0; i < ifaces.length; i++) {
 			ifaces[i]._updateDocs();
 		}
