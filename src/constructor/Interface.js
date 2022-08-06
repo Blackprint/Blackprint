@@ -87,6 +87,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 		if(type.constructor === Array && type.name.includes(' '))
 			type._name = type.name.replace(/ /g, ', ');
 
+		temp._iname = temp.name.replace(/([a-z])([A-Z])/g, '$1 $2');
 		return temp;
 	}
 
