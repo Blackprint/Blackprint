@@ -45,6 +45,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 			this._scope = node.instance.scope;
 			this._nodeSelected = false;
 			this._nodeHovered = false;
+			this._inactive = false;
 
 			if(this._scope !== void 0){
 				this._container = this._scope('container');
@@ -376,7 +377,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 		if(Blackprint.settings.windowless) return;
 		await $.afterRepaint();
 
-		this.$space('nodes')._recalculate([{
+		this.$space?.('nodes')._recalculate([{
 			target: {model: this},
 			contentRect: this.$el[0].firstElementChild.getBoundingClientRect(),
 		}]);
@@ -412,6 +413,8 @@ Blackprint.Interface = class Interface extends sf.Model {
 			port.on('connect', ()=> this._assignDefault(item, false, port));
 			port.on('disconnect', ()=> this._assignDefault(item, true, port));
 		}
+
+		setTimeout(() => this._recalculateSize(), 200);
 	}
 	_assignDefault(item, isDisconnect, port){
 		item.visible = isDisconnect;
