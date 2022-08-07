@@ -28,6 +28,7 @@
           {{ x.disabled ? 'disabled' : ''}}
           {{ x.hasBranch ? 'has-branch' : ''}}
           {{ x.selected ? 'selected' : ''}}
+          {{ x._inactive ? 'inactive' : '' }}
         " @contextmenu.capture.prevent="x.cableMenu(event)">
           <path
             @pointerdown.capture="x.cablePathClicked(event)"
@@ -47,7 +48,7 @@
     <!-- Nodes goes here -->
     <sf-m name="nodes" class="nodes" style="user-select:none;">
       <!-- Handled on ./nodes.js -->
-      <div sf-each="item in list" class="{{ item._nodeSelected ? 'selected' : '' }}"
+      <div sf-each="item in list" class="{{ item._nodeSelected ? 'selected' : '' }} {{ item._inactive ? 'inactive' : '' }}"
         @pointerover.capture="pointerOver(event, item)"
         @pointerup="checkNodeClick(event)">
         {{@exec
@@ -220,6 +221,10 @@ sf-space[blackprint]{
     stroke-linecap: round;
   }
 
+  .cables .inactive{
+    opacity: 0.4;
+  }
+
   .glow-cable{
     position: absolute;
     top: 0;
@@ -377,6 +382,13 @@ sf-space[blackprint]{
     .selected .node {
       border: 1px solid white;
       box-shadow: 0 0 5px white;
+    }
+
+    .inactive .node {
+      filter: saturate(0) opacity(0.7);
+      &:hover{
+        filter: none;
+      }
     }
 
     .node{

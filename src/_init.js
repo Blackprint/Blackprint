@@ -371,11 +371,13 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			}
 		}
 
+		// Connect route cable
 		for (let i=0; i < routeConnects.length; i++) {
 			let { from, to } = routeConnects[i];
 			from.node.routes.routeTo(to);
 		}
 
+		// Connect ports cable
 		for (var i = 0; i < cableConnects.length; i++) {
 			let {output, portName, linkPortA, input, target, linkPortB} = cableConnects[i];
 
@@ -410,6 +412,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			// Connect cables.currentCable to target port on NodeB
 			linkPortB.connectCable(cable);
+		}
+
+		// Check active/inactive node from connected input/output cables and the routes
+		for (let i=0; i < routeConnects.length; i++) {
+			let from = routeConnects[i].from;
+			from.node.routes._checkInactiveFromNode(from);
 		}
 
 		// Call node init after creation processes was finished

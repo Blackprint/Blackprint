@@ -39,7 +39,7 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 	// For creating output cable
 	createCable(event){
 		if(!this._init) this._initForSketch();
-		var cable;
+		var cable, iface = this.iface;
 
 		if(event != null){
 			let target = $(event.target);
@@ -55,9 +55,9 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 		}
 		else{
 			let rect;
-			if(this.iface.$el == null || Blackprint.settings.windowless)
+			if(iface.$el == null || Blackprint.settings.windowless)
 				rect = {x:0, y:0, height:0, width:0};
-			else rect = this.iface.$el('.routes .out')[0].getBoundingClientRect();
+			else rect = iface.$el('.routes .out')[0].getBoundingClientRect();
 
 			cable = new Cable({
 				x: rect.x + rect.width/2,
@@ -73,6 +73,15 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 			// Default head index is "2" when creating new cable
 			cable.cableHeadClicked(event, true);
 		}
+
+		if(iface.update == null && iface.node.update == null && this._invalidRoute == null){
+			if(!(findAnyRouteOut(iface) || findAnyRouteOut(iface.node))){
+				this._invalidRoute = true;
+			}
+		}
+
+		if(this._invalidRoute)
+			cable.valid = false;
 
 		return cable;
 	}
@@ -101,11 +110,102 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 			else el_ = sf.Window.source(this._inElement, _ev);
 
 			let rect = el_.getBoundingClientRect();
-			
+
 			cable.head2[0] = (rect.x+(rect.width/2) - offset.x - pos.x) / scale;
 			cable.head2[1] = (rect.y+(rect.height/2) - offset.y - pos.y) / scale;
 		}
 
-		return super.connectCable(cable);
+		let res = super.connectCable(cable);
+		this._checkInactiveFromNode(cable.owner.iface);
+		return res;
 	}
+
+	_checkInactiveFromNode(iface, checked=new Set()){
+		let outputs = iface.output;
+		for (let key in outputs) {
+			let { cables } = outputs[key];
+			for (let i=0; i < cables.length; i++) {
+				this._checkInactiveNode(cables[i].input.iface);
+			}
+		}
+	}
+
+	_checkInactiveNode(target, checked=new Set()){
+		if(checked.has(target)) return;
+		checked.add(target);
+
+		let isActive = false;
+
+		// Active if this node can be requested from other input port
+		if(!isActive) isActive = target.node.request != null || target.request != null;
+
+		// Active if have 'port.value' listener
+		if(!isActive) isActive = !!(target._event?.['port.value']?.length);
+
+		// Check every input port
+		if(!isActive){
+			let hasInput = false;
+			let inputs = target.input;
+			that: for (let key in inputs) {
+				hasInput = true;
+				let { cables, _event } = inputs[key];
+
+				// Active if have 'value' listener
+				if(!!(_event?.value?.length)){
+					isActive = true;
+					break that;
+				}
+
+				for (let i=0; i < cables.length; i++) {
+					let prevIface = cables[i].output.iface;
+
+					// Active if have active route into current node
+					let ins = target.node.routes.in;
+					for (let i=0; i < ins.length; i++) {
+						if(ins[i].output.iface._inactive === false){
+							isActive = true;
+							break that;
+						}
+					}
+
+					// Active if previous node is active and don't have any route out
+					if(prevIface._inactive === false && prevIface.node.routes.out == null){
+						isActive = true;
+						break that;
+					}
+				}
+			}
+
+			// Default to active if have no input (like standalone node that triggered by itself)
+			if(!hasInput) isActive = true;
+		}
+
+		let willInactive = !isActive;
+
+		// Mark connected cables as active/inactive
+		let inputs = target.input;
+		for (let key in inputs) {
+			let { cables } = inputs[key];
+			for (let i=0; i < cables.length; i++) {
+				cables[i]._inactive = willInactive;
+			}
+		}
+		
+		let outRoute = target.node.routes.out;
+		if(outRoute != null) outRoute._inactive = willInactive;
+
+		target._inactive = willInactive;
+
+		// Deep recheck
+		this._checkInactiveFromNode(target, checked);
+	}
+}
+
+function findAnyRouteOut(obj) {
+    if(obj === Object.prototype)
+        return false;
+    if(obj.constructor.toString().includes('.routeOut('))
+        return true;
+
+    return findAnyRouteOut(Object.getPrototypeOf(obj.constructor.prototype));
 }

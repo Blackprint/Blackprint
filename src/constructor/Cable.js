@@ -30,6 +30,7 @@ class Cable extends Blackprint.Engine.Cable {
 		this.hasBranch = false;
 		this.selected = false;
 		this._destroyed = false;
+		this._inactive = false;
 		this.beforeConnect = null;
 
 		var container = this._container = port._scope('container');
@@ -513,6 +514,12 @@ class Cable extends Blackprint.Engine.Cable {
 			this._inputCable.push(this);
 			this.cableTrunk.output.cables.push(this);
 		}
+
+		// Recheck inactive node
+		if(!this.isRoute){
+			let inputIface = this.input.iface;
+			inputIface.node.routes._checkInactiveNode(inputIface);
+		}
 	}
 
 	_delete(isDeep){
@@ -657,6 +664,10 @@ class Cable extends Blackprint.Engine.Cable {
 		this._destroyed = true;
 		this._delete();
 
-		// console.log('A cable was removed', this);
+		// Recheck inactive node
+		if(!this.isRoute){
+			let inputIface = this.input.iface;
+			inputIface.node.routes._checkInactiveNode(inputIface);
+		}
 	}
 }
