@@ -105,7 +105,7 @@ function createNodesMenu(list, sketch, ev, pos, opt){
 
 	let cancelMenu = false;
 	Blackprint.emit('menu.create.node', { 
-		list, sketch, position, coordinate, isSuggestion: opt.suggest ?? false, 
+		list, menu, sketch, position, coordinate, options: opt, isSuggestion: opt.suggest ?? false, 
 		preventDefault(){
 			cancelMenu = tree;
 		}
