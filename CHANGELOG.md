@@ -1,3 +1,18 @@
+# 0.7.2
+
+### Features
+- Add space between capitalized letters for port name
+- Use `Shift + Left Click` to detach cable from a port
+- Add feature to detect inactive node
+- Add menu and options on `menu.create.node` event data
+
+### Bug Fix
+- Fix minor bug when registering docs
+- Fix weird cable flow animation on newest browser
+- Fix and improve inactive node recheck
+- Fix interface size recalculation
+- Fix inline node documentation
+
 # 0.7.1
 
 ### Features
