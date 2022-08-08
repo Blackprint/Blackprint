@@ -665,7 +665,11 @@ class Cable extends Blackprint.Engine.Cable {
 		this._delete();
 
 		// Recheck inactive node
-		if(!this.isRoute){
+		if(this.isRoute){
+			let owner = this.owner.iface;
+			owner.node.routes._checkInactiveFromNode(owner);
+		}
+		else if(this.input != null){ // Not a route cable
 			let inputIface = this.input.iface;
 			inputIface.node.routes._checkInactiveNode(inputIface);
 		}
