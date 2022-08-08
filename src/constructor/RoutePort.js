@@ -157,7 +157,8 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 				}
 
 				for (let i=0; i < cables.length; i++) {
-					let prevIface = cables[i].output.iface;
+					let prevIface = cables[i].output?.iface;
+					if(prevIface == null) continue;
 
 					// Active if have active route into current node
 					let ins = target.node.routes.in;
@@ -190,11 +191,14 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 				cables[i]._inactive = willInactive;
 			}
 		}
-		
-		let outRoute = target.node.routes.out;
+
+		// Mark connected route cables as active/inactive
+		let outRoute = target.node.routes?.out;
 		if(outRoute != null) outRoute._inactive = willInactive;
 
-		target._inactive = willInactive;
+		// Mark node as active/inactive
+		if(!target.isGhost)
+			target._inactive = willInactive;
 
 		// Deep recheck
 		this._checkInactiveFromNode(target, checked);
