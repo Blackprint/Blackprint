@@ -2,12 +2,15 @@ Blackprint.Sketch.suggestNode = function(source, clazz, fromList){
 	let BP_Port = Blackprint.Port;
 	if(clazz._bpRoute) return {}; // cable for route only
 
+	let skipInternal = Blackprint.nodes.BP;
+
 	let temp = {};
 	function dive(nodes, obj){
 		let found = false;
 
 		for(let key in nodes){
 			let ref = nodes[key];
+			if(ref === skipInternal) continue;
 
 			if(ref.constructor === Object){
 				obj[key] = {};
