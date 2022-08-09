@@ -394,8 +394,9 @@ Blackprint.Interface = class Interface extends sf.Model {
 
 		for(let key in inputs){
 			let port = inputs[key];
-			let type = 'string';
+			if(port._hasComponent) continue; // Skip default component if the developer already added a component
 
+			let type = 'string';
 			if(port.type === Number) type = 'number';
 			else if(port.type === Boolean) type = 'checkbox';
 			else if(port.type !== String) continue; // Skip if not Number/Boolean/String

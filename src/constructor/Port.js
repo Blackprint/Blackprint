@@ -276,6 +276,7 @@ class Port extends Blackprint.Engine.Port {
 
 	insertComponent(beforeSelector, compName, item, callback, _repeat, _reinit){
 		var portList = this.iface[this.source]._portList;
+		this._hasComponent = true;
 
 		if(portList.getElement === void 0){
 			return setTimeout(() => {
