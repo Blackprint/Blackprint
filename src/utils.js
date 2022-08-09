@@ -94,8 +94,8 @@ function createNodesMenu(list, sketch, ev, pos, opt){
 		y: (pos ? pos.y : ev.clientY),
 	};
 	let coordinate = {
-		x: position.x / container.scale - container.offset.x - container.pos.x,
-		y: position.y / container.scale - container.offset.y - container.pos.y,
+		x: (position.x - container.offset.x - container.pos.x) / container.scale,
+		y: (position.y - container.offset.y - container.pos.y) / container.scale,
 	};
 
 	function createNode(namespace){
