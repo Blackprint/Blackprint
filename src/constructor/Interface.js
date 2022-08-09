@@ -385,7 +385,12 @@ Blackprint.Interface = class Interface extends sf.Model {
 	initInputPort(){
 		let _debounce;
 		let inputs = this.input;
-		let update = ()=> this.node.update?.();
+		let update = port => {
+			let node = this.node;
+			node.instance.emit('port.default.changed', { port });
+			node.update?.();
+			node.routes.routeOut();
+		}
 
 		for(let key in inputs){
 			let port = inputs[key];
@@ -396,6 +401,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 			else if(port.type !== String) continue; // Skip if not Number/Boolean/String
 
 			port._mainDefault = port.default;
+			let debouncer = ()=> update(port);
 
 			let item = port._boxInput = {
 				value: port.default ?? '',
@@ -403,7 +409,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 				type,
 				whenChanged(now){
 					clearTimeout(_debounce);
-					_debounce = setTimeout(update, 700);
+					_debounce = setTimeout(debouncer, 700);
 
 					return port.default = type === 'number' ? +now : now;
 				}
