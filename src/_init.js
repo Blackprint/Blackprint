@@ -414,15 +414,15 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			linkPortB.connectCable(cable);
 		}
 
+		// Call node init after creation processes was finished
+		for (var i = 0; i < handlers.length; i++)
+			handlers[i].init?.();
+
 		// Check active/inactive node from connected input/output cables and the routes
 		for (let i=0; i < routeConnects.length; i++) {
 			let from = routeConnects[i].from;
 			from.node.routes._checkInactiveFromNode(from);
 		}
-
-		// Call node init after creation processes was finished
-		for (var i = 0; i < handlers.length; i++)
-			handlers[i].init?.();
 
 		containerModel._isImporting = false;
 		this.emit("json.imported", {appendMode: options.appendMode, nodes: inserted, raw: json});
