@@ -52,6 +52,7 @@ If you just want to execute exported Blackprint JSON, you can just use the engin
 | `RightClick` | `tap hold 1 sec` | Node, Cable, Container | Context menu |
 | `Ctrl + LeftClick` | - | Cable | Create cable branch |
 | `Ctrl + RightClick` | - | Port, Cable | Node suggestion |
+| `Shift + LeftClick` | - | Port | Detach last connected cable |
 
 ## Available Shortcut for Blackprint Editor
 | Mouse + Keyboard | Touchscreen | Target | Description |

@@ -1,3 +1,13 @@
+# 0.7.3
+### Features
+- Emit `port.default.changed` instance event when default value was changed
+
+### Bug Fix
+- Fix route data flow when default value was changed
+- Fix execution order for checking inactive node
+- Fix node creation using dropdown on scaled container
+- Skip default component if the developer already added a component
+
 # 0.7.2
 
 ### Features
