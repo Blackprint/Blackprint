@@ -37,7 +37,7 @@ If you're looking for minimal sketch example to get started integrate for your e
 - [JSBin](https://jsbin.com/bakulux/edit?html,js,output)
 - [StackBlitz](https://stackblitz.com/edit/minimal-blackprint?file=index.js)
 
-If you just want to execute exported Blackprint JSON, you can just use the engine. I also provide few simple example for different framework in case you want to use integrate to your frontend framework. For non-browser engine, there are example on it's repository. You can copy and paste the JSON to [Blackprint Editor](https://blackprint.github.io/) to see the nodes arrangement. The example below is using this [arrangement](https://blackprint.github.io/#page/sketch/1#;importSketch:tZHLTsMwEEX_ZdZunEeDiFelVRcguqFLVCETW6lbP6LYqVJV-Xecl5TCEthY9mjuvWfGN_gAcgNlWC35yx7IOxydKy3BOGc6OFnGpbhUgeYO61Lh1aek-bmshPZvw7hdhUESRJgJOxYWudHWSB6okwX0azehy9r9kRdvqCpHskOLYDOQ4ldT-MFvIICECBogafqA4AokCjMEggEBaYqCV9AeEDx3RHgvBePV2jSTMuqVj6MwXY5C2_dFnp5RR7tdh91xobLmQGIESmggiyj0yYo2Xaa_WcdLDxNErcc0tfOJo3QISxBoqrwBPHkm39RX4zuELLlDiP8NYd0j-M1sh_3iHXVHvKulE6W8zvq9dRIPdFk4wqmpbR7yxq0vz_5kGlZfv2eta-eMxnvRvSbFss9aZn1Ums6tN1LkZ85-TrFteD6Yt18).
+If you just want to execute exported Blackprint JSON, you can just use the engine. I also provide few simple example for different framework in case you want to use integrate to your frontend framework. For non-browser engine, there are example on it's repository. You can copy and paste the JSON to [Blackprint Editor](https://blackprint.github.io/) to see the nodes arrangement. The example below is using this [arrangement](https://blackprint.github.io/#page/sketch/1#;importSketch:tZHLTsMwEEX_ZdZpnCciXkGrLorohooVqpCJrdatH1HsVClV_h3HSaQWlsAm8ozu3HtmcoF3wBeQmjaCPW0Av8He2spghEqqwoOhTPBTHSpmkaokevgQpDxWNVeu1pSZhyjMEeVmLGelVkYLFsqDgeCXXlxVjf0TJ9YSWY1U2y6AxUCJnvXOrXwBDjgKoAWc53cBnAHHURHAp-9yChiE3u1YDd02gFVPhV5XaCM4ZfVct5NF7C3uR4c88w7x6GC8OnarUGJJf_So_5yIaBjgJADJFeBZHLlISdoewb2MZZWjCOPOUevGuuhxdIh0c4pIZwCPDs6JfDe7ASlSD5LcgCT_BjL3IO5Qy-HoaE3sHq0bYXklzld6Z50mA2MRecR0RJST-DrqhRnXvvpd0-Lq_D1x3lirFdrwvpomUp-YFT4wz31gdh2wELw8Mvpzo2XLyiGi-wI).
 - [Multiply - Event Listener](https://jsbin.com/gaxisop/edit?html,js,output)
 - [Multiply - ScarletsFrame](https://jsbin.com/nigarib/edit?html,js,output)
 - [Multiply - Vue](https://jsbin.com/bocehax/edit?html,js,output)
@@ -129,7 +129,7 @@ Blackprint Engine
 > 🧪 = Experimental/Alpha stage (Being tested and may have rapid changes)<br>
 > ✖  = Not supported (Either it can't be implemented or it has better solution)<br>
 > ❔  = Should we add the feature? (The feature may be skipped)<br>
-> -   = Haven't been decided<br>
+> \-   = Haven't been decided<br>
 
 ---
 
