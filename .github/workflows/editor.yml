@@ -44,3 +44,7 @@ jobs:
           repository-name: Blackprint/blackprint.github.io
           branch: gh-pages
           single-commit: true
+          clean-exclude: |
+            src
+            docs
+            utils
