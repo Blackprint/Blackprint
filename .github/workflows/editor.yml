@@ -45,6 +45,6 @@ jobs:
           branch: gh-pages
           single-commit: true
           clean-exclude: |
-            src
-            docs
-            utils
+            editor/src
+            editor/docs
+            editor/utils
