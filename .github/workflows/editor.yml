@@ -36,6 +36,9 @@ jobs:
           EDITOR_ONLY: true
         run: npm run compile
 
+      - name: ⚙ Delete some files
+        run: rm -rf editor/src && rm -rf editor/docs && rm -rf editor/utils
+
       - name: 🚀 Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
@@ -44,7 +47,3 @@ jobs:
           repository-name: Blackprint/blackprint.github.io
           branch: gh-pages
           single-commit: true
-          clean-exclude: |
-            editor/src
-            editor/docs
-            editor/utils
