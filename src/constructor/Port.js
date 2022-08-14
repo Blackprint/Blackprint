@@ -183,6 +183,8 @@ class Port extends Blackprint.Engine.Port {
 			pos.event = ev;
 
 			let menu = createNodesMenu(suggestedNode, scope.sketch, ev, pos, {suggest: true});
+			if(menu === false) return;
+
 			scope('dropdown').show(menu, pos);
 		}
 

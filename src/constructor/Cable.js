@@ -569,6 +569,8 @@ class Cable extends Blackprint.Engine.Cable {
 
 		function suggestNode(){
 			let menu = createNodesMenu(suggestedNode, scope.sketch, ev, null, {suggest: true});
+			if(menu === false) return;
+
 			scope('dropdown').show(menu, {x: ev.clientX, y: ev.clientY, event: ev});
 		}
 

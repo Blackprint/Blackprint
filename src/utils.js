@@ -103,18 +103,19 @@ function createNodesMenu(list, sketch, ev, pos, opt){
 		opt.onCreated?.(iface);
 	}
 
+	menu = menu.sort((a, b) => a.title < b.title ? -1 : 1);
+	menu.event = ev;
+
+	deep(list, menu);
+
 	let cancelMenu = false;
 	Blackprint.emit('menu.create.node', { 
-		list, menu, sketch, position, coordinate, options: opt, isSuggestion: opt.suggest ?? false, 
+		list, menu, sketch, position, coordinate, event: ev, options: opt, isSuggestion: opt.suggest ?? false, 
 		preventDefault(){
-			cancelMenu = tree;
+			cancelMenu = true;
 		}
 	});
 
-	if(cancelMenu) return;
-	deep(list, menu);
-
-	menu = menu.sort((a, b) => a.title < b.title ? -1 : 1);
-	menu.event = ev;
+	if(cancelMenu) return false;
 	return menu;
 }
