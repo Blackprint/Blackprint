@@ -388,6 +388,8 @@ Blackprint.Interface = class Interface extends sf.Model {
 		let update = port => {
 			let node = this.node;
 			node.instance.emit('port.default.changed', { port });
+			port.emit('value', { port, cable: { isVirtual: true, value: port.default } });
+
 			node.update?.();
 			node.routes.routeOut();
 		}
