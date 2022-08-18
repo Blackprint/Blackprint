@@ -1073,7 +1073,7 @@ Blackprint.registerNode = function(namespace, func, _fromDecorator=false){
 			temp = Blackprint.modulesURL[this._scopeURL];
 			temp._nodeLength = 0;
 			temp._url = this._scopeURL;
-			Blackprint.emit('moduleAdded', {url: this._scopeURL});
+			Blackprint.emit('module.added', {url: this._scopeURL});
 			Blackprint._modulesURL.push(temp);
 		}
 
