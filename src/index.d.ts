@@ -4,61 +4,25 @@
 
 import { sQuery } from "scarletsframe";
 import {
-	settings,
-	getContext,
-	createContext,
-	loadScope,
-	allowModuleOrigin,
-	loadBrowserInterface,
-	loadModuleFromURL,
-	deleteModuleFromURL,
-	Port,
 	IFacePort,
-	onModuleConflict,
-	registerNode,
-	registerInterface,
-	Environment,
-	utils,
 	Engine,
 	Interface as EngineInterface,
 	Node,
-	OutputPort,
-	InputPort,
 	RemoteControl,
-	RemoteEngine,
 } from "@blackprint/engine-js";
 // } from "../engine-js/src";
 
-export {
-	settings,
-	getContext,
-	createContext,
-	loadScope,
-	allowModuleOrigin,
-	loadBrowserInterface,
-	loadModuleFromURL,
-	deleteModuleFromURL,
-	Port,
-	IFacePort,
-	onModuleConflict,
-	registerNode,
-	registerInterface,
-	Environment,
-	utils,
-	Engine,
-	Node,
-	OutputPort,
-	InputPort,
-	RemoteControl,
-	RemoteEngine,
-} from "@blackprint/engine-js";
-// } from "../engine-js/src";
+export type { Cable, Decoration, RoutePort } from "@blackprint/engine-js";
+// export type { Cable, Decoration, RoutePort } from "../engine-js/src";
+
+export * from "@blackprint/engine-js";
+// export * from "../engine-js/src";
 
 type Docs = {
-	tags: {summary: string},
-	description: string,
-	input:{[key: string]: {description: string}},
-	output:{[key: string]: {description: string}},
+	tags?: {summary?: string},
+	description?: string,
+	input?:{[key: string]: {description: string}},
+	output?:{[key: string]: {description: string}},
 };
 
 type DocsPath = {[key: string]: DocsPath | Docs};
@@ -66,7 +30,7 @@ type DocsPath = {[key: string]: DocsPath | Docs};
 export namespace Sketch {
 	/**
 	 * Register interface to Blackprint (For browser only)
-	 * @param icNamespace Interface component's namespace
+	 * @param icNamespace Interface component's namespace, must be started with "BPIC/"
 	 * @param options You may need to specify either html or template for the Sketch UI
 	 * @param clazz Class that extends Blackprint.Interface
 	 */
@@ -77,10 +41,8 @@ export namespace Sketch {
 	}, clazz: Function): void;
 
 	/**
-	 * Register interface to Blackprint (For browser only)
-	 * @param icNamespace Interface component's namespace
-	 * @param options You may need to specify either html or template for the Sketch UI
-	 * @param clazz Class that extends Blackprint.Interface
+	 * Register node documentation to Blackprint (For browser only)
+	 * @param docs documentation object
 	 */
 	export function registerDocs(docs: DocsPath): void;
 
