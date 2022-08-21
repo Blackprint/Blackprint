@@ -1348,27 +1348,29 @@ Blackprint.loadScope = function(options){
 	// Save URL to the object
 	temp.Sketch._scopeURL = temp._scopeURL = cleanURL.replace(/\.sf\.mjs$/m, '.min.mjs');
 
-	if(Blackprint.loadBrowserInterface){
-		if(window.sf === void 0)
-			return console.log("[Blackprint] ScarletsFrame was not found, node interface for Blackprint Editor will not being loaded. You can also set `Blackprint.loadBrowserInterface` to false if you don't want to use node interface for Blackprint Editor.");
+	if(Blackprint.Environment.loadFromURL){
+		if(Blackprint.loadBrowserInterface){
+			if(window.sf === void 0)
+				return console.log("[Blackprint] ScarletsFrame was not found, node interface for Blackprint Editor will not being loaded. You can also set `Blackprint.loadBrowserInterface` to false if you don't want to use node interface for Blackprint Editor.");
 
-		let url = temp._scopeURL.replace(/(|\.min|\.es6)\.(js|mjs|ts)$/m, '');
+			let url = temp._scopeURL.replace(/(|\.min|\.es6)\.(js|mjs|ts)$/m, '');
 
-		if(!isInterfaceModule && options.hasInterface){
-			let noStyle = Blackprint.loadBrowserInterface === 'without-css';
-			if(options != null && options.css === false)
-				noStyle = false;
+			if(!isInterfaceModule && options.hasInterface){
+				let noStyle = Blackprint.loadBrowserInterface === 'without-css';
+				if(options != null && options.css === false)
+					noStyle = false;
 
-			if(!noStyle)
-				sf.loader.css([url+'.sf.css']);
+				if(!noStyle)
+					sf.loader.css([url+'.sf.css']);
 
-			sf.loader.mjs([url+'.sf.mjs']);
+				sf.loader.mjs([url+'.sf.mjs']);
+			}
 		}
-	}
 
-	if(options.hasDocs && !Blackprint.settings.windowless){
-		let url = temp._scopeURL.replace(/(|\.min|\.es6)\.(js|mjs|ts)$/m, '');
-		sf.$.getJSON(url+'.docs.json').then(Blackprint.Sketch.registerDocs);
+		if(options.hasDocs){
+			let url = temp._scopeURL.replace(/(|\.min|\.es6)\.(js|mjs|ts)$/m, '');
+			sf.$.getJSON(url+'.docs.json').then(Blackprint.Sketch.registerDocs);
+		}
 	}
 
 	return temp;
@@ -1376,6 +1378,8 @@ Blackprint.loadScope = function(options){
 
 Blackprint._docs = {};
 Blackprint.Sketch.registerDocs = function(obj){
+	if(Blackprint.settings.windowless) return;
+
 	deepMerge(Blackprint._docs, obj);
 
 	// Update every nodes that already been added to any active sketch instance
