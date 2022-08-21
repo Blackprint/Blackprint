@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/11073373/82104644-e9d5e900-9741-11ea-9689-fc01ddfa81ab.gif">
+  <video src="https://user-images.githubusercontent.com/11073373/185776245-e883cadb-631e-497c-9fec-1de60098d4b1.mp4">
 </p>
 
 <p align="center">
@@ -27,9 +27,7 @@ Please use Chromium based browser for better rendering performance.
 Default Node's UI design was inspired by UE4 Blueprint and can be modified with HTML/CSS. If you're using Blackprint Editor you can choose different theme on the settings, and here's the <a href="https://github.com/Blackprint/blackprint.github.io/blob/ed9cb35fdd0fb79acf2bede4d007e3afd2b40399/src/node-design.scss#L47-L67">code</a> for reference if you want to create your own theme.
 
 ## Documentation
-> Warning: This project haven't reach it stable version
-
-The [documentation](https://stefansarya.gitbook.io/blackprint) haven't been finished, there are inline documentation on [the template](https://github.com/Blackprint/template-js) and some information on [CONTRIBUTING.md](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md#version-conventions) if you want to use Blackprint before reaching v1.0.0.
+Documentation is included in [the editor](https://blackprint.github.io/#;bpdocs:Home), if you want to help contributing or modify you can fork the editor and modify files in [this directory](https://github.com/Blackprint/blackprint.github.io/tree/master/docs). Blackprint Engine and Sketch does have a TypeScript definition files, so if you working with TypeScript you may see a code suggestion in your code editor like Visual Studio Code.
 
 ## Example
 
@@ -176,9 +174,9 @@ Example case where you may need remote control:
 - [ ] Simplify node development for new developer
   - [x] Auto `blackprint.config.js` import
   - [ ] Add example for using ES6 modules importing system
-- [ ] Better documentation
-  - [x] Add in-editor node documentation in a tooltip 🧪
-  - [ ] Nodes docs generator
+- [x] Better documentation
+  - [x] Add in-editor node documentation in a tooltip
+  - [x] Nodes docs generator
   - [x] Add TypeScript definition file
 - [ ] Blackprint Nodes Package Manager
   - [x] Use NPM registry for Node.js/Deno/Browser
