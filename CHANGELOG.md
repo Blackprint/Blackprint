@@ -1,4 +1,15 @@
+# 0.7.4
+
+### Features
+- Improve TypeScript definition file
+- Trigger port `value` event when changing default port value
+
+### Bug Fix
+- Fix menu event's preventDefault
+- Fix error when sketch is imported on Node.js for unit testing
+
 # 0.7.3
+
 ### Features
 - Emit `port.default.changed` instance event when default value was changed
 
