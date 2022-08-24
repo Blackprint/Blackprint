@@ -109,12 +109,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	}
 
 	// Import node positions and cable connection from JSON
-	async importJSON(json, options){
+	async importJSON(json, options = {}){
 		if(window.sf && window.sf.loader)
 			await window.sf.loader.task;
 
-		if(this._remote != null && !this._remote._skipEvent)
-			return await this._remote.importJSON(json, options, false, true);
+		// if(this._remote != null && !this._remote._skipEvent)
+		// 	return await this._remote.importJSON(json, options, false, true);
 
 		if(json.constructor === String)
 			json = JSON.parse(json);
@@ -124,7 +124,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		let oldIfaces = this.iface;
 
-		if(options === void 0) options = {};
+		this.emit("json.importing", {appendMode: options.appendMode, raw: json});
 		if(!options.appendMode) this.clearNodes();
 
 		var metadata = json._;
