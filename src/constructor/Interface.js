@@ -85,10 +85,16 @@ Blackprint.Interface = class Interface extends sf.Model {
 		temp._description = '';
 		Object.setPrototypeOf(temp, Port.prototype);
 
-		if(type.constructor === Array && type.name.includes(' '))
-			type._name = type.name.replace(/ /g, ', ');
+		function iName(){
+			if(type.constructor === Array && type.name.includes(' '))
+				type._name = type.name.replace(/ /g, ', ');
 
-		temp._iname = temp.name.replace(/([a-z])([A-Z])/g, '$1 $2');
+			temp._iname = temp.name.replace(/([a-z])([A-Z])/g, '$1 $2');
+		}
+
+		sf.watch(temp, 'name', iName);
+		iName();
+
 		return temp;
 	}
 
@@ -457,6 +463,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 };
 
 Blackprint.Interface.prototype._importInputs = EngineInterface.prototype._importInputs;
+Blackprint.Interface.prototype._initPortSwitches = EngineInterface.prototype._initPortSwitches;
 
 var IFaceDecoration = Blackprint.Interface.Decoration = class IFaceDecoration {
 	constructor(iface){

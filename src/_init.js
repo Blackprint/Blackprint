@@ -972,18 +972,11 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			iface._importInputs(defaultInputData);
 
 		if(portSwitches != null){
-			for (let key in portSwitches) {
-				let temp = portSwitches[key];
-				let ref = iface.output[key];
-
-				if((temp | 1) === 1)
-					Blackprint.Port.StructOf.split(ref);
-
-				if((temp | 2) === 2){
-					ref.allowResync = true;
-					ref.classAdd += 'BP-AllowResync ' + ref.classAdd;
-				}
+			if(iface.interface === "BPIC/BP/Fn/Main" || iface.interface === "BPIC/BP/Fn/Input"){
+				// Pending init
+				iface._portSw_ = portSwitches;
 			}
+			else iface._initPortSwitches(portSwitches);
 		}
 
 		iface.initInputPort();
