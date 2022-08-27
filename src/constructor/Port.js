@@ -267,7 +267,7 @@ class Port extends Blackprint.Engine.Port {
 		pos.event = ev;
 
 		let skipMenu = false;
-		let event = {iface: this, instance: scope.sketch, port, menu, event: ev, position: pos, preventDefault(){
+		let event = {instance: scope.sketch, port, menu, event: ev, position: pos, preventDefault(){
 			skipMenu = true;
 		}};
 
