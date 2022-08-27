@@ -131,12 +131,14 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 		for (let key in outputs) {
 			let { cables } = outputs[key];
 			for (let i=0; i < cables.length; i++) {
-				this._checkInactiveNode(cables[i].input.iface);
+				this._checkInactiveNode(cables[i].input?.iface);
 			}
 		}
 	}
 
 	_checkInactiveNode(target, checked=new Set()){
+		if(target == null) return;
+
 		if(checked.has(target)) return;
 		checked.add(target);
 
@@ -152,6 +154,7 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 		if(!isActive){
 			let hasInput = false;
 			let inputs = target.input;
+
 			that: for (let key in inputs) {
 				hasInput = true;
 				let { cables, _event } = inputs[key];
@@ -166,20 +169,20 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 					let prevIface = cables[i].output?.iface;
 					if(prevIface == null) continue;
 
-					// Active if have active route into current node
-					let ins = target.node.routes.in;
-					for (let i=0; i < ins.length; i++) {
-						if(ins[i].output.iface._inactive === false){
-							isActive = true;
-							break that;
-						}
-					}
-
 					// Active if previous node is active and don't have any route out
 					if(prevIface._inactive === false && prevIface.node.routes.out == null){
 						isActive = true;
 						break that;
 					}
+				}
+			}
+
+			// Active if have active route into current node
+			let ins = target.node.routes.in;
+			for (let i=0; i < ins.length; i++) {
+				if(ins[i].output.iface._inactive === false){
+					isActive = true;
+					break;
 				}
 			}
 

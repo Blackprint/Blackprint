@@ -296,6 +296,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 									targetNode.useType(linkPortA);
 									linkPortB = targetNode.input[target.name];
 								}
+								else if(linkPortA.type === Blackprint.Port.Route){
+									linkPortB = targetNode.node.routes;
+								}
 								else {
 									this.emit('error', {
 										type: 'node_port_not_found',

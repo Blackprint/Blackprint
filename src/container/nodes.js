@@ -61,7 +61,7 @@ Space.model('nodes', function(My, include){
 					let portX = (rect.x+(rect.width/2) - oX) / container.scale;
 					let portY = (rect.y+(rect.height/2) - oY) / container.scale;
 
-					var cable;
+					var cable, isRouteOutput = which === 'output' && port.type === Blackprint.Port.Route;
 					for (var h = 0; h < cables.length; h++) {
 						cable = cables[h];
 
@@ -73,6 +73,15 @@ Space.model('nodes', function(My, include){
 						   && which === 'output'
 						   && cable.cableTrunk !== cable){
 							continue;
+						}
+
+						if(isRouteOutput){
+							let rect = cable.input._inElement[0].getBoundingClientRect();
+							let head2 = cable.head2;
+
+							// ToDo: simplify this math
+							head2[0] = (rect.x+(rect.width/2) - oX) / container.scale;
+							head2[1] = (rect.y+(rect.height/2) - oY) / container.scale;
 						}
 
 						if(cable.owner.iface === iface && which === 'output')
