@@ -831,8 +831,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	clearNodes(){
 		let list = this.scope('nodes').list;
 		for (var i = 0; i < list.length; i++) {
-			let temp = list[i].node;
-			temp.destroy && temp.destroy();
+			let temp = list[i];
+			if(temp == null) continue;
+
+			temp.node.destroy?.();
 		}
 
 		list.splice(0);

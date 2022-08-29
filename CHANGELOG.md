@@ -1,3 +1,12 @@
+# 0.7.5
+### Features
+- Add `json.importing` event
+
+### Bug Fix
+- Emit `cable.created` event when creating route cable
+- Fix route port connection and recalculation
+- Fix port switches initialization and port name
+
 # 0.7.4
 
 ### Features

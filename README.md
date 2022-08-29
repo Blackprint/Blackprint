@@ -65,7 +65,6 @@ If you just want to execute exported Blackprint JSON, you can just use the engin
 ## Blackprint Roadmap
 This roadmap could be changed on the future, feel free to request feature or report an issue.
 
-Blackprint Engine
 <table>
 <thead>
   <tr>
@@ -183,7 +182,7 @@ Example case where you may need remote control:
 
 ---
 
-Currently the main focus is Blackprint for JavaScript. PHP, and Golang engine could have some changes on the future.
+Currently the main focus is Blackprint for JavaScript. Some engine for PHP, and Golang could have some changes in the future.
 
 ## Other possible plan
 Blackprint Engine:
@@ -234,7 +233,7 @@ $ npm test
 ```
 
 ## Stability
-Breaking changes may happen on `v0.x.0` increment, while `v0.0.x` usually will have new feature or bug fixes.
+Breaking changes may happen every increment of `v0.x.0`, while `v0.0.x` usually will have new feature or bug fixes.
 
 After version v1.0.0 any feature addition may have long delay before actually being merged.<br>
 Feel free to request a feature or give a feedback at this moment.
