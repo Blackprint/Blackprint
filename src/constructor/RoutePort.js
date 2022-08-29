@@ -144,6 +144,9 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 
 		let isActive = false;
 
+		// Active if it connected to port that controlled by a script
+		if(target.isGhost) isActive = true;
+
 		// Active if this node can be requested from other input port
 		if(!isActive) isActive = target.node.request != null || target.request != null;
 
