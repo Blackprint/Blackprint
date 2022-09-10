@@ -109,11 +109,11 @@ This roadmap could be changed on the future, feel free to request feature or rep
   </tr>
   <tr>
     <td>Pausable and routable data flow</td>
-    <td>🧪</td>  <td>🧪</td>  <td>🧪</td>  <td>-</td>  <td>-</td>  <td>-</td>
+    <td>🧪</td>  <td>🧪</td>  <td>🧪</td>  <td>🚧</td>  <td>-</td>  <td>-</td>
   </tr>
   <tr>
     <td>Remote control</td>
-    <td>🧪</td>  <td>🧪</td>  <td title="It may be useful for Socket application, but I think only useful for that">❔</td>  <td>-</td>  <td>-</td>  <td>-</td>
+    <td>🧪</td>  <td>🧪</td>  <td title="It may be useful for Socket application, but I think only useful for that">❔</td>  <td>🚧</td>  <td>-</td>  <td>-</td>
   </tr>
   <tr>
     <td>Code generation</td>
