@@ -285,6 +285,9 @@ Blackprint.Interface = class Interface extends sf.Model {
 				event.view ??= window;
 				portElem = sf.Window.source(portElem, event);
 
+				// Maybe the route port was disabled for that node
+				if(portElem == null) return;
+
 				let rect = portElem.getBoundingClientRect();
 				let temp = rect => {
 					cableScope.hoverPort = {
