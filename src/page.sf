@@ -300,6 +300,9 @@ sf-space[blackprint]{
       &.hide { opacity: 0; }
       &.disable { display: none; }
     }
+    .routes.show div{
+      z-index: 1;
+    }
     .routes.show div.hide{
       opacity: 1;
     }
@@ -439,9 +442,6 @@ sf-space[blackprint]{
           position: absolute;
           top: -12px;
           right: -10px;
-          &.show-route{
-            margin: 0 20px;
-          }
           .item{
             background: black;
             border-radius: 50px;
