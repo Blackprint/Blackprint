@@ -1,6 +1,6 @@
 ## html
-<comp-port-input style="display: {{ visible ? '' : 'none' }}">
-	(<input @pointerdown="click" @pointerup="click" type="{{ type }}" sf-bind="value">)
+<comp-port-input style="display: {{ visible ? '' : 'none' }}" class="{{ _size }}">
+	<input @pointerdown="click" @pointerup="click" type="{{ type }}" sf-bind="value">
 </comp-port-input>
 
 
@@ -11,17 +11,47 @@ Blackprint.space.component('comp-port-input', {
 		async beforeInit(){
 			let noData = this.noData = this.which == null;
 
+			this._size = "size-1";
 			this.visible ??= true;
 			this.type ??= 'string';
 			this.value ??= this.data[this.which];
 
-			if(this.whenChanged != null)
-				this.v2m$value = this.whenChanged;
+			if(this.value) this.checkSize();
 		}
 
 		v2m$value(now){
-			if(this.noData) return;
-			this.data[this.which] = now;
+			this.checkSize(true);
+			if(this.whenChanged)
+				return this.whenChanged(now);
+
+			if(!this.noData)
+				this.data[this.which] = now;
+		}
+
+		checkSize(reset){
+			clearTimeout(this._rechecking);
+			this._rechecking = setTimeout(async ()=>{
+				let $el = this.$el('input');
+				await $.afterRepaint();
+
+				if(reset){
+					$el.css('max-width', '30px');
+					$el.css('width', '');
+					await $.afterRepaint();
+				}
+
+				let el = $el[0];
+
+				if(el.offsetWidth < el.scrollWidth){
+					this._size = 'size-2';
+					$el.css('width', (el.scrollWidth+5)+'px');
+				}
+				else if(this._size !== 'size-1') {
+					this._size = 'size-1';
+				}
+
+				if(reset) $el.css('max-width', '');
+			}, 700);
 		}
 
 		click(ev){
@@ -33,13 +63,22 @@ Blackprint.space.component('comp-port-input', {
 
 ## scss-global
 sf-space[blackprint]{
-	comp-port-input{
+	.node comp-port-input{
 		input{
 			display: inline-block;
 			max-width: 30px;
 			background: #000000a8;
 			color: white;
-			border: none;
+			border: 1px solid gray;
+			border-radius: 5px;
+		}
+
+		&.size-2 {
+			display: block;
+   			margin-bottom: 10px;
+			input{
+				max-width: 120px;
+			}
 		}
 	}
 }

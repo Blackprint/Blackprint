@@ -157,6 +157,11 @@ sf-space[blackprint]{
         // color: #{$color};
       }
 
+      comp-port-input input {
+        border: 1px solid #{$color}8c;
+        box-shadow: 0 0 5px #{$color}8c;
+      }
+
       &.inactive {
         color: grey;
         & > .port {
@@ -170,11 +175,11 @@ sf-space[blackprint]{
     }
   }
 
-  @include portType("Number", deepskyblue);
-  @include portType("Object", mediumpurple);
+  @include portType("Number", #00bfff);
+  @include portType("Object", #9370db);
   @include portType("Boolean", #ff5959);
   @include portType("String", #55ff52);
-  @include portType("BP-Union", white);
+  @include portType("BP-Union", #ffffff);
   @include portType("BP-Route", #ffac7b);
 
   // BP-Route
