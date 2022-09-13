@@ -1,4 +1,4 @@
-Blackprint.Sketch.suggestNode = function(source, clazz, fromList){
+Blackprint.Sketch.suggestNode = function(source, clazz, fromList, virtualType){
 	let BP_Port = Blackprint.Port;
 	if(clazz._bpRoute) return {}; // cable for route only
 
@@ -26,6 +26,13 @@ Blackprint.Sketch.suggestNode = function(source, clazz, fromList){
 				let match = false;
 				that: for(let prop in metadata){
 					let temp = metadata[prop];
+
+					if(virtualType != null){ // virtualType = Port
+						if(BP_Port.VirtualType.validate(temp, virtualType))
+							match = true;
+
+						continue;
+					}
 
 					if(temp === Blackprint.Types.Any){
 						if(clazz === Function)
@@ -146,5 +153,5 @@ function checkTypeInstance(source, clazz, target, nodeClass){
 }
 
 Blackprint.Sketch.suggestNodeForPort = function(port){
-	return Blackprint.Sketch.suggestNode(port.source === 'input' ? 'output' : 'input', port.type);
+	return Blackprint.Sketch.suggestNode(port.source === 'input' ? 'output' : 'input', port.type, null, port.virtualType ? port : null);
 }

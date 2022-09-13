@@ -8,8 +8,13 @@ let BlackprintEventFallback = {
 	'cable.wrong_type'({ cable, iface, source, target }){
 		console.log(iface.title+"> Port from '"+source.iface.title + " - " + source.name+"' was not an "+target.type.name);
 	},
-	'cable.wrong_type_pair'({ cable, target }){
-		console.log(`The cable type is not suitable (${cable.owner.type.name}, ${target.type.name})`);
+	'cable.wrong_type_pair'({ port, target }){
+		console.log(`The cable type is not suitable (${port.type.name} != ${target.type.name})`);
+	},
+	'cable.virtual_type_mismatch'({ port, target }){
+		let A = port.virtualType.map(v => v.name).join("|");
+		let B = target.virtualType.map(v => v.name).join("|");
+		console.log(`No virtual type that matched each other (${A} != ${B})`);
 	},
 	'cable.duplicate_removed'({ cable, target }){
 		console.log("Duplicated cable removed");
