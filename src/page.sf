@@ -159,7 +159,7 @@ sf-space[blackprint]{
 
       comp-port-input input {
         border: 1px solid #{$color}8c;
-        box-shadow: 0 0 5px #{$color}8c;
+        box-shadow: 0 0 2px #{$color}8c;
       }
 
       &.inactive {
