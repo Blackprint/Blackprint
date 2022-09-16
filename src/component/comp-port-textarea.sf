@@ -1,0 +1,93 @@
+## html
+<comp-port-textarea style="display: {{ visible ? '' : 'none' }}" class="{{ _size }}">
+	<textarea @pointerdown="click" @pointerup="click" sf-bind="value"></textarea>
+</comp-port-textarea>
+
+
+## js-global
+Blackprint.space.component('comp-port-textarea', {
+	template: #this.path, // 'Blackprint/component/comp-port-textarea.sf'
+	extend: class extends sf.Model {
+		async beforeInit(){
+			let noData = this.noData = this.which == null;
+
+			this._size = "size-1";
+			this.visible ??= true;
+			this.value ??= this.data[this.which];
+
+			if(this.value) this.checkSize(false, this.value);
+		}
+
+		v2m$value(now){
+			this.checkSize(true, now);
+			if(this.whenChanged)
+				return this.whenChanged(now);
+
+			if(!this.noData)
+				this.data[this.which] = now;
+		}
+
+		checkSize(reset, now){
+			clearTimeout(this._rechecking);
+			this._rechecking = setTimeout(async ()=>{
+				let $el = this.$el('textarea');
+				await $.afterRepaint();
+
+				if(now.length < 6)
+					this._size = "size-1";
+				else if(now.length >= 6){
+					this._size = "size-2";
+					let el = $el[0];
+
+					// Skip if textarea was larger than our auto control
+					// I mean, if user have change the size manually
+					if(el.offsetWidth > 150 || el.offsetHeight > 60)
+						return;
+
+					$el.attr('style', 'width:50px;height:15px');
+
+					let w = el.scrollWidth;
+					let h = el.scrollHeight;
+					$el.attr('style', `width:${w < 140 ? w : 140}px;height:${h < 50 ? h : 50}px`);
+				}
+			}, 700);
+		}
+
+		click(ev){
+			ev.stopPropagation();
+		}
+	}
+}, ()=> {});
+
+
+## scss-global
+sf-space[blackprint]{
+	.node comp-port-textarea {
+		textarea {
+			max-width: 40px;
+			max-height: 15px;
+			margin-left: 0px;
+			border: 1px solid #55ff528c;
+    		box-shadow: 0 0 2px #55ff528c;
+			border-radius: 5px;
+			padding: 1px 2px;
+			vertical-align: middle;
+			resize: none;
+			white-space: pre;
+			&::-webkit-scrollbar {
+				width: 4px;
+				height: 4px;
+			}
+		}
+
+		&.size-2 {
+			display: block;
+   			margin-bottom: 10px;
+			textarea{
+				max-width: unset;
+				max-height: unset;
+				resize: both;
+			}
+		}
+	}
+}

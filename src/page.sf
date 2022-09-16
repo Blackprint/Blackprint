@@ -162,6 +162,11 @@ sf-space[blackprint]{
         box-shadow: 0 0 2px #{$color}8c;
       }
 
+      comp-port-textarea textarea {
+        border: 1px solid #{$color}8c;
+        box-shadow: 0 0 2px #{$color}8c;
+      }
+
       &.inactive {
         color: grey;
         & > .port {
