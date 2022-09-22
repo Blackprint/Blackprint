@@ -358,7 +358,7 @@ sf-space[blackprint]{
       }
 
       circle{
-        r: 5;
+        r: 5px;
         fill: orange;
       }
 
