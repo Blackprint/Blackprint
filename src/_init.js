@@ -190,6 +190,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		var handlers = []; // nodes
 		let isCleanImport = inserted.length === 0;
 		let appendLength = options.appendMode ? inserted.length : 0;
+		let reorderInputPort = [];
 
 		// Prepare all nodes depend on the namespace
 		// before we create cables for them
@@ -215,6 +216,13 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 						input_d: temp.input_d,
 						output_sw: temp.output_sw,
 					}, handlers);
+
+					if(temp.input != null){
+						reorderInputPort.push({
+							iface: iface,
+							config: temp,
+						});
+					}
 
 					// For custom function node
 					await iface._BpFnInit?.();
@@ -327,7 +335,6 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		}
 
 		let branchMap = new Map();
-
 		function deepCreate(temp, cable, linkPortA) {
 			if(temp.branch !== void 0){
 				cable.head2[0] = temp.x;
@@ -353,7 +360,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			this.scope('nodes').list.refresh?.();
 		
 		await $.afterRepaint();
-		
+
 		let _getPortRect, _windowless = Blackprint.settings.windowless;
 		if(options.pendingRender){
 			this.pendingRender = true;
@@ -368,7 +375,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		if(isCleanImport && !Blackprint.settings.windowless){
 			let list = this.scope('nodes').list;
-			
+
 			// Init after pushed into DOM tree
 			for (let i=0; i < list.length; i++) {
 				list[i].node.routes._initForSketch();
@@ -383,6 +390,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		// Connect ports cable
 		for (var i = 0; i < cableConnects.length; i++) {
+			// linkPortA = output, linkPortB = input
 			let {output, portName, linkPortA, input, target, linkPortB} = cableConnects[i];
 
 			let cable;
@@ -418,6 +426,36 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			linkPortB.connectCable(cable);
 		}
 
+		// Fix input port cable order
+		for (let i=0; i < reorderInputPort.length; i++) {
+			let { iface, config } = reorderInputPort[i];
+			let cInput = config.input;
+
+			for (let key in cInput) {
+				let port = iface.input[key];
+				let cables = port.cables;
+				let temp = new Array(cables.length);
+
+				let conf = cInput[key];
+				for (let a=0; a < conf.length; a++) {
+					let { i: index, name } = conf[a];
+					let targetIface = inserted[index + appendLength];
+					
+					for (let z=0; z < cables.length; z++) {
+						let cable = cables[z];
+						if(cable.output.name !== name && cable.output.iface !== targetIface) continue;
+						temp[a] = cable;
+					}
+				}
+
+				for (let a=0; a < temp.length; a++) {
+					if(temp[a] == null) console.error(`Some cable failed to be ordered for (${iface.title}: ${key})`);
+				}
+
+				port.cables = temp;
+			}
+		}
+
 		// Call node init after creation processes was finished
 		for (var i = 0; i < handlers.length; i++)
 			handlers[i].init?.();
@@ -432,10 +470,14 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		this._importing = false;
 		this.emit("json.imported", {appendMode: options.appendMode, nodes: inserted, raw: json});
 
-		this._executionOrder.next();
+		this.executionOrder.next();
 
-		if(!Blackprint.settings.windowless)
-			this.recalculatePosition();
+		if(!Blackprint.settings.windowless){
+			setTimeout(async ()=>{
+				await $.afterRepaint();
+				setTimeout(()=> this.recalculatePosition(), 100);
+			}, 100);
+		}
 
 		if(this.pendingRender) Blackprint.settings.windowless = _windowless;
 		return inserted;
@@ -458,15 +500,17 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(options.exclude)
 			exclude = options.exclude;
 
+		let refreshCableOrder = new Set();
+		let ifaceExportData = new Array(ifaces.length);
+
 		for (var i = 0; i < ifaces.length; i++) {
 			var iface = ifaces[i];
 			if(exclude.includes(iface.namespace))
 				continue;
 
-			if(json[iface.namespace] === void 0)
-				json[iface.namespace] = [];
+			json[iface.namespace] ??= [];
 
-			var data = { i };
+			var data = ifaceExportData[i] = { i };
 
 			if(options.position !== false){
 				data.x = Math.round(iface.x);
@@ -550,6 +594,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 							name: target.name,
 						};
 
+						if(target.cables.length > 1 && !refreshCableOrder.has(target))
+							refreshCableOrder.add(target);
+
 						if(cable.overrideRot != null)
 							temp.overRot = cable.overrideRot;
 
@@ -626,6 +673,17 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				data._cable = cableMetadata;
 
 			json[iface.namespace].push(data);
+		}
+
+		// Add input order for port that have more than one connection
+		for (let port of refreshCableOrder) { // port = input port
+			let ref = ifaceExportData[ifaces.indexOf(port.iface)];
+
+			ref.input ??= {};
+			ref.input[port.name] = port.cables.map(({ output }) => ({
+				i: ifaces.indexOf(output.iface),
+				name: output.name,
+			}));
 		}
 
 		let space = options.space;
