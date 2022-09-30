@@ -233,17 +233,23 @@ Blackprint.Interface = class Interface extends sf.Model {
 	}
 
 	swapZIndex(ev, disableSwap){
-		var container = this._container;
+		let container = this._container;
 		let ifaceList = container.nodeScope.list;
+
 		this._scope.sketch.emit('node.click', { event: ev, iface: this});
 
 		if(!disableSwap){
+			let refresh = () => {
+				let i = ifaceList.indexOf(this);
+				if(i+1 === ifaceList.length) return;
+	
+				ifaceList.move(i, -1, 1);
+			};
+
 			if(ev.pointerType === 'touch'){
-				$(ev.target).once('pointerup', () => {
-					ifaceList.push(ifaceList.splice(ifaceList.indexOf(this), 1)[0]);
-				});
+				$(ev.target).once('pointerup', refresh);
 			}
-			else ifaceList.push(ifaceList.splice(ifaceList.indexOf(this), 1)[0]);
+			else refresh();
 		}
 	}
 
@@ -427,7 +433,9 @@ Blackprint.Interface = class Interface extends sf.Model {
 				}
 			};
 
-			port.insertComponent(null, 'comp-port-input', item);
+			let componentName = port.type === String ? 'comp-port-textarea' : 'comp-port-input';
+
+			port.insertComponent(null, componentName, item);
 			port.on('connect', ()=> this._assignDefault(item, false, port));
 			port.on('disconnect', ()=> this._assignDefault(item, true, port));
 		}
