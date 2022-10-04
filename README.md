@@ -87,7 +87,7 @@ This roadmap could be changed on the future, feel free to request feature or rep
     <td><a href='https://www.npmjs.com/package/@blackprint/engine'><img src='https://img.shields.io/npm/v/@blackprint/engine.svg?include_prereleases' height='20'></a></td>
     <td><a href='https://packagist.org/packages/blackprint/engine'><img src='https://img.shields.io/github/v/release/blackprint/engine-php?include_prereleases' height='20'></a></td>
     <td><a href='https://github.com/Blackprint/engine-go'><img src='https://img.shields.io/github/v/release/blackprint/engine-go?include_prereleases' height='20'></a></td>
-    <td><a href="https://github.com/Blackprint/engine-python"><img src='https://img.shields.io/pypi/v/blackprint-engine' height='20'></a></td>
+    <td><a href="https://pypi.org/project/blackprint-engine/"><img src='https://img.shields.io/pypi/v/blackprint-engine' height='20'></a></td>
     <td>-</td>
   </tr>
   <tr>
@@ -96,12 +96,12 @@ This roadmap could be changed on the future, feel free to request feature or rep
     <td><a href='https://github.com/Blackprint/engine-js/tree/master/example'>✔️ Link</a></td>
     <td><a href='https://github.com/Blackprint/engine-php/tree/master/example'>✔️ Link</a></td>
     <td><a href='https://github.com/Blackprint/engine-go/tree/main/example'>✔️ Link</a></td>
-    <td><a href='https://github.com/Blackprint/engine-python/tree/main/example'>✔️ Link</a></td>
+    <td><a href='https://github.com/Blackprint/engine-python/tree/main/example'>🚧 Link</a></td>
     <td>-</td>
   </tr>
   <tr>
     <td>Environment variables</td>
-    <td>✔️</td>  <td>✔️</td>  <td>✔️</td>  <td><a href="https://github.com/Blackprint/engine-go/pull/1">🚧</a></td>  <td>🚧</td>  <td>-</td>
+    <td>✔️</td>  <td>✔️</td>  <td>✔️</td>  <td><a href="https://github.com/Blackprint/engine-go/pull/1">🚧</a></td>  <td>✔️</td>  <td>-</td>
   </tr>
   <tr>
     <td>Import modules from URL</td>
@@ -109,11 +109,11 @@ This roadmap could be changed on the future, feel free to request feature or rep
   </tr>
   <tr>
     <td>Pausable and routable data flow</td>
-    <td>🧪</td>  <td>🧪</td>  <td>🧪</td>  <td><a href="https://github.com/Blackprint/engine-go/pull/1">🚧</a></td>  <td>🚧</td>  <td>-</td>
+    <td>🧪</td>  <td>🧪</td>  <td>🧪</td>  <td><a href="https://github.com/Blackprint/engine-go/pull/1">🚧</a></td>  <td>🧪</td>  <td>-</td>
   </tr>
   <tr>
     <td>Remote control</td>
-    <td>🧪</td>  <td>🧪</td>  <td title="It may be useful for Socket application, but I think only useful for that">❔</td>  <td><a href="https://github.com/Blackprint/engine-go/pull/1">🚧</a></td>  <td>-</td>  <td>-</td>
+    <td>🧪</td>  <td>🧪</td>  <td title="It may be useful for Socket application, but I think only useful for that">❔</td>  <td>-</td>  <td>🚧</td>  <td>-</td>
   </tr>
   <tr>
     <td>Code generation</td>
