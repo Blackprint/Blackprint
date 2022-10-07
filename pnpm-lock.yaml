@@ -40,6 +40,7 @@ specifiers:
   node-notifier: ^9.0.1
   scarletsframe: 0.35.x
   scarletsframe-compiler: 0.6.21
+  source-map-support: ^0.5.21
   through2: ^4.0.2
   vinyl: '*'
 
@@ -57,6 +58,7 @@ devDependencies:
   jest-environment-jsdom: 28.1.2
   node-notifier: 9.0.1
   scarletsframe-compiler: 0.6.21_i6dial6me4rzwuk2p2lwdazeni
+  source-map-support: 0.5.21
   through2: 4.0.2
   vinyl: 2.2.1
 
