@@ -1,3 +1,17 @@
+# 0.8.0
+### Features
+- Add VirtualType and improve the node suggestion
+
+### Bug Fix
+- Fix cable `<circle>` style for Firefox
+- Fix error for route port's element
+- Improve style for port's input box
+- Fix layout shift when showing route port
+- Fix error when port element was disabled
+
+### Breaking Changes
+- Blackprint Engine v0.8 is required (for more information please see the changelog)
+
 # 0.7.5
 ### Features
 - Add `json.importing` event
