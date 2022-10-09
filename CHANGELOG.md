@@ -1,4 +1,5 @@
 # 0.8.0
+
 ### Features
 - Add VirtualType and improve the node suggestion
 
@@ -13,6 +14,7 @@
 - Blackprint Engine v0.8 is required (for more information please see the changelog)
 
 # 0.7.5
+
 ### Features
 - Add `json.importing` event
 

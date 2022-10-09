@@ -96,7 +96,7 @@ This roadmap could be changed on the future, feel free to request feature or rep
     <td><a href='https://github.com/Blackprint/engine-js/tree/master/example'>✔️ Link</a></td>
     <td><a href='https://github.com/Blackprint/engine-php/tree/master/example'>✔️ Link</a></td>
     <td><a href='https://github.com/Blackprint/engine-go/tree/main/example'>✔️ Link</a></td>
-    <td><a href='https://github.com/Blackprint/engine-python/tree/main/example'>🚧 Link</a></td>
+    <td><a href='https://github.com/Blackprint/engine-python/tree/main/example'>✔️ Link</a></td>
     <td>-</td>
   </tr>
   <tr>
