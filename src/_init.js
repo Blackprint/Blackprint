@@ -109,7 +109,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	}
 
 	// Import node positions and cable connection from JSON
+	// If this was changed, we also need to change the `importJSON` on the `@blackprint/engine`
 	async importJSON(json, options = {}){
+		if(this._locked_) throw new Error("This instance was locked");
+
 		if(window.sf && window.sf.loader)
 			await window.sf.loader.task;
 

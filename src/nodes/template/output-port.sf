@@ -1,7 +1,7 @@
 ## html
 <div class="output" @pointerover="nodeHovered(event)" @pointerout="nodeUnhovered(event)">
   <div sf-each="val in output._portList"
-        class="ports {{ hideUnusedPort && val.cables.length === 0 ? 'unused' : '' }} {{ val.classAdd + val.type.name }} {{ val.inactive ? 'inactive' : ''}}"
+        class="ports {{ val.disabled ? 'disabled' : ''}} {{ hideUnusedPort && val.cables.length === 0 ? 'unused' : '' }} {{ val.classAdd + val.type.name }} {{ val.inactive ? 'inactive' : ''}}"
         @contextmenu.stop.prevent="val.portRightClick(event)"
         @pointerdown.left.stop="val.createCable(event)"
         @pointerup.left="val.connectCable()"

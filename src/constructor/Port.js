@@ -11,6 +11,9 @@ class Port extends Blackprint.Engine.Port {
 	}
 
 	createCable(e, noPush){
+		if(this._node.instance._locked_)
+			throw new Error("This instance was locked");
+
 		var isAuto = e.target == null;
 
 		// Shift + Left Click
@@ -75,6 +78,9 @@ class Port extends Blackprint.Engine.Port {
 	}
 
 	connectCable(cable, _ev){
+		if(this._node.instance._locked_)
+			throw new Error("This instance was locked");
+
 		if(this._ignoreConnect) return;
 
 		let _cable = cable;

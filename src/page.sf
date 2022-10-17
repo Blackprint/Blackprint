@@ -222,6 +222,11 @@ sf-space[blackprint]{
     &.BP-StructSplit.BP-Last {
       margin-bottom: 10px;
     }
+
+    &.disabled{
+      text-decoration: line-through;
+      color: #727272;
+    }
   }
   // BP-StructOf
 
