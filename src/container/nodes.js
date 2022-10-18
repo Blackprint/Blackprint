@@ -75,7 +75,7 @@ Space.model('nodes', function(My, include){
 							continue;
 						}
 
-						if(isRouteOutput){
+						if(isRouteOutput && cable.input != null){
 							let rect = cable.input._inElement[0].getBoundingClientRect();
 							let head2 = cable.head2;
 

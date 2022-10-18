@@ -251,7 +251,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				var iface = inserted[node.i];
 
 				if(node.route != null)
-					routeConnects.push({from: iface, to: inserted[node.route.i]});
+					routeConnects.push({from: iface, to: inserted[node.route.i + appendLength]});
 
 				// If have output connection
 				if(node.output !== void 0){
@@ -393,7 +393,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		// Connect ports cable
 		for (var i = 0; i < cableConnects.length; i++) {
-			// linkPortA = output, linkPortB = input
+			// linkPortA = output, linkPortB = input (the port interface)
 			let {output, portName, linkPortA, input, target, linkPortB} = cableConnects[i];
 
 			let cable;
@@ -419,6 +419,16 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			if(target.overRot != null)
 				cable.overrideRot = target.overRot;
+
+			if(linkPortA.isRoute){
+				// Positioning the cable head2 into target port position from NodeB
+				var rectB = linkPortB._inElement[0].getBoundingClientRect();
+				var center = rectB.width / 2;
+				cable.head2 = [rectB.x + center, rectB.y + center];
+
+				linkPortB.connectCable(cable);
+				continue;
+			}
 
 			// Positioning the cable head2 into target port position from NodeB
 			var rectB = _getPortRect(input, target.name);
@@ -599,7 +609,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 							name: target.name,
 						};
 
-						if(target.cables.length > 1 && !refreshCableOrder.has(target))
+						if(!target.isRoute && target.cables.length > 1 && !refreshCableOrder.has(target))
 							refreshCableOrder.add(target);
 
 						if(cable.overrideRot != null)
@@ -685,10 +695,15 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			let ref = ifaceExportData[ifaces.indexOf(port.iface)];
 
 			ref.input ??= {};
-			ref.input[port.name] = port.cables.map(({ output }) => ({
-				i: ifaces.indexOf(output.iface),
-				name: output.name,
-			}));
+			let temp = ref.input[port.name] = port.cables.map(({ output }) => {
+				let i = ifaces.indexOf(output.iface);
+				if(i === -1) return null;
+				return { i, name: output.name };
+			});
+
+			for (let i=temp.length-1; i >= 0; i--) {
+				if(temp[i] == null) temp.splice(i, 1);
+			}
 		}
 
 		let space = options.space;

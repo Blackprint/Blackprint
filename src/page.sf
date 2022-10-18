@@ -189,11 +189,11 @@ sf-space[blackprint]{
 
   // BP-Route
     .nodes .node .ports.BP-Route > .port {
-        border: 2px solid #ffac7b;
-        border-radius: 3px;
+        // border: 2px solid #ffac7b;
+        border-radius: 2px;
         transform: rotate(45deg);
-        height: 7px;
-        width: 7px;
+        height: 8px;
+        width: 8px;
     }
   // BP-Route
 
