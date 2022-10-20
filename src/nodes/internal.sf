@@ -200,8 +200,8 @@ $(function(){
 			if(instance.pendingRender){
 				setTimeout(function(){
 					$.afterRepaint().then(() => {
-						setTimeout(function(){
-							instance.recalculatePosition();
+						setTimeout(async function(){
+							await instance.recalculatePosition();
 
 							let list = instance.ifaceList;
 							let nodes = instance.scope('nodes');

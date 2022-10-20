@@ -428,7 +428,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 
 			let item = port._boxInput = {
 				value: port.default ?? '',
-				visible: true,
+				visible: port.cables.length === 0,
 				type,
 				whenChanged(now){
 					clearTimeout(_debounce);
