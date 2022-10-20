@@ -398,6 +398,8 @@ Blackprint.Interface = class Interface extends sf.Model {
 		}]);
 	}
 	initInputPort(){
+		if(this.node.instance.pendingRender) return;
+
 		let _debounce;
 		let inputs = this.input;
 		let update = port => {
@@ -417,6 +419,9 @@ Blackprint.Interface = class Interface extends sf.Model {
 			if(port.type === Number) type = 'number';
 			else if(port.type === Boolean) type = 'checkbox';
 			else if(port.type !== String) continue; // Skip if not Number/Boolean/String
+
+			// Skip if the port is using ArrayOf feature
+			if(port.feature === BP_Port.ArrayOf) continue;
 
 			port._mainDefault = port.default;
 			let debouncer = ()=> update(port);

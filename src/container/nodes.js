@@ -1,7 +1,7 @@
 Space.model('nodes', function(My, include){
 	let container = My.container = include('container');
 
-	var sizeObserve = new ResizeObserver(My._recalculate = function(items, noEvent){
+	var sizeObserve = My._sO = new ResizeObserver(My._recalculate = function(items, noEvent){
 		if(My.$space.sketch == null) return;
 
 		// Use the main container's offset when having multiple container

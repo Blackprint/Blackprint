@@ -289,10 +289,12 @@ class Port extends Blackprint.Engine.Port {
 		this._hasComponent = true;
 
 		if(portList.getElement === void 0){
-			return setTimeout(() => {
+			return setTimeout(async () => {
+				await $.afterRepaint();
+
 				if(_repeat === void 0)
 					this.insertComponent(beforeSelector, compName, item, callback, true)
-			}, 100);
+			}, 700);
 		}
 
 		if(_reinit === void 0){

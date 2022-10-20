@@ -187,6 +187,10 @@ $(function(){
 
 	Blackprint.Sketch.registerInterface('BPIC/BP/Fn/Main', BPFn,
 	class extends Blackprint._iface['BPIC/BP/Fn/Main'] {
+		init(){
+			// This is required for Blackprint Sketch, when the node is created at runtime
+			if(!this._importOnce) this._BpFnInit();
+		}
 		openFunction(event){
 			let instance = this.bpInstance;
 			this.node.instance.emit("node.function.open", {
@@ -198,6 +202,15 @@ $(function(){
 					$.afterRepaint().then(() => {
 						setTimeout(function(){
 							instance.recalculatePosition();
+
+							let list = instance.ifaceList;
+							let nodes = instance.scope('nodes');
+							for	(let i=0; i < list.length; i++) {
+								let iface = list[i];
+								iface.initInputPort();
+
+								nodes._sO.observe(iface.$el('.node')[0]);
+							}
 						}, 10);
 					});
 				}, 10);

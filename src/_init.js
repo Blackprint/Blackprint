@@ -130,6 +130,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		this._importing = true;
 		this.emit("json.importing", {appendMode: options.appendMode, raw: json});
 		if(!options.appendMode) this.clearNodes();
+		if(options.pendingRender) this.pendingRender = true;
 
 		var metadata = json._;
 		delete json._;
@@ -138,7 +139,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			if(metadata.env !== void 0 && options.importEnvironment){
 				let Env = Blackprint.Environment;
 				let temp = metadata.env;
-				
+
 				for (let key in temp) {
 					Env.set(key, temp[key]);
 				}
@@ -366,8 +367,6 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		let _getPortRect, _windowless = Blackprint.settings.windowless;
 		if(options.pendingRender){
-			this.pendingRender = true;
-
 			let temp = {x:50,y:50,width:50,height:50,left:50,right:50,top:50,bottom:50};
 			Object.setPrototypeOf(temp, DOMRect.prototype);
 			_getPortRect = () => temp;
