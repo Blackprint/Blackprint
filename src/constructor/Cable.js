@@ -43,7 +43,7 @@ class Cable extends Blackprint.Engine.Cable {
 			_unshift = true;
 		}
 
-		let windowless = Blackprint.settings.windowless;
+		let windowless = Blackprint.settings.windowless || port.iface.node.instance.pendingRender;
 
 		let x = windowless ? 100 : (obj.x - container.pos.x - Ofst.x) / container.scale;
 		let y = windowless ? 100 : (obj.y - container.pos.y - Ofst.y) / container.scale;
@@ -68,7 +68,7 @@ class Cable extends Blackprint.Engine.Cable {
 
 	// Get SVG Path element
 	get pathEl(){
-		if(Blackprint.settings.windowless) return null;
+		if(Blackprint.settings.windowless || this.owner.iface.node.instance.pendingRender) return null;
 
 		if(this._pathEl == null){
 			let temp = this._ownerCableList.getElement?.(this);

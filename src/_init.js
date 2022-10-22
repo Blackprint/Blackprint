@@ -25,6 +25,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		this.index = Blackprint.index++;
 		this.scope = Blackprint.space.getScope(this.index);
 		this.scope.sketch = this;
+		this.isSketch = true;
 
 		// Default event
 		this._event = {$_fallback: BlackprintEventFallback};
@@ -1087,6 +1088,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		if(handlers == null && !Blackprint.settings.windowless){
 			$.afterRepaint().then(()=>{
+				if(this.pendingRender) return;
+
 				let rect = iface.$el[0].firstElementChild.getBoundingClientRect();
 				iface.w = rect.width;
 				iface.h = rect.height;

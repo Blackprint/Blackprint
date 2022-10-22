@@ -101,7 +101,7 @@ class Port extends Blackprint.Engine.Port {
 
 		let res = super.connectCable(cable);
 		if(res === true && cable != null && this._scope != null){
-			if(!Blackprint.settings.windowless){
+			if(!Blackprint.settings.windowless && !cable.owner.iface.node.instance.pendingRender){
 				let list = cable.input.iface.input._portList;
 				if(list != null){
 					let el;

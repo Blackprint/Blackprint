@@ -389,7 +389,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 		if(tags?.summary != null) this.description = tags.summary;
 	}
 	async _recalculateSize(){
-		if(Blackprint.settings.windowless) return;
+		if(Blackprint.settings.windowless || this.node.instance.pendingRender) return;
 		await $.afterRepaint();
 
 		this.$space?.('nodes')._recalculate([{

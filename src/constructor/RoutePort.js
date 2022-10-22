@@ -22,7 +22,7 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 	}
 
 	get _inElement(){
-		if(Blackprint.settings.windowless) return null;
+		if(Blackprint.settings.windowless || this.iface.node.instance.pendingRender) return null;
 		if(this.__inElement == null || this.__inElement.length === 0)
 			this.__inElement = this.iface.$el('.routes .in');
 
@@ -30,7 +30,7 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 	}
 
 	get _outElement(){
-		if(Blackprint.settings.windowless) return null;
+		if(Blackprint.settings.windowless || this.iface.node.instance.pendingRender) return null;
 		if(this.__outElement == null || this.__outElement.length === 0)
 			this.__outElement = this.iface.$el('.routes .out');
 
@@ -61,7 +61,7 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 		}
 		else{
 			let rect;
-			if(iface.$el == null || Blackprint.settings.windowless)
+			if(iface.$el == null || Blackprint.settings.windowless || iface.node.instance.pendingRender)
 				rect = {x:0, y:0, height:0, width:0};
 			else rect = iface.$el('.routes .out')[0].getBoundingClientRect();
 
@@ -114,7 +114,7 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 			return false;
 		}
 
-		if(!Blackprint.settings.windowless){
+		if(!Blackprint.settings.windowless && !this.iface.node.instance.pendingRender){
 			let { offset, pos, scale } = this._scope('container');
 
 			let el_;
