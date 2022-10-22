@@ -187,10 +187,6 @@ $(function(){
 
 	Blackprint.Sketch.registerInterface('BPIC/BP/Fn/Main', BPFn,
 	class extends Blackprint._iface['BPIC/BP/Fn/Main'] {
-		init(){
-			// This is required for Blackprint Sketch, when the node is created at runtime
-			if(!this._importOnce) this._BpFnInit();
-		}
 		openFunction(event){
 			let instance = this.bpInstance;
 			this.node.instance.emit("node.function.open", {
