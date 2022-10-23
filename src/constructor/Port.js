@@ -220,7 +220,6 @@ class Port extends Blackprint.Engine.Port {
 					title: "Allow Resync",
 					callback(){
 						port.allowResync = true;
-						port.classAdd = "BP-AllowResync " + port.classAdd;
 						port.iface.node.instance.emit('_port.resync.allow', { port });
 					},
 				});
@@ -230,7 +229,6 @@ class Port extends Blackprint.Engine.Port {
 					title: "Disallow Resync",
 					callback(){
 						port.allowResync = false;
-						port.classAdd = port.classAdd.replace('BP-AllowResync ', '');
 						port.iface.node.instance.emit('_port.resync.disallow', { port });
 					},
 				});
