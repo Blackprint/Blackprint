@@ -411,6 +411,9 @@ Blackprint.Interface = class Interface extends sf.Model {
 			node.routes.routeOut();
 		}
 
+		// Skip default value's port input box for internal nodes
+		if(this.namespace.startsWith('BP/')) return;
+
 		for(let key in inputs){
 			let port = inputs[key];
 			if(port._hasComponent) continue; // Skip default component if the developer already added a component
