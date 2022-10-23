@@ -279,7 +279,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 								linkPortA = iface.output[portName];
 							}
 							else{
-								this.emit('error', {
+								this._emit('error', {
 									type: 'node_port_not_found',
 									data: {iface, portName}
 								});
@@ -314,7 +314,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 									linkPortB = targetNode.node.routes;
 								}
 								else {
-									this.emit('error', {
+									this._emit('error', {
 										type: 'node_port_not_found',
 										data: {
 											iface: targetNode,
@@ -696,6 +696,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			ref.input ??= {};
 			let temp = ref.input[port.name] = port.cables.map(({ output }) => {
+				if(output == null) return null;
 				let i = ifaces.indexOf(output.iface);
 				if(i === -1) return null;
 				return { i, name: output.name };
@@ -860,7 +861,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		var i = list.indexOf(iface);
 
 		if(i === -1)
-			return scope.sketch.emit('error', {
+			return scope.sketch._emit('error', {
 				type: 'node_delete_not_found',
 				data: {iface}
 			});
@@ -939,12 +940,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 					if(func != null){
 						func = func.node;
 					}
-					else return this.emit('error', {
+					else return this._emit('error', {
 						type: 'node_not_found',
 						data: {namespace}
 					});
 				}
-				else return this.emit('error', {
+				else return this._emit('error', {
 					type: 'node_not_found',
 					data: {namespace}
 				});
