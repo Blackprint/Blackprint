@@ -1,3 +1,18 @@
+# 0.8.1
+
+### Features
+- Add feature to lock the instance
+
+### Bug Fix
+- Avoid processing element in function node when before being rendered
+- Fix port input in function node and fix the resize observer
+- Fix route port connection and array input data
+- Fix node type defined on node constructor's static property
+- Emit some event to root instance
+- Hide default port input box on port that have connection
+- Simplify interface style binding when port resync is allowed
+- Skip default value's port input box for internal nodes
+
 # 0.8.0
 
 ### Features
