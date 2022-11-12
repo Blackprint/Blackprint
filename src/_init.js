@@ -1144,6 +1144,11 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			}
 		}
 	}
+
+	destroy(){
+		super.destroy();
+		this.scope.destroy();
+	}
 }
 
 // Replace function from Blackprint Engine

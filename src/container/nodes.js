@@ -55,6 +55,8 @@ Space.model('nodes', function(My, include){
 					if(cables.length === 0)
 						continue;
 
+					// Skip if not ready or the container was deleted
+					if(_list.$EM == null) continue;
 					var rect = _list.getElement(port).querySelector('.port').getBoundingClientRect();
 
 					// ToDo: simplify this math
