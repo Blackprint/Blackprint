@@ -1,3 +1,8 @@
+# 0.8.2
+
+### Bug Fix
+- Destroy space after the instance was destroyed
+
 # 0.8.1
 
 ### Features
