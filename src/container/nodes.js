@@ -27,14 +27,20 @@ Space.model('nodes', function(My, include){
 			let routeCable = iface.node.routes.out;
 			if(routeCable != null){
 				if(routeCable.input != null){
-					let inp = routeCable.input.iface.$el('.routes .in')[0].getBoundingClientRect();
+					let inp = routeCable.input.iface.$el('.routes .in')[0];
+					if(inp == null) continue;
+					inp = inp.getBoundingClientRect();
+
 					let inPortX = (inp.x+(inp.width/2) - oX) / container.scale;
 					let inPortY = (inp.y+(inp.height/2) - oY) / container.scale;
 					routeCable.head2 = [inPortX, inPortY];
 				}
 
 				if(routeCable.output != null){
-					let out = routeCable.output.iface.$el('.routes .out')[0].getBoundingClientRect();
+					let out = routeCable.output.iface.$el('.routes .out')[0];
+					if(out == null) continue;
+					out = out.getBoundingClientRect();
+
 					let outPortX = (out.x+(out.width/2) - oX) / container.scale;
 					let outPortY = (out.y+(out.height/2) - oY) / container.scale;
 					routeCable.head1 = [outPortX, outPortY];
