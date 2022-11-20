@@ -1,4 +1,4 @@
-// Type definitions for Blackprint Sketch, still not perfect yet
+// Type definitions for Blackprint Sketch
 // Project: https://github.com/Blackprint/Blackprint
 // Definitions by: StefansArya <https://github.com/stefansarya>
 
