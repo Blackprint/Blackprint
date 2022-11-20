@@ -137,6 +137,17 @@ sf-space[blackprint]{
     }
   }
 
+  .nodes .node.bp-skeleton{
+    width: 200px;
+
+    .ports.ArrayOf > .port {
+      background: white;
+      &:before {
+        content: unset;
+      }
+    }
+  }
+
   .BP-Hide{
     display: none;
   }

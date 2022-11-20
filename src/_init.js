@@ -7,6 +7,8 @@ var Blackprint = window.Blackprint;
 
 let onModuleConflict = Blackprint._utils.onModuleConflict;
 let _InternalNodeEnum = Blackprint._InternalNodeEnum;
+let arrayOfAny = Blackprint.Port.ArrayOf(Blackprint.Types.Any);
+let NOOP_ExecutionOrder = {list:[], index: 0, length:0, pause: true, add(){}, next(){}, clear(){}};
 
 Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	static _iface = {'BP/default': NOOP};
@@ -133,8 +135,18 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(!options.appendMode) this.clearNodes();
 		if(options.pendingRender) this.pendingRender = true;
 
+		// Skeleton instance will only use No-operation node and interface
+		// It doesn't need external module and can be useful for displaying node connection only 
+		if(options.isSkeletonInstance){
+			this.executionOrder = NOOP_ExecutionOrder;
+			this.isSkeletonInstance = true;
+		}
+
 		var metadata = json._;
 		delete json._;
+
+		if(this.isSkeletonInstance)
+			delete metadata.moduleJS;
 
 		if(metadata !== void 0){
 			if(metadata.env !== void 0 && options.importEnvironment){
@@ -220,6 +232,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 						oldIface: oldIfaces[temp.id],
 						input_d: temp.input_d,
 						output_sw: temp.output_sw,
+						_isSkeletonInstance: this.isSkeletonInstance,
 					}, handlers);
 
 					if(temp.input != null){
@@ -278,6 +291,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 								iface.useType(target);
 								linkPortA = iface.output[portName];
 							}
+							else if(this.isSkeletonInstance){
+								linkPortA = iface.node.createPort('output', portName, arrayOfAny);
+							}
 							else{
 								this._emit('error', {
 									type: 'node_port_not_found',
@@ -312,6 +328,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 								}
 								else if(linkPortA.type === Blackprint.Port.Route){
 									linkPortB = targetNode.node.routes;
+								}
+								else if(this.isSkeletonInstance){
+									linkPortB = targetNode.node.createPort('input', target.name, arrayOfAny);
 								}
 								else {
 									this._emit('error', {
@@ -929,6 +948,11 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	// Create new node that will be inserted to the container
 	// @return node scope
 	createNode(namespace, options, handlers){
+		if(options._isSkeletonInstance && !(namespace.startsWith("BP/") || namespace.startsWith("BPI/"))){
+			let objCopy = Object.assign({}, options, {data: Object.assign({ namespace }, options)});
+			return this.createNode("BP/Skeleton", objCopy);
+		}
+
 		var node, func;
 		if(!(namespace.prototype instanceof Blackprint.Node)){
 			func = deepProperty(Blackprint.nodes, namespace.split('/'));
