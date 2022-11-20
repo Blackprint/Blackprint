@@ -17,9 +17,11 @@ zef
 babel.config.json
 gulpfile.js
 dist/engine.*
+dist/skeleton.*
 dist/nodes-*
 dist/remote-*
 cli-tools
 templates
 jest.config.js
 remote-control
+private-editor

@@ -7,9 +7,13 @@ node_modules/
 /zef/
 /dist/blackprint.*
 /dist/engine.*
+/dist/skeleton.*
 /dist/nodes-*
 /dist/remote-*
 /parser/
 /cli-tools/
 /templates/
-/nodes/
+/chrome-extension/
+# /nodes/
+workspace.code-workspace
+/private-editor/

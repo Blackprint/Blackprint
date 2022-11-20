@@ -29,6 +29,21 @@ let compileTargets = editorOnly ? {} : {
 				// Combine files from all directory recursively
 				'engine-js/src/**/*.js',
 				'engine-js/src/nodes/*.js',
+				'!engine-js/src/skeleton/*.js',
+			],
+		}
+	},
+	'engine-js-skeleton':{
+		versioning: !isCI && 'editor/dev.html',
+		// stripURL:'editor/',
+
+		js:{
+			file:'dist/skeleton.min.js',
+			wrapped: true,
+			header:"/* Blackprint \n MIT Licensed */",
+			combine:[
+				'engine-js/src/skeleton/_init.js',
+				'engine-js/src/skeleton/*.js',
 			],
 		}
 	},
@@ -75,6 +90,27 @@ if(!compileEngineOnly){
 			sf:{
 				file:'editor/assets/custom.sf',
 				combine:'editor/src/**/*.sf',
+				prefix:'PrivateEditor',
+			},
+		};
+
+		compileTargets.privateEditor = {
+			js:{
+				file:'editor/assets/private.min.js',
+
+				// Will be processed from the top to bottom
+				combine:[
+					// Combine files from all directory recursively
+					'private-editor/src/**/*.js',
+				],
+			},
+			scss:{
+				file:'editor/assets/private.min.css',
+				combine:'private-editor/src/**/*.scss',
+			},
+			sf:{
+				file:'editor/assets/private.sf',
+				combine:'private-editor/src/**/*.sf',
 			},
 		};
 
@@ -138,7 +174,7 @@ var SFC = require("scarletsframe-compiler")({
 			baseDir:'editor/',
 			index:'index.html',
 			middleware(req, res, next){
-				if(true) return next(); // Comment this to allow CORS for all domain
+				// if(true) return next(); // Comment this to allow CORS for all domain
 				// Always disable this if you don't need it
 				// it can dangerous if you leave this active
 
