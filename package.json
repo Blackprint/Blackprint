@@ -44,6 +44,7 @@
   ],
   "exports": {
     "./mjs": "./dist/_entry.mjs",
+    "./cjs": "./dist/_entry.cjs.js",
     "./css": "./dist/blackprint.sf.css"
   },
   "dependencies": {
