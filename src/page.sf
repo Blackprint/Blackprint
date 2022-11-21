@@ -138,7 +138,20 @@ sf-space[blackprint]{
   }
 
   .nodes .node.bp-skeleton{
-    width: 200px;
+    min-width: 200px;
+
+    .header .description {
+      max-width: 200px;
+      font-size: 14px;
+      font-style: normal;
+    }
+
+    .input{
+      padding-right: 5px;
+    }
+    .right-port {
+      margin-left: 5px;
+    }
 
     .ports.ArrayOf > .port {
       background: white;
