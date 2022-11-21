@@ -1,6 +1,5 @@
 // Type definitions for Blackprint Sketch
 // Project: https://github.com/Blackprint/Blackprint
-// Definitions by: StefansArya <https://github.com/stefansarya>
 
 import { sQuery } from "scarletsframe";
 import {

@@ -130,7 +130,7 @@ This roadmap could be changed on the future, feel free to request feature or rep
 
 ---
 
-With remote control you can easily manage connection to the target environment (Node.js/PHP/etc) from the browser. Please always run your app inside of container (like Docker) if you allow someone to remote control your system.
+With remote control you can easily manage connection to the target environment (Node.js/PHP/etc) from the browser. Please always run your app inside of isolated container (like Docker) if you allow someone to remote control your system.
 
 Example case where you may need remote control:
  - Creating Discord.js bot (because the library doesn't have support for browser)
