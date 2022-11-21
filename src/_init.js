@@ -946,8 +946,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	}
 
 	// Create new node that will be inserted to the container
-	// @return node scope
 	createNode(namespace, options, handlers){
+		options ??= {};
+
 		if(options._isSkeletonInstance && !(namespace.startsWith("BP/") || namespace.startsWith("BPI/"))){
 			let objCopy = Object.assign({}, options, {data: Object.assign({ namespace }, options)});
 			return this.createNode("BP/Skeleton", objCopy);
@@ -1003,7 +1004,6 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			throw new Error(namespace+"> 'node.iface' was not found, do you forget to call 'node.setInterface()'?");
 
 		iface.namespace = namespace;
-		options ??= {};
 
 		if(options.oldIface !== void 0 && options.oldIface.namespace === iface.namespace){
 			try {
