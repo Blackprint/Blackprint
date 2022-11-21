@@ -1,7 +1,6 @@
 import "./_entry.deps.mjs";
 import "./blackprint.min.js";
 import "./blackprint.sf.js";
-import "./blackprint.sf.css";
 
 const {
 	settings,
@@ -23,9 +22,9 @@ const {
 	modulesURL,
 	template,
 	availableNode,
-} = window.Blackprint;
+} = globalThis.Blackprint;
 
-export default window.Blackprint;
+export default globalThis.Blackprint;
 export {
 	settings,
 	createContext,
