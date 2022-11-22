@@ -1,5 +1,6 @@
 // Type definitions for Blackprint Sketch
 // Project: https://github.com/Blackprint/Blackprint
+// Module: @blackprint/sketch
 
 import { sQuery } from "scarletsframe";
 import {
@@ -35,8 +36,8 @@ export {
 	InputPort,
 	RemoteControl,
 	RemoteEngine,
-	Skeleton,
 } from "@blackprint/engine";
+export { Skeleton } from "@blackprint/engine/skeleton";
 
 type Docs = {
 	tags?: {summary?: string},
@@ -52,13 +53,16 @@ export namespace Sketch {
 	 * Register interface to Blackprint (For browser only)
 	 * @param icNamespace Interface component's namespace, must be started with "BPIC/"
 	 * @param options You may need to specify either html or template for the Sketch UI
-	 * @param clazz Class that extends Blackprint.Interface
+	 * @param class_ Class that extends Blackprint.Interface, leave this parameter empty if you want to use decorator
 	 */
 	export function registerInterface(icNamespace: String, options: {
+		/** Keep the template cache */
 		keepTemplate?: Boolean,
+		/** Define ScarletsFrame's HTML template here */
 		html?: String,
+		/** Template path that was saved on window.templates[path] */
 		template?: String,
-	}, clazz: Function): void;
+	}, class_?: Function): void;
 
 	/**
 	 * Register node documentation to Blackprint (For browser only)
@@ -69,10 +73,10 @@ export namespace Sketch {
 	/**
 	 * Get nodes suggestion that can be connected with the specified data type
 	 * @param source Port source
-	 * @param clazz Data type
+	 * @param class_ Data type
 	 * @param fromList Node tree like 'Blackprint.nodes'
 	 */
-	export function suggestNode(source: 'input' | 'output', clazz: Function, fromList?: object): object;
+	export function suggestNode(source: 'input' | 'output', class_: Function, fromList?: object): object;
 
 	/**
 	 * Get nodes suggestion that can be connected with specified port

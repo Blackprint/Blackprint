@@ -18,9 +18,13 @@
   },
   "main": "./dist/_entry.cjs.js",
   "module": "./dist/_entry.mjs",
-  "types": "./src/index.d.ts",
+  "typings": "./src/index.d.ts",
   "exports": {
-    ".": "./dist/_entry.cjs.js",
+    ".": {
+      "types": "./src/index.d.ts",
+      "require": "./dist/_entry.cjs.js",
+      "import": "./dist/_entry.mjs"
+    },
     "./web-loader": "./dist/_entry.js"
   },
   "homepage": "https://blackprint.github.io/",
