@@ -16,9 +16,13 @@
     "compile": "gulp compile",
     "test": "jest --verbose ./tests/"
   },
-  "main": "./dist/_entry.js",
+  "main": "./dist/_entry.cjs.js",
   "module": "./dist/_entry.mjs",
   "types": "./src/index.d.ts",
+  "exports": {
+    ".": "./dist/_entry.cjs.js",
+    "./web-loader": "./dist/_entry.js"
+  },
   "homepage": "https://blackprint.github.io/",
   "devDependencies": {
     "@babel/core": "^7.18.5",
@@ -42,11 +46,6 @@
     "html5",
     "diagram"
   ],
-  "exports": {
-    "./mjs": "./dist/_entry.mjs",
-    "./cjs": "./dist/_entry.cjs.js",
-    "./css": "./dist/blackprint.sf.css"
-  },
   "dependencies": {
     "scarletsframe": "0.35.x"
   },

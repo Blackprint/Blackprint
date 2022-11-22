@@ -1,4 +1,7 @@
 // Import Blackprint Sketch for Browser only
+// You import this from CDN, and make sure to wait until every script
+// have been loaded with `$(function(){ ... });` before using Blackprint
+
 if(window === void 0 || window.HTMLVideoElement === void 0)
 	throw new Error("Blackprint Sketch is only for browser, please use Blackprint Engine if you want to run on browserless environment.");
 
