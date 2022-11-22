@@ -8,14 +8,35 @@ import {
 	Interface as EngineInterface,
 	Node,
 	RemoteControl,
-} from "@blackprint/engine-js";
-// } from "../engine-js/src";
+} from "@blackprint/engine";
 
-export type { Cable, Decoration, RoutePort } from "@blackprint/engine-js";
-// export type { Cable, Decoration, RoutePort } from "../engine-js/src";
+export type { Cable, Decoration, RoutePort } from "@blackprint/engine";
 
-export * from "@blackprint/engine-js";
-// export * from "../engine-js/src";
+export {
+	Types,
+	settings,
+	createContext,
+	getContext,
+	loadScope,
+	allowModuleOrigin,
+	loadBrowserInterface,
+	loadModuleFromURL,
+	deleteModuleFromURL,
+	Port,
+	onModuleConflict,
+	registerNode,
+	registerInterface,
+	Environment,
+	utils,
+	Engine,
+	IFacePort,
+	Node,
+	OutputPort,
+	InputPort,
+	RemoteControl,
+	RemoteEngine,
+	Skeleton,
+} from "@blackprint/engine";
 
 type Docs = {
 	tags?: {summary?: string},
