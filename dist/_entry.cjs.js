@@ -8,7 +8,7 @@ if(globalThis.HTMLVideoElement == null){
 }
 
 // Make sure to load the framework first
-globalThis.sf = require("scarletsframe/dist/scarletsframe.min.js");
+globalThis.sf = require("scarletsframe/dist/scarletsframe.modern.js");
 
 // And then the engine
 require('@blackprint/engine');
