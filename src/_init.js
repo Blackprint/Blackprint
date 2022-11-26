@@ -128,90 +128,90 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		let containerModel = this.scope('container');
 		containerModel._isImporting = true;
 
-		let oldIfaces = this.iface;
-
-		this._importing = true;
-		this.emit("json.importing", {appendMode: options.appendMode, raw: json});
-		if(!options.appendMode) this.clearNodes();
-		if(options.pendingRender) this.pendingRender = true;
-
-		// Skeleton instance will only use No-operation node and interface
-		// It doesn't need external module and can be useful for displaying node connection only 
-		if(options.isSkeletonInstance){
-			this.executionOrder = NOOP_ExecutionOrder;
-			this.isSkeletonInstance = true;
-		}
-
-		var metadata = json._;
-		delete json._;
-
-		if(this.isSkeletonInstance)
-			delete metadata.moduleJS;
-
-		if(metadata !== void 0){
-			if(metadata.env !== void 0 && options.importEnvironment){
-				let Env = Blackprint.Environment;
-				let temp = metadata.env;
-
-				for (let key in temp) {
-					Env.set(key, temp[key]);
-				}
-			}
-
-			let mjs;
-			if(metadata.functions != null) mjs = metadata.moduleJS.slice(0) || [];
-
-			if(metadata.moduleJS !== void 0 && !options.noModuleJS){
-				try{
-					// wait for .min.mjs
-					await Blackprint.loadModuleFromURL(metadata.moduleJS, {
-						loadBrowserInterface: true
-					});
-
-					// wait for .sf.mjs and .sf.css if being loaded from code above
-					if(window.sf && window.sf.loader){
-						await sf.loader.task;
-						await new Promise(resolve=> setTimeout(resolve, 100));
-						await sf.loader.task;
-					}
-
-					await Promise.resolve();
-				} catch(e) {
-					containerModel._isImporting = false;
-					throw e;
-				}
-			}
-
-			if(metadata.functions != null){
-				let functions = metadata.functions;
-
-				for (let key in functions){
-					let temp = this.createFunction(key, functions[key]);
-
-					// Required to be included on JSON export if this function isn't modified
-					// ToDo: use better mapping for moduleJS
-					let other = temp.structure._ = {};
-					other.moduleJS = mjs;
-				}
-			}
-
-			if(metadata.variables != null){
-				let variables = metadata.variables;
-
-				for (let key in variables)
-					this.createVariable(key, variables[key]);
-			}
-		}
-
-		var inserted = this.ifaceList;
-		var handlers = []; // nodes
-		let isCleanImport = inserted.length === 0;
-		let appendLength = options.appendMode ? inserted.length : 0;
-		let reorderInputPort = [];
-
-		// Prepare all nodes depend on the namespace
-		// before we create cables for them
 		try {
+			let oldIfaces = this.iface;
+
+			this._importing = true;
+			this.emit("json.importing", {appendMode: options.appendMode, raw: json});
+			if(!options.appendMode) this.clearNodes();
+			if(options.pendingRender) this.pendingRender = true;
+
+			// Skeleton instance will only use No-operation node and interface
+			// It doesn't need external module and can be useful for displaying node connection only 
+			if(options.isSkeletonInstance){
+				this.executionOrder = NOOP_ExecutionOrder;
+				this.isSkeletonInstance = true;
+			}
+
+			var metadata = json._;
+			delete json._;
+
+			if(this.isSkeletonInstance)
+				delete metadata.moduleJS;
+
+			if(metadata !== void 0){
+				if(metadata.env !== void 0 && options.importEnvironment){
+					let Env = Blackprint.Environment;
+					let temp = metadata.env;
+
+					for (let key in temp) {
+						Env.set(key, temp[key]);
+					}
+				}
+
+				let mjs;
+				if(metadata.functions != null) mjs = metadata.moduleJS.slice(0) || [];
+
+				if(metadata.moduleJS !== void 0 && !options.noModuleJS){
+					try{
+						// wait for .min.mjs
+						await Blackprint.loadModuleFromURL(metadata.moduleJS, {
+							loadBrowserInterface: true
+						});
+
+						// wait for .sf.mjs and .sf.css if being loaded from code above
+						if(window.sf && window.sf.loader){
+							await sf.loader.task;
+							await new Promise(resolve=> setTimeout(resolve, 100));
+							await sf.loader.task;
+						}
+
+						await Promise.resolve();
+					} catch(e) {
+						containerModel._isImporting = false;
+						throw e;
+					}
+				}
+
+				if(metadata.functions != null){
+					let functions = metadata.functions;
+
+					for (let key in functions){
+						let temp = this.createFunction(key, functions[key]);
+
+						// Required to be included on JSON export if this function isn't modified
+						// ToDo: use better mapping for moduleJS
+						let other = temp.structure._ = {};
+						other.moduleJS = mjs;
+					}
+				}
+
+				if(metadata.variables != null){
+					let variables = metadata.variables;
+
+					for (let key in variables)
+						this.createVariable(key, variables[key]);
+				}
+			}
+
+			var inserted = this.ifaceList;
+			var handlers = []; // nodes
+			let isCleanImport = inserted.length === 0;
+			let appendLength = options.appendMode ? inserted.length : 0;
+			let reorderInputPort = [];
+
+			// Prepare all nodes depend on the namespace
+			// before we create cables for them
 			for(var namespace in json){
 				var nodes = json[namespace];
 
@@ -246,271 +246,272 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 					await iface._BpFnInit?.();
 				}
 			}
-		} catch(e) {
-			containerModel._isImporting = false;
-			throw e;
-		}
 
-		let cableConnects = [];
-		let routeConnects = [];
-		let branchPrepare = new Map();
+			let cableConnects = [];
+			let routeConnects = [];
+			let branchPrepare = new Map();
 
-		// Create cable only from output and property
-		// > Important to be separated from above, so the cable can reference to loaded nodes
-		for(var namespace in json){
-			var nodes = json[namespace];
+			// Create cable only from output and property
+			// > Important to be separated from above, so the cable can reference to loaded nodes
+			for(var namespace in json){
+				var nodes = json[namespace];
 
-			// Every nodes that using this namespace name
-			for (var a = 0; a < nodes.length; a++){
-				let node = nodes[a];
-				var iface = inserted[node.i];
+				// Every nodes that using this namespace name
+				for (var a = 0; a < nodes.length; a++){
+					let node = nodes[a];
+					var iface = inserted[node.i];
 
-				if(node.route != null)
-					routeConnects.push({from: iface, to: inserted[node.route.i + appendLength]});
+					if(node.route != null)
+						routeConnects.push({from: iface, to: inserted[node.route.i + appendLength]});
 
-				// If have output connection
-				if(node.output !== void 0){
-					var out = node.output;
-					var _cableMeta = node._cable;
+					// If have output connection
+					if(node.output !== void 0){
+						var out = node.output;
+						var _cableMeta = node._cable;
 
-					// Every output port that have connection
-					for(var portName in out){
-						var port = out[portName];
+						// Every output port that have connection
+						for(var portName in out){
+							var port = out[portName];
 
-						var linkPortA = iface.output[portName];
-						if(linkPortA === void 0){
-							if(iface._enum === _InternalNodeEnum.BPFnInput){
-								let target = this._getTargetPortType(iface.node.instance, 'input', port);
-								linkPortA = iface.addPort(target, portName);
+							var linkPortA = iface.output[portName];
+							if(linkPortA === void 0){
+								if(iface._enum === _InternalNodeEnum.BPFnInput){
+									let target = this._getTargetPortType(iface.node.instance, 'input', port);
+									linkPortA = iface.addPort(target, portName);
 
-								if(linkPortA === void 0)
-									throw new Error(`Can't create output port (${portName}) for function (${iface._funcMain.node._funcInstance.id})`);
-							}
-							else if(iface._enum === _InternalNodeEnum.BPVarGet){
-								let target = this._getTargetPortType(this, 'input', port);
-								iface.useType(target);
-								linkPortA = iface.output[portName];
-							}
-							else if(this.isSkeletonInstance){
-								linkPortA = iface.node.createPort('output', portName, arrayOfAny);
-							}
-							else{
-								this._emit('error', {
-									type: 'node_port_not_found',
-									data: {iface, portName}
-								});
-								continue;
-							}
-						}
-
-						if(_cableMeta)
-							branchPrepare.set(linkPortA, _cableMeta[portName])
-
-						// Current output's available targets
-						for (var k = 0; k < port.length; k++) {
-							var target = port[k];
-							target.i += appendLength;
-			
-							var targetNode = inserted[target.i];
-
-							// Output can only meet input port
-							var linkPortB = targetNode.input[target.name];
-							if(linkPortB === void 0){
-								if(targetNode._enum === _InternalNodeEnum.BPFnOutput){
-									linkPortB = targetNode.addPort(linkPortA, target.name);
-
-									if(linkPortB === void 0)
-										throw new Error(`Can't create output port (${target.name}) for function (${targetNode._funcMain.node._funcInstance.id})`);
+									if(linkPortA === void 0)
+										throw new Error(`Can't create output port (${portName}) for function (${iface._funcMain.node._funcInstance.id})`);
 								}
-								else if(targetNode._enum === _InternalNodeEnum.BPVarSet){
-									targetNode.useType(linkPortA);
-									linkPortB = targetNode.input[target.name];
-								}
-								else if(linkPortA.type === Blackprint.Port.Route){
-									linkPortB = targetNode.node.routes;
+								else if(iface._enum === _InternalNodeEnum.BPVarGet){
+									let target = this._getTargetPortType(this, 'input', port);
+									iface.useType(target);
+									linkPortA = iface.output[portName];
 								}
 								else if(this.isSkeletonInstance){
-									linkPortB = targetNode.node.createPort('input', target.name, arrayOfAny);
+									linkPortA = iface.node.createPort('output', portName, arrayOfAny);
 								}
-								else {
+								else{
 									this._emit('error', {
 										type: 'node_port_not_found',
-										data: {
-											iface: targetNode,
-											portName: target.name
-										}
+										data: {iface, portName}
 									});
 									continue;
 								}
 							}
 
-							cableConnects.push({
-								output: iface.output,
-								input: targetNode.input,
-								target,
-								portName,
-								linkPortA,
-								linkPortB
-							});
+							if(_cableMeta)
+								branchPrepare.set(linkPortA, _cableMeta[portName])
+
+							// Current output's available targets
+							for (var k = 0; k < port.length; k++) {
+								var target = port[k];
+								target.i += appendLength;
+				
+								var targetNode = inserted[target.i];
+
+								// Output can only meet input port
+								var linkPortB = targetNode.input[target.name];
+								if(linkPortB === void 0){
+									if(targetNode._enum === _InternalNodeEnum.BPFnOutput){
+										linkPortB = targetNode.addPort(linkPortA, target.name);
+
+										if(linkPortB === void 0)
+											throw new Error(`Can't create output port (${target.name}) for function (${targetNode._funcMain.node._funcInstance.id})`);
+									}
+									else if(targetNode._enum === _InternalNodeEnum.BPVarSet){
+										targetNode.useType(linkPortA);
+										linkPortB = targetNode.input[target.name];
+									}
+									else if(linkPortA.type === Blackprint.Types.Route){
+										linkPortB = targetNode.node.routes;
+									}
+									else if(this.isSkeletonInstance){
+										linkPortB = targetNode.node.createPort('input', target.name, arrayOfAny);
+									}
+									else {
+										this._emit('error', {
+											type: 'node_port_not_found',
+											data: {
+												iface: targetNode,
+												portName: target.name
+											}
+										});
+										continue;
+									}
+								}
+
+								cableConnects.push({
+									output: iface.output,
+									input: targetNode.input,
+									target,
+									portName,
+									linkPortA,
+									linkPortB
+								});
+							}
 						}
 					}
 				}
 			}
-		}
 
-		let branchMap = new Map();
-		function deepCreate(temp, cable, linkPortA) {
-			if(temp.branch !== void 0){
-				cable.head2[0] = temp.x;
-				cable.head2[1] = temp.y;
+			let branchMap = new Map();
+			function deepCreate(temp, cable, linkPortA) {
+				if(temp.branch !== void 0){
+					cable.head2[0] = temp.x;
+					cable.head2[1] = temp.y;
 
-				if(temp.overRot != null)
-					cable.overrideRot = temp.overRot;
+					if(temp.overRot != null)
+						cable.overrideRot = temp.overRot;
 
-				let list = temp.branch;
-				for (let z = 0; z < list.length; z++)
-					deepCreate(list[z], cable.createBranch(), linkPortA);
+					let list = temp.branch;
+					for (let z = 0; z < list.length; z++)
+						deepCreate(list[z], cable.createBranch(), linkPortA);
 
-				return;
-			}
-
-			if(!branchMap.has(linkPortA))
-				branchMap.set(linkPortA, []);
-
-			branchMap.get(linkPortA)[temp.id] = cable;
-		}
-
-		if(isCleanImport)
-			this.scope('nodes').list.refresh?.();
-		
-		await $.afterRepaint();
-
-		let _getPortRect, _windowless = Blackprint.settings.windowless;
-		if(options.pendingRender){
-			let temp = {x:50,y:50,width:50,height:50,left:50,right:50,top:50,bottom:50};
-			Object.setPrototypeOf(temp, DOMRect.prototype);
-			_getPortRect = () => temp;
-
-			Blackprint.settings.windowless = true;
-		}
-		else _getPortRect = getPortRect;
-
-		if(isCleanImport && !Blackprint.settings.windowless){
-			let list = this.scope('nodes').list;
-
-			// Init after pushed into DOM tree
-			for (let i=0; i < list.length; i++) {
-				list[i].node.routes._initForSketch();
-			}
-		}
-
-		// Connect route cable
-		for (let i=0; i < routeConnects.length; i++) {
-			let { from, to } = routeConnects[i];
-			from.node.routes.routeTo(to);
-		}
-
-		// Connect ports cable
-		for (var i = 0; i < cableConnects.length; i++) {
-			// linkPortA = output, linkPortB = input (the port interface)
-			let {output, portName, linkPortA, input, target, linkPortB} = cableConnects[i];
-
-			let cable;
-			let _cable = branchPrepare.get(linkPortA);
-			if(_cable !== void 0){
-				if(_cable !== true){
-					branchPrepare.set(linkPortA, true);
-
-					// Create cable from NodeA
-					let rectA = _getPortRect(output, portName);
-
-					// Create branches
-					for (let z = 0; z < _cable.length; z++)
-						deepCreate(_cable[z], linkPortA.createCable(rectA), linkPortA);
+					return;
 				}
 
-				cable = branchMap.get(linkPortA)[target.parentId];
+				if(!branchMap.has(linkPortA))
+					branchMap.set(linkPortA, []);
+
+				branchMap.get(linkPortA)[temp.id] = cable;
 			}
 
-			// Create cable from NodeA
-			if(cable === void 0)
-				cable = linkPortA.createCable(_getPortRect(output, portName));
+			if(isCleanImport)
+				this.scope('nodes').list.refresh?.();
+			
+			await $.afterRepaint();
 
-			if(target.overRot != null)
-				cable.overrideRot = target.overRot;
+			// Don't change `var` to `let` as it's used outside of this try catch block
+			var _getPortRect, _windowless = Blackprint.settings.windowless;
+			if(options.pendingRender){
+				let temp = {x:50,y:50,width:50,height:50,left:50,right:50,top:50,bottom:50};
+				Object.setPrototypeOf(temp, DOMRect.prototype);
+				_getPortRect = () => temp;
 
-			if(linkPortA.isRoute){
+				Blackprint.settings.windowless = true;
+			}
+			else _getPortRect = getPortRect;
+
+			if(isCleanImport && !Blackprint.settings.windowless){
+				let list = this.scope('nodes').list;
+
+				// Init after pushed into DOM tree
+				for (let i=0; i < list.length; i++) {
+					list[i].node.routes._initForSketch();
+				}
+			}
+
+			// Connect route cable
+			for (let i=0; i < routeConnects.length; i++) {
+				let { from, to } = routeConnects[i];
+				from.node.routes.routeTo(to);
+			}
+
+			// Connect ports cable
+			for (var i = 0; i < cableConnects.length; i++) {
+				// linkPortA = output, linkPortB = input (the port interface)
+				let {output, portName, linkPortA, input, target, linkPortB} = cableConnects[i];
+
+				let cable;
+				let _cable = branchPrepare.get(linkPortA);
+				if(_cable !== void 0){
+					if(_cable !== true){
+						branchPrepare.set(linkPortA, true);
+
+						// Create cable from NodeA
+						let rectA = _getPortRect(output, portName);
+
+						// Create branches
+						for (let z = 0; z < _cable.length; z++)
+							deepCreate(_cable[z], linkPortA.createCable(rectA), linkPortA);
+					}
+
+					cable = branchMap.get(linkPortA)[target.parentId];
+				}
+
+				// Create cable from NodeA
+				if(cable === void 0)
+					cable = linkPortA.createCable(_getPortRect(output, portName));
+
+				if(target.overRot != null)
+					cable.overrideRot = target.overRot;
+
+				if(linkPortA.isRoute){
+					// Positioning the cable head2 into target port position from NodeB
+					var rectB = linkPortB._inElement[0].getBoundingClientRect();
+					var center = rectB.width / 2;
+					cable.head2 = [rectB.x + center, rectB.y + center];
+
+					linkPortB.connectCable(cable);
+					continue;
+				}
+
 				// Positioning the cable head2 into target port position from NodeB
-				var rectB = linkPortB._inElement[0].getBoundingClientRect();
+				var rectB = _getPortRect(input, target.name);
 				var center = rectB.width / 2;
 				cable.head2 = [rectB.x + center, rectB.y + center];
 
+				// Connect cables.currentCable to target port on NodeB
 				linkPortB.connectCable(cable);
-				continue;
 			}
 
-			// Positioning the cable head2 into target port position from NodeB
-			var rectB = _getPortRect(input, target.name);
-			var center = rectB.width / 2;
-			cable.head2 = [rectB.x + center, rectB.y + center];
+			// Fix input port cable order
+			for (let i=0; i < reorderInputPort.length; i++) {
+				let { iface, config } = reorderInputPort[i];
+				let cInput = config.input;
 
-			// Connect cables.currentCable to target port on NodeB
-			linkPortB.connectCable(cable);
-		}
+				for (let key in cInput) {
+					let port = iface.input[key];
+					let cables = port.cables;
+					let temp = new Array(cables.length);
 
-		// Fix input port cable order
-		for (let i=0; i < reorderInputPort.length; i++) {
-			let { iface, config } = reorderInputPort[i];
-			let cInput = config.input;
+					let conf = cInput[key];
+					for (let a=0; a < conf.length; a++) {
+						let { i: index, name } = conf[a];
+						let targetIface = inserted[index + appendLength];
+						
+						for (let z=0; z < cables.length; z++) {
+							let cable = cables[z];
+							if(cable.output.name !== name || cable.output.iface !== targetIface) continue;
 
-			for (let key in cInput) {
-				let port = iface.input[key];
-				let cables = port.cables;
-				let temp = new Array(cables.length);
-
-				let conf = cInput[key];
-				for (let a=0; a < conf.length; a++) {
-					let { i: index, name } = conf[a];
-					let targetIface = inserted[index + appendLength];
-					
-					for (let z=0; z < cables.length; z++) {
-						let cable = cables[z];
-						if(cable.output.name !== name || cable.output.iface !== targetIface) continue;
-
-						temp[a] = cable;
-						break;
+							temp[a] = cable;
+							break;
+						}
 					}
-				}
 
-				for (let a=0; a < temp.length; a++) {
-					if(temp[a] == null) console.error(`Some cable failed to be ordered for (${iface.title}: ${key})`);
-				}
+					for (let a=0; a < temp.length; a++) {
+						if(temp[a] == null) console.error(`Some cable failed to be ordered for (${iface.title}: ${key})`);
+					}
 
-				port.cables = temp;
+					port.cables = temp;
+				}
 			}
-		}
 
-		// Call node init after creation processes was finished
-		for (var i = 0; i < handlers.length; i++)
-			handlers[i].init?.();
+			// Call node init after creation processes was finished
+			for (var i = 0; i < handlers.length; i++)
+				handlers[i].init?.();
 
-		// Check active/inactive node from connected input/output cables and the routes
-		for (let i=0; i < routeConnects.length; i++) {
-			let from = routeConnects[i].from;
-			from.node.routes._checkInactiveFromNode(from);
-		}
+			// Check active/inactive node from connected input/output cables and the routes
+			for (let i=0; i < routeConnects.length; i++) {
+				let from = routeConnects[i].from;
+				from.node.routes._checkInactiveFromNode(from);
+			}
 
-		containerModel._isImporting = false;
-		this._importing = false;
-		this.emit("json.imported", {appendMode: options.appendMode, nodes: inserted, raw: json});
+			containerModel._isImporting = false;
+			this._importing = false;
+			this.emit("json.imported", {appendMode: options.appendMode, nodes: inserted, raw: json});
 
-		this.executionOrder.next();
+			this.executionOrder.next();
 
-		if(!Blackprint.settings.windowless){
-			setTimeout(async ()=>{
-				await $.afterRepaint();
-				setTimeout(()=> this.recalculatePosition(), 100);
-			}, 100);
+			if(!Blackprint.settings.windowless){
+				setTimeout(async ()=>{
+					await $.afterRepaint();
+					setTimeout(()=> this.recalculatePosition(), 100);
+				}, 100);
+			}
+		} catch(e) {
+			containerModel._isImporting = false;
+			throw e;
 		}
 
 		if(this.pendingRender) Blackprint.settings.windowless = _windowless;
