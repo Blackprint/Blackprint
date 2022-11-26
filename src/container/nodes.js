@@ -69,7 +69,7 @@ Space.model('nodes', function(My, include){
 					let portX = (rect.x+(rect.width/2) - oX) / container.scale;
 					let portY = (rect.y+(rect.height/2) - oY) / container.scale;
 
-					var cable, isRouteOutput = which === 'output' && port.type === Blackprint.Port.Route;
+					var cable, isRouteOutput = which === 'output' && port.type === Blackprint.Types.Route;
 					for (var h = 0; h < cables.length; h++) {
 						cable = cables[h];
 
@@ -95,7 +95,7 @@ Space.model('nodes', function(My, include){
 						if(cable.owner.iface === iface && which === 'output')
 							cable = cable.head1;
 						else{
-							if(!cable.connected && which === 'input') continue;
+							// if(!cable.connected && which === 'input') continue;
 							cable = cable.head2;
 						}
 
