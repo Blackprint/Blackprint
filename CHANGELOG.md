@@ -1,3 +1,19 @@
+# 0.8.3
+
+### Features
+- Improve module exports
+- Add feature to import skeleton nodes for sketch
+
+### Bug Fix
+- Fix and improve TypeScript definition file
+- Fix package exports
+- Skip interface calculation if element haven't been rendered/exist
+- Add relative position for port stylesheet
+- Fix container that can't be interacted when import was failed
+
+### Note
+There's also a deprecation for `engine-js` make sure to visit the [CHANGELOG.md](https://github.com/Blackprint/engine-js/blob/master/CHANGELOG.md).
+
 # 0.8.2
 
 ### Bug Fix
