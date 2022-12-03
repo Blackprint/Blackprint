@@ -628,12 +628,14 @@ sf-space[blackprint]{
       }
 
       .left-port{
+        position: relative;
         float: left;
       }
       .right-port{
-          float: right;
-          text-align: right;
-          margin-left: 20px;
+        position: relative;
+        float: right;
+        text-align: right;
+        margin-left: 20px;
       }
 
       .output{
