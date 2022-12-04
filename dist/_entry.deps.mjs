@@ -1,4 +1,4 @@
-import * as sf from "scarletsframe/dist/scarletsframe.modern.js";
+import * as sf from "scarletsframe";
 import Blackprint from "@blackprint/engine";
 
 globalThis.sf = sf;

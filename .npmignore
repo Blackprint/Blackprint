@@ -12,7 +12,8 @@ engine
 engine-js
 nodes
 parser
-src
+src/**/*
+!src/**/*.d.ts
 zef
 babel.config.json
 gulpfile.js
