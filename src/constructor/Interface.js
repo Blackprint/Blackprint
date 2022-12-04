@@ -527,3 +527,5 @@ var IFaceDecoration = Blackprint.Interface.Decoration = class IFaceDecoration {
 let _proto1 = Object.getOwnPropertyDescriptors(Blackprint.Engine.CustomEvent.prototype);
 delete _proto1.constructor;
 Object.defineProperties(Blackprint.Interface.prototype, _proto1);
+
+prototypeReplacer(Blackprint._iface, EngineInterface, Blackprint.Interface);

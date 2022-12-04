@@ -119,3 +119,24 @@ function createNodesMenu(list, sketch, ev, pos, opt){
 	if(cancelMenu) return false;
 	return menu;
 }
+
+// original and replace parameter must be a class, classes = Array<Class>
+function prototypeReplacer(classes, original, replace){
+	let protoA = original.prototype;
+	let protoB = replace.prototype;
+
+	for (let key in classes) {
+		let obj = classes[key];
+		diveAndReplace(classes[key].prototype, obj);
+	}
+
+	function diveAndReplace(proto, obj){
+		if(proto == null) return;
+		if(proto === protoA){
+			Object.setPrototypeOf(obj, protoB);
+			return;
+		}
+
+		diveAndReplace(Object.getPrototypeOf(proto), proto);
+	}
+}
