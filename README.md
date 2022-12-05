@@ -32,8 +32,8 @@ Documentation is included in [the editor](https://blackprint.github.io/#;bpdocs:
 ## Example
 
 If you're looking for minimal sketch example to get started integrate for your editor project:
-- [JSBin](https://jsbin.com/bakulux/edit?html,js,output)
-- [StackBlitz](https://stackblitz.com/edit/minimal-blackprint?file=index.js)
+- [JSBin (CDN)](https://jsbin.com/bakulux/edit?html,js,output)
+- [StackBlitz (with Vite)](https://stackblitz.com/edit/blackprint-vite?file=vite.config.js,src%2Fmain.ts&terminal=dev)
 
 If you just want to execute exported Blackprint JSON, you can just use the engine. I also provide few simple example for different framework in case you want to use integrate to your frontend framework. For non-browser engine, there are example on it's repository. You can copy and paste the JSON to [Blackprint Editor](https://blackprint.github.io/) to see the nodes arrangement. The example below is using this [arrangement](https://blackprint.github.io/#page/sketch/1#;importSketch:tZHLTsMwEEX_ZdZpnCciXkGrLorohooVqpCJrdatH1HsVClV_h3HSaQWlsAm8ozu3HtmcoF3wBeQmjaCPW0Av8He2spghEqqwoOhTPBTHSpmkaokevgQpDxWNVeu1pSZhyjMEeVmLGelVkYLFsqDgeCXXlxVjf0TJ9YSWY1U2y6AxUCJnvXOrXwBDjgKoAWc53cBnAHHURHAp-9yChiE3u1YDd02gFVPhV5XaCM4ZfVct5NF7C3uR4c88w7x6GC8OnarUGJJf_So_5yIaBjgJADJFeBZHLlISdoewb2MZZWjCOPOUevGuuhxdIh0c4pIZwCPDs6JfDe7ASlSD5LcgCT_BjL3IO5Qy-HoaE3sHq0bYXklzld6Z50mA2MRecR0RJST-DrqhRnXvvpd0-Lq_D1x3lirFdrwvpomUp-YFT4wz31gdh2wELw8Mvpzo2XLyiGi-wI).
 - [Multiply - Event Listener](https://jsbin.com/gaxisop/edit?html,js,output)
@@ -154,8 +154,8 @@ Example case where you may need remote control:
   - [x] Add feature to arrange cable (cable branching)
   - [x] Add variable's node
   - [x] Add feature to hide some unused port on a node
-  - [ ] Add feature to import node skeleton (use default node, and no execution)
-    - [ ] Create addons for VS Code for previewing exported Blackprint
+  - [x] Add feature to import node skeleton (use default node, and no execution)
+  - [ ] Create addons for VS Code for previewing exported Blackprint
     - [ ] Add JSON preview for Visual Studio Code
   - [x] Add TypeScript definition file
 - [ ] Blackprint Editor ([repository](https://github.com/Blackprint/blackprint.github.io))
@@ -170,9 +170,7 @@ Example case where you may need remote control:
   - [x] Show overview or notice when importing nodes from URL
   - [ ] Multiple sketch workspaces or tabs
     - [ ] Export multiple sketch workspaces to JSON
-- [ ] Simplify node development for new developer
-  - [x] Auto `blackprint.config.js` import
-  - [ ] Add example for using ES6 modules importing system
+- [x] Auto `blackprint.config.js` import
 - [x] Better documentation
   - [x] Add in-editor node documentation in a tooltip
   - [x] Nodes docs generator
