@@ -1,3 +1,9 @@
+# 0.8.4
+
+### Bug Fix
+- Fix type definition that not published to NPM
+- Fix interface error when bundling using Vite
+
 # 0.8.3
 
 ### Features
