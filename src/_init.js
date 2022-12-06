@@ -1231,8 +1231,8 @@ Blackprint.registerNode = function(namespace, func, _fromDecorator=false){
 
 	let ref = Blackprint.nodes[namespace[0]];
 	if(ref._length === void 0){
-		Object.defineProperty(ref, 'hidden', {configurable: true, writable: true, value: false});
-		Object.defineProperty(ref, 'disabled', {configurable: true, writable: true, value: false});
+		Object.defineProperty(ref, 'hidden', {configurable: true, writable: true, value: ref.hidden || false});
+		Object.defineProperty(ref, 'disabled', {configurable: true, writable: true, value: ref.disabled || false});
 		Object.defineProperty(ref, '_length', {configurable: true, writable: true, value: 0});
 		Object.defineProperty(ref, '_visibleNode', {configurable: true, writable: true, value: 0});
 	}
