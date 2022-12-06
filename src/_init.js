@@ -100,10 +100,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		Blackprint.space.component(nodeName, options, func || NOOP);
 
 		// For ScarletsFrame inspector
-		func.prototype.sf$resolveSrc ??= {
-			url: (new Error(1)).stack.split('\n')[_fromDecorator ? 3 : 2].split('://')[1],
-			rawText: templatePath
-		};
+		if(sf.hotReload != null) {
+			func.prototype.sf$resolveSrc ??= {
+				url: (new Error(1)).stack.split('\n')[_fromDecorator ? 3 : 2]?.split('://')[1],
+				rawText: templatePath
+			};
+		}
 	}
 
 	// Clone current container index
@@ -1262,10 +1264,12 @@ Blackprint.registerNode = function(namespace, func, _fromDecorator=false){
 	});
 
 	// For ScarletsFrame inspector
-	func.prototype.sf$resolveSrc ??= {
-		url: (new Error(1)).stack.split('\n')[_fromDecorator ? 3 : 2].split('://')[1],
-		rawText: namespace_
-	};
+	if(sf.hotReload != null) {
+		func.prototype.sf$resolveSrc ??= {
+			url: (new Error(1)).stack.split('\n')[_fromDecorator ? 3 : 2]?.split('://')[1],
+			rawText: namespace_
+		};
+	}
 }
 
 function createEmptyPortList(){
@@ -1428,10 +1432,12 @@ Blackprint.registerInterface = function(templatePath, options, func, _fromDecora
 	_registerInterface.call(this, templatePath, options, func);
 
 	// For ScarletsFrame inspector
-	func.prototype.sf$resolveSrc ??= {
-		url: (new Error(1)).stack.split('\n')[_fromDecorator ? 3 : 2].split('://')[1],
-		rawText: templatePath
-	};
+	if(sf.hotReload != null){
+		func.prototype.sf$resolveSrc ??= {
+			url: (new Error(1)).stack.split('\n')[_fromDecorator ? 3 : 2]?.split('://')[1],
+			rawText: templatePath
+		};
+	}
 }
 
 Blackprint.loadModuleFromURL.browser = function(url, options){
