@@ -2,9 +2,10 @@
 <sf-space blackprint>
   <sf-m name="container"
     class="{{ _isImporting ? 'importing-nodes' : '' }}"
-    @mousewheel="scaleContainer(event)"
+    @wheel="scaleContainer(event)"
     @touchstart.capture="checkTouch(event)"
-    @pointerdown.capture="recheckOffset(event)"
+    @pointerdown.capture="recheckOffset(event) || pointerDown(event)"
+    @pointerup.capture="pointerUp(event)"
     style="
       min-width: {{ size.w }}px;
       min-height: {{ size.h }}px;

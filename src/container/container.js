@@ -392,7 +392,7 @@ Space.model('container', function(My, include){
 	}
 
 	My.scaleContainer = function(ev){
-		if(ev.buttons !== 2 && ev.ctrlKey === false && ev.scale === void 0) return;
+		if(!rightClick && ev.ctrlKey === false && ev.scale === void 0) return;
 		if(My.config.scale === false) return;
 		ev.preventDefault();
 		disableShadow();
@@ -438,5 +438,14 @@ Space.model('container', function(My, include){
 
 		My.onScale && My.onScale(scale);
 		// My.onMove && My.onMove(My.pos);
+	}
+
+	let rightClick = false;
+	My.pointerDown = function(ev){
+		rightClick = ev.button === 2;
+	}
+
+	My.pointerUp = function(ev){
+		rightClick = ev.button === 2 ? false : true;
 	}
 });
