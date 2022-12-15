@@ -40,10 +40,14 @@ export {
 export { Skeleton } from "@blackprint/engine/skeleton";
 
 type Docs = {
-	tags?: {summary?: string},
+	/** Description for the node */
 	description?: string,
+	/** Description for the input ports */
 	input?:{[key: string]: {description: string}},
+	/** Description for the output ports */
 	output?:{[key: string]: {description: string}},
+	/** Additional docs tags */
+	tags?: {summary?: string},
 };
 
 type DocsPath = {[key: string]: DocsPath | Docs};
@@ -135,38 +139,60 @@ export class Interface extends EngineInterface {
 	 */
 	constructor(node: Node);
 
+	/** Node's X position */
+	x: number;
+	/** Node's Y position */
+	y: number;
+
+	/** Shortcut for querying HTML elements */
 	$el: sQuery & ((selector:string) => sQuery);
 
-	/** Node's ID */
-	get id(): any;
-	set id(val: any);
+	/** Node's description or summary (below the header's title) */
+	description: string;
+
+	/** Node's comment (above the header's title) */
+	comment: string;
 
 	/**
 	 * For internal library use only, may be changed in the future
+	 * 
+	 * If you want to do something when user moved the node
+	 * Please listen to `node.move` event on Sketch instance or on this node
 	 * @param event
 	 */
 	moveNode(event: object): void;
 
 	/**
 	 * For internal library use only, may be changed in the future
+	 * 
+	 * If you want to do something when user open the node's menu
+	 * Please listen to `node.menu` event on Sketch instance or on this node
 	 * @param event
 	 */
 	nodeMenu(event: object): void;
 
 	/**
 	 * For internal library use only, may be changed in the future
+	 * 
+	 * If you want to do something when user clicked the node's header
+	 * Please listen to `node.click` event on Sketch instance instead
 	 * @param event
 	 */
 	swapZIndex(event: object, disableSwap: Boolean): void;
 
 	/**
 	 * For internal library use only, may be changed in the future
+	 * 
+	 * If you want to do something when user hovering the node
+	 * Please listen to `node.hover` event on Sketch instance instead
 	 * @param event
 	 */
 	nodeHovered(event: object): void;
 
 	/**
 	 * For internal library use only, may be changed in the future
+	 * If you want to do something when user's pointer leaving the node
+	 * Please listen to `node.unhover` event on Sketch instance instead
 	 * @param event
 	 */
 	nodeUnhovered(event: object): void;
