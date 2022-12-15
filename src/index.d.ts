@@ -9,6 +9,7 @@ import {
 	Interface as EngineInterface,
 	Node,
 	RemoteControl,
+	Cable,
 } from "@blackprint/engine";
 
 export type { Cable, Decoration, RoutePort } from "@blackprint/engine";
@@ -36,6 +37,7 @@ export {
 	InputPort,
 	RemoteControl,
 	RemoteEngine,
+	on,
 } from "@blackprint/engine";
 export { Skeleton } from "@blackprint/engine/skeleton";
 
@@ -128,6 +130,58 @@ export class Sketch extends Engine {
 
 	/** Refresh nodes positions */
 	recalculatePosition(): void;
+
+	/** Node ID was added/changed/removed */
+	on(eventName: 'node.id.changed', callback: (data: { iface: Interface, from: String, to: String }) => void): void;
+	/** A cable was disconnected or deleted */
+	on(eventName: 'cable.disconnect', callback: (data: { port: IFacePort, target?: IFacePort, cable: Cable }) => void): void;
+	/** A cable was connected between two port */
+	on(eventName: 'cable.connect', callback: (data: { port: IFacePort, target: IFacePort, cable: Cable }) => void): void;
+
+	/** User is selecting some nodes and cables */
+	on(eventName: 'container.selection', callback: (data: { cables: Array<Cable>, nodes: Array<Node> }) => void): void;
+	/** JSON was imported into the instance */
+	on(eventName: 'json.imported', callback: (data: { appendMode: Boolean, nodes: Array<Node>, raw: String }) => void): void;
+	/** An error happened on the instance */
+	on(eventName: 'error', callback: (data: { type: String, data: Object }) => void): void;
+	/** Default port value was changed */
+	on(eventName: 'port.default.changed', callback: (data: { port: IFacePort }) => void): void;
+	/** A cable was splitted and a cable branch was created */
+	on(eventName: 'cable.create.branch', callback: (data: { event: Event, cable: Cable }) => void): void;
+	/** A cable was created */
+	on(eventName: 'cable.created', callback: (data: { port: IFacePort, cable: Cable }) => void): void;
+	/** A cable that was created by user interaction was dropped by user */
+	on(eventName: 'cable.dropped', callback: (data: { port: IFacePort, cable: Cable, event: Event }) => void): void;
+	/** A cable is being dragged by user */
+	on(eventName: 'cable.drag', callback: (data: { cable: Cable }) => void): void;
+	/** A cable was deleted */
+	on(eventName: 'cable.deleted', callback: (data: { cable: Cable }) => void): void;
+	/** A node is moved by user interaction */
+	on(eventName: 'node.move', callback: (data: { iface: Interface, event: Event }) => void): void;
+	/** Some nodes get resized */
+	on(eventName: 'node.resize', callback: (data: { items: Array<any> }) => void): void;
+	/** A node is being deleted */
+	on(eventName: 'node.delete', callback: (data: { iface: Interface }) => void): void;
+	/** A node was deleted */
+	on(eventName: 'node.deleted', callback: (data: { iface: Interface }) => void): void;
+	/** A node was created */
+	on(eventName: 'node.created', callback: (data: { iface: Interface }) => void): void;
+	/** User clicked the node header */
+	on(eventName: 'node.click', callback: (data: { iface: Interface, event: Event }) => void): void;
+	/** User is hovering/focus the node header */
+	on(eventName: 'node.hover', callback: (data: { iface: Interface, event: Event }) => void): void;
+	/** User is leaving focus the node header */
+	on(eventName: 'node.unhover', callback: (data: { iface: Interface, event: Event }) => void): void;
+	/** User is hovering/focus the port element */
+	on(eventName: 'port.hover', callback: (data: { port: IFacePort, event: Event }) => void): void;
+	/** User is leaving focus the port element */
+	on(eventName: 'port.unhover', callback: (data: { port: IFacePort, event: Event }) => void): void;
+	/** User was double clicked a function node to open it */
+	on(eventName: 'node.function.open	', callback: (data: {
+		event: Event,
+		iface: Interface,
+		// function: BPFunction
+	}) => void): void;
 }
 
 /** Interface/IFace that can be used to control nodes */
@@ -196,6 +250,36 @@ export class Interface extends EngineInterface {
 	 * @param event
 	 */
 	nodeUnhovered(event: object): void;
+
+	/** Two ports were connected with a cable */
+	on(eventName: 'cable.connect', callback: (data: { port: IFacePort, target: IFacePort, cable: Cable }) => void): void;
+	/** Two ports get disconnected each other */
+	on(eventName: 'cable.disconnect', callback: (data: { port: IFacePort, target: IFacePort, cable: Cable }) => void): void;
+	/** There's new value update coming from output port */
+	on(eventName: 'port.value', callback: (data: { port: IFacePort, target: IFacePort, cable: Cable }) => void): void;
+
+	/** A cable was created from a port */
+	on(eventName: 'cable.created', callback: (data: { port: IFacePort, cable: Cable }) => void): void;
+	/** User hovered/focus on an port element */
+	on(eventName: 'port.hover', callback: (data: { event: Event, port: IFacePort }) => void): void;
+	/** User leaving focus from an port element */
+	on(eventName: 'port.unhover', callback: (data: { event: Event, port: IFacePort }) => void): void;
+	/** User right clicked port element to open a menu */
+	on(eventName: 'port.menu', callback: (data: {
+		instance: Engine | Sketch,
+		port: IFacePort,
+		menu: Array<any>,
+		event: Event,
+		preventDefault: Function
+	}) => void): void;
+	/** User right clicked the node's header to open a menu */
+	on(eventName: 'node.menu', callback: (data: {
+		iface: Interface,
+		instance: Engine | Sketch,
+		menu: Array<any>,
+		event: Event,
+		preventDefault: Function
+	}) => void): void;
 }
 
 /**
