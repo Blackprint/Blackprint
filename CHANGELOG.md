@@ -1,3 +1,13 @@
+# 0.8.5
+
+### Improvement
+- Improve TypeScript definitions
+
+### Bug Fix
+- Fix container zoom using right click and mouse wheel
+- Fix some error on Safari browser
+- Hide internal BP namespace
+
 # 0.8.4
 
 ### Bug Fix
