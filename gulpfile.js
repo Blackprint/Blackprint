@@ -94,26 +94,6 @@ if(!compileEngineOnly){
 			},
 		};
 
-		compileTargets.privateEditor = {
-			js:{
-				file:'editor/assets/private.min.js',
-
-				// Will be processed from the top to bottom
-				combine:[
-					// Combine files from all directory recursively
-					'private-editor/src/**/*.js',
-				],
-			},
-			scss:{
-				file:'editor/assets/private.min.css',
-				combine:'private-editor/src/**/*.scss',
-			},
-			sf:{
-				file:'editor/assets/private.sf',
-				combine:'private-editor/src/**/*.sf',
-			},
-		};
-
 		require('./editor/utils/build-docs.js')(Gulp, isCI);
 	}
 
