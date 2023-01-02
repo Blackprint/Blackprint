@@ -139,9 +139,9 @@ export class Sketch extends Engine {
 	on(eventName: 'cable.connect', callback: (data: { port: IFacePort, target: IFacePort, cable: Cable }) => void): void;
 
 	/** User is selecting some nodes and cables */
-	on(eventName: 'container.selection', callback: (data: { cables: Array<Cable>, nodes: Array<Node> }) => void): void;
+	on(eventName: 'container.selection', callback: (data: { cables: Array<Cable>, nodes: Array<Node<any>> }) => void): void;
 	/** JSON was imported into the instance */
-	on(eventName: 'json.imported', callback: (data: { appendMode: Boolean, nodes: Array<Node>, raw: String }) => void): void;
+	on(eventName: 'json.imported', callback: (data: { appendMode: Boolean, nodes: Array<Node<any>>, raw: String }) => void): void;
 	/** An error happened on the instance */
 	on(eventName: 'error', callback: (data: { type: String, data: Object }) => void): void;
 	/** Default port value was changed */
@@ -185,13 +185,13 @@ export class Sketch extends Engine {
 }
 
 /** Interface/IFace that can be used to control nodes */
-export class Interface extends EngineInterface {
+export class Interface<T extends Node<T> = any> extends EngineInterface<T> {
 	/**
 	 * You mustn't use this class to manually construct nodes
 	 * But please use 'instance.createNode()' instead
 	 * @param node
 	 */
-	constructor(node: Node);
+	constructor(node: T);
 
 	/** Node's X position */
 	x: number;
@@ -252,22 +252,22 @@ export class Interface extends EngineInterface {
 	nodeUnhovered(event: object): void;
 
 	/** Two ports were connected with a cable */
-	on(eventName: 'cable.connect', callback: (data: { port: IFacePort, target: IFacePort, cable: Cable }) => void): void;
+	on(eventName: 'cable.connect', callback: (data: { port: IFacePort<T['node']>, target: IFacePort, cable: Cable }) => void): void;
 	/** Two ports get disconnected each other */
-	on(eventName: 'cable.disconnect', callback: (data: { port: IFacePort, target: IFacePort, cable: Cable }) => void): void;
+	on(eventName: 'cable.disconnect', callback: (data: { port: IFacePort<T['node']>, target: IFacePort, cable: Cable }) => void): void;
 	/** There's new value update coming from output port */
-	on(eventName: 'port.value', callback: (data: { port: IFacePort, target: IFacePort, cable: Cable }) => void): void;
+	on(eventName: 'port.value', callback: (data: { port: IFacePort<T['node']>, target: IFacePort, cable: Cable }) => void): void;
 
 	/** A cable was created from a port */
-	on(eventName: 'cable.created', callback: (data: { port: IFacePort, cable: Cable }) => void): void;
+	on(eventName: 'cable.created', callback: (data: { port: IFacePort<T['node']>, cable: Cable }) => void): void;
 	/** User hovered/focus on an port element */
-	on(eventName: 'port.hover', callback: (data: { event: Event, port: IFacePort }) => void): void;
+	on(eventName: 'port.hover', callback: (data: { event: Event, port: IFacePort<T['node']> }) => void): void;
 	/** User leaving focus from an port element */
-	on(eventName: 'port.unhover', callback: (data: { event: Event, port: IFacePort }) => void): void;
+	on(eventName: 'port.unhover', callback: (data: { event: Event, port: IFacePort<T['node']> }) => void): void;
 	/** User right clicked port element to open a menu */
 	on(eventName: 'port.menu', callback: (data: {
 		instance: Engine | Sketch,
-		port: IFacePort,
+		port: IFacePort<T['node']>,
 		menu: Array<any>,
 		event: Event,
 		preventDefault: Function
