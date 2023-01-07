@@ -63,14 +63,17 @@ function createNodesMenu(list, sketch, ev, pos, opt){
 	var menu = [];
 	var strArr = [];
 	function deep(obj, target){
+		let nodePath = strArr.join('/');
 		for(var name in obj){
 			let that = obj[name];
 			if(that == null || that.hidden || that.disabled)
 				continue;
 
 			if(that.constructor === Function){
+				let doc = deepProperty(Blackprint._docs, (nodePath+'/'+name).split('/'));
 				target.push({
 					title: name,
+					description: doc?.description || doc?.tags?.summary,
 					args: [strArr.length !== 0 ? strArr.join('/')+'/'+name : name],
 					callback: createNode
 				});

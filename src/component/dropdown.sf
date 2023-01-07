@@ -1,17 +1,18 @@
 ## comment, This will be used for sf-each for above element
 ## html
-<drop-down class="bp-dropdown-menu {{hidden}}" style="
+<drop-down class="bp-dropdown-menu {{ hidden }}" style="
     display: {{visible ? 'block' : 'none'}};
     transform: translate({{ x | 0 }}px, {{ y | 0 }}px);
   ">
   <div class="first" style="display: {{ !title && 'none' }}">{{ title || '' }}</div>
+  <input>
   <ul>
-    <li sf-each="x in options" :class="{{ x.divider ? 'divider' : '' }} {{ x.disabled ? 'disabled' : '' }}" title="{{ x.info || '' }}">
-      {{@if x.title !== undefined:
+    <li sf-each="x in options" :class="{{ x.divider ? 'divider' : '' }} {{ x.disabled ? 'disabled' : '' }} {{ x.description ? 'has-desc' : '' }}" title="{{ x.info || '' }}">
+      {{@if x.title != null:
       	{[ <a> ]} // Begin
 
       	// Icon on the left
-      	if(x.icon !== void 0){
+      	if(x.icon != null){
       		if(x.icon.includes('//'))
       			{[ <img class="dropdown-icon" :src="{{x.icon}}"> ]};
       		else
@@ -20,10 +21,13 @@
 
       	// Always use { [ enclosed template ]} to avoid vulnerability
       	// like the text being parsed as HTML
-      	{[ <span>{{ x.title }}</span> ]} // Content
+      	{[ <div class="title">{{ x.title }}</div> ]} // Content
+
+		if(x.description != null)
+      		{[ <div class="description">{{ x.description }}</div> ]};
 
       	// Add icon if the has deep menu
-      	if(x.deep !== void 0)
+      	if(x.deep != null)
       		{[ <i class="{{ root.icon.more }} has-deep"></i> ]};
 
       	{[ </a> ]} // End
@@ -41,34 +45,65 @@ sf-space[blackprint]{
 		margin-top: 7px;
 		background-color: rgba(255, 255, 255, 0.96);
 		box-shadow: 1px 1px 11px 3px black;
-	    border: inherit;
-	    position: fixed;
-	    top: 0;
-	    left: 0;
-	    padding: 0;
-	    border-radius: 3px;
-	    background: white;
+		border: inherit;
+		position: fixed;
+		top: 0;
+		left: 0;
+		padding: 0;
+		border-radius: 3px;
+		background: white;
 
-	    // transition: 0.3s ease-out;
-	    // transition-property: visibility, opacity;
-	    &.bp-hidden{
+		// transition: 0.3s ease-out;
+		// transition-property: visibility, opacity;
+		&.hidden{
 			visibility: hidden;
 			opacity: 0;
-	    }
-	    ul{
-	    	overflow-x: hidden;
-	    	overflow-y: auto;
-	    	max-height: 300px;
-	    }
+		}
+		input{
+			display: none;
+			outline: none;
+			border: none;
+			border-bottom: 1px solid black;
+			width: calc(100% - 4px);
+			font-family: 'Nunito', sans-serif, "Font Awesome 5 Free";
+			&::placeholder {
+				text-align: center;
+			}
+		}
+		ul{
+			overflow-x: hidden;
+			overflow-y: auto;
+			max-height: 300px;
+		}
 
 		li {
 			position: relative;
 			vertical-align: baseline;
 			display: inherit !important;
 			padding: 8px 16px 8px 8px;
-			min-width: 100px;
+			min-width: 110px;
 			border-bottom: 1px dashed darkgray;
 			font-size: 16px;
+			max-width: 400px;
+
+			&.has-desc {
+				padding: 2px 16px 2px 8px;
+
+				a{
+					display: block;
+				}
+				.title{
+					font-size: 14px;
+				}
+			}
+
+			.description {
+				font-size: 12px;
+				color: gray;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
 
 			> * {
 				pointer-events: none;
@@ -79,29 +114,11 @@ sf-space[blackprint]{
 			}
 
 			cursor: pointer;
-	    	color: black;
-		}
-	}
+			color: black;
 
-	drop-down.bp-dropdown-menu drop-down{
-		opacity: 1;
-	}
-
-	.ground-backdrop{
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%;
-		background: rgba(0,0,0,.4);
-		z-index: 10000;
-		visibility: hidden;
-		opacity: 0;
-		transition-duration: .2s;
-
-		&.show{
-			opacity: 1;
-			visibility: visible;
+			li > a > span {
+				padding-right: 6px;
+			}
 		}
 	}
 
@@ -109,6 +126,14 @@ sf-space[blackprint]{
 		top: 11px;
 		position: absolute;
 		right: 5px;
+	}
+
+	sf-m[name="dropdown"].has-search > drop-down > input{
+		display: block;
+	}
+
+	drop-down.bp-dropdown-menu drop-down{
+		opacity: 1;
 	}
 
 	drop-down{
@@ -128,8 +153,17 @@ sf-space[blackprint]{
 			margin: 0;
 			padding: 0;
 
+			li a {
+				display: flex;
+				div{
+					padding-left: 5px;
+				}
+			}
+
 			.dropdown-icon {
 				padding-right: 5px;
+				float: left;
+				align-self: center;
 			}
 
 			li.disabled, li.disabled:hover{
@@ -148,6 +182,8 @@ Blackprint.space.model('dropdown', function(My){
 	My.menus = [];
 	My.onCancel = void 0;
 	My.className = '';
+	My.hasSearch = false;
+	My.searchActive = false;
 	My.pendingDeepOpen = false;
 	My.pendingDeepOpen_ = 0;
 
@@ -156,12 +192,14 @@ Blackprint.space.model('dropdown', function(My){
 	};
 
 	// menus: [{title, callback}, {title, deep:[{...}]}, ...]
-	My.show = function(menus, { x, y, event, element, title, className }){
+	My.show = function(menus, { x, y, event, element, title, className, hasSearch, searchObject }){
+		My._event = event;
+
 		// Remove last dropdown if haven't been closed
 		if(My.menus.length !== 0)
 			My.menus.splice(0);
 		else
-			addBackdrop(event || menus.event);
+			addBackdrop();
 
 		menus.title = title;
 
@@ -179,10 +217,113 @@ Blackprint.space.model('dropdown', function(My){
 			menus.y = event.y;
 		}
 
-		menus.event ??= event;
+		menus.event = event;
+		for (var i = menus.length - 1; i >= 0; i--) {
+			if(menus[i].hide)
+				menus.splice(i, 1);
+		}
 
 		My.className = className || '';
 		My.menus.push(menus);
+
+		if(hasSearch){
+			let el = My.$el('input').eq(0);
+			let debounce = 0;
+			let ref = My.menus[0];
+			let menuCopy = My.menus[0].slice(0);
+			el.attr('placeholder', ' Type here to search...');
+			My.hasSearch = true;
+
+			function onClick(ev){
+				let item = ev.target.model;
+				item.callback.apply(item.context, item.args);
+
+				My.$el('drop-down > ul').off('click', onClick);
+				My.hide();
+			}
+
+			el.on('keyup', function(ev){
+				clearTimeout(debounce);
+				debounce = setTimeout(()=> {
+					let value = el[0].value;
+					if(!value || !My.hasSearch){
+						My.searchActive = false;
+						el[0].value = '';
+
+						ref.splice(0);
+						ref.push(...menuCopy);
+
+						My.$el('drop-down > ul').off('click', onClick);
+						return;
+					}
+
+					My.searchActive = true;
+					let checks = value.split(' ').map(v => {
+						let temp = RegExp(v, 'i');
+						temp.found = false;
+						return temp;
+					});
+
+					let results = [];
+					function deepFindFilter(list, docs, lastPath=''){
+						for(let i=0; i < list.length; i++){
+							let item = list[i];
+							let getDocs = docs?.[item.title];
+							let fullPath = lastPath + item.title+' > ';
+
+							if(item.deep != null){
+								deepFindFilter(item.deep, getDocs, fullPath);
+							}
+							else {
+								let allFound = true;
+								for(var k=0; k < checks.length; k++){
+									let ref = checks[k];
+									if(ref.test(fullPath)) ref.found = true;
+									else allFound = false;
+								}
+
+								let description;
+								if(getDocs != null){
+									;({ description } = getDocs);
+
+									if(allFound === false){
+										for(let k=0; k < checks.length; k++){
+											let ref = checks[k];
+											if(ref.test(description)) ref.found = true;
+										}
+									}
+								}
+
+								// Check and reset flag
+								allFound = true;
+								for(let k=0; k < checks.length; k++){
+									let ref = checks[k];
+									if(ref.found === false) allFound = false;
+									ref.found = false;
+								}
+
+								if(allFound === false) continue;
+
+								results.push(Object.assign({ description, info: description }, item, {title: fullPath.slice(0, -3)}));
+							}
+						}
+					}
+
+					deepFindFilter(menuCopy, searchObject);
+
+					for (var i = 0; i < My.menus.length; i++)
+						My.menus.getElement(i).model.deepRemove();
+
+					ref.splice(0);
+					ref.push(...results);
+
+					My.$el('drop-down > ul').on('click', onClick);
+				}, 300);
+			});
+
+			setTimeout(()=> el.focus(), 200);
+		}
+
 		return My;
 	}
 
@@ -196,11 +337,14 @@ Blackprint.space.model('dropdown', function(My){
 		removeBackdrop();
 
 		My.className = '';
+		My.hasSearch = false;
+
+		My.$el('input').off('keyup');
 	}
 
 	var backdropCreated = false;
 	function backdropListener(ev){
-		if($(ev.target).parent('sf-m')[0] === sf.Window.source(My.$el))
+		if($(ev.target).parent('sf-m')[0] === sf.Window.source(My.$el, My._event))
 			return;
 
 		removeBackdrop();
@@ -210,10 +354,10 @@ Blackprint.space.model('dropdown', function(My){
 	}
 
 	var backdrop = $('<div class="ground-backdrop"></div>');
-	function addBackdrop(ev){
+	function addBackdrop(){
 		if(backdropCreated) return;
 
-		backdrop.insertBefore(sf.Window.source(My.$el, ev));
+		backdrop.insertBefore(sf.Window.source(My.$el, My._event));
 		setTimeout(function(){
 			backdrop.addClass('show');
 			$(sf.Window).on('pointerdown', backdropListener);
@@ -239,7 +383,7 @@ Blackprint.space.model('dropdown', function(My){
 // =====================================================================
 Blackprint.space.component('drop-down', {template: #this.path}, function(My, include, $item){
 	My.visible = false;
-	My.hidden = 'bp-hidden'; // We also need to hide it before repaint
+	My.hidden = 'hidden'; // We also need to hide it before repaint
 
 	My.options = $item;
 	My._parent = $item._parent;
@@ -249,6 +393,11 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 	My.width = 0;
 	My.height = 0;
 	My.disabled = $item.disabled === true;
+
+	for (var i = $item.length - 1; i >= 0; i--) {
+		if($item[i].hide)
+			$item.splice(i, 1);
+	}
 
 	// First dropdown title
 	My.title = $item.title;
@@ -286,13 +435,10 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 			if(y + My.y + My.height > sf.Window.focus.innerHeight)
 				My.y -= My.height;
 
-			$item.x = My.x;
-			$item.y = My.y;
-
 			My.hidden = '';
 		});
 
-		// Find nested options and add event listener on pointer hover
+		// Find nested options and add event listener on mouse hover
 		var options = My.options;
 		for (var i = 0; i < options.length; i++) {
 			let opt = options[i];
@@ -313,7 +459,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 					// Use the cache instead
 					if(deep.el !== void 0){
 						currentDeepLevel = deep.el;
-						deep.el.model.y = deep.y - ((deep.ul?.scrollTop || 0) - deep.lastScrollTop);
+						deep.el.model.y = deep.yi - (deep.ul?.scrollTop || 0);
 						$el.append(deep.el);
 						return;
 					}
@@ -323,8 +469,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 					// Initialize position once
 					deep.x = ulElem.offsetWidth;
 					deep.yi = ev.target.offsetTop - 7;
-					deep.lastScrollTop = (deep.ul?.scrollTop || 0);
-					deep.y = deep.yi - deep.lastScrollTop;
+					deep.y = deep.yi - (deep.ul?.scrollTop || 0);
 
 					// Create dropdown in current sf-space
 					deep.el = currentDeepLevel = new $DropDown(deep, My.$space);
@@ -332,7 +477,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 					$el.append(currentDeepLevel);
 				}
 
-				elem.on('pointerover', function(ev){
+				elem.on('mouseover', function(ev){
 					My.root.pendingDeepOpen = ev.target;
 					clearTimeout(My.root.pendingDeepOpen_);
 
@@ -346,7 +491,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 				continue;
 			}
 
-			elem.on('pointerover', function(ev){
+			elem.on('mouseover', function(ev){
 				My.root.pendingDeepOpen = ev.target;
 				clearTimeout(My.root.pendingDeepOpen_);
 
@@ -362,10 +507,8 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 
 			if(opt.callback){
 				elem.on('click', function(ev){
-					setTimeout(()=> {
-						if(opt.unhover !== void 0)
-							opt.unhover.apply(opt.context, opt.args);
-					}, 200);
+					if(opt.unhover !== void 0)
+						opt.unhover.apply(opt.context, opt.args);
 
 					opt.callback.apply(opt.context, opt.args);
 					My.root.hide();
@@ -373,7 +516,7 @@ Blackprint.space.component('drop-down', {template: #this.path}, function(My, inc
 			}
 
 			if(opt.unhover){
-				elem.on('pointerout', function(ev){
+				elem.on('mouseout', function(ev){
 					opt.unhover.apply(opt.context, opt.args);
 				});
 			}
