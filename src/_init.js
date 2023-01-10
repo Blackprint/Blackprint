@@ -1401,7 +1401,7 @@ Blackprint.registerInterface = function(templatePath, options, func, _fromDecora
 	if(/\/[a-z]/.test(templatePath))
 		throw new Error(templatePath+": Please capitalize each word after the slash symbol '/'");
 
-	if(options.constructor === Function){
+	if(options?.constructor === Function){
 		func = options;
 		options = {};
 	}
