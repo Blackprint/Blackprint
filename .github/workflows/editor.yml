@@ -33,6 +33,7 @@ jobs:
 
       - name: 🛠 Compile the editor only
         env:
+          SF_COMPILER_IDLE_TERMINATE_TIME: 10 # seconds
           EDITOR_ONLY: true
         run: npm run compile
 

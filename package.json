@@ -39,7 +39,7 @@
     "jest": "^29.3.1",
     "jest-environment-jsdom": "^29.3.1",
     "node-notifier": "^9.0.1",
-    "scarletsframe-compiler": "0.6.23",
+    "scarletsframe-compiler": "0.6.25",
     "source-map-support": "^0.5.21",
     "through2": "^4.0.2",
     "vinyl": "*"
