@@ -1,4 +1,5 @@
 const fs = require('fs');
+const chokidar = require('chokidar');
 let currentPath = process.cwd();
 
 module.exports = function(SFC, Gulp){
@@ -123,6 +124,15 @@ module.exports = function(SFC, Gulp){
 
 				if(that.combine)
 					that.combine = convertCWD(that.combine, dirPath);
+
+				if(that.watch)
+					that.watch = convertCWD(that.watch, dirPath);
+
+				if(that.scanDocs)
+					that.scanDocs = convertCWD(that.scanDocs, dirPath);
+
+				if(that.entry)
+					that.entry = convertCWD([that.entry], dirPath)[0];
 			}
 		});
 
