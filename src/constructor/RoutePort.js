@@ -91,9 +91,7 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 
 		let evTemp = {port: this, cable};
 		iface.emit('cable.created', evTemp);
-
-		if(Blackprint.settings._remoteSketch)
-			this._scope.sketch.emit('cable.created', evTemp);
+		this._scope.sketch.emit('cable.created', evTemp);
 
 		return cable;
 	}

@@ -228,15 +228,11 @@ class Cable extends Blackprint.Engine.Cable {
 		ev.stopPropagation();
 
 		if(!isCreating && ev.ctrlKey){
-			if(Blackprint.settings._remoteSketch){
-				var evTemp = { event: ev, type: 'cableHead', cable: this };
-				this._scope.sketch.emit('cable.create.branch', evTemp);
-			}
+			var evTemp = { event: ev, type: 'cableHead', cable: this };
+			this._scope.sketch.emit('cable.create.branch', evTemp);
 
 			let newCable = this.createBranch(ev);
-
-			if(Blackprint.settings._remoteSketch)
-				evTemp.newCable = newCable;
+			evTemp.newCable = newCable;
 
 			return newCable;
 		}
@@ -279,7 +275,7 @@ class Cable extends Blackprint.Engine.Cable {
 				});
 			});
 
-			this._scope.sketch.emit('cable.drag', { cable });
+			this._scope.sketch.emit('cable.drag', { event: ev, cable });
 		}
 
 		if(isCreating){
@@ -299,10 +295,8 @@ class Cable extends Blackprint.Engine.Cable {
 			return;
 		}
 
-		if(Blackprint.settings._remoteSketch){
-			var evTemp = { event: ev, type: 'cablePath', cable: this };
-			this._scope.sketch.emit('cable.create.branch', evTemp);
-		}
+		var evTemp = { event: ev, type: 'cablePath', cable: this };
+		this._scope.sketch.emit('cable.create.branch', evTemp);
 
 		let current = this;
 
@@ -389,8 +383,7 @@ class Cable extends Blackprint.Engine.Cable {
 			clientY: ev.clientY,
 		}, true);
 
-		if(Blackprint.settings._remoteSketch)
-			evTemp.newCable = current;
+		evTemp.newCable = current;
 
 		// Don't use Object.assign
 		if(assignPosFor !== void 0){
@@ -523,8 +516,7 @@ class Cable extends Blackprint.Engine.Cable {
 	}
 
 	_delete(isDeep){
-		if(Blackprint.settings._remoteSketch && !isDeep)
-			this._scope.sketch.emit('cable.deleted', {cable:this});
+		this._scope.sketch.emit('cable.deleted', {cable: this});
 
 		if(this.hasBranch){
 			let branch = this.branch;

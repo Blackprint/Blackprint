@@ -49,11 +49,9 @@ class Port extends Blackprint.Engine.Port {
 		// Put port reference to the cable
 		cable.owner = this;
 
-		let evTemp = {port: this, cable};
+		let evTemp = {port: this, cable, event: isAuto ? null : e};
 		this.iface.emit('cable.created', evTemp);
-
-		if(Blackprint.settings._remoteSketch)
-			this._scope.sketch.emit('cable.created', evTemp);
+		this._scope.sketch.emit('cable.created', evTemp);
 
 		// Stop here if this function wasn't triggered by user
 		if(isAuto) return cable;
