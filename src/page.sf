@@ -83,6 +83,7 @@
 </sf-space>
 
 ## scss-global
+sf-m { display: block; }
 sf-space[blackprint]{
   position: absolute;
 
