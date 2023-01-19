@@ -1469,7 +1469,7 @@ Blackprint.loadScope = function(options){
 	// Save URL to the object
 	temp.Sketch._scopeURL = temp._scopeURL = cleanURL.replace(/\.sf\.mjs$/m, '.min.mjs');
 
-	if(Blackprint.Environment.loadFromURL){
+	if(Blackprint.Environment.loadFromURL && Blackprint.Environment.isBrowser){
 		if(Blackprint.loadBrowserInterface){
 			if(window.sf === void 0)
 				return console.log("[Blackprint] ScarletsFrame was not found, node interface for Blackprint Editor will not being loaded. You can also set `Blackprint.loadBrowserInterface` to false if you don't want to use node interface for Blackprint Editor.");
