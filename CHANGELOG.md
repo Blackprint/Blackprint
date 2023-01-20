@@ -1,3 +1,18 @@
+# 0.8.6
+
+### Improvement
+- Improve typings for port's type definition
+- Improve cable glow animation
+
+### Features
+- Show node description on dropdown menu
+
+### Bug Fix
+- Fix error when using `registerInterface` as decorator
+- Fix unemitted event
+- Avoid browser interface loading when not in Browser environment
+- Assign default style for `sf-m`
+
 # 0.8.5
 
 ### Improvement
