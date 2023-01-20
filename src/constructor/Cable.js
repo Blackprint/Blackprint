@@ -1,24 +1,11 @@
 var dotGlow = document.createElement('div');
 dotGlow.classList.add('bp-dot-glow');
 
-function _deleteFromList(list, item){
-	if(list === void 0) return;
-
-	let a = list.indexOf(item);
-	if(a !== -1)
-		list.splice(a, 1);
-}
-
-function _resetCableZIndex(branch, cableList){
-	for (var i = 0; i < branch.length; i++) {
-		let cable = branch[i];
-
-		cableList.move(cableList.indexOf(cable), 0);
-
-		if(cable.branch !== void 0)
-			_resetCableZIndex(cable.branch, cableList);
-	}
-}
+let settings = Blackprint.settings;
+let cableGlowDuration = 1000; // visualizeFlow.duration
+let cableGlowFrame = 4; // visualizeFlow.frame
+let cableGlowThrottle = 200; // visualizeFlow.throttle
+let cableGlowStartLength = true; // visualizeFlow.startLength
 
 class Cable extends Blackprint.Engine.Cable {
 	constructor(obj, port, _unshift=false){
@@ -80,35 +67,70 @@ class Cable extends Blackprint.Engine.Cable {
 		return this._pathEl;
 	}
 
-	// ToDo: Improve performance by caching the dotGlow.cloneNode()
-	// ToDo: Make the animation more better
 	async visualizeFlow(){
-		if(this.animating || window.Timeplate === void 0)
-			return;
+		if(this.pathEl == null || window.Timeplate === void 0) return;
+		if(this.output === void 0 || this._destroyed) return;
 
-		if(this.pathEl == null) return;
-		this.animating = true;
+		if(settings.visualizeFlow_duration != null)
+			cableGlowDuration = settings.visualizeFlow_duration;
+
+		if(settings.visualizeFlow_frame != null)
+			cableGlowFrame = settings.visualizeFlow_frame;
+
+		if(settings.visualizeFlow_throttle != null)
+			cableGlowThrottle = settings.visualizeFlow_throttle;
+
+		if(settings.visualizeFlow_startLength != null)
+			cableGlowStartLength = settings.visualizeFlow_startLength;
+
+		if(cableGlowThrottle !== 0){
+			if(this._delayGlow) return;
+			this._delayGlow = true;
+		}
 
 		let cableScope = this._scope('cables');
 		var glowContainer = cableScope.$el('.glow-cable');
 
 		await $.afterRepaint();
-		if(this.output === void 0 || this._destroyed) return;
 
 		if(cableScope.minimapCableScope !== void 0)
 			glowContainer = [...glowContainer, ...cableScope.minimapCableScope.$el('.glow-cable')];
 
-		var anim = this.animPlayer;
-		if(anim === void 0){
-			anim = this.animPlayer = Timeplate.parallel(1000);
-			anim.el = new WeakMap();
+		var els = new Array(glowContainer.length);
+		for (let i=0; i < glowContainer.length; i++) {
+			let el = els[i] = getIdleCableGlow();
+			let container = glowContainer[i];
+
+			if(el.parentNode === container) continue;
+			container.append(el);
 		}
 
-		function r(a, b){return Math.round(Math.random()*(b-a)*1000)/1000+a}
+		// Generate new variations if not exist
+		if(cableGlowKeyframes == null){
+			let variations = cableGlowKeyframes = new Array(30);
+			for (let i=0; i < variations.length; i++) {
+				let keyframes = variations[i] = new Array(cableGlowFrame+3);
 
-		var offsetPath = `path('${this.pathEl.getAttribute('d')}')`;
-		var first = {offset: 0, offsetPath, offsetDistance: '1%'};
-		var last = {offset: 1, translate: 0, offsetPath, scale: 1, offsetDistance: '100%'};
+				var o = 1/(keyframes.length - 1);
+				for (var a = 2, n=cableGlowFrame+2; a <= n; a++) {
+					keyframes[a] = {
+						offset: o*(a+1),
+						translate: [random(-15, 15)+'px', random(-15, 15)+'px'],
+					};
+				}
+
+				keyframes[0] = {offset: 0, offsetPath: null, offsetDistance: '1%'};
+				keyframes[1] = {offset:0.02, visibility: 'hidden'};
+				keyframes[2].visibility = 'visible';
+				keyframes[cableGlowFrame+2] = {offset: 1, translate: 0, offsetPath: null, scale: 1, offsetDistance: '100%'};
+			}
+		}
+
+		let keyframes = incrementalGet(cableGlowKeyframes);
+		let offsetPath = `path('${this.pathEl.getAttribute('d')}')`;
+		let first = keyframes[0];
+		let last = keyframes[6];
+		first.offsetPath = last.offsetPath = offsetPath;
 
 		// reverse if owner is not the output port
 		if(this.owner !== this.output){
@@ -116,59 +138,39 @@ class Cable extends Blackprint.Engine.Cable {
 			last.offsetDistance = '1%';
 		}
 
-		var els = new Array(glowContainer.length);
-		for (var z = 0; z < glowContainer.length; z++) {
-			var data = anim.el.get(glowContainer[z]);
-			if(data === void 0){
-				data = [dotGlow.cloneNode(), dotGlow.cloneNode(), dotGlow.cloneNode()];
-				anim.el.set(glowContainer[z], data);
-			}
-
-			for (var i = 0; i < data.length; i++) {
-				var ref = els[i];
-				if(ref === void 0)
-					ref = els[i] = $(new Array(glowContainer.length));
-
-				ref[z] = data[i];
-			}
-
-			$(glowContainer[z]).append(data);
-		}
-
-		var timeline = new Array(3); // 3 glow element
-		for (var i = 0; i < timeline.length; i++) {
-			var keyframes = new Array(4);
-
-			var o = 1/(keyframes.length+3);
-			for (var a = 0; a < keyframes.length; a++) {
-				keyframes[a] = {
-					offset: o*(a+i+1),
-					translate: [r(-15, 15)+'px', r(-15, 15)+'px'],
-					// scale: r(0.5, 1.6),
-				};
-			}
-
-			keyframes[0].visibility = 'visible';
-			keyframes.unshift(first, {offset:0.02, visibility: 'hidden'});
-			keyframes.push(last);
-
-			timeline[i] = Timeplate.for(els[i], keyframes, {delay: i*100});
-		}
-
-		anim.timeline = timeline;
-
-		// Put on DOM tree and play it
-		anim.restart();
-
-		// Remove from DOM tree
-		anim.once('finish', ()=> {
-			this.animating = false;
-
-			for (var i = 0; i < els.length; i++)
-				els[i].remove();
-		});
+		let anim = Timeplate.for(els, keyframes, {delay: 100});
+		anim.duration = cableGlowDuration;
+		anim.play();
 
 		super.visualizeFlow();
+
+		if(cableGlowThrottle !== 0)
+			setTimeout(() => this._delayGlow = false, cableGlowThrottle);
+
+		if(cableGlowStartLength){
+			this._deglow ??= () => this._glowing = false;
+			if(!this._glowing){
+				this._glowing = true;
+				this._glow = true;
+
+				let i = 0;
+				let temp = setInterval(()=> {
+					this._delayGlow = false;
+					this.visualizeFlow();
+
+					if(++i >= 2) {
+						clearInterval(temp);
+						this._glow = false;
+					}
+				}, 100);
+
+				this._reglow = setTimeout(this._deglow, cableGlowDuration+1000);
+			}
+			else if(!this._glow){
+				clearTimeout(this._reglow);
+				this._reglow = setTimeout(this._deglow, cableGlowDuration+1000);
+			}
+		}
 	}
 
 	moveCableHead(ev, single){
@@ -668,4 +670,63 @@ class Cable extends Blackprint.Engine.Cable {
 			inputIface.node.routes._checkInactiveNode(inputIface);
 		}
 	}
+}
+
+function _deleteFromList(list, item){
+	if(list === void 0) return;
+
+	let a = list.indexOf(item);
+	if(a !== -1)
+		list.splice(a, 1);
+}
+
+function _resetCableZIndex(branch, cableList){
+	for (var i = 0; i < branch.length; i++) {
+		let cable = branch[i];
+
+		cableList.move(cableList.indexOf(cable), 0);
+
+		if(cable.branch !== void 0)
+			_resetCableZIndex(cable.branch, cableList);
+	}
+}
+
+function random(a, b){ return Math.round(Math.random()*(b-a)*1000)/1000+a }
+
+// In case you're using kind of debugging
+// tools and think this was memory leak
+// This feature can be disabled if you're not enabling
+// Blackprint.settings('visualizeFlow', true);
+let cableGlowKeyframes;
+let cableGlowElCache = [];
+let getIdleCableGlow = (function(){
+	let idle = 0;
+	let current = 0;
+	let timeout = false;
+
+	return function(){
+		if(timeout === false) timeout = setTimeout(()=> {
+			idle = current = 0;
+			timeout = false;
+		}, cableGlowDuration + 500);
+
+		if(current >= idle){
+			if(idle >= cableGlowElCache.length)
+				cableGlowElCache.push(dotGlow.cloneNode());
+
+			idle++;
+		}
+
+		return cableGlowElCache[current++];
+	}
+})();
+console.log(cableGlowElCache)
+
+function incrementalGet(list){
+	let i = list._i ??= 0;
+	let temp = list[i];
+	i = i + 1;
+	if(i >= list.length) i = 0;
+	list._i = i
+	return temp;
 }
