@@ -720,7 +720,6 @@ let getIdleCableGlow = (function(){
 		return cableGlowElCache[current++];
 	}
 })();
-console.log(cableGlowElCache)
 
 function incrementalGet(list){
 	let i = list._i ??= 0;

@@ -1,3 +1,8 @@
+# 0.8.7
+
+### Minor changes
+- Remove `console.log` used by me for debugging 😅
+
 # 0.8.6
 
 ### Improvement
