@@ -145,6 +145,11 @@ function checkTypeInstance(source, clazz, target, nodeClass){
 			return false;
 		}
 
+		if(target.constructor === Object){
+			if(target === clazz) return true;
+			return false;
+		}
+
 		if(clazz.prototype instanceof target)
 			return true;
 	}
