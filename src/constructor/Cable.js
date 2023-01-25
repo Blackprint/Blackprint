@@ -339,7 +339,8 @@ class Cable extends Blackprint.Engine.Cable {
 						port.out = cable;
 						port._outTrunk = cable.cableTrunk;
 					}
-					else current.output.cables.push(cable);
+
+					current.output.cables?.push(cable);
 				}
 
 				cable.connected = current.connected;
@@ -431,7 +432,7 @@ class Cable extends Blackprint.Engine.Cable {
 
 		if(this.isRoute){
 			setTimeout(() => {
-				if(this.branch.length > 1)this.branch[0].disconnect();
+				if(this.branch.length > 1) this.branch[0].disconnect();
 			}, 10);
 		}
 
@@ -526,7 +527,8 @@ class Cable extends Blackprint.Engine.Cable {
 				port.out = this;
 				port._outTrunk = this.cableTrunk;
 			}
-			else this.cableTrunk.output.cables.push(this);
+
+			this.cableTrunk.output.cables?.push(this);
 		}
 
 		// Recheck inactive node
