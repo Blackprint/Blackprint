@@ -138,7 +138,8 @@ Blackprint.Interface = class Interface extends sf.Model {
 		}
 
 		let { routes } =  this.node;
-		if(routes.out) this._cableMove('output', routes.out, x, y, this);
+		if(routes._outTrunk) this._cableMove('output', routes._outTrunk, x, y, this);
+		else if(routes.out) this._cableMove('output', routes.out, x, y, this);
 
 		let routesIn = routes.in;
 		for (let i=0; i < routesIn.length; i++) {

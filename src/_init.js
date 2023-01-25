@@ -252,6 +252,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			let cableConnects = [];
 			let routeConnects = [];
 			let branchPrepare = new Map();
+			let routeBranchPrepare = new Map();
 
 			// Create cable only from output and property
 			// > Important to be separated from above, so the cable can reference to loaded nodes
@@ -263,8 +264,16 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 					let node = nodes[a];
 					var iface = inserted[node.i];
 
-					if(node.route != null)
-						routeConnects.push({from: iface, to: inserted[node.route.i + appendLength]});
+					if(node.route != null){
+						routeConnects.push({
+							parentId: node.route.parentId,
+							from: iface,
+							to: inserted[node.route.i + appendLength]
+						});
+
+						if(node._route != null)
+							routeBranchPrepare.set(iface.node.routes, node._route);
+					}
 
 					// If have output connection
 					if(node.output !== void 0){
@@ -302,7 +311,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 							}
 
 							if(_cableMeta)
-								branchPrepare.set(linkPortA, _cableMeta[portName])
+								branchPrepare.set(linkPortA, _cableMeta[portName]);
 
 							// Current output's available targets
 							for (var k = 0; k < port.length; k++) {
@@ -405,8 +414,19 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			// Connect route cable
 			for (let i=0; i < routeConnects.length; i++) {
-				let { from, to } = routeConnects[i];
-				from.node.routes.routeTo(to);
+				let { from, to, parentId } = routeConnects[i];
+				let port = from.node.routes;
+
+				let meta = routeBranchPrepare.get(port);
+				if(meta != null){
+					// Create branches
+					for (let z = 0; z < meta.length; z++)
+						deepCreate(meta[z], port.createCable(), port);
+
+					let cable = branchMap.get(port)[parentId];
+					to.node.routes.connectCable(cable);
+				}
+				else port.routeTo(to);
 			}
 
 			// Connect ports cable
@@ -650,46 +670,16 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 					}
 
 					if(pendingBranch.length !== 0){
-						let parentCable = 0;
-
 						let meta = cableMetadata[name] = [];
 						hasCableMetadata = true;
 
-						function deepBranch(cable, save){
-							if(cable.branch){
-								let branch = cable.branch;
-
-								if(cable.overrideRot != null)
-									save.overRot = cable.overrideRot;
-
-								save.x = Math.round(cable.head2[0]);
-								save.y = Math.round(cable.head2[1]);
-								save.branch = [];
-
-								for (let z = 0; z < branch.length; z++){
-									let temp = {};
-									save.branch.push(temp);
-									deepBranch(branch[z], temp);
-								}
-
-								return;
-							}
-
-							// Skip if not connected to anything
-							if(cable.connected === false) return;
-
-							let temp = parentMap.get(cable);
-							if(options.selectedOnly && temp == null)
-								return;
-
-							save.id = temp.parentId = parentCable++;
-						}
+						let settings = { options, parentMap, parentCable: 0 };
 
 						for (var z = 0; z < pendingBranch.length; z++) {
 							let temp = {};
 							meta.push(temp);
 
-							deepBranch(pendingBranch[z], temp);
+							deepBranch(pendingBranch[z], temp, settings);
 						}
 					}
 				}
@@ -708,6 +698,30 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			if(hasCableMetadata)
 				data._cable = cableMetadata;
+
+			let routeHasBranch = iface.node.routes._outTrunk;
+			if(routeHasBranch != null){
+				let connectedCable = iface.node.routes.out;
+				if(connectedCable !== routeHasBranch){
+					let meta = [{}];
+					let parentMap = new Map();
+					let input = connectedCable.input || {};
+					let _i = ifaces.indexOf(input.iface);
+	
+					// Check if not excluded for export
+					if(_i !== -1 && !exclude.includes(ifaces[_i].namespace)){
+						let temp = { i: _i };
+	
+						parentMap.set(connectedCable, temp);
+						let settings = { options, parentMap, parentCable: 0 };
+	
+						deepBranch(routeHasBranch, meta[0], settings);
+						data._route = meta;
+
+						data.route.parentId = 0;
+					}
+				}
+			}
 
 			json[iface.namespace].push(data);
 		}
@@ -1080,6 +1094,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			this.ifaceList[iface.i] = iface;
 		else this.ifaceList.push(iface);
 
+		node.initPorts?.(savedData);
+
 		if(defaultInputData != null)
 			iface._importInputs(defaultInputData);
 
@@ -1176,6 +1192,38 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		super.destroy();
 		this.scope.destroy();
 	}
+}
+
+function deepBranch(cable, save, settings){
+	let { options, parentMap } = settings;
+	
+	if(cable.branch){
+		let branch = cable.branch;
+
+		if(cable.overrideRot != null)
+			save.overRot = cable.overrideRot;
+
+		save.x = Math.round(cable.head2[0]);
+		save.y = Math.round(cable.head2[1]);
+		save.branch = [];
+
+		for (let z = 0; z < branch.length; z++){
+			let temp = {};
+			save.branch.push(temp);
+			deepBranch(branch[z], temp, settings);
+		}
+
+		return;
+	}
+
+	// Skip if not connected to anything
+	if(cable.connected === false) return;
+
+	let temp = parentMap.get(cable);
+	if(options.selectedOnly && temp == null)
+		return;
+
+	save.id = temp.parentId = settings.parentCable++;
 }
 
 // Replace function from Blackprint Engine

@@ -24,7 +24,7 @@ Space.model('nodes', function(My, include){
 			if(width > 0)
 				iface.w = width;
 
-			let routeCable = iface.node.routes.out;
+			let routeCable = iface.node.routes._outTrunk || iface.node.routes.out;
 			if(routeCable != null){
 				if(routeCable.input != null){
 					let inp = routeCable.input.iface.$el('.routes .in')[0];

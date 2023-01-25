@@ -327,14 +327,19 @@ class Cable extends Blackprint.Engine.Cable {
 
 				if(current.input != null){
 					// Swap from input port
-					let list = current.input.cables;
+					let list = current.input.cables || current.input.in;
 					list[list.indexOf(current)] = cable;
 
 					cable.target = cable.input = current.input;
 					current.target = current.input = void 0;
 
 					// Put it on output port
-					current.output.cables.push(cable);
+					if(cable.isRoute){
+						let port = cable.cableTrunk.output;
+						port.out = cable;
+						port._outTrunk = cable.cableTrunk;
+					}
+					else current.output.cables.push(cable);
 				}
 
 				cable.connected = current.connected;
@@ -346,7 +351,7 @@ class Cable extends Blackprint.Engine.Cable {
 			}
 		}
 		else{
-			if(current.branch == null || current.branch.length === 0){
+			if(current.parentCable && (current.branch == null || current.branch.length === 0)){
 				cable = current.parentCable.createBranch();
 
 				let parentBranch = current.parentCable.branch;
@@ -397,7 +402,7 @@ class Cable extends Blackprint.Engine.Cable {
 	}
 
 	createBranch(ev, cable){
-		if(this.source !== 'output' || this.isRoute)
+		if(this.source !== 'output')
 			throw new Error("Cable branch currently can only be created from output port");
 
 		this.hasBranch = true;
@@ -418,9 +423,17 @@ class Cable extends Blackprint.Engine.Cable {
 		this._allBranch.push(newCable);
 		this.branch.push(newCable);
 		newCable.parentCable = this;
+		newCable.isRoute = this.isRoute;
+		newCable.source = this.source;
 
 		if(ev !== void 0)
 			newCable.cableHeadClicked(ev, true);
+
+		if(this.isRoute){
+			setTimeout(() => {
+				if(this.branch.length > 1)this.branch[0].disconnect();
+			}, 10);
+		}
 
 		return newCable;
 	}
@@ -507,7 +520,13 @@ class Cable extends Blackprint.Engine.Cable {
 			}
 
 			this._inputCable.push(this);
-			this.cableTrunk.output.cables.push(this);
+
+			if(this.isRoute){
+				let port = this.cableTrunk.output;
+				port.out = this;
+				port._outTrunk = this.cableTrunk;
+			}
+			else this.cableTrunk.output.cables.push(this);
 		}
 
 		// Recheck inactive node

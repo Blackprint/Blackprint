@@ -135,7 +135,7 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 		for (let key in outputs) {
 			let { cables } = outputs[key];
 			for (let i=0; i < cables.length; i++) {
-				this._checkInactiveNode(cables[i].input?.iface);
+				this._checkInactiveNode(cables[i].input?.iface, checked);
 			}
 		}
 	}
