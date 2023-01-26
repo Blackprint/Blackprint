@@ -299,7 +299,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 									linkPortA = iface.output[portName];
 								}
 								else if(this.isSkeletonInstance){
-									linkPortA = iface.node.createPort('output', portName, arrayOfAny);
+									let type = arrayOfAny;
+									if(port[0].name == null) type = Blackprint.Types.Route;
+
+									linkPortA = iface.node.createPort('output', portName, type);
 								}
 								else{
 									this._emit('error', {
@@ -458,18 +461,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				if(target.overRot != null)
 					cable.overrideRot = target.overRot;
 
-				if(linkPortA.isRoute){
-					// Positioning the cable head2 into target port position from NodeB
-					var rectB = linkPortB._inElement[0].getBoundingClientRect();
-					var center = rectB.width / 2;
-					cable.head2 = [rectB.x + center, rectB.y + center];
-
-					linkPortB.connectCable(cable);
-					continue;
-				}
-
 				// Positioning the cable head2 into target port position from NodeB
-				var rectB = _getPortRect(input, target.name);
+				var rectB;
+				if(linkPortA.isRoute || linkPortB.isRoute)
+					rectB = linkPortB._inElement[0].getBoundingClientRect();
+				else rectB = _getPortRect(input, target.name);
+
 				var center = rectB.width / 2;
 				cable.head2 = [rectB.x + center, rectB.y + center];
 
@@ -1099,7 +1096,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(defaultInputData != null)
 			iface._importInputs(defaultInputData);
 
-		if(portSwitches != null){
+		if(portSwitches != null && !this.isSkeletonInstance){
 			if(iface.interface === "BPIC/BP/Fn/Main" || iface.interface === "BPIC/BP/Fn/Input"){
 				// Pending init
 				iface._portSw_ = portSwitches;

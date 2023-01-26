@@ -7,6 +7,9 @@ Blackprint.registerNode("BP/Skeleton", class extends Blackprint.Node {
 		this.setInterface();
 	}
 
+	// Empty function, just to show input route
+	update(){}
+
 	imported(data){
 		let temp = data.namespace.split('/');
 		this.iface.title = temp.slice(-2).join(' ');
