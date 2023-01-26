@@ -126,8 +126,19 @@ class Cable extends Blackprint.Engine.Cable {
 			}
 		}
 
+		let path = this.pathEl.getAttribute('d');
+		if(this.parentCable != null){
+			this._glowing = true; // Force single glow element
+
+			let deep = this.parentCable;
+			do {
+				path = deep.pathEl.getAttribute('d') + ' ' + path;
+				deep = deep.parentCable;
+			} while(deep != null);
+		}
+
 		let keyframes = incrementalGet(cableGlowKeyframes);
-		let offsetPath = `path('${this.pathEl.getAttribute('d')}')`;
+		let offsetPath = `path('${path}')`;
 		let first = keyframes[0];
 		let last = keyframes[6];
 		first.offsetPath = last.offsetPath = offsetPath;
