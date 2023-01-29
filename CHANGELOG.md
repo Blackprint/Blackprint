@@ -1,3 +1,13 @@
+# 0.8.8
+
+### Features
+- Add support for cable branch on route cable
+
+### Bug Fix
+- Fix error when suggesting cable from route cable
+- Improve cable glow
+- Show variable's title from title field instead of name
+
 # 0.8.7
 
 ### Minor changes
