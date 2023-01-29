@@ -62,7 +62,7 @@ let BPVar = {html: `<div class="node {{ type }}" style="transform:translate({{ x
 			@pointerup="useType(true)"
 			@pointerover="nodeHovered(event)"
 			@pointerout="nodeUnhovered(event)"
-		>{{ data.name }} <div class="description">{{ data._scopeName.slice(0, 1).toUpperCase() + data._scopeName.slice(1) }} Variable</div></div>
+		>{{ title }} <div class="description">{{ data._scopeName.slice(0, 1).toUpperCase() + data._scopeName.slice(1) }} Variable</div></div>
 
 		<div class="right-port">
 			<sf-template path="Blackprint/nodes/template/output-port.sf"></sf-template>
@@ -85,7 +85,7 @@ let BPEnv = {html: `<div class="node {{ type }}" style="transform:translate({{ x
 			@pointerdown="swapZIndex(event)"
 			@pointerover="nodeHovered(event)"
 			@pointerout="nodeUnhovered(event)"
-		>{{ data.name }} <div class="description">Environment</div></div>
+		>{{ title }} <div class="description">Environment</div></div>
 
 		<div class="right-port">
 			<sf-template path="Blackprint/nodes/template/output-port.sf"></sf-template>
@@ -108,7 +108,7 @@ let BPFnVar = {html: `<div class="node {{ type }}" style="transform:translate({{
 			@pointerdown="swapZIndex(event)"
 			@pointerover="nodeHovered(event)"
 			@pointerout="nodeUnhovered(event)"
-		>{{ data.name }} <div class="description">Function {{ type === 'bp-fnvar-input' ? 'Input' : 'Output' }}</div></div>
+		>{{ title }} <div class="description">Function {{ type === 'bp-fnvar-input' ? 'Input' : 'Output' }}</div></div>
 
 		<div class="right-port">
 			<sf-template path="Blackprint/nodes/template/output-port.sf"></sf-template>
