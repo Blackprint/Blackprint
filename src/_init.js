@@ -788,7 +788,6 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 							continue;
 
 						let temp = functions[path+key] = {};
-						temp.id = bpFunc.id;
 						temp.title = bpFunc.title;
 						temp.description = bpFunc.description;
 						temp.vars = Object.keys(bpFunc.variables);
@@ -844,7 +843,6 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 					let bpVar = list[key];
 					if(bpVar instanceof Blackprint._utils.BPVariable){
 						let temp = variables[path+key] = {};
-						temp.id = bpVar.id;
 						temp.title = bpVar.title;
 					}
 					else dive(bpVar, path+key+'/');
