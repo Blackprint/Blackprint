@@ -31,6 +31,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		// Default event
 		this._event = {$_fallback: BlackprintEventFallback};
+		this.events._updateTreeList();
 	}
 
 	static registerInterface(templatePath, options, func, _fromDecorator=false){

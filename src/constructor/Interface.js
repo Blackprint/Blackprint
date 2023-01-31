@@ -400,20 +400,24 @@ Blackprint.Interface = class Interface extends sf.Model {
 	}
 	initInputPort(){
 		if(this.node.instance.pendingRender) return;
+		let isEventNode = this.namespace.startsWith('BP/Event/');
 
 		let _debounce;
 		let inputs = this.input;
 		let update = port => {
+			if(isEventNode) return;
+
 			let node = this.node;
 			node.instance.emit('port.default.changed', { port });
 			port.emit('value', { port, cable: { isVirtual: true, value: port.default } });
 
-			node.update?.();
-			node.routes.routeOut();
+			if(node.routes.in.length === 0)
+				node._bpUpdate();
 		}
 
+
 		// Skip default value's port input box for internal nodes
-		if(this.namespace.startsWith('BP/')) return;
+		if(this.namespace.startsWith('BP/') && !isEventNode) return;
 
 		for(let key in inputs){
 			let port = inputs[key];

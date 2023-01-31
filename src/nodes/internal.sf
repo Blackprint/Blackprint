@@ -175,6 +175,11 @@ let BPFnInOut = {html: `<div class="node func-in-out {{ type }}" style="transfor
 	<sf-template path="Blackprint/nodes/template/other.sf"></sf-template>
 </div>`};
 
+let BPEvent = {
+	keepTemplate: true,
+	template: 'Blackprint/nodes/default.sf',
+};
+
 $(function(){
 	Blackprint.Sketch.registerInterface('BPIC/BP/Var/Get', BPVar, Blackprint._iface['BPIC/BP/Var/Get']);
 	Blackprint.Sketch.registerInterface('BPIC/BP/Var/Set', BPVar, Blackprint._iface['BPIC/BP/Var/Set']);
@@ -184,6 +189,8 @@ $(function(){
 	Blackprint.Sketch.registerInterface('BPIC/BP/FnVar/Output', BPFnVar, Blackprint._iface['BPIC/BP/FnVar/Output']);
 	Blackprint.Sketch.registerInterface('BPIC/BP/Fn/Input', BPFnInOut, Blackprint._iface['BPIC/BP/Fn/Input']);
 	Blackprint.Sketch.registerInterface('BPIC/BP/Fn/Output', BPFnInOut, Blackprint._iface['BPIC/BP/Fn/Output']);
+	Blackprint.Sketch.registerInterface('BPIC/BP/Event/Listen', BPEvent, Blackprint._iface['BPIC/BP/Event/Listen']);
+	Blackprint.Sketch.registerInterface('BPIC/BP/Event/Emit', BPEvent, Blackprint._iface['BPIC/BP/Event/Emit']);
 
 	Blackprint.Sketch.registerInterface('BPIC/BP/Fn/Main', BPFn,
 	class extends Blackprint._iface['BPIC/BP/Fn/Main'] {
