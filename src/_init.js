@@ -291,8 +291,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 									let target = this._getTargetPortType(iface.node.instance, 'input', port);
 									linkPortA = iface.addPort(target, portName);
 
-									if(linkPortA === void 0)
-										throw new Error(`Can't create output port (${portName}) for function (${iface._funcMain.node._funcInstance.id})`);
+									if(linkPortA === void 0){
+										console.error(`Can't create output port (${portName}) for function (${iface._funcMain.node._funcInstance.id}). Maybe it was connected to dynamic port.`);
+										continue;
+									}
 								}
 								else if(iface._enum === _InternalNodeEnum.BPVarGet){
 									let target = this._getTargetPortType(this, 'input', port);
@@ -557,6 +559,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		let refreshCableOrder = new Set();
 		let ifaceExportData = new Array(ifaces.length);
+		let zList = [];
 
 		for (var i = 0; i < ifaces.length; i++) {
 			var iface = ifaces[i];
@@ -571,6 +574,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				data.x = Math.round(iface.x);
 				data.y = Math.round(iface.y);
 				data.z = zPlacement.indexOf(iface); // kind of z-index
+				zList[data.z] = data;
 			}
 
 			if(iface.id !== void 0)
@@ -722,6 +726,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			}
 
 			json[iface.namespace].push(data);
+		}
+
+		for (let i=0; i < zList.length; i++) {
+			if(zList[i] == null) 
+				zList.splice(i--, 1);
+			else zList[i].z = i;
 		}
 
 		// Add input order for port that have more than one connection
