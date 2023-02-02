@@ -195,29 +195,9 @@ $(function(){
 	Blackprint.Sketch.registerInterface('BPIC/BP/Fn/Main', BPFn,
 	class extends Blackprint._iface['BPIC/BP/Fn/Main'] {
 		openFunction(event){
-			let instance = this.bpInstance;
 			this.node.instance._emit("node.function.open", {
 				event, iface: this, function: this.node._funcInstance
 			});
-
-			if(instance.pendingRender){
-				setTimeout(function(){
-					$.afterRepaint().then(() => {
-						setTimeout(async function(){
-							await instance.recalculatePosition();
-
-							let list = instance.ifaceList;
-							let nodes = instance.scope('nodes');
-							for	(let i=0; i < list.length; i++) {
-								let iface = list[i];
-								iface.initInputPort();
-
-								nodes._sO.observe(iface.$el('.node')[0]);
-							}
-						}, 10);
-					});
-				}, 10);
-			}
 		}
 	});
 });

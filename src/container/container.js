@@ -90,6 +90,26 @@ Space.model('container', function(My, include){
 		if(My.offset.width === 0)
 			setTimeout(fixScaling, 1000);
 		else if(My.isMinimap) recalculateScale();
+
+		let instance = My.$space.sketch;
+		if(instance.pendingRender){
+			setTimeout(function(){
+				$.afterRepaint().then(() => {
+					setTimeout(async function(){
+						await instance.recalculatePosition();
+
+						let list = instance.ifaceList;
+						let nodes = instance.scope('nodes');
+						for	(let i=0; i < list.length; i++) {
+							let iface = list[i];
+							iface.initInputPort();
+
+							nodes._sO.observe(iface.$el('.node')[0]);
+						}
+					}, 10);
+				});
+			}, 10);
+		}
 	}
 
 	My.recheckOffset = function(ev){
