@@ -626,10 +626,14 @@ class Cable extends Blackprint.Engine.Cable {
 		}
 
 		if(cable.branch !== void 0 || cable.parentCable !== void 0){
+			let resetRotation = cable.overrideRot && (
+				cable.parentCable == null || cable.target != null
+			);
+
 			menu.push({
-				title: cable.overrideRot ? 'Reset rotation' : "Override rotation",
+				title: resetRotation ? 'Reset rotation' : "Override rotation",
 				callback(){
-					if(cable.overrideRot != null)
+					if(resetRotation)
 						delete cable.overrideRot;
 					else{
 						if(cable.parentCable == null){ // have direct connection to a port
@@ -639,9 +643,14 @@ class Cable extends Blackprint.Engine.Cable {
 						}
 						else{
 							if(cable.target == null){ // only a connection between cable
-								if(cable.source === 'input')
-									cable.overrideRot = 'out-in';
-								else cable.overrideRot = 'in-out';
+								if(cable.overrideRot == null)
+									cable.overrideRot = 'in-out';
+								else if(cable.overrideRot === 'in-out')
+									cable.overrideRot = 'in-in';
+								else if(cable.overrideRot === 'in-in')
+									cable.overrideRot = 'out-out';
+								else if(cable.overrideRot === 'out-out')
+									cable.overrideRot = null;
 							}
 							else{ // have direct connection to a port
 								if(cable.source === 'input')
