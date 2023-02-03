@@ -205,6 +205,14 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 					for (let key in variables)
 						this.createVariable(key, variables[key]);
 				}
+
+				if(metadata.events != null){
+					let events = metadata.events;
+
+					for (let path in events){
+						this.events.createEvent(path, events[path]);
+					}
+				}
 			}
 
 			var inserted = this.ifaceList;
@@ -795,7 +803,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 					let bpFunc = list[key];
 					if(bpFunc instanceof Blackprint._utils.BPFunction){
-						if(options.selectedOnly && !onlySelected.includes(`BPI/F/${path+key}`))
+						if(onlySelected != null && !onlySelected.includes(`BPI/F/${path+key}`))
 							continue;
 
 						let temp = functions[path+key] = {};
@@ -846,12 +854,15 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(options.exportVariables !== false){
 			let hasVar = false, variables = {};
 			let vars = this.variables;
+			let onlySelected = options.selectedOnly ? ifaces.map(v => v.data.name) : null;
 
 			let dive = function(list, path){
 				for (let key in list) {
-					hasVar = true;
-
 					let bpVar = list[key];
+					if(onlySelected != null && !onlySelected.includes(bpVar.id))
+						continue;
+
+					hasVar = true;
 					if(bpVar instanceof Blackprint._utils.BPVariable){
 						let temp = variables[path+key] = {};
 						temp.title = bpVar.title;
@@ -862,6 +873,26 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			dive(vars, '');
 			if(hasVar) metadata.variables = variables;
+		}
+
+		if(options.exportEvents !== false){
+			let hasEvent = false, events = {};
+			let onlySelected = options.selectedOnly ? ifaces.map(v => v.data.namespace) : null;
+
+			let dive = function(list){
+				for (let path in list) {
+					if(onlySelected != null && !onlySelected.includes(path))
+						continue;
+
+					hasEvent = true;
+					events[path] = {
+						schema: Object.keys(list[path].schema),
+					};
+				}
+			}
+
+			dive(this.events.list);
+			if(hasEvent) metadata.events = events;
 		}
 
 		// Remove metadata if empty
