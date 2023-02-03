@@ -68,6 +68,7 @@ class Cable extends Blackprint.Engine.Cable {
 	}
 
 	async visualizeFlow(){
+		if(settings.visualizeFlow === false) return;
 		if(this.pathEl == null || window.Timeplate === void 0) return;
 		if(this.output === void 0 || this._destroyed) return;
 
