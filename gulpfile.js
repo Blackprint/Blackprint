@@ -28,6 +28,7 @@ let compileTargets = editorOnly ? {} : {
 
 				// Combine files from all directory recursively
 				'engine-js/src/**/*.js',
+				'!engine-js/src/nodes/*.js',
 				'engine-js/src/nodes/*.js',
 				'!engine-js/src/skeleton/*.js',
 			],
