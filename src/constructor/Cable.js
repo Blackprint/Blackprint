@@ -114,7 +114,7 @@ class Cable extends Blackprint.Engine.Cable {
 				var o = 1/(keyframes.length - 1);
 				for (var a = 2, n=cableGlowFrame+2; a <= n; a++) {
 					keyframes[a] = {
-						offset: o*(a+1),
+						offset: o*a,
 						translate: [random(-15, 15)+'px', random(-15, 15)+'px'],
 					};
 				}
