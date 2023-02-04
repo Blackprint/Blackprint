@@ -633,38 +633,72 @@ class Cable extends Blackprint.Engine.Cable {
 				cable.parentCable == null || cable.target != null
 			);
 
-			menu.push({
-				title: resetRotation ? 'Reset rotation' : "Override rotation",
-				callback(){
-					if(resetRotation)
-						delete cable.overrideRot;
-					else{
-						if(cable.parentCable == null){ // have direct connection to a port
-							if(cable.source === 'input')
-								cable.overrideRot = 'in-in';
-							else cable.overrideRot = 'out-out';
-						}
-						else{
-							if(cable.target == null){ // only a connection between cable
-								if(cable.overrideRot == null)
-									cable.overrideRot = 'in-out';
-								else if(cable.overrideRot === 'in-out')
-									cable.overrideRot = 'in-in';
-								else if(cable.overrideRot === 'in-in')
-									cable.overrideRot = 'out-out';
-								else if(cable.overrideRot === 'out-out')
-									cable.overrideRot = null;
-							}
-							else{ // have direct connection to a port
-								if(cable.source === 'input')
-									cable.overrideRot = 'out-out';
-								else cable.overrideRot = 'in-in';
-							}
-						}
-					}
+			function recalculatePath(){
+				cable._scope('cables').recalculatePath(cable);
+			}
 
-					cable._scope('cables').recalculatePath(cable);
+			let list = [{
+				title: "Reset",
+				callback(){
+					delete cable.overrideRot;
+					recalculatePath();
 				},
+			}];
+
+			// direct cable from output port
+			if(cable.parentCable == null){
+				if(cable.target == null){
+					list.push({
+						title: "out-out",
+						callback(){
+							cable.overrideRot = 'out-out';
+							recalculatePath();
+						},
+					});
+				}
+			}
+			else {
+				if(cable.target != null){ // direct cable to input port
+					list.push({
+						title: "in-in",
+						callback(){
+							cable.overrideRot = 'in-in';
+							recalculatePath();
+						},
+					});
+				}
+				else {
+					list.push({
+						title: "out-out",
+						callback(){
+							cable.overrideRot = 'out-out';
+							recalculatePath();
+						},
+					}, {
+						title: "in-in",
+						callback(){
+							cable.overrideRot = 'in-in';
+							recalculatePath();
+						},
+					}, {
+						title: "in-out",
+						callback(){
+							cable.overrideRot = 'in-out';
+							recalculatePath();
+						},
+					}, {
+						title: "out-in",
+						callback(){
+							cable.overrideRot = 'out-in';
+							recalculatePath();
+						},
+					});
+				}
+			}
+
+			menu.push({
+				title: "Override rotation",
+				deep: list
 			});
 		}
 
