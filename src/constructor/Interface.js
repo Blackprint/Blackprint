@@ -199,7 +199,8 @@ Blackprint.Interface = class Interface extends sf.Model {
 				title: 'New Node',
 				callback(){
 					scope.sketch.createNode(iface.namespace, {
-						x: iface.x + 10, y: iface.y + 10
+						x: iface.x + 10, y: iface.y + 10,
+						data: iface.data,
 					});
 				}
 			}, {
@@ -421,7 +422,9 @@ Blackprint.Interface = class Interface extends sf.Model {
 
 		for(let key in inputs){
 			let port = inputs[key];
-			if(port._hasComponent) continue; // Skip default component if the developer already added a component
+
+			// Skip default component if the developer already added a component
+			if(port._hasComponent) continue;
 
 			let type = 'string';
 			if(port.type === Number) type = 'number';
@@ -449,6 +452,8 @@ Blackprint.Interface = class Interface extends sf.Model {
 			let componentName = port.type === String ? 'comp-port-textarea' : 'comp-port-input';
 
 			port.insertComponent(null, componentName, item);
+			port._hasComponent = false; // reset the flag as this was internal component
+
 			port.on('connect', ()=> this._assignDefault(item, false, port));
 			port.on('disconnect', ()=> this._assignDefault(item, true, port));
 		}

@@ -325,6 +325,8 @@ class Port extends Blackprint.Engine.Port {
 		}
 
 		var comp = window['$'+compName.join('')];
+		if(comp == null) throw new Error(`"${compName}" component was not found`);
+
 		var beforeEl = portList.getElements(this);
 		for (var i = 0; i < beforeEl.length; i++) {
 			var before = beforeEl[i];
