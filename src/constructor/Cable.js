@@ -57,7 +57,9 @@ class Cable extends Blackprint.Engine.Cable {
 	get pathEl(){
 		if(Blackprint.settings.windowless || this.owner.iface.node.instance.pendingRender) return null;
 
-		if(this._pathEl == null){
+		if(this._pathEl == null || !this._pathEl.isConnected){
+			if(this._ownerCableList.$EM == null) return;
+
 			let temp = this._ownerCableList.getElement?.(this);
 			if(temp == null) return null;
 

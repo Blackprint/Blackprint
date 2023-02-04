@@ -84,6 +84,7 @@ Space.model('container', function(My, include){
 		if(My.isMinimap) recalculateScale();
 	}
 
+	let initialized = false;
 	My.init = async function(){
 		await fixScaling();
 
@@ -92,7 +93,7 @@ Space.model('container', function(My, include){
 		else if(My.isMinimap) recalculateScale();
 
 		let instance = My.$space.sketch;
-		if(instance.pendingRender){
+		if(instance.pendingRender || initialized){
 			setTimeout(function(){
 				$.afterRepaint().then(() => {
 					setTimeout(async function(){
@@ -110,6 +111,8 @@ Space.model('container', function(My, include){
 				});
 			}, 10);
 		}
+
+		initialized = true;
 	}
 
 	My.recheckOffset = function(ev){
