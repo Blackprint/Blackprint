@@ -330,7 +330,7 @@ class Port extends Blackprint.Engine.Port {
 		var beforeEl = portList.getElements(this);
 		for (var i = 0; i < beforeEl.length; i++) {
 			var before = beforeEl[i];
-			if(before.bp$insertItem === item)
+			if(before.bp$insertItem === item || before.querySelector(_compName) != null)
 				continue;
 
 			before.bp$insertItem = item;
