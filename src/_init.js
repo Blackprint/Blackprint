@@ -854,7 +854,13 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(options.exportVariables !== false){
 			let hasVar = false, variables = {};
 			let vars = this.variables;
-			let onlySelected = options.selectedOnly ? ifaces.map(v => v.data.name) : null;
+			let onlySelected = options.selectedOnly ? ifaces.filter(v => {
+				if(v._enum !== _InternalNodeEnum.BPVarGet
+					&& v._enum !== _InternalNodeEnum.BPVarSet)
+					return;
+
+				return v.data.name
+			}) : null;
 
 			let dive = function(list, path){
 				for (let key in list) {
@@ -877,7 +883,13 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		if(options.exportEvents !== false){
 			let hasEvent = false, events = {};
-			let onlySelected = options.selectedOnly ? ifaces.map(v => v.data.namespace) : null;
+			let onlySelected = options.selectedOnly ? ifaces.filter(v => {
+				if(v._enum !== _InternalNodeEnum.BPEventListen
+					&& v._enum !== _InternalNodeEnum.BPEventEmit)
+					return;
+
+				return v.data.namespace
+			}) : null;
 
 			let dive = function(list){
 				for (let path in list) {
