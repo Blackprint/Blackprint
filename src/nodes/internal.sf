@@ -108,7 +108,7 @@ let BPFnVar = {html: `<div class="node {{ type }}" style="transform:translate({{
 			@pointerdown="swapZIndex(event)"
 			@pointerover="nodeHovered(event)"
 			@pointerout="nodeUnhovered(event)"
-		>{{ title }} <div class="description">Function {{ type === 'bp-fnvar-input' ? 'Input' : 'Output' }}</div></div>
+		>{{ data.name }} <div class="description">Function {{ type === 'bp-fnvar-input' ? 'Input' : 'Output' }}</div></div>
 
 		<div class="right-port">
 			<sf-template path="Blackprint/nodes/template/output-port.sf"></sf-template>
