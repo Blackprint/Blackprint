@@ -1,3 +1,18 @@
+# 0.8.9
+
+### Features
+- Add event nodes feature
+- Add support for importing events
+- Improve cable rotation override's menu
+
+### Bug Fix
+- Fix container re-initialization
+- Fix clone node and throw error when component was not found
+- Fix settings for disabling cable visualization
+- Fix cable flow visualization warnings
+- Fix container rendering when using pending render option
+- Fix node's z-index when exporting selected node
+
 # 0.8.8
 
 ### Features
