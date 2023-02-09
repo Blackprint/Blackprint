@@ -198,9 +198,17 @@ Blackprint.Interface = class Interface extends sf.Model {
 			menu = [{
 				title: 'New Node',
 				callback(){
+					let data = {};
+					if(iface.exportData != null){
+						let temp = iface.exportData();
+						if(temp != null) data = temp;
+					}
+					else if (iface.data !== void 0){
+						deepCopy(data, iface.data);
+					}
+
 					scope.sketch.createNode(iface.namespace, {
-						x: iface.x + 10, y: iface.y + 10,
-						data: iface.data,
+						x: iface.x + 10, y: iface.y + 10, data
 					});
 				}
 			}, {
