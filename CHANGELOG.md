@@ -1,3 +1,11 @@
+# 0.8.10
+
+### Deprecation
+- Instance's exported JSON schema was updated, please import and re-export your old exported JSON before v1.0. The old schema will still importable on `engine-js`, but it will show a deprecation notice.
+
+### Bug Fix
+- Fix copying node data when creating new node
+
 # 0.8.9
 
 ### Features
