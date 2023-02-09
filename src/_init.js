@@ -778,9 +778,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(options.module !== false){
 			let modules = new Set();
 			let _modulesURL = Blackprint._modulesURL;
-			for(let key in json){
-				if(key === '_') continue;
+			let instance = json.instance;
 
+			for(let key in instance){
 				for (var i = 0; i < _modulesURL.length; i++) {
 					if(key in _modulesURL[i]){
 						modules.add(_modulesURL[i]._url);
@@ -823,10 +823,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 						}
 
 						if(options.position === false || options.comment === false){
-							for (let key in copy) {
-								if(key === '_') continue;
+							let instance = copy.instance;
 
-								let temp = copy[key] = copy[key].slice(0);
+							for (let key in instance) {
+								let temp = instance[key] = instance[key].slice(0);
 								for (let i=0; i < temp.length; i++) {
 									let item = temp[i] = Object.assign({}, temp[i])
 									if(options.position === false){
