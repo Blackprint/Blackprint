@@ -128,6 +128,14 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		if(json.constructor === String)
 			json = JSON.parse(json);
 
+		// ToDo: remove this after v1.0 released
+		if(json.instance == null)
+			json = this._jsonToNew(json);
+
+		// Throw if no instance data in the JSON
+		if(json.instance == null)
+			throw new Error("Instance was not found in the JSON data");
+
 		let containerModel = this.scope('container');
 		containerModel._isImporting = true;
 
@@ -146,72 +154,66 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				this.isSkeletonInstance = true;
 			}
 
-			var metadata = json._;
-			delete json._;
-
 			if(this.isSkeletonInstance)
-				delete metadata.moduleJS;
+				delete json.moduleJS;
 
-			if(metadata !== void 0){
-				if(metadata.env !== void 0 && options.importEnvironment){
-					let Env = Blackprint.Environment;
-					let temp = metadata.env;
+			if(json.env !== void 0 && options.importEnvironment){
+				let Env = Blackprint.Environment;
+				let temp = json.env;
 
-					for (let key in temp) {
-						Env.set(key, temp[key]);
-					}
+				for (let key in temp) {
+					Env.set(key, temp[key]);
 				}
+			}
 
-				let mjs;
-				if(metadata.functions != null) mjs = metadata.moduleJS.slice(0) || [];
+			let mjs;
+			if(json.functions != null) mjs = json.moduleJS.slice(0) || [];
 
-				if(metadata.moduleJS !== void 0 && !options.noModuleJS){
-					try{
-						// wait for .min.mjs
-						await Blackprint.loadModuleFromURL(metadata.moduleJS, {
-							loadBrowserInterface: true
-						});
+			if(json.moduleJS !== void 0 && !options.noModuleJS){
+				try{
+					// wait for .min.mjs
+					await Blackprint.loadModuleFromURL(json.moduleJS, {
+						loadBrowserInterface: true
+					});
 
-						// wait for .sf.mjs and .sf.css if being loaded from code above
-						if(window.sf && window.sf.loader){
-							await sf.loader.task;
-							await new Promise(resolve=> setTimeout(resolve, 100));
-							await sf.loader.task;
-						}
-
-						await Promise.resolve();
-					} catch(e) {
-						containerModel._isImporting = false;
-						throw e;
+					// wait for .sf.mjs and .sf.css if being loaded from code above
+					if(window.sf && window.sf.loader){
+						await sf.loader.task;
+						await new Promise(resolve=> setTimeout(resolve, 100));
+						await sf.loader.task;
 					}
+
+					await Promise.resolve();
+				} catch(e) {
+					containerModel._isImporting = false;
+					throw e;
 				}
+			}
 
-				if(metadata.functions != null){
-					let functions = metadata.functions;
+			if(json.functions != null){
+				let functions = json.functions;
 
-					for (let key in functions){
-						let temp = this.createFunction(key, functions[key]);
+				for (let key in functions){
+					let temp = this.createFunction(key, functions[key]);
 
-						// Required to be included on JSON export if this function isn't modified
-						// ToDo: use better mapping for moduleJS
-						let other = temp.structure._ = {};
-						other.moduleJS = mjs;
-					}
+					// Required to be included on JSON export if this function isn't modified
+					// ToDo: use better mapping for moduleJS
+					temp.structure.moduleJS = mjs;
 				}
+			}
 
-				if(metadata.variables != null){
-					let variables = metadata.variables;
+			if(json.variables != null){
+				let variables = json.variables;
 
-					for (let key in variables)
-						this.createVariable(key, variables[key]);
-				}
+				for (let key in variables)
+					this.createVariable(key, variables[key]);
+			}
 
-				if(metadata.events != null){
-					let events = metadata.events;
+			if(json.events != null){
+				let events = json.events;
 
-					for (let path in events){
-						this.events.createEvent(path, events[path]);
-					}
+				for (let path in events){
+					this.events.createEvent(path, events[path]);
 				}
 			}
 
@@ -220,11 +222,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			let isCleanImport = inserted.length === 0;
 			let appendLength = options.appendMode ? inserted.length : 0;
 			let reorderInputPort = [];
+			let instance = json.instance;
 
 			// Prepare all nodes depend on the namespace
 			// before we create cables for them
-			for(var namespace in json){
-				var nodes = json[namespace];
+			for(var namespace in instance){
+				var nodes = instance[namespace];
 
 				// Every nodes that using this namespace name
 				for (var a = 0; a < nodes.length; a++){
@@ -265,8 +268,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			// Create cable only from output and property
 			// > Important to be separated from above, so the cable can reference to loaded nodes
-			for(var namespace in json){
-				var nodes = json[namespace];
+			for(var namespace in instance){
+				var nodes = instance[namespace];
 
 				// Every nodes that using this namespace name
 				for (var a = 0; a < nodes.length; a++){
@@ -551,10 +554,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 	exportJSON(options){
 		var ifaces;
 
-		var json = {};
+		var instance = {};
+		var json = { instance };
 		var exclude = [];
 		options ??= {};
-		let metadata = json._ = {};
 
 		let zPlacement = this.scope('nodes').list;
 
@@ -574,7 +577,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			if(exclude.includes(iface.namespace))
 				continue;
 
-			json[iface.namespace] ??= [];
+			instance[iface.namespace] ??= [];
 
 			var data = ifaceExportData[i] = { i };
 
@@ -733,7 +736,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				}
 			}
 
-			json[iface.namespace].push(data);
+			instance[iface.namespace].push(data);
 		}
 
 		for (let i=0; i < zList.length; i++) {
@@ -769,7 +772,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		// Inject environment data if exist to JSON
 		if(options.environment !== false && Blackprint.Environment._list.length !== 0)
-			metadata.env = Blackprint.Environment.map;
+			json.environments = Blackprint.Environment.map;
 
 		// Find modules
 		if(options.module !== false){
@@ -788,13 +791,13 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			// Inject modules URL if exist to JSON
 			if(modules.size !== 0)
-				metadata.moduleJS = [...modules];
+				json.moduleJS = [...modules];
 		}
 
 		if(options.exportFunctions !== false){
 			let hasFunc = false, functions = {};
 			let funcs = this.functions;
-			let moduleJS = new Set(metadata.moduleJS || []);
+			let moduleJS = new Set(json.moduleJS || []);
 			let onlySelected = options.selectedOnly ? ifaces.map(v => v.namespace) : null;
 
 			let dive = function(list, path){
@@ -813,7 +816,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 						temp.privateVars = bpFunc.privateVars;
 
 						let copy = temp.structure = Object.assign({}, bpFunc.structure);
-						let mjs = copy._?.moduleJS;
+						let mjs = copy.moduleJS;
 						if(mjs != null){
 							for (let i=0; i < mjs.length; i++)
 								moduleJS.add(mjs[i]);
@@ -838,17 +841,17 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 							}
 						}
 
-						delete copy._;
+						delete copy.moduleJS;
 					}
 					else dive(bpFunc, path+key+'/');
 				}
 			}
 
 			dive(funcs, '');
-			if(hasFunc) metadata.functions = functions;
+			if(hasFunc) json.functions = functions;
 
 			if(options.module !== false)
-				metadata.moduleJS = [...moduleJS];
+				json.moduleJS = [...moduleJS];
 		}
 
 		if(options.exportVariables !== false){
@@ -878,7 +881,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			}
 
 			dive(vars, '');
-			if(hasVar) metadata.variables = variables;
+			if(hasVar) json.variables = variables;
 		}
 
 		if(options.exportEvents !== false){
@@ -904,24 +907,21 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			}
 
 			dive(this.events.list);
-			if(hasEvent) metadata.events = events;
+			if(hasEvent) json.events = events;
 		}
-
-		// Remove metadata if empty
-		if(options.module === false && options.environment === false)
-			delete json._;
 
 		if(options.toRawObject) return json;
 
 		json = JSON.stringify(json, options.replacer, options.space);
 
+		// ToDo: Prettifier need to be fixed
 		if(options.toJS)
 			json = json.replace(/,"([\w]+)":/g, (_, v) => ', '+v+':')
 				.replace(/"([\w]+)":/g, (_, v) => v+':')
 				.replace(/\[\n +{/g, '[{')
 				.replace(/}\n +\]/g, '}]')
 				.replace(/},\n +\{/g, '}, {')
-				.replace(/,\n +(i|x|y|name):/g, (_, v) => ', '+v+':');
+				.replace(/,\n +(i|x|y|z|name):/g, (_, v) => ', '+v+':');
 
 		if(space !== void 0)
 			json = json.replace(/\n {6}/g, '\n   ')
