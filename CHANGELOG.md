@@ -1,3 +1,12 @@
+# 0.8.11
+
+### Feature
+- Add options to disable cleaning the instance when importing JSON
+
+### Bug Fix
+- Fix pending render when visiting function node
+- Fix incorrect reference when outputing error
+
 # 0.8.10
 
 ### Deprecation
