@@ -144,7 +144,30 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			this._importing = true;
 			this.emit("json.importing", {appendMode: options.appendMode, raw: json});
-			if(!options.appendMode) this.clearNodes();
+			if(options.clean !== false && !options.appendMode){
+				this.clearNodes();
+
+				let list = this.functions;
+				for (let key in list)
+					delete list[key];
+				list.refresh?.();
+
+				list = this.variables;
+				for (let key in list)
+					delete list[key];
+				list.refresh?.();
+
+				list = this.events.list;
+				for (let key in list)
+					delete list[key];
+				list.refresh?.();
+
+				list = this.events.treeList;
+				for (let key in list)
+					delete list[key];
+				list.refresh?.();
+			}
+			else if(!options.appendMode) this.clearNodes();
 			if(options.pendingRender) this.pendingRender = true;
 
 			// Skeleton instance will only use No-operation node and interface
@@ -475,14 +498,16 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				if(target.overRot != null)
 					cable.overrideRot = target.overRot;
 
-				// Positioning the cable head2 into target port position from NodeB
-				var rectB;
-				if(linkPortA.isRoute || linkPortB.isRoute)
-					rectB = linkPortB._inElement[0].getBoundingClientRect();
-				else rectB = _getPortRect(input, target.name);
-
-				var center = rectB.width / 2;
-				cable.head2 = [rectB.x + center, rectB.y + center];
+				if(!this.pendingRender){
+					// Positioning the cable head2 into target port position from NodeB
+					var rectB;
+					if(linkPortA.isRoute || linkPortB.isRoute)
+						rectB = linkPortB._inElement[0].getBoundingClientRect();
+					else rectB = _getPortRect(input, target.name);
+	
+					var center = rectB.width / 2;
+					cable.head2 = [rectB.x + center, rectB.y + center];
+				}
 
 				// Connect cables.currentCable to target port on NodeB
 				linkPortB.connectCable(cable);
@@ -1221,10 +1246,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			contentRect: v.$el[0].firstElementChild.getBoundingClientRect()
 		}));
 
+		this.pendingRender = false;
+
 		this.scope('nodes')._recalculate(list, true);
 		if(switchVFX) body.removeClass('blackprint-no-vfx');
-
-		this.pendingRender = false;
 
 		// Also fix minimap
 		let spaceId = this.scope.id;
