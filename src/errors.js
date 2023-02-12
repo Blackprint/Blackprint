@@ -5,8 +5,8 @@ let BlackprintEventFallback = {
 	'cable.wrong_pair'({ port, cable }){
 		console.log(`The cable is not suitable (${cable.source}, ${port.source})`);
 	},
-	'cable.wrong_type'({ cable, iface, source, target }){
-		console.log(iface.title+"> Port from '"+source.iface.title + " - " + source.name+"' was not an "+target.type.name);
+	'cable.wrong_type'({ cable, iface, port, target }){
+		console.log(iface.title+"> Port from '"+port.iface.title + " - " + port.name+"' was not an "+target.type.name);
 	},
 	'cable.wrong_type_pair'({ port, target }){
 		console.log(`The cable type is not suitable (${port.type.name} != ${target.type.name})`);
