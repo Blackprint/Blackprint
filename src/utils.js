@@ -13,8 +13,10 @@ function getPortRect(RP, name){
 	return _list.getElement(RP[name]).querySelector('.port').getBoundingClientRect();
 }
 
-// deepProperty(obj, path, value, onCreate)
-let deepProperty = Blackprint._utils.deepProperty;
+// setDeepProperty(obj, path, value, onCreate)
+let setDeepProperty = Blackprint._utils.setDeepProperty;
+// getDeepProperty(obj, path, reduceLen)
+let getDeepProperty = Blackprint._utils.getDeepProperty;
 
 function deepCopy(target, source){
 	for(var key in source){
@@ -70,7 +72,7 @@ function createNodesMenu(list, sketch, ev, pos, opt){
 				continue;
 
 			if(that.constructor === Function){
-				let doc = deepProperty(Blackprint._docs, (nodePath+'/'+name).split('/'));
+				let doc = getDeepProperty(Blackprint._docs, (nodePath+'/'+name).split('/'));
 				target.push({
 					title: name,
 					description: doc?.description || doc?.tags?.summary,

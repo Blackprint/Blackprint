@@ -1047,11 +1047,11 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		var node, func;
 		if(!(namespace.prototype instanceof Blackprint.Node)){
-			func = deepProperty(Blackprint.nodes, namespace.split('/'));
+			func = getDeepProperty(Blackprint.nodes, namespace.split('/'));
 
 			if(func == null){
 				if(namespace.startsWith("BPI/F/")){
-					func = deepProperty(this.functions, namespace.slice(6).split('/'));
+					func = getDeepProperty(this.functions, namespace.slice(6).split('/'));
 
 					if(func != null){
 						func = func.node;
@@ -1332,7 +1332,7 @@ Blackprint.registerNode = function(namespace, func, _fromDecorator=false){
 	if(!(namespace[0] in Blackprint.nodes))
 		sf.Obj.set(Blackprint.nodes, namespace[0], {});
 
-	let isExist = deepProperty(Blackprint.nodes, namespace);
+	let isExist = getDeepProperty(Blackprint.nodes, namespace);
 	if(isExist){
 		if(this._scopeURL && isExist._scopeURL !== this._scopeURL){
 			let _call = ()=> this.registerNode.apply(this, arguments);
@@ -1365,7 +1365,7 @@ Blackprint.registerNode = function(namespace, func, _fromDecorator=false){
 	ref._visibleNode++;
 
 	if(isClass(func)){
-		let isExist = deepProperty(Blackprint.nodes, namespace);
+		let isExist = getDeepProperty(Blackprint.nodes, namespace);
 
 		if(isExist !== void 0){
 			hotRefreshNodePort(namespace_, 'output', isExist, func);
@@ -1375,7 +1375,7 @@ Blackprint.registerNode = function(namespace, func, _fromDecorator=false){
 	}
 
 	func._scopeURL = this._scopeURL;
-	deepProperty(Blackprint.nodes, namespace, func, function(obj){
+	setDeepProperty(Blackprint.nodes, namespace, func, function(obj){
 		if(obj._length !== void 0)
 			obj._length++;
 		else{

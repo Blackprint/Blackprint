@@ -372,7 +372,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 
 	_updateDocs(){
 		let docs = Blackprint._docs;
-		let exist = deepProperty(docs, this.namespace.split('/'));
+		let exist = getDeepProperty(docs, this.namespace.split('/'));
 		if(exist == null) return;
 
 		this.docs = exist;
