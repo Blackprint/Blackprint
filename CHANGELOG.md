@@ -1,3 +1,8 @@
+# 0.8.12
+
+### Minor changes
+- Implement internal changes from the `engine-js` v0.8.12
+
 # 0.8.11
 
 ### Feature
