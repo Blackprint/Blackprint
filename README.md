@@ -117,7 +117,7 @@ This roadmap could be changed on the future, feel free to request feature or rep
   </tr>
   <tr>
     <td>Code generation</td>
-    <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>  <td>-</td>
+    <td>🚧</td>  <td>🚧</td>  <td title="Generated from engine-js">🚧</td>  <td title="Generated from engine-js">🚧</td>  <td title="Generated from engine-js">🚧</td>  <td title="Generated from engine-js">🚧</td>
   </tr>
 </tbody>
 </table>
