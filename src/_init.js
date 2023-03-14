@@ -149,23 +149,19 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 				let list = this.functions;
 				for (let key in list)
-					delete list[key];
-				list.refresh?.();
+					sf.Obj.delete(list[key]);
 
 				list = this.variables;
 				for (let key in list)
-					delete list[key];
-				list.refresh?.();
+					sf.Obj.delete(list[key]);
 
 				list = this.events.list;
 				for (let key in list)
-					delete list[key];
-				list.refresh?.();
+					sf.Obj.delete(list[key]);
 
 				list = this.events.treeList;
 				for (let key in list)
-					delete list[key];
-				list.refresh?.();
+					sf.Obj.delete(list[key]);
 			}
 			else if(!options.appendMode) this.clearNodes();
 			if(options.pendingRender) this.pendingRender = true;
