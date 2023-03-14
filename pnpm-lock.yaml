@@ -36,14 +36,14 @@ specifiers:
   jest: ^29.3.1
   jest-environment-jsdom: ^29.3.1
   node-notifier: ^9.0.1
-  scarletsframe: 0.35.25
+  scarletsframe: ^0.35.26
   scarletsframe-compiler: 0.6.25
   source-map-support: ^0.5.21
   through2: ^4.0.2
   vinyl: '*'
 
 dependencies:
-  scarletsframe: 0.35.25
+  scarletsframe: 0.35.26
 
 devDependencies:
   '@babel/core': 7.20.5
@@ -6855,8 +6855,8 @@ packages:
       - vinyl
     dev: true
 
-  /scarletsframe/0.35.25:
-    resolution: {integrity: sha512-E5w/6YWNV7jOIIdawOIMu+XUD0diz6ep4kKLITJDIBerAdrV/JIwI+s1tI3epN6wCGvaUw/WnKJZBRJmn2Dmhg==}
+  /scarletsframe/0.35.26:
+    resolution: {integrity: sha512-/BtO9NUKfR0BOIukMcBNaA7u179ujTISWkHilghW9Oj3siaeAUkFNkL1KUiyjwRHbx1JF3xvprkx4MRSl8aRnA==}
     dev: false
 
   /scss-tokenizer/0.4.3:
