@@ -1,3 +1,8 @@
+# 0.8.13
+
+### Bug Fix
+- Fix error when reloading the instance
+
 # 0.8.12
 
 ### Minor changes
