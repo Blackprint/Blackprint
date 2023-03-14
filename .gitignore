@@ -8,6 +8,7 @@ node_modules/
 /dist/blackprint.*
 /dist/engine.*
 /dist/skeleton.*
+/dist/codegen.*
 /dist/nodes-*
 /dist/remote-*
 /parser/
@@ -17,3 +18,4 @@ node_modules/
 # /nodes/
 workspace.code-workspace
 /private-editor/
+dist/test.js

@@ -31,6 +31,7 @@ let compileTargets = editorOnly ? {} : {
 				'!engine-js/src/nodes/*.js',
 				'engine-js/src/nodes/*.js',
 				'!engine-js/src/skeleton/*.js',
+				'!engine-js/src/codegen/*.js',
 			],
 		}
 	},
@@ -45,6 +46,20 @@ let compileTargets = editorOnly ? {} : {
 			combine:[
 				'engine-js/src/skeleton/_init.js',
 				'engine-js/src/skeleton/*.js',
+			],
+		}
+	},
+	'engine-js-codegen':{
+		versioning: !isCI && 'editor/dev.html',
+		// stripURL:'editor/',
+
+		js:{
+			file:'dist/codegen.min.js',
+			wrapped: true,
+			header:"/* Blackprint \n MIT Licensed */",
+			combine:[
+				'engine-js/src/codegen/_init.js',
+				'engine-js/src/codegen/*.js',
 			],
 		}
 	},
