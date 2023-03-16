@@ -125,7 +125,7 @@ This roadmap could be changed on the future, feel free to request feature or rep
 > 🚧 = Under development (In the current working plan)<br>
 > 🧪 = Experimental/Alpha stage (Being tested and may have rapid changes)<br>
 > ✖  = Not supported (Either it can't be implemented or it has better solution)<br>
-> ❔  = Should we add the feature? (The feature may be skipped)<br>
+> ❔  = Should we add the feature? (Please start a discussion if you need it)<br>
 > \-   = Haven't been decided<br>
 
 ---
@@ -136,7 +136,7 @@ Example case where you may need remote control:
  - Creating Discord.js bot (because the library doesn't have support for browser)
    - Support for browser was dropped due to CORS at the Discord endpoint
  - Collaboratively work with your friend
- - Remotely modify your running application in realtime
+ - Remotely modify your running application in runtime
 
 ---
 
