@@ -21,6 +21,7 @@ dist/engine.*
 dist/skeleton.*
 dist/nodes-*
 dist/remote-*
+dist/codegen-*
 cli-tools
 templates
 jest.config.js
