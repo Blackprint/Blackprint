@@ -469,6 +469,6 @@ Space.model('container', function(My, include){
 	}
 
 	My.pointerUp = function(ev){
-		rightClick = ev.button === 2 ? false : true;
+		rightClick = false;
 	}
 });
