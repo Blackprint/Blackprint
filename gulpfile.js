@@ -31,7 +31,6 @@ let compileTargets = editorOnly ? {} : {
 				'!engine-js/src/nodes/*.js',
 				'engine-js/src/nodes/*.js',
 				'!engine-js/src/skeleton/*.js',
-				'!engine-js/src/codegen/*.js',
 			],
 		}
 	},
@@ -49,17 +48,18 @@ let compileTargets = editorOnly ? {} : {
 			],
 		}
 	},
-	'engine-js-codegen':{
+	'code-generation':{
 		versioning: !isCI && 'editor/dev.html',
 		// stripURL:'editor/',
 
 		js:{
-			file:'dist/codegen.min.js',
+			file:'dist/code-generation.min.js',
 			wrapped: true,
 			header:"/* Blackprint \n MIT Licensed */",
 			combine:[
-				'engine-js/src/codegen/_init.js',
-				'engine-js/src/codegen/*.js',
+				'code-generation/src/_init.js',
+				'code-generation/src/*.js',
+				'code-generation/src/languages/*.js',
 			],
 		}
 	},
@@ -78,7 +78,12 @@ let compileTargets = editorOnly ? {} : {
 				// Combine files from all directory recursively
 				'remote-control/js/src/**/*.js',
 			],
-		}
+		},
+		sf:{
+			file:'dist/remote-control.sf',
+			combine:'remote-control/js/src/**/*.sf',
+			prefix:'BlackprintRemote',
+		},
 	},
 };
 

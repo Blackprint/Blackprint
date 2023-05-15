@@ -15,6 +15,10 @@ on:
         description: "Set this to dryRun if you didn't plan to publish the remote control"
         required: true
         default: 'dryRun'
+      codeGeneration:
+        description: "Set this to dryRun if you didn't plan to publish the code generation"
+        required: true
+        default: 'dryRun'
   # release:
     # This specifies that the build will be triggered when we publish a release
     # types: [published]
@@ -55,7 +59,7 @@ jobs:
 
       - name: 📦 Publish Sketch
         if: github.event.inputs.sketch != 'dryRun'
-        run: npm publish
+        run: npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -73,7 +77,7 @@ jobs:
       - name: 📦 Publish Engine
         if: github.event.inputs.engine != 'dryRun'
         working-directory: ./engine-js
-        run: npm publish
+        run: npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -91,6 +95,20 @@ jobs:
       - name: 📦 Publish Remote Control
         if: github.event.inputs.remoteControl != 'dryRun'
         working-directory: ./remote-control/js
-        run: npm publish
+        run: npm publish --access=public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+
+          
+      - name: 📦 Dry Run Code Generation
+        if: github.event.inputs.codeGeneration == 'dryRun'
+        working-directory: ./code-generation
+        run: npm publish --dry-run
+
+      - name: 📦 Publish Code Generation
+        if: github.event.inputs.codeGeneration != 'dryRun'
+        working-directory: ./code-generation
+        run: npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

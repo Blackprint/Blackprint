@@ -8,7 +8,7 @@ node_modules/
 /dist/blackprint.*
 /dist/engine.*
 /dist/skeleton.*
-/dist/codegen.*
+/dist/code-generation.*
 /dist/nodes-*
 /dist/remote-*
 /parser/
