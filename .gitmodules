@@ -9,4 +9,4 @@
 	url = https://github.com/Blackprint/remote-control
 [submodule "code-generation"]
 	path = code-generation
-	url = ./code-generation/
+	url = https://github.com/Blackprint/code-generation
