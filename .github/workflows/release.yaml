@@ -81,7 +81,8 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-
+      - name: 🛠 Running prepublish scripts
+        run: node ./utils/prepublish.js
 
       - name: 🛠 Running prepublish scripts for Remote-Control
         working-directory: ./remote-control/js
