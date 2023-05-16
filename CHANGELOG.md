@@ -1,3 +1,8 @@
+# 0.8.15
+
+### Bug Fix
+- Fix container zoom with mouse wheel
+
 # 0.8.13
 
 ### Bug Fix
