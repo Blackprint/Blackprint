@@ -203,7 +203,8 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 		let inputs = target.input;
 		for (let key in inputs) {
 			let { cables } = inputs[key];
-			for (let i=0; i < cables.length; i++) {
+			for (let i=cables.length-1; i >= 0; i--) {
+				if(cables[i] == null) cables.splice(i, 1);
 				cables[i]._inactive = willInactive;
 			}
 		}
