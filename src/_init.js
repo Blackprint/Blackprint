@@ -403,12 +403,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			let branchMap = new Map();
 			function deepCreate(temp, cable, linkPortA) {
+				if(temp.overRot != null)
+					cable.overrideRot = temp.overRot;
+
 				if(temp.branch !== void 0){
 					cable.head2[0] = temp.x;
 					cable.head2[1] = temp.y;
-
-					if(temp.overRot != null)
-						cable.overrideRot = temp.overRot;
 
 					let list = temp.branch;
 					for (let z = 0; z < list.length; z++)
@@ -745,10 +745,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 					// Check if not excluded for export
 					if(_i !== -1 && !exclude.includes(ifaces[_i].namespace)){
 						let temp = { i: _i };
-	
+
 						parentMap.set(connectedCable, temp);
 						let settings = { options, parentMap, parentCable: 0 };
-	
+
 						deepBranch(routeHasBranch, meta[0], settings);
 						data._route = meta;
 
@@ -1266,12 +1266,12 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 function deepBranch(cable, save, settings){
 	let { options, parentMap } = settings;
+
+	if(cable.overrideRot != null)
+		save.overRot = cable.overrideRot;
 	
 	if(cable.branch){
 		let branch = cable.branch;
-
-		if(cable.overrideRot != null)
-			save.overRot = cable.overrideRot;
 
 		save.x = Math.round(cable.head2[0]);
 		save.y = Math.round(cable.head2[1]);
