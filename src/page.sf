@@ -600,7 +600,7 @@ sf-space[blackprint]{
           }
         }
 
-        &.Function{
+        &.Trigger{
           height: 20px;
           .name{
             line-height: 20px;
@@ -646,7 +646,7 @@ sf-space[blackprint]{
           text-align: right;
         }
 
-        .Function .port{
+        .Trigger .port{
           float: right;
           margin-left: -1px;
           margin-right: -5px;
@@ -658,7 +658,7 @@ sf-space[blackprint]{
         margin-left: 5px;
         white-space: nowrap;
 
-        .Function .port{
+        .Trigger .port{
           float: left;
           margin-left: -2px;
         }

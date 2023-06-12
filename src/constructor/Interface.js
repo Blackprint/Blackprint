@@ -332,8 +332,8 @@ Blackprint.Interface = class Interface extends sf.Model {
 			for (var i = 0; i < _list.length; i++) {
 				let port = _list[i];
 
-				if((port.type.any && owner.type !== Function)
-					|| (owner.type.any && port.type !== Function)
+				if((port.type.any && owner.type !== Blackprint.Types.Trigger)
+					|| (owner.type.any && port.type !== Blackprint.Types.Trigger)
 					|| port.type === owner.type
 					|| (port.type.constructor === Array && port.type.includes(owner.type))
 					|| (owner.type.constructor === Array && owner.type.includes(port.type))

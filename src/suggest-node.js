@@ -35,9 +35,7 @@ Blackprint.Sketch.suggestNode = function(source, clazz, fromList, virtualType){
 					}
 
 					if(temp === Blackprint.Types.Any){
-						if(clazz === Function)
-							continue;
-
+						if(clazz === Blackprint.Types.Trigger) continue;
 						if(ref.skipSuggestTypeAny) continue;
 
 						match = true;
@@ -49,17 +47,14 @@ Blackprint.Sketch.suggestNode = function(source, clazz, fromList, virtualType){
 					if(temp.constructor === Object){
 						if(temp.portFeature !== void 0){
 							if(temp.portFeature === BP_Port.Trigger){
-								if(clazz === Function)
-									match = true;
+								if(clazz === Blackprint.Types.Trigger) match = true;
 
 								continue;
 							}
 
 							if(temp.portType === Blackprint.Types.Any){
 								if(ref.skipSuggestTypeAny) continue;
-
-								if(clazz !== Function)
-									match = true;
+								if(clazz !== Blackprint.Types.Trigger) match = true;
 
 								continue;
 							}
@@ -75,11 +70,11 @@ Blackprint.Sketch.suggestNode = function(source, clazz, fromList, virtualType){
 					}
 
 					// Skip if not matching with BP_Port.Trigger
-					if(source === 'input' && clazz === Function)
+					if(source === 'input' && clazz === Blackprint.Types.Trigger)
 						continue;
 
 					if(clazz.any != null){
-						if(temp === Function || ref.skipSuggestTypeAny) continue;
+						if(temp === Blackprint.Types.Trigger || ref.skipSuggestTypeAny) continue;
 
 						match = true;
 						break;
@@ -125,6 +120,8 @@ function checkTypeInstance(source, clazz, target, nodeClass){
 			return false;
 		}
 
+		if(clazz.constructor === Object || target.constructor === Object)
+			return false;
 		if(target.prototype instanceof clazz)
 			return true;
 	}
