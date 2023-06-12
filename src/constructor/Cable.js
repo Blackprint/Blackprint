@@ -20,6 +20,11 @@ class Cable extends Blackprint.Engine.Cable {
 		this._inactive = false;
 		this.beforeConnect = null;
 
+		this.typeName = !port.type ? 'Any' : port.type.name;
+		this.source = port.source;
+
+		if(port.iface.node.instance.constructor === Blackprint.Engine) return;
+
 		var container = this._container = port._scope('container');
 		this._cablesModel = this._scope('cables');
 
@@ -38,9 +43,6 @@ class Cable extends Blackprint.Engine.Cable {
 
 		this.head1 = this.parentCable ? this.parentCable.head2.slice(0) : [x, y];
 		this.head2 = this.head1.slice(0); // Copy on same position
-
-		this.typeName = !port.type ? 'Any' : port.type.name;
-		this.source = port.source;
 
 		// Push to cable list
 		var list = port._scope('cables').list;

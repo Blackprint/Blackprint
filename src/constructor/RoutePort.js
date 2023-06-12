@@ -91,13 +91,18 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 
 		let evTemp = {port: this, cable};
 		iface.emit('cable.created', evTemp);
-		this._scope.sketch.emit('cable.created', evTemp);
+
+		if(this._scope != null)
+			this._scope.sketch.emit('cable.created', evTemp);
 
 		return cable;
 	}
 
 	// Connect to input route
 	connectCable(cable, _ev){
+		if(this.iface.node.instance.constructor === Blackprint.Engine)
+			return super.connectCable(cable);
+
 		if(!this._init) this._initForSketch();
 
 		let cables = this._scope('cables');
