@@ -1,3 +1,13 @@
+# 0.9.0
+
+### Bug Fix
+- Fix cable rotation override on export/import
+- Fix for creating paused engine instance
+- Remove unused cable when scanning inactive node
+
+### Breaking Changes
+- Blackprint Engine v0.9 is required (for more information please see the changelog)
+
 # 0.8.15
 
 ### Bug Fix
