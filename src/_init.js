@@ -572,6 +572,14 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		return inserted;
 	}
 
+	linkVariables(vars){
+		for (let i=0; i < vars.length; i++) {
+			let temp = vars[i];
+			setDeepProperty(this.variables, temp.id.split('/'), temp);
+			this._emit('variable.new', temp);
+		}
+	}
+
 	exportJSON(options){
 		var ifaces;
 
