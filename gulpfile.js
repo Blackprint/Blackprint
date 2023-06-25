@@ -111,7 +111,7 @@ if(!compileEngineOnly){
 			sf:{
 				file:'editor/assets/custom.sf',
 				combine:'editor/src/**/*.sf',
-				prefix:'PrivateEditor',
+				prefix:'BPEditor',
 			},
 		};
 
