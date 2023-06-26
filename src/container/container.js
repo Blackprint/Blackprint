@@ -93,7 +93,7 @@ Space.model('container', function(My, include){
 		else if(My.isMinimap) recalculateScale();
 
 		let instance = My.$space.sketch;
-		if(instance.pendingRender || initialized){
+		if(instance?.pendingRender || initialized){
 			setTimeout(function(){
 				$.afterRepaint().then(() => {
 					setTimeout(async function(){
