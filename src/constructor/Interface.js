@@ -59,6 +59,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 	get id(){ return this._id_ }
 	set id(val){
 		let {marks} = this.$decoration;
+		if(val === this._id_ || (val === '' && this._id_ == null)) return;
 
 		if(val){
 			if(val.constructor !== String)
