@@ -11,9 +11,7 @@
   <a href='https://discord.gg/cz9rh3a7d6'><img src='https://img.shields.io/discord/915881655921704971.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2' height='20'></a>
 </p>
 
-<p align="center">
-  <video src="https://user-images.githubusercontent.com/11073373/185776245-e883cadb-631e-497c-9fec-1de60098d4b1.mp4">
-</p>
+https://user-images.githubusercontent.com/11073373/185776245-e883cadb-631e-497c-9fec-1de60098d4b1.mp4
 
 <p align="center">
   <b>Blackprint Sketch</b> is built using ScarletsFrame (<a href="https://krausest.github.io/js-framework-benchmark/current.html">performance</a> and <a href="https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example">features</a>).
@@ -40,6 +38,12 @@ If you just want to execute exported Blackprint JSON, you can just use the engin
 - [Multiply - ScarletsFrame](https://jsbin.com/nigarib/edit?html,js,output)
 - [Multiply - Vue](https://jsbin.com/bocehax/edit?html,js,output)
 - [Multiply - React](https://jsbin.com/watogus/edit?js,output)
+
+---
+### Video Example:
+1. Build Telegram bot with Blackprint
+
+https://github.com/Blackprint/Blackprint/assets/11073373/fe3d767b-e340-4371-8685-ef7a12709e0f
 
 ## Available Shortcut for Blackprint Sketch
 | Mouse + Keyboard | Touchscreen | Target | Description |
