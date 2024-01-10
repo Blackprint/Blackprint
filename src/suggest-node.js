@@ -35,8 +35,9 @@ Blackprint.Sketch.suggestNode = function(source, clazz, fromList, virtualType){
 					}
 
 					if(temp === Blackprint.Types.Any){
-						if(clazz === Blackprint.Types.Trigger) continue;
 						if(ref.skipSuggestTypeAny) continue;
+						if(clazz === Blackprint.Types.Route) continue;
+						if(clazz === Blackprint.Types.Trigger) continue;
 
 						match = true;
 						continue;
@@ -54,7 +55,10 @@ Blackprint.Sketch.suggestNode = function(source, clazz, fromList, virtualType){
 
 							if(temp.portType === Blackprint.Types.Any){
 								if(ref.skipSuggestTypeAny) continue;
-								if(clazz !== Blackprint.Types.Trigger) match = true;
+
+								if(clazz !== Blackprint.Types.Trigger
+									&& clazz !== Blackprint.Types.Route
+								) match = true;
 
 								continue;
 							}
@@ -74,7 +78,7 @@ Blackprint.Sketch.suggestNode = function(source, clazz, fromList, virtualType){
 						continue;
 
 					if(clazz.any != null){
-						if(temp === Blackprint.Types.Trigger || ref.skipSuggestTypeAny) continue;
+						if(temp === Blackprint.Types.Trigger || temp === Blackprint.Types.Route || ref.skipSuggestTypeAny) continue;
 
 						match = true;
 						break;
@@ -108,6 +112,10 @@ function checkTypeInstance(source, clazz, target, nodeClass){
 		if(clazz === Object) return false;
 		if(clazz.any || target.any){
 			if(nodeClass.skipSuggestTypeAny) return false;
+			if(clazz === Blackprint.Types.Route) return false;
+			if(clazz === Blackprint.Types.Route) return false;
+			if(target === Blackprint.Types.Trigger) return false;
+			if(target === Blackprint.Types.Trigger) return false;
 			return true;
 		}
 
@@ -130,6 +138,10 @@ function checkTypeInstance(source, clazz, target, nodeClass){
 		if(target === Object) return false;
 		if(clazz.any || target.any){
 			if(nodeClass.skipSuggestTypeAny) return false;
+			if(clazz === Blackprint.Types.Route) return false;
+			if(clazz === Blackprint.Types.Route) return false;
+			if(target === Blackprint.Types.Trigger) return false;
+			if(target === Blackprint.Types.Trigger) return false;
 			return true;
 		}
 

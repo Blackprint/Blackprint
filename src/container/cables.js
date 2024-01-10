@@ -14,7 +14,8 @@ Space.model('cables', function(My, include){
 	My.init = function(){
 		setTimeout(function(){
 			// Get sf-space element
-			var rect = My.$el[0].parentNode.getBoundingClientRect();
+			var rect = My.$el[0].parentNode?.getBoundingClientRect();
+			if(rect == null) return;
 			My.space = [rect.x, rect.y];
 		}, 500);
 	}
