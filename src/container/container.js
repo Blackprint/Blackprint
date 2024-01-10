@@ -197,6 +197,14 @@ Space.model('container', function(My, include){
 			return;
 		}
 
+		if(ev.constructor === Object && (ev.x != null || ev.y != null)){
+			if(ev.x != null) { if(ev.x > 0) ev.x = 0; My.pos.x = ev.x; }
+			if(ev.y != null) { if(ev.y > 0) ev.y = 0; My.pos.y = ev.y; }
+
+			moveContainer({ movementX: ev.x ? devicePixelRatio : 0, movementY: ev.y ? devicePixelRatio : 0});
+			return;
+		}
+
 		My.$el.on('pointermove', moveContainer);
 		let cancelContextMenu = false;
 
@@ -417,27 +425,32 @@ Space.model('container', function(My, include){
 	My.scaleContainer = function(ev){
 		if(!rightClick && ev.ctrlKey === false && ev.scale === void 0) return;
 		if(My.config.scale === false) return;
-		ev.preventDefault();
+		
 		disableShadow();
-
-		if(ev.deltaY > 0 && My.scale < 0.21)
-			return;
-
-		if(ev.deltaY < 0 && My.scale > 4.98)
-			return;
-
-		// From touchGesture
-		if(ev.scale !== void 0){
-			// console.log(ev);
-
-			// Mouse scroll delta Y
-			var delta = ev.scale;
-			var scale = My.scale + delta;
+		if(ev.constructor === Number) {
+			if(ev <= 0) return;
+			var delta = 0;
+			var scale = ev;
+			ev = {scale: ev, clientX: My.pos.x, clientY: My.pos.y};
 		}
-		else{
-			// Mouse scroll delta Y
-			var delta = ev.deltaY/100 * (My.scale <= 1.05 ? 0.05 : 0.1);
-			var scale = My.scale - delta;
+		else {
+			ev.preventDefault();
+			if(ev.deltaY > 0 && My.scale < 0.21) return;
+			if(ev.deltaY < 0 && My.scale > 4.98) return;
+
+			// From touchGesture
+			if(ev.scale !== void 0){
+				// console.log(ev);
+	
+				// Mouse scroll delta Y
+				var delta = ev.scale;
+				var scale = My.scale + delta;
+			}
+			else{
+				// Mouse scroll delta Y
+				var delta = ev.deltaY/100 * (My.scale <= 1.05 ? 0.05 : 0.1);
+				var scale = My.scale - delta;
+			}
 		}
 
 		My.scale = scale;
