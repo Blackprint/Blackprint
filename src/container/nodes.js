@@ -142,12 +142,42 @@ Space.model('nodes', function(My, include){
 	$(window).once('beforeunload', My.destroy);
 
 	My.selected = [];
-	My.unselectAll = function(){
+	My.deselectAll = function(){
 		let list = My.selected;
 		for (let i = 0; i < list.length; i++)
 			list[i]._nodeSelected = false;
 
 		list.splice(0);
+	}
+
+	My.isSelected = function(iface){ return iface._nodeSelected }
+	My.select = function(items){
+		if(items.constructor !== Array) items = [items];
+
+		let list = My.selected;
+		for (let i=0; i < items.length; i++) {
+			let temp = items[i];
+			if(temp._nodeSelected) continue;
+			if(!list.includes(temp)){
+				temp._nodeSelected = true;
+				list.push(temp);
+			}
+		}
+	}
+
+	My.deselect = function(items){
+		if(items.constructor !== Array) items = [items];
+		items = new Set(items);
+
+		let list = My.selected;
+		for (let i=list.length-1; i >= 0; i--) {
+			let temp = items[i];
+			if(!temp._nodeSelected) continue;
+			if(items.has(temp)){
+				temp._nodeSelected = false;
+				list.splice(i, 1);
+			}
+		}
 	}
 
 	My.checkNodeClick = function(ev){

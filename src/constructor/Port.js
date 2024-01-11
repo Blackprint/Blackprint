@@ -56,8 +56,8 @@ class Port extends Blackprint.Engine.Port {
 		// Stop here if this function wasn't triggered by user
 		if(isAuto) return cable;
 
-		this._scope('nodes').unselectAll();
-		this._scope('cables').unselectAll();
+		this._scope('nodes').deselectAll();
+		this._scope('cables').deselectAll();
 
 		// Default head index is "2" when creating new cable
 		cable.cableHeadClicked(e, true);
