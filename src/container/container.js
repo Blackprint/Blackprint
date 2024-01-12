@@ -132,6 +132,7 @@ Space.model('container', function(My, include){
 
 		let w = 0, h = 0;
 		let elements = My.$el;
+		if(!(_rect || elements[0])) throw new Error("Failed to reset container offsets as HTML element is detached with the DOM");
 		My.offset = (_rect || elements[0].firstElementChild.getBoundingClientRect());
 		My.offset.x -= My.pos.x;
 		My.offset.y -= My.pos.y;
