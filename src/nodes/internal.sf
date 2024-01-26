@@ -181,10 +181,22 @@ let BPEvent = {
 };
 
 $(function(){
-	Blackprint.Sketch.registerInterface('BPIC/BP/Var/Get', BPVar, Blackprint._iface['BPIC/BP/Var/Get']);
-	Blackprint.Sketch.registerInterface('BPIC/BP/Var/Set', BPVar, Blackprint._iface['BPIC/BP/Var/Set']);
-	Blackprint.Sketch.registerInterface('BPIC/BP/Env/Get', BPEnv, Blackprint._iface['BPIC/BP/Env/Get']);
-	Blackprint.Sketch.registerInterface('BPIC/BP/Env/Set', BPEnv, Blackprint._iface['BPIC/BP/Env/Set']);
+	Blackprint.Sketch.registerInterface('BPIC/BP/Var/Get', BPVar,
+	class extends Blackprint._iface['BPIC/BP/Var/Get'] {
+		init(){ sf.watch(this.data, 'name', ()=> { this.title = this.data.name }); }
+	});
+	Blackprint.Sketch.registerInterface('BPIC/BP/Var/Set', BPVar,
+	class extends Blackprint._iface['BPIC/BP/Var/Set'] {
+		init(){ sf.watch(this.data, 'name', ()=> { this.title = this.data.name }); }
+	});
+	Blackprint.Sketch.registerInterface('BPIC/BP/Env/Get', BPEnv,
+	class extends Blackprint._iface['BPIC/BP/Env/Get'] {
+		init(){ sf.watch(this.data, 'name', ()=> { this.title = this.data.name }); }
+	});
+	Blackprint.Sketch.registerInterface('BPIC/BP/Env/Set', BPEnv,
+	class extends Blackprint._iface['BPIC/BP/Env/Set'] {
+		init(){ sf.watch(this.data, 'name', ()=> { this.title = this.data.name }); }
+	});
 	Blackprint.Sketch.registerInterface('BPIC/BP/FnVar/Input', BPFnVar, Blackprint._iface['BPIC/BP/FnVar/Input']);
 	Blackprint.Sketch.registerInterface('BPIC/BP/FnVar/Output', BPFnVar, Blackprint._iface['BPIC/BP/FnVar/Output']);
 	Blackprint.Sketch.registerInterface('BPIC/BP/Fn/Input', BPFnInOut, Blackprint._iface['BPIC/BP/Fn/Input']);
