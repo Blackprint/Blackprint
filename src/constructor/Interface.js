@@ -408,7 +408,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 			contentRect: this.$el[0].firstElementChild.getBoundingClientRect(),
 		}]);
 	}
-	initInputPort(){
+	initInputPort(_skipInitOnce=false){
 		if(this.node.instance.pendingRender) return;
 		let isEventNode = this.namespace.startsWith('BP/Event/');
 
@@ -425,7 +425,6 @@ Blackprint.Interface = class Interface extends sf.Model {
 				node._bpUpdate();
 		}
 
-
 		// Skip default value's port input box for internal nodes
 		if(this.namespace.startsWith('BP/') && !isEventNode) return;
 
@@ -434,6 +433,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 
 			// Skip default component if the developer already added a component
 			if(port._hasComponent) continue;
+			if(_skipInitOnce && port._hasComponent != null) continue;
 
 			let type = 'string';
 			if(port.type === Number) type = 'number';
