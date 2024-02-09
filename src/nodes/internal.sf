@@ -208,7 +208,7 @@ $(function(){
 	class extends Blackprint._iface['BPIC/BP/Fn/Main'] {
 		openFunction(event){
 			this.node.instance._emit("node.function.open", {
-				event, iface: this, function: this.node._funcInstance
+				event, iface: this, function: this.node.bpFunction
 			});
 		}
 	});

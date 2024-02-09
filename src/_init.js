@@ -322,7 +322,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 									linkPortA = iface.addPort(target, portName);
 
 									if(linkPortA === void 0){
-										console.error(`Can't create output port (${portName}) for function (${iface._funcMain.node._funcInstance.id}). Maybe it was connected to dynamic port.`);
+										console.error(`Can't create output port (${portName}) for function (${iface.parentInterface.node.bpFunction.id}). Maybe it was connected to dynamic port.`);
 										continue;
 									}
 								}
@@ -363,7 +363,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 										linkPortB = targetNode.addPort(linkPortA, target.name);
 
 										if(linkPortB === void 0)
-											throw new Error(`Can't create output port (${target.name}) for function (${targetNode._funcMain.node._funcInstance.id})`);
+											throw new Error(`Can't create output port (${target.name}) for function (${targetNode.parentInterface.node.bpFunction.id})`);
 									}
 									else if(targetNode._enum === _InternalNodeEnum.BPVarSet){
 										targetNode.useType(linkPortA);
@@ -576,7 +576,11 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		for (let i=0; i < vars.length; i++) {
 			let temp = vars[i];
 			setDeepProperty(this.variables, temp.id.split('/'), temp);
-			this._emit('variable.new', temp);
+			this._emit('variable.new', {
+				reference: temp,
+				scope: temp._scope,
+				id: temp.id,
+			});
 		}
 	}
 
@@ -592,6 +596,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 		if(options.selectedOnly)
 			ifaces = this.scope('nodes').selected;
+		else if(options.ifaceList != null) ifaces = options.ifaceList;
 		else ifaces = this.ifaceList;
 
 		if(options.exclude)
@@ -1018,7 +1023,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		delete this.iface[iface.id];
 		delete this.ref[iface.id];
 
-		let parent = iface.node.instance._funcMain;
+		let parent = iface.node.instance.parentInterface;
 		if(parent != null)
 			delete parent.ref[iface.id];
 
@@ -1073,17 +1078,17 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		}
 		else{
 			func = namespace;
-			if(func.type === 'function')
-				namespace = "BPI/F/" + func.namespace;
+			if(func.type === 'function') namespace = "BPI/F/" + func.namespace;
 			else throw new Error("Unrecognized node");
+
+			if(this._isInsideFunction(namespace)) throw new Error("Blackprint doesn't support recursive function node");
 		}
 
 		let time = Date.now();
 
 		// Call the registered func (from this.registerNode)
 		try{
-			if(isClass(func))
-				node = new func(this);
+			if(isClass(func)) node = new func(this);
 			else func(node = new Blackprint.Node(this));
 		} catch(e){
 			console.error("Error when processing:", namespace);
@@ -1163,7 +1168,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			this.iface[iface.id] = iface;
 			this.ref[iface.id] = iface.ref;
 
-			let parent = iface.node.instance._funcMain;
+			let parent = iface.node.instance.parentInterface;
 			if(parent != null)
 				parent.ref[iface.id] = iface.ref;
 		}
