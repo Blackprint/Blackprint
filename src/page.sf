@@ -48,13 +48,14 @@
 
     <!-- Nodes goes here -->
     <sf-m name="nodes" class="nodes" style="user-select:none;">
-      <!-- Handled on ./nodes.js -->
+      <!-- Managed from ./nodes.js -->
       <div sf-each="item in list" class="{{ item._nodeSelected ? 'selected' : '' }} {{ item._inactive ? 'inactive' : '' }}"
         @pointerover.capture="pointerOver(event, item)"
         @pointerup="checkNodeClick(event)">
         {{@exec
-          // Capitalize each word
-          var name = item.interface.split('.sf')[0].replace(/[\/.,<>:\[\]{}+_=`~!@#$%^*(\\|)]/g, '-').toLowerCase();
+          // Lowercase and replace "/" with dash:
+          // "BPIC/Node/IFace" ==> "bpic-node-iface"
+          var name = item.interface.replace(/[\/.,<>:\[\]{}+_=`~!@#$%^*(\\|)]/g, '-').toLowerCase();
           var node = sf.component.roots[name];
 
           if(node === void 0){
@@ -62,8 +63,8 @@
             return null;
           }
 
-          // Create from Blackprint's namespace and (true = let the item become the scope)
-          Blackprint._reuseIFace = item;
+          // Create element from Blackprint's namespace
+          Blackprint._reuseIFace = item; // used in: src\constructor\Interface.js
           return new node(item, $space);
         }}
       </div>
