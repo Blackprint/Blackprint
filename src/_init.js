@@ -319,7 +319,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 							if(linkPortA === void 0){
 								if(iface._enum === _InternalNodeEnum.BPFnInput){
 									let target = this._getTargetPortType(iface.node.instance, 'input', port);
-									linkPortA = iface.addPort(target, portName);
+									linkPortA = iface.createPort(target, portName);
 
 									if(linkPortA === void 0){
 										console.error(`Can't create output port (${portName}) for function (${iface.parentInterface.node.bpFunction.id}). Maybe it was connected to dynamic port.`);
@@ -360,7 +360,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 								var linkPortB = targetNode.input[target.name];
 								if(linkPortB === void 0){
 									if(targetNode._enum === _InternalNodeEnum.BPFnOutput){
-										linkPortB = targetNode.addPort(linkPortA, target.name);
+										linkPortB = targetNode.createPort(linkPortA, target.name);
 
 										if(linkPortB === void 0)
 											throw new Error(`Can't create output port (${target.name}) for function (${targetNode.parentInterface.node.bpFunction.id})`);
@@ -935,7 +935,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 					hasEvent = true;
 					events[path] = {
-						schema: Object.keys(list[path].schema),
+						fields: Object.keys(list[path].schema),
 					};
 				}
 			}
