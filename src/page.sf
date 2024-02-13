@@ -53,8 +53,9 @@
         @pointerover.capture="pointerOver(event, item)"
         @pointerup="checkNodeClick(event)">
         {{@exec
-          // Lowercase and replace "/" with dash:
-          // "BPIC/Node/IFace" ==> "bpic-node-iface"
+          /* Lowercase and replace "/" with dash:
+             "BPIC/Node/IFace" ==> "bpic-node-iface"
+          */
           var name = item.interface.replace(/[\/.,<>:\[\]{}+_=`~!@#$%^*(\\|)]/g, '-').toLowerCase();
           var node = sf.component.roots[name];
 
