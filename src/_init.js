@@ -1084,6 +1084,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			if(this._isInsideFunction(namespace)) throw new Error("Blackprint doesn't support recursive function node");
 		}
 
+		this.emit('node.creating', { namespace, options });
 		let time = Date.now();
 
 		// Call the registered func (from this.registerNode)
