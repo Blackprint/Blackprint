@@ -37,6 +37,7 @@ export {
 	InputPort,
 	RemoteControl,
 	RemoteEngine,
+	ready,
 	on,
 } from "@blackprint/engine";
 export { Skeleton } from "@blackprint/engine/skeleton";
@@ -131,41 +132,20 @@ export class Sketch extends Engine {
 	/** Refresh nodes positions */
 	recalculatePosition(): void;
 
-	/** Node ID was added/changed/removed */
-	on(eventName: 'node.id.changed', callback: (data: { iface: Interface, from: String, to: String }) => void): void;
-	/** A cable was disconnected or deleted */
-	on(eventName: 'cable.disconnect', callback: (data: { port: IFacePort, target?: IFacePort, cable: Cable }) => void): void;
-	/** A cable was connected between two port */
-	on(eventName: 'cable.connect', callback: (data: { port: IFacePort, target: IFacePort, cable: Cable }) => void): void;
-
 	/** User is selecting some nodes and cables */
 	on(eventName: 'container.selection', callback: (data: { cables: Array<Cable>, nodes: Array<Node<any>> }) => void): void;
-	/** JSON was imported into the instance */
-	on(eventName: 'json.imported', callback: (data: { appendMode: Boolean, nodes: Array<Node<any>>, raw: String }) => void): void;
-	/** An error happened on the instance */
-	on(eventName: 'error', callback: (data: { type: String, data: Object }) => void): void;
 	/** Default port value was changed */
 	on(eventName: 'port.default.changed', callback: (data: { port: IFacePort }) => void): void;
 	/** A cable was splitted and a cable branch was created */
 	on(eventName: 'cable.create.branch', callback: (data: { event: Event, cable: Cable }) => void): void;
-	/** A cable was created */
-	on(eventName: 'cable.created', callback: (data: { port: IFacePort, cable: Cable }) => void): void;
 	/** A cable that was created by user interaction was dropped by user */
 	on(eventName: 'cable.dropped', callback: (data: { port: IFacePort, cable: Cable, event: Event }) => void): void;
 	/** A cable is being dragged by user */
 	on(eventName: 'cable.drag', callback: (data: { cable: Cable }) => void): void;
-	/** A cable was deleted */
-	on(eventName: 'cable.deleted', callback: (data: { cable: Cable }) => void): void;
 	/** A node is moved by user interaction */
 	on(eventName: 'node.move', callback: (data: { iface: Interface, event: Event }) => void): void;
 	/** Some nodes get resized */
 	on(eventName: 'node.resize', callback: (data: { items: Array<any> }) => void): void;
-	/** A node is being deleted */
-	on(eventName: 'node.delete', callback: (data: { iface: Interface }) => void): void;
-	/** A node was deleted */
-	on(eventName: 'node.deleted', callback: (data: { iface: Interface }) => void): void;
-	/** A node was created */
-	on(eventName: 'node.created', callback: (data: { iface: Interface }) => void): void;
 	/** User clicked the node header */
 	on(eventName: 'node.click', callback: (data: { iface: Interface, event: Event }) => void): void;
 	/** User is hovering/focus the node header */
@@ -176,8 +156,16 @@ export class Sketch extends Engine {
 	on(eventName: 'port.hover', callback: (data: { port: IFacePort, event: Event }) => void): void;
 	/** User is leaving focus the port element */
 	on(eventName: 'port.unhover', callback: (data: { port: IFacePort, event: Event }) => void): void;
+	/** User right clicked port element to open a menu */
+	on(eventName: 'port.menu', callback: (data: {
+		instance: Engine | Sketch,
+		port: IFacePort<any>,
+		menu: Array<any>,
+		event: Event,
+		preventDefault: Function
+	}) => void): void;
 	/** User was double clicked a function node to open it */
-	on(eventName: 'node.function.open	', callback: (data: {
+	on(eventName: 'node.function.open', callback: (data: {
 		event: Event,
 		iface: Interface,
 		// function: BPFunction
@@ -187,8 +175,10 @@ export class Sketch extends Engine {
 /** Interface/IFace that can be used to control nodes */
 export class Interface<T extends Node<T> = any> extends EngineInterface<T> {
 	/**
+	 * ```txt
 	 * You mustn't use this class to manually construct nodes
 	 * But please use 'instance.createNode()' instead
+	 * ```
 	 * @param node
 	 */
 	constructor(node: T);
@@ -208,45 +198,56 @@ export class Interface<T extends Node<T> = any> extends EngineInterface<T> {
 	comment: string;
 
 	/**
+	 * ```txt
 	 * For internal library use only, may be changed in the future
 	 * 
 	 * If you want to do something when user moved the node
 	 * Please listen to `node.move` event on Sketch instance or on this node
+	 * ```
 	 * @param event
 	 */
 	moveNode(event: object): void;
 
 	/**
+	 * ```txt
 	 * For internal library use only, may be changed in the future
 	 * 
 	 * If you want to do something when user open the node's menu
 	 * Please listen to `node.menu` event on Sketch instance or on this node
+	 * ```
 	 * @param event
 	 */
 	nodeMenu(event: object): void;
 
 	/**
+	 * ```txt
 	 * For internal library use only, may be changed in the future
 	 * 
 	 * If you want to do something when user clicked the node's header
 	 * Please listen to `node.click` event on Sketch instance instead
+	 * ```
 	 * @param event
 	 */
 	swapZIndex(event: object, disableSwap: Boolean): void;
 
 	/**
+	 * ```txt
 	 * For internal library use only, may be changed in the future
 	 * 
 	 * If you want to do something when user hovering the node
 	 * Please listen to `node.hover` event on Sketch instance instead
+	 * ```
 	 * @param event
 	 */
 	nodeHovered(event: object): void;
 
 	/**
+	 * ```txt
 	 * For internal library use only, may be changed in the future
+	 * 
 	 * If you want to do something when user's pointer leaving the node
 	 * Please listen to `node.unhover` event on Sketch instance instead
+	 * ```
 	 * @param event
 	 */
 	nodeUnhovered(event: object): void;
@@ -283,9 +284,11 @@ export class Interface<T extends Node<T> = any> extends EngineInterface<T> {
 }
 
 /**
+ * ```txt
  * [Experimental] [ToDo]
  * 
  * module @blackprint/remote-control is required
+ * ```
  */
 export class RemoteSketch extends RemoteControl {
 	/**
