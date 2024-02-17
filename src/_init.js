@@ -542,8 +542,13 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			}
 
 			// Call node init after creation processes was finished
-			for (var i = 0; i < handlers.length; i++)
-				handlers[i].init?.();
+			for (var i = 0; i < handlers.length; i++){
+				let ref = handlers[i];
+				ref.init?.();
+
+				let nodeClass = ref.constructor;
+				if(nodeClass.initUpdate != null) this._tryInitUpdateNode(ref, nodeClass.initUpdate, false);
+			}
 
 			// Check active/inactive node from connected input/output cables and the routes
 			for (let i=0; i < routeConnects.length; i++) {
@@ -1225,6 +1230,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		}
 
 		iface._updateDocs();
+		if(func.initUpdate != null) this._tryInitUpdateNode(node, func.initUpdate, true);
 
 		this.emit('node.created', { iface });
 		return iface;
