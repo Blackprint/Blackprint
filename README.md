@@ -113,11 +113,11 @@ This roadmap could be changed on the future, feel free to request feature or rep
   </tr>
   <tr>
     <td>Pausable and routable data flow</td>
-    <td>🧪</td>  <td>🧪</td>  <td>🧪</td>  <td><a href="https://github.com/Blackprint/engine-go/pull/1">🚧</a></td>  <td>🧪</td>  <td>-</td>
+    <td>✔️</td>  <td>✔️</td>  <td>🧪</td>  <td><a href="https://github.com/Blackprint/engine-go/pull/1">🚧</a></td>  <td>🧪</td>  <td>-</td>
   </tr>
   <tr>
     <td>Remote control</td>
-    <td>🧪</td>  <td>🧪</td>  <td title="It may be useful for Socket application, but I think only useful for that">❔</td>  <td>-</td>  <td>🧪</td>  <td>-</td>
+    <td>🧪</td>  <td>🧪</td>  <td>✖</td>  <td>-</td>  <td>🧪</td>  <td>-</td>
   </tr>
   <tr>
     <td>Code generation</td>
@@ -134,7 +134,7 @@ This roadmap could be changed on the future, feel free to request feature or rep
 
 ---
 
-With remote control you can easily manage connection to the target environment (Node.js/PHP/etc) from the browser. Please always run your app inside of isolated container (like Docker) if you allow someone to remote control your system.
+With remote control you can easily manage connection to the target environment (Node.js/Python/etc) from the browser. Please always run your app inside of isolated container (like Docker) if you allow someone to remote control your system.
 
 Example case where you may need remote control:
  - Creating Discord.js bot (because the library doesn't have support for browser)
@@ -172,8 +172,7 @@ Example case where you may need remote control:
   - [x] Node list editor (right click and from side panel)
   - [x] Error/log popup or overlay
   - [x] Show overview or notice when importing nodes from URL
-  - [ ] Multiple sketch workspaces or tabs
-    - [ ] Export multiple sketch workspaces to JSON
+  - [x] Multiple sketch workspaces or tabs
 - [x] Auto `blackprint.config.js` import
 - [x] Better documentation
   - [x] Add in-editor node documentation in a tooltip
@@ -184,7 +183,7 @@ Example case where you may need remote control:
 
 ---
 
-Currently the main focus is Blackprint for JavaScript. Some engine for PHP, and Golang could have some changes in the future.
+Currently the main focus is Blackprint for JavaScript. Blackprint Engine for PHP, Python, Golang, etc may follow the implementation of JavaScript version.
 
 ## Other possible plan
 Blackprint Engine:
@@ -192,6 +191,7 @@ Blackprint Engine:
 - **Java** (or maybe Kotlin)
 - **Rust** (may get removed from this list)
 - **C++** (for Arduino if possible)
+- **Zig** (for Arduino if possible)
 
 ## Some Note
 Each engine may have different compatibilities.<br>

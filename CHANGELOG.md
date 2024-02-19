@@ -1,3 +1,20 @@
+# 0.9.1
+
+### Bug Fix
+- Fix error when calculating container on initialization
+- Fix node suggestion and cable rect
+- Fix missing input component on first function node
+- Throw error when trying to reset offset on detached container
+- Watch changes of `data.name` as node title (for internal node)
+
+### Feature
+- Add support for moving/scaling container using script
+- Add function to select/deselect node/cable in the container space
+- Improve TypeScript definition file
+
+### Minor changes
+- Rename some internal property name
+
 # 0.9.0
 
 ### Bug Fix
