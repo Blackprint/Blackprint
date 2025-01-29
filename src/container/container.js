@@ -155,8 +155,9 @@ Space.model('container', function(My, include){
 	function moveContainer(ev){
 		isMoved = true;
 
-		let movementX = ev.movementX / devicePixelRatio;
-		let movementY = ev.movementY / devicePixelRatio;
+		let dpi = screen.width / window.innerWidth;
+		let movementX = ev.movementX / dpi;
+		let movementY = ev.movementY / dpi;
 
 		if(!(My.pos.x >= 0 && movementX > 0)){
 			var temp = My.pos.x + movementX;
@@ -424,7 +425,16 @@ Space.model('container', function(My, include){
 	}
 
 	My.scaleContainer = function(ev){
-		if(!rightClick && ev.ctrlKey === false && ev.scale === void 0) return;
+		let isTrackpad = ev.deltaMode === 0;
+		if (!isTrackpad) isTrackpad = Math.abs(ev.deltaY) < 5;
+		
+		if(!rightClick && ev.ctrlKey === false && ev.scale === void 0) {
+			if (isTrackpad) {
+				moveContainer({ movementX: -ev.deltaX, movementY: -ev.deltaY});
+				return;
+			}
+			return;
+		}
 		if(My.config.scale === false) return;
 		
 		disableShadow();
