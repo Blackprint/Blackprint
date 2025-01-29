@@ -85,6 +85,8 @@ sf-space[blackprint]{
 			border-bottom: 1px dashed darkgray;
 			font-size: 16px;
 			max-width: 400px;
+			cursor: pointer;
+			color: black;
 
 			&.has-desc {
 				padding: 2px 16px 2px 8px;
@@ -112,9 +114,6 @@ sf-space[blackprint]{
 			&:hover{
 				background: lightgray;
 			}
-
-			cursor: pointer;
-			color: black;
 
 			li > a > span {
 				padding-right: 6px;
