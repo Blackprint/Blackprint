@@ -152,30 +152,29 @@ module.exports = function(SFC, Gulp){
 		if(event === 'add'){
 			if(config.disabled) return;
 
-			if(config.js != null){
-				// Extract JSDoc for Blackprint nodes if exist
-				if(config.bpDocs != null){
-					let dir = config.bpDocs;
-					if(dir.includes('@cwd'))
-						dir = dir.replace('@cwd', currentPath);
+			[config.js, config.sf].forEach(that => {
+				if(that != null){
+					// Extract JSDoc for Blackprint nodes if exist
+					if(config.bpDocs != null){
+						let dir = config.bpDocs;
+						if(dir.includes('@cwd')) dir = dir.replace('@cwd', currentPath);
 
-					let docs = {};
-					let that = config.js;
-
-					that.onEvent = {
-						fileCompiled(content, rawContent){
-							that.onEvent.fileModify(rawContent || content);
-						},
-						fileModify(content, filePath){
-							extractDocs(content, filePath, docs);
-						},
-						scanFinish(){
-							fs.writeFileSync(dir, JSON.stringify(docs));
-							SFC.socketSync?.('bp-docs-append', docs, "Blackprint docs updated");
+						let docs = {};
+						that.onEvent = {
+							fileCompiled(content, rawContent){
+								that.onEvent.fileModify(rawContent || content);
+							},
+							fileModify(content, filePath){
+								extractDocs(content, filePath, docs);
+							},
+							scanFinish(){
+								fs.writeFileSync(dir, JSON.stringify(docs));
+								SFC.socketSync?.('bp-docs-append', docs, "Blackprint docs updated");
+							}
 						}
 					}
 				}
-			}
+			});
 
 			if(config.ts != null && config.ts.scanDocs){
 				// Extract JSDoc for Blackprint nodes if exist
