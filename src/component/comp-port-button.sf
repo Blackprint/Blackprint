@@ -1,0 +1,68 @@
+## html
+<comp-port-button style="display: {{ visible ? '' : 'none' }}" class="{{ inline ? 'inline' : '' }}">
+	<div class="bp-button" @click="click(event)" @pointerdown.capture.stop="press(event)" @pointerup="release(event)" title="{{ tooltip }}">{{ text }}</div>
+</comp-port-button>
+
+
+## js-global
+Blackprint.space.component('comp-port-button', {
+	template: #this.path, // 'Blackprint/component/comp-port-button.sf'
+	extend: class extends sf.Model {
+		async beforeInit(){
+			let noData = this.noData = this.which == null;
+
+			this.inline ??= false;
+			this.visible ??= true;
+			this.text ??= "Button";
+			this.tooltip ??= "";
+		}
+
+		click(ev){
+			if(this.onClick) return this.onClick(ev);
+		}
+
+		press(ev){
+			if(this.onPress) return this.onPress(ev);
+		}
+
+		release(ev){
+			if(this.onRelease) return this.onRelease(ev);
+		}
+	}
+}, ()=> {});
+
+
+## scss-global
+sf-space[blackprint]{
+	.node comp-port-button {
+		.bp-button {
+            background: #0000008c;
+            border: 2px solid #ffffff6b;
+            margin: 3px;
+            padding: 2px 8px;
+            border-radius: 50px;
+            outline: none;
+            color: white;
+            cursor: pointer;
+            &:hover{
+                background: #9191918c;
+            }
+        }
+	}
+
+    .node .output > .ports {
+        comp-port-button {
+            &.inline {
+                float: left;
+            }
+        }
+    }
+
+    .node .input > .ports {
+        comp-port-button {
+            &.inline {
+                float: right;
+            }
+        }
+    }
+}

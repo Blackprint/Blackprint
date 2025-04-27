@@ -603,7 +603,7 @@ sf-space[blackprint]{
         }
 
         &.Trigger{
-          height: 20px;
+          // height: 20px;
           .name{
             line-height: 20px;
           }
