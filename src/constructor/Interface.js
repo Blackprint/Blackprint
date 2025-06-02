@@ -105,7 +105,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 	moveNode(e, single){
 		var container = this._container;
 		var scale = container.scale;
-		var dpi = screen.width / window.innerWidth;
+		var dpi = 1; // window.devicePixelRatio;
 		var x = e.movementX / dpi / scale;
 		var y = e.movementY / dpi / scale;
 

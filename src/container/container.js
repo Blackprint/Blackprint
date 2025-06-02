@@ -153,9 +153,7 @@ Space.model('container', function(My, include){
 	let isMoved = false;
 	My._posNoScale = {x:0, y:0};
 	function moveContainer(ev){
-		isMoved = true;
-
-		let dpi = screen.width / window.innerWidth;
+		let dpi = 1; // window.devicePixelRatio;
 		let movementX = ev.movementX / dpi;
 		let movementY = ev.movementY / dpi;
 
@@ -183,6 +181,7 @@ Space.model('container', function(My, include){
 			if(My.scale === 1) My._posNoScale.y = temp;
 		}
 
+		if(movementX > 1 || movementY > 1 || movementX < -1 || movementY < -1) isMoved = true;
 		My.onMove && My.onMove(My.pos);
 	}
 
@@ -203,7 +202,8 @@ Space.model('container', function(My, include){
 			if(ev.x != null) { if(ev.x > 0) ev.x = 0; My.pos.x = ev.x; }
 			if(ev.y != null) { if(ev.y > 0) ev.y = 0; My.pos.y = ev.y; }
 
-			moveContainer({ movementX: ev.x ? devicePixelRatio : 0, movementY: ev.y ? devicePixelRatio : 0});
+			// moveContainer({ movementX: ev.x ? devicePixelRatio : 0, movementY: ev.y ? devicePixelRatio : 0});
+			moveContainer({ movementX: ev.x ? 1 : 0, movementY: ev.y ? 1 : 0});
 			return;
 		}
 
@@ -425,14 +425,12 @@ Space.model('container', function(My, include){
 	}
 
 	My.scaleContainer = function(ev){
-		let isTrackpad = ev.deltaMode === 0;
+		let isTrackpad = ev.deltaMode === 0 && /Mac|iPod|iPhone|iPad/.test(navigator?.platform || navigator?.userAgentData?.platform);
 		if (!isTrackpad) isTrackpad = Math.abs(ev.deltaY) < 5;
 		
 		if(!rightClick && ev.ctrlKey === false && ev.scale === void 0) {
-			if (isTrackpad) {
+			if (isTrackpad)
 				moveContainer({ movementX: -ev.deltaX, movementY: -ev.deltaY});
-				return;
-			}
 			return;
 		}
 		if(My.config.scale === false) return;
