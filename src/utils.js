@@ -20,9 +20,9 @@ let getDeepProperty = Blackprint._utils.getDeepProperty;
 
 function deepCopy(target, source){
 	for(var key in source){
-		// Skip any character that contain $ or _
+		// Skip any field that starts with $ or _
 		// Because it's marked as private property
-		if(key.includes('$') || key.includes('_'))
+		if(key.startsWith('$') || key.startsWith('_'))
 			continue;
 
 		if(typeof source[key] === 'object'){
@@ -41,9 +41,9 @@ function deepCopy(target, source){
 
 function deepMerge(target, source){
 	for(var key in source){
-		// Skip any character that contain $ or _
+		// Skip any field that starts with $ or _
 		// Because it's marked as private property
-		if(key.includes('$') || key.includes('_'))
+		if(key.startsWith('$') || key.startsWith('_'))
 			continue;
 
 		if(typeof target[key] === 'object'){

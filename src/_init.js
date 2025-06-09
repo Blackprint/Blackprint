@@ -637,7 +637,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				let temp = iface.exportData();
 				if(temp != null) data.data = temp;
 			}
-			else if (iface.data !== void 0){
+			else if (iface.data != null){
 				data.data = {};
 				deepCopy(data.data, iface.data);
 			}
