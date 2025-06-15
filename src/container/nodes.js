@@ -9,6 +9,8 @@ Space.model('nodes', function(My, include){
 			container.resetOffset(container.nodeScope.$el[0].getBoundingClientRect());
 
 		let {offset: Ofst, pos} = container;
+		if(Ofst == null || pos == null) return;
+
 		let oX = pos.x + Ofst.x;
 		let oY = pos.y + Ofst.y;
 
