@@ -359,7 +359,10 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 								// Output can only meet input port
 								var linkPortB = targetNode.input[target.name];
 								if(linkPortB === void 0){
-									if(targetNode._enum === _InternalNodeEnum.BPFnOutput){
+									if(linkPortA.type === Blackprint.Types.Route){
+										linkPortB = targetNode.node.routes;
+									}
+									else if(targetNode._enum === _InternalNodeEnum.BPFnOutput){
 										linkPortB = targetNode.createPort(linkPortA, target.name);
 
 										if(linkPortB === void 0)
@@ -368,9 +371,6 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 									else if(targetNode._enum === _InternalNodeEnum.BPVarSet){
 										targetNode.useType(linkPortA);
 										linkPortB = targetNode.input[target.name];
-									}
-									else if(linkPortA.type === Blackprint.Types.Route){
-										linkPortB = targetNode.node.routes;
 									}
 									else if(this.isSkeletonInstance){
 										linkPortB = targetNode.node.createPort('input', target.name, arrayOfAny);
@@ -745,7 +745,8 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			let routeToIface = iface.node.routes?.out?.input?.iface;
 			if(routeToIface != null){
-				data.route = { i: ifaces.indexOf(routeToIface) };
+				let targetIndex = ifaces.indexOf(routeToIface);
+				if(targetIndex != -1) data.route = { i: targetIndex };
 			}
 
 			if(hasCableMetadata)

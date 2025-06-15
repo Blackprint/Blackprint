@@ -14,7 +14,7 @@ class Port extends Blackprint.Engine.Port {
 		if(this._node.instance._locked_)
 			throw new Error("This instance was locked");
 
-		var isAuto = e.target == null;
+		var isAuto = e?.target == null;
 
 		// Shift + Left Click
 		if(isAuto === false && e.shiftKey && e.button === 0){
