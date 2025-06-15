@@ -1060,6 +1060,15 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			return this.createNode("BP/Skeleton", objCopy);
 		}
 
+		if(namespace === "BP/Fn/Input" && this.parentInterface != null){
+			let funcMain = this.parentInterface;
+			if(funcMain._proxyInput != null) {
+				// Disallow to have more than one proxy input
+				console.error("Function node can't have more than one proxy input");
+				return null;
+			}
+		}
+
 		var node, func;
 		if(!(namespace.prototype instanceof Blackprint.Node)){
 			func = getDeepProperty(Blackprint.nodes, namespace.split('/'));
