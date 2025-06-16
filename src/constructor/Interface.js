@@ -297,7 +297,8 @@ Blackprint.Interface = class Interface extends sf.Model {
 			this.$el.once('pointerup', this.__onCableDrop);
 
 			if(cable.isRoute){
-				let portElem = this.node.routes._inElement;
+				let routePort = this.node.routes;
+				let portElem = (cable.source === 'input' ? routePort._outElement : routePort._inElement);
 				if(portElem == null) return;
 
 				event.view ??= window;
@@ -311,7 +312,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 					cableScope.hoverPort = {
 						elem: portElem,
 						rect,
-						item: this.node.routes,
+						item: routePort,
 					};
 				}
 

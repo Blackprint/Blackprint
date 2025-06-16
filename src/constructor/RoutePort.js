@@ -49,7 +49,17 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 
 		if(event != null){
 			let target = $(event.target);
-			if(!target.hasClass('out')) return;
+			
+			// Shift + Left Click
+			if(event.shiftKey && event.button === 0){
+				let cable = target.hasClass('out') ? this.out : this.in.pop();
+				cable.detachPort(this);
+
+				// Default head index is "2" when creating new cable
+				cable.cableHeadClicked(event, true);
+	
+				return cable;
+			}
 
 			let rect = target[0].getBoundingClientRect();
 			let center = rect.width / 2;
@@ -58,6 +68,14 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 				x: rect.x + center,
 				y: rect.y + center,
 			}, this, true);
+
+			if(target.hasClass('in')){
+				cable.forceRecreate = true;
+				cable.source = 'input';
+				cable.isRoute = true;
+				cable.cableHeadClicked(event, true);
+				return cable;
+			}
 		}
 		else{
 			let rect;
