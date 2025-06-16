@@ -456,7 +456,11 @@ class Cable extends Blackprint.Engine.Cable {
 	}
 
 	detachPort(port){
+		if(!port) port = this.target;
+		if(!port) return;
+		
 		super.disconnect();
+		let owner = this.input === port ? 'output' : 'input';
 
 		// Reset some state
 		delete this.input;
@@ -472,9 +476,17 @@ class Cable extends Blackprint.Engine.Cable {
 			head2[1] = temp[1];
 		}
 
-		this.source = this.owner.source;
-		this.owner.cables.push(this);
+		this.source = this.owner.source || owner;
 		delete this.target;
+
+		if(this.isRoute){
+			this.forceRecreate = true;
+			if(this.owner instanceof Blackprint.RoutePort){
+				if(owner === 'output') this.owner.out = this;
+				else this.owner.in.push(this);
+			}
+		}
+		else this.owner.cables.push(this);
 	}
 
 	_touchCable(oldEv){
@@ -556,6 +568,15 @@ class Cable extends Blackprint.Engine.Cable {
 
 	_delete(isDeep){
 		this._scope.sketch.emit('cable.deleted', {cable: this});
+
+		if(this.isRoute && this.owner != null){
+			if(this.owner.out === this) this.owner.out = null;
+			else {
+				let list = this.owner.in || this.owner.cables;
+				let i = list.indexOf(this);
+				if(i !== -1) list.splice(i, 1);
+			}
+		}
 
 		if(this.hasBranch){
 			let branch = this.branch;
