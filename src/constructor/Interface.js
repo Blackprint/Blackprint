@@ -499,6 +499,17 @@ Blackprint.Interface = class Interface extends sf.Model {
 
 		return hasData ? portData : null;
 	}
+	_recalculateBpVisual(){
+		if(this.$el?.[0] !== void 0){
+			clearTimeout(this._recalculateBpVisual_);
+			this._recalculateBpVisual_ = setTimeout(()=>{
+				this.node.instance.scope('nodes')._recalculate([{
+					target: {model: this},
+					contentRect: this.$el[0].firstElementChild.getBoundingClientRect()
+				}], true);
+			}, 10);
+		}
+	}
 };
 
 Blackprint.Interface.prototype._importInputs = EngineInterface.prototype._importInputs;

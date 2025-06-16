@@ -14,6 +14,18 @@ class Port extends Blackprint.Engine.Port {
 		if(this._node.instance._locked_)
 			throw new Error("This instance was locked");
 
+		if(e == null) {
+			let list = this.iface[this.source]._portList;
+			let rect;
+
+			if(list.getElement == null || DOMRect.fromRect == null){
+				rect = new DOMRect(); // use fake DOMRect (usually for testing with Jest)
+				rect.height = rect.width = rect.y = rect.x = 10;
+			}
+			else rect = this.findPortElement(list.getElement(this)).getBoundingClientRect();
+			e = rect;
+		}
+
 		var isAuto = e?.target == null;
 
 		// Shift + Left Click
