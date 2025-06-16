@@ -126,6 +126,22 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 		let cables = this._scope('cables');
 		if(cable == null)
 			cable = cables.currentCable;
+		else if(cable.forceRecreate && cable.isRoute){
+			cables.currentCable = void 0;
+			cable._delete();
+
+			let owner = cable.owner;
+			if(owner !== this){
+				if(cable.source === 'output'){
+					this.connectCable(owner.createCable(), _ev);
+				}
+				else {
+					owner.connectCable(this.createCable(), _ev);
+				}
+			}
+
+			return true;
+		}
 
 		if(!cable) return false;
 		cables.currentCable = void 0;

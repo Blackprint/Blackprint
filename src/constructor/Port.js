@@ -100,6 +100,23 @@ class Port extends Blackprint.Engine.Port {
 		// Ignore if no cable found
 		if(_cable === void 0) return;
 
+		if(_cable.forceRecreate && _cable.isRoute){
+			this._scope('cables').currentCable = void 0;
+			_cable._delete();
+
+			let owner = _cable.owner;
+			if(owner !== this){
+				if(_cable.source === 'output'){
+					this.connectCable(owner.createCable(), _ev);
+				}
+				else {
+					owner.connectCable(this.createCable(), _ev);
+				}
+			}
+
+			return;
+		}
+
 		if(_cable.beforeConnect != null){
 			let temp = _cable.beforeConnect;
 			_cable.beforeConnect = null;
