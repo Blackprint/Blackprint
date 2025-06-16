@@ -796,7 +796,7 @@ function random(a, b){ return Math.round(Math.random()*(b-a)*1000)/1000+a }
 
 // In case you're using kind of debugging
 // tools and think this was memory leak
-// This feature can be disabled if you're not enabling
+// This feature can be disabled with
 // Blackprint.settings('visualizeFlow', true);
 let cableGlowKeyframes;
 let cableGlowElCache = [];
@@ -809,7 +809,7 @@ let getIdleCableGlow = (function(){
 		if(timeout === false) timeout = setTimeout(()=> {
 			idle = current = 0;
 			timeout = false;
-		}, cableGlowDuration + 500);
+		}, cableGlowDuration + 1000);
 
 		if(current >= idle){
 			if(idle >= cableGlowElCache.length)
