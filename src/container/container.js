@@ -84,9 +84,19 @@ Space.model('container', function(My, include){
 		if(My.isMinimap) recalculateScale();
 	}
 
+	let cableSelect;
+	let nodeSelect;
+	let cableList;
+	let nodeList;
+
 	let initialized = false;
 	My.init = async function(){
 		await fixScaling();
+
+		cableSelect = My.cableScope.selected;
+		nodeSelect = My.nodeScope.selected;
+		cableList = My.cableScope.list;
+		nodeList = My.nodeScope.list;
 
 		if(My.offset.width === 0)
 			setTimeout(fixScaling, 1000);
@@ -228,11 +238,6 @@ Space.model('container', function(My, include){
 			isMoved = false;
 		});
 	}
-
-	let cableSelect = My.cableScope.selected;
-	let nodeSelect = My.nodeScope.selected;
-	let cableList = My.cableScope.list;
-	let nodeList = My.nodeScope.list;
 
 	My.moveSelection = function(ev, skip){
 		for (var i = 0; i < cableSelect.length; i++) {

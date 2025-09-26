@@ -88,10 +88,18 @@ Space.model('cables', function(My, include){
 			// by put link on your code to this repository :3
 			if(item.source !== 'property'){
 				var cx = (x2-x1)/2;
+
 				if(cx > -50 && cx < 0)
 					cx = -50;
-				else if(cx < 50 && cx >= 0)
+				else if(cx >= 0 && cx < 50){
 					cx = 50;
+
+					let dy = Math.abs(y2 - y1);
+					if (dy < 50) cx -= 50 - dy;
+				}
+
+				if (cx > 250) cx = 250;
+				if (cx < -250) cx = -250;
 
 				let temp = item.overrideRot ?? (item.source === 'input' ? 'in-out' : 'out-in');
 				if(temp === 'out-in'){

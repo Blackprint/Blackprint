@@ -124,9 +124,10 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 		if(!this._init) this._initForSketch();
 
 		let cables = this._scope('cables');
-		if(cable == null)
-			cable = cables.currentCable;
-		else if(cable.forceRecreate && cable.isRoute){
+		if(cable == null) cable = cables.currentCable;
+		if(!cable) return false;
+
+		if(cable.forceRecreate && cable.isRoute){
 			cables.currentCable = void 0;
 			cable._delete();
 
@@ -143,7 +144,6 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 			return true;
 		}
 
-		if(!cable) return false;
 		cables.currentCable = void 0;
 
 		if(cable.owner.iface === this.iface || cable.isRoute === false){
