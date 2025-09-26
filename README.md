@@ -1,13 +1,14 @@
 <p align="center"><a href="#" target="_blank" rel="noopener noreferrer"><img width="150" src="https://user-images.githubusercontent.com/11073373/141421213-5decd773-a870-4324-8324-e175e83b0f55.png" alt="Blackprint"></a></p>
 
 <h1 align="center">Blackprint</h1>
-<p align="center">A general purpose visual programming interface for lowering programming language's steep learning curve, and introduce an easy way to experimenting with your beautiful project for other developer.</p>
+<p align="center">A general-purpose visual programming interface designed to reduce the learning curve of programming languages and provide an intuitive way to experiment with your projects for other developers.</p>
 
 <p align="center">
   <a href='https://github.com/Blackprint/Blackprint/blob/master/LICENSE'><img src='https://img.shields.io/badge/License-MIT-brightgreen.svg' height='20'></a>
   <a href='https://github.com/Blackprint/Blackprint/actions/workflows/build.yml'><img src='https://github.com/Blackprint/Blackprint/actions/workflows/build.yml/badge.svg?branch=master' height='20'></a>
   <a href='https://www.npmjs.com/package/@blackprint/sketch'><img src='https://img.shields.io/npm/v/@blackprint/sketch.svg' height='20'></a>
   <a href='https://www.jsdelivr.com/package/npm/@blackprint/sketch'><img src='https://data.jsdelivr.com/v1/package/npm/@blackprint/sketch/badge?style=rounded' height='20'></a>
+  <a href='https://www.jsdelivr.com/package/npm/@blackprint/sketch'><img src='https://img.shields.io/bundlephobia/minzip/%40blackprint/sketch' height='20'></a>
   <a href='https://discord.gg/cz9rh3a7d6'><img src='https://img.shields.io/discord/915881655921704971.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2' height='20'></a>
 </p>
 
@@ -15,32 +16,40 @@ https://user-images.githubusercontent.com/11073373/185776245-e883cadb-631e-497c-
 
 <p align="center">
   <b>Blackprint Sketch</b> is built using ScarletsFrame (<a href="https://krausest.github.io/js-framework-benchmark/current.html">performance</a> and <a href="https://github.com/ScarletsFiction/ScarletsFrame/wiki#advanced-example">features</a>).
-  <br><b>Blackprint Engine</b> is distributed separately for different runtime environment.
-  <br><b>Blackprint Editor</b> is created as a <a href="https://github.com/Blackprint/blackprint.github.io">online IDE</a> for browser.
+  <br><b>Blackprint Engine</b> is distributed separately for different runtime environments.
+  <br><b>Blackprint Editor</b> is available as an <a href="https://github.com/Blackprint/blackprint.github.io">online IDE</a> for web browsers.
 </p>
 
-## Note
-Please use Chromium based browser for better rendering performance.
+## Browser Requirements
+For optimal rendering performance, please use a Chromium-based browser.
 
-Default Node's UI design was inspired by UE4 Blueprint and can be modified with HTML/CSS. If you're using Blackprint Editor you can choose different theme on the settings, and here's the <a href="https://github.com/Blackprint/blackprint.github.io/blob/ed9cb35fdd0fb79acf2bede4d007e3afd2b40399/src/node-design.scss#L47-L67">code</a> for reference if you want to create your own theme.
+## Customization
+The default node UI design is inspired by UE4 Blueprint and can be customized using HTML/CSS. In the Blackprint Editor, you can select different themes from the settings. For creating your own theme, refer to the <a href="https://github.com/Blackprint/blackprint.github.io/blob/ed9cb35fdd0fb79acf2bede4d007e3afd2b40399/src/node-design.scss#L47-L67">theme code</a>.
 
 ## Documentation
-Documentation is included in [the editor](https://blackprint.github.io/#;bpdocs:Home), if you want to help contributing or modify you can fork the editor and modify files in [this directory](https://github.com/Blackprint/blackprint.github.io/tree/master/docs). Blackprint Engine and Sketch does have a TypeScript definition files, so if you working with TypeScript you may see a code suggestion in your code editor like Visual Studio Code.
+Documentation is available within [the editor](https://blackprint.github.io/#;bpdocs:Home). If you'd like to contribute or make modifications, you can fork the editor and edit files in the [documentation directory](https://github.com/Blackprint/blackprint.github.io/tree/master/docs). Blackprint Engine and Sketch include TypeScript definition files, providing code suggestions in TypeScript-compatible editors like Visual Studio Code.
 
-## Example
+## Getting Started
 
-If you're looking for minimal sketch example to get started integrate for your editor project:
+### Quick Examples
+To get started with integrating Blackprint into your project, check out these minimal sketch examples:
+
 - [JSBin (CDN)](https://jsbin.com/bakulux/edit?html,js,output)
 - [StackBlitz (with Vite)](https://stackblitz.com/edit/blackprint-vite?file=vite.config.js,src%2Fmain.ts&terminal=dev)
 
-If you just want to execute exported Blackprint JSON, you can just use the engine. I also provide few simple example for different framework in case you want to use integrate to your frontend framework. For non-browser engine, there are example on it's repository. You can copy and paste the JSON to [Blackprint Editor](https://blackprint.github.io/) to see the nodes arrangement. The example below is using this [arrangement](https://blackprint.github.io/#page/sketch/1#;importSketch:tZHLTsMwEEX_ZdZpnCciXkGrLorohooVqpCJrdatH1HsVClV_h3HSaQWlsAm8ozu3HtmcoF3wBeQmjaCPW0Av8He2spghEqqwoOhTPBTHSpmkaokevgQpDxWNVeu1pSZhyjMEeVmLGelVkYLFsqDgeCXXlxVjf0TJ9YSWY1U2y6AxUCJnvXOrXwBDjgKoAWc53cBnAHHURHAp-9yChiE3u1YDd02gFVPhV5XaCM4ZfVct5NF7C3uR4c88w7x6GC8OnarUGJJf_So_5yIaBjgJADJFeBZHLlISdoewb2MZZWjCOPOUevGuuhxdIh0c4pIZwCPDs6JfDe7ASlSD5LcgCT_BjL3IO5Qy-HoaE3sHq0bYXklzld6Z50mA2MRecR0RJST-DrqhRnXvvpd0-Lq_D1x3lirFdrwvpomUp-YFT4wz31gdh2wELw8Mvpzo2XLyiGi-wI).
+### Framework Integration Examples
+If you want to see how Blackprint works with different frontend frameworks, here are some simple examples:
+
 - [Multiply - Event Listener](https://jsbin.com/gaxisop/edit?html,js,output)
 - [Multiply - ScarletsFrame](https://jsbin.com/nigarib/edit?html,js,output)
 - [Multiply - Vue](https://jsbin.com/bocehax/edit?html,js,output)
 - [Multiply - React](https://jsbin.com/watogus/edit?js,output)
 
+### Using the Engine
+If you just want to execute exported Blackprint JSON files, you can use the Blackprint Engine directly. For non-browser engines, examples are available in their respective repositories. You can copy and paste JSON into the [Blackprint Editor](https://blackprint.github.io/) to visualize the node arrangement. The examples above use this [sample arrangement](https://blackprint.github.io/#page/sketch/1#;importSketch:tZHLTsMwEEX_ZdZpnCciXkGrLorohooVqpCJrdatH1HsVClV_h3HSaQWlsAm8ozu3HtmcoF3wBeQmjaCPW0Av8He2spghEqqwoOhTPBTHSpmkaokevgQpDxWNVeu1pSZhyjMEeVmLGelVkYLFsqDgeCXXlxVjf0TJ9YSWY1U2y6AxUCJnvXOrXwBDjgKoAWc53cBnAHHURHAp-9yChiE3u1YDd02gFVPhV5XaCM4ZfVct5NF7C3uR4c88w7x6GC8OnarUGJJf_So_5yIaBjgJADJFeBZHLlISdoewb2MZZWjCOPOUevGuuhxdIh0c4pIZwCPDs6JfDe7ASlSD5LcgCT_BjL3IO5Qy-HoaE3sHq0bYXklzld6Z50mA2MRecR0RJST-DrqhRnXvvpd0-Lq_D1x3lirFdrwvpomUp-YFT4wz31gdh2wELw8Mvpzo2XLyiGi-wI).
+
 ---
-### Video Example:
+### Video Example
 1. Build Telegram bot with Blackprint
 
 https://github.com/Blackprint/Blackprint/assets/11073373/fe3d767b-e340-4371-8685-ef7a12709e0f
@@ -67,7 +76,9 @@ https://github.com/Blackprint/Blackprint/assets/11073373/fe3d767b-e340-4371-8685
 ---
 
 ## Blackprint Roadmap
-This roadmap could be changed on the future, feel free to request feature or report an issue.
+This roadmap may changed in the future. Feel free to request features or report issues.
+
+> **Important Note**: Each Blackprint node must be rewritten and reimplemented for each programming language. While basic nodes may be available across all languages, some language-specific nodes may not be available to different language.
 
 <table>
 <thead>
@@ -77,6 +88,7 @@ This roadmap could be changed on the future, feel free to request feature or rep
     <th rowspan="2">PHP</th>
     <th rowspan="2" title="Please request on Discord if you want this updated">Golang</th>
     <th rowspan="2">Python</th>
+    <th rowspan="2">Lua</th>
     <th rowspan="2">C#</th>
   </tr>
   <tr>
@@ -92,6 +104,8 @@ This roadmap could be changed on the future, feel free to request feature or rep
     <td><a href='https://packagist.org/packages/blackprint/engine'><img src='https://img.shields.io/github/v/release/blackprint/engine-php?include_prereleases' height='20'></a></td>
     <td><a href='https://github.com/Blackprint/engine-go'><img src='https://img.shields.io/github/v/release/blackprint/engine-go?include_prereleases' height='20'></a></td>
     <td><a href="https://pypi.org/project/blackprint-engine/"><img src='https://img.shields.io/pypi/v/blackprint-engine' height='20'></a></td>
+    <!--td><a href="https://github.com/Blackprint/engine-lua"><img src='https://img.shields.io/luarocks/v/blackprint/engine-lua' height='20'></a></td-->
+    <td><a href="https://github.com/Blackprint/engine-lua"><img src='https://img.shields.io/badge/gh-0.10-orange' height='20'></a></td>
     <td>-</td>
   </tr>
   <tr>
@@ -101,27 +115,58 @@ This roadmap could be changed on the future, feel free to request feature or rep
     <td><a href='https://github.com/Blackprint/engine-php/tree/master/example'>✔️ Link</a></td>
     <td><a href='https://github.com/Blackprint/engine-go/tree/main/example'>✔️ Link</a></td>
     <td><a href='https://github.com/Blackprint/engine-python/tree/main/example'>✔️ Link</a></td>
+    <td><a href='https://github.com/Blackprint/engine-lua/tree/main/example'>✔️ Link</a></td>
     <td>-</td>
   </tr>
   <tr>
     <td>Environment variables</td>
-    <td>✔️</td>  <td>✔️</td>  <td>✔️</td>  <td><a href="https://github.com/Blackprint/engine-go/pull/1">🚧</a></td>  <td>✔️</td>  <td>-</td>
+    <td>✔️</td>
+    <td>✔️</td>
+    <td>✔️</td>
+    <td><a href="https://github.com/Blackprint/engine-go/pull/1">🚧</a></td>
+    <td>✔️</td>
+    <td>🧪</td>
+    <td>-</td>
   </tr>
   <tr>
     <td>Import modules from URL</td>
-    <td>✔️</td>  <td>✔️</td>  <td title="You need to use package manager to install node modules">✖</td>  <td title="You need to manually import the node module">✖</td>  <td title="You need to manually import the node module">✖</td>  <td title="You need to use package manager to install the node module">✖</td>
+    <td>✔️</td>
+    <td>✔️</td>
+    <td title="You need to use package manager to install node modules">✖</td>
+    <td title="You need to manually import the node module">✖</td>
+    <td title="You need to manually import the node module">✖</td>
+    <td title="You need to use package manager to install the node module">✖</td>
+    <td>-</td>
   </tr>
   <tr>
     <td>Pausable and routable data flow</td>
-    <td>✔️</td>  <td>✔️</td>  <td>🧪</td>  <td><a href="https://github.com/Blackprint/engine-go/pull/1">🚧</a></td>  <td>🧪</td>  <td>-</td>
+    <td>✔️</td>
+    <td>✔️</td>
+    <td>🧪</td>
+    <td><a href="https://github.com/Blackprint/engine-go/pull/1">🚧</a></td>
+    <td>🧪</td>
+    <td>🧪</td>
+    <td>-</td>
   </tr>
   <tr>
     <td>Remote control</td>
-    <td>🧪</td>  <td>🧪</td>  <td>✖</td>  <td>-</td>  <td>🧪</td>  <td>-</td>
+    <td>🧪</td>
+    <td>🧪</td>
+    <td>✖</td>
+    <td>-</td>
+    <td>🧪</td>
+    <td>🚧</td>
+    <td>-</td>
   </tr>
   <tr>
     <td>Code generation</td>
-    <td>🧪</td>  <td>🧪</td>  <td>🚧</td>  <td>🚧</td>  <td>🧪</td>  <td>🚧</td>
+    <td>🧪</td>
+    <td>🧪</td>
+    <td>🚧</td>
+    <td>🚧</td>
+    <td>🧪</td>
+    <td>🚧</td>
+    <td>-</td>
   </tr>
 </tbody>
 </table>
@@ -134,79 +179,80 @@ This roadmap could be changed on the future, feel free to request feature or rep
 
 ---
 
-With remote control you can easily manage connection to the target environment (Node.js/Python/etc) from the browser. Please always run your app inside of isolated container (like Docker) if you allow someone to remote control your system.
+## Remote Control
+Blackprint's remote control feature allows you to easily manage connections to target environments (Node.js, Python, etc.) directly from your browser. For security reasons, please always run your application within an isolated container (like Docker) when allowing remote control access.
 
 Example case where you may need remote control:
- - Creating Discord.js bot (because the library doesn't have support for browser)
-   - Support for browser was dropped due to CORS at the Discord endpoint
- - Collaboratively work with your friend
- - Remotely modify your running application in runtime
+- **Discord.js Bots**: Create Discord bots (some library may not work in the browser if the endpoint has CORS)
+- **Collaboration**: Work together with team members in real-time
+- **Remote Development**: Modify and debug your running applications during runtime
 
 ---
+
+## Development Status
 
 - [ ] Blackprint Sketch (this repository)
   - [x] Mirrored sketch on detachable window
   - [x] Mini sketch for preview
   - [x] Hot Reload
   - [x] Export single sketch to JSON
-  - [x] Importable minimal sketch for different project
+  - [x] Importable minimal sketch for different projects
   - [x] Select and move multiple nodes at once
     - [x] Bulk delete
     - [x] Add feature to put nodes into a group
-  - [x] Clicked nodes should be moved on front of the other nodes (z-index)
-  - [x] Automatically put cable on suitable port when it's dropped on top of a node
-  - [x] Add feature to arrange cable (cable branching)
-  - [x] Add variable's node
-  - [x] Add feature to hide some unused port on a node
-  - [x] Add feature to import node skeleton (use default node, and no execution)
-  - [ ] Create addons for VS Code for previewing exported Blackprint
-    - [ ] Add JSON preview for Visual Studio Code
-  - [x] Add TypeScript definition file
+  - [x] Clicked nodes should be moved to front of other nodes (z-index)
+  - [x] Automatically place cables on suitable ports when dropped on nodes
+  - [x] Cable arrangement feature (cable branching)
+  - [x] Variable nodes
+  - [x] Hide unused ports on nodes
+  - [x] Import node skeleton feature (use default node, no execution)
+  - [ ] VS Code addons for previewing exported Blackprint
+    - [ ] JSON preview for Visual Studio Code
+  - [x] TypeScript definition file
+
 - [ ] Blackprint Editor ([repository](https://github.com/Blackprint/blackprint.github.io))
   - [x] [Online editor](https://blackprint.github.io)
   - [x] Basic nodes editor
   - [x] Detachable window and minimap
-  - [x] Add Environment Variables editor
+  - [x] Environment Variables editor
   - [x] Import sketch from URL
   - [ ] Move current sketch with minimap
-  - [x] Node list editor (right click and from side panel)
+  - [x] Node list editor (right-click and side panel)
   - [x] Error/log popup or overlay
-  - [x] Show overview or notice when importing nodes from URL
+  - [x] Show overview/notice when importing nodes from URL
   - [x] Multiple sketch workspaces or tabs
 - [x] Auto `blackprint.config.js` import
-- [x] Better documentation
-  - [x] Add in-editor node documentation in a tooltip
-  - [x] Nodes docs generator
-  - [x] Add TypeScript definition file
-- [ ] Blackprint Nodes Package Manager
-  - [x] Use NPM registry for Node.js/Deno/Browser
+- [x] Enhanced documentation
+  - [x] In-editor node documentation tooltips
+  - [x] Node documentation generator
+  - [x] TypeScript definition file
+- [x] Blackprint Nodes Package Manager
+  - [x] NPM registry support for Node.js/Deno/Browser
 
 ---
 
-Currently the main focus is Blackprint for JavaScript. Blackprint Engine for PHP, Python, Golang, etc may follow the implementation of JavaScript version.
+## Current Focus
+The primary development focus is on Blackprint for JavaScript. Support for other languages (PHP, Python, Golang, etc.) will follow the JavaScript implementation roadmap.
 
-## Other possible plan
-Blackprint Engine:
-- **Lua** (because it's embeddable language)
-- **Java** (or maybe Kotlin)
-- **Rust** (may get removed from this list)
-- **C++** (for Arduino if possible)
-- **Zig** (for Arduino if possible)
-
-## Some Note
-Each engine may have different compatibilities.<br>
-For the example:
- - WebAudio is **only compatible** in the browser.
- - Web server is **not compatible** in the browser.
+## Future Language Support
+Potential plans for additional Blackprint Engine implementations:
+- **Java** (or Kotlin for Android development)
+- **Rust** (for IO and high performance application)
+- **Zig** (for Arduino)
+- **C++** (for Arduino)
 
 ---
 
-Blackprint will act as an interface for each engine. To use it on NodeJS, Deno, or other JavaScript runtime, you can export it to JSON and use [engine-js](https://github.com/Blackprint/engine-js#example). But it doesn't mean exporting is just like a magic, you also need to write `registerNode` and `registerInterface` on the target engine. Except if someone already write the Blackprint Module (node and interface) on target engine, you can easily plug and play the module.
+## Architecture
+Blackprint engine serves as an execution layer for each engine implementation. To use it with Node.js, Deno, or other JavaScript runtimes, you can export your visual programs to JSON and use the [engine-js](https://github.com/Blackprint/engine-js#example).
+
+**Important**: Exporting to JSON is not a complete solution by itself. You'll need to write `registerNode` and `registerInterface` functions for your target engine. However, if someone has already created Blackprint modules (nodes and interfaces) for your target engine, you can easily plug and play those modules.
 
 ## Contributing
-To make things easier, please make sure to read the [Contributing Guide](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md) before creating a issue/request.
+For getting started, please start from the [Contributing Guide](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md) before creating issues or pull request.
 
-If you want to compile and start the editor's web server on your machine, you can run the command below:
+### Development Setup
+To compile and start the editor's web server locally:
 
 ```sh
 $ cd /your/project/folder
@@ -221,8 +267,8 @@ $ npm start
  >> -----------------------------------
 ```
 
-### Build and run the unit test
-If you're trying to run the unit test, you can use `npm run compile` and then `npm test`.
+### Running Tests
+To run the unit tests:
 
 ```sh
 $ cd /your/project/folder
@@ -234,13 +280,17 @@ $ npm run compile
 $ npm test
 ```
 
-## Stability
-Breaking changes may happen every increment of `v0.x.0`, while `v0.0.x` usually will have new feature or bug fixes.
+## Version Stability
+- **Breaking changes** may occur with each `v0.x.0` increment
+- **v0.0.x** versions typically include new features and bug fixes
+- After **v1.0.0**, new feature additions may experience longer delays before being merged
 
-After version v1.0.0 any feature addition may have long delay before actually being merged.<br>
-Feel free to request a feature or give a feedback at this moment.
+We welcome any feature requests and feedback at this stage of development.
 
 ## License
-Blackprint is a **MIT licensed** open source project and completely free to use.
+Blackprint is an **MIT-licensed** open source project, completely free to use.
 
-But please consider sponsoring the people who work and contribute amount of effort to maintain and develop new features for this project. Because without their contribution, this project may get slowed down or possible to getting paused.
+### Support the Project
+Please consider sponsoring the developers who contribute significant effort to maintaining and enhancing this project. Without their contributions, development may slow down or potentially pause.
+
+Your support helps ensure the continued growth and active improvement for Blackprint!
