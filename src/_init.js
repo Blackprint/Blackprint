@@ -143,7 +143,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			let oldIfaces = this.iface;
 
 			this._importing = true;
-			this.emit("json.importing", {appendMode: options.appendMode, raw: json});
+			this.emit("json.importing", {appendMode: options.appendMode, data: json});
 			if(options.clean !== false && !options.appendMode){
 				this.clearNodes();
 
@@ -558,9 +558,9 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			containerModel._isImporting = false;
 			this._importing = false;
-			this.emit("json.imported", {appendMode: options.appendMode, startIndex: appendLength, nodes: inserted, raw: json});
+			this.emit("json.imported", {appendMode: options.appendMode, startIndex: appendLength, nodes: inserted, data: json});
 
-			this.executionOrder.next();
+			await this.executionOrder.start();
 
 			if(!Blackprint.settings.windowless){
 				setTimeout(async ()=>{
