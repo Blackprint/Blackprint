@@ -221,12 +221,12 @@ Blackprint.Interface = class Interface extends sf.Model {
 					if(selected.length !== 0){
 						for (var i = selected.length - 1; i >= 0; i--)
 							scope.sketch.deleteNode(selected[i]);
-	
+
 						selected.splice(0);
 						container.cableScope.selected.splice(0);
 						return;
 					}
-	
+
 					scope.sketch.deleteNode(iface);
 				}
 			}];
@@ -254,7 +254,7 @@ Blackprint.Interface = class Interface extends sf.Model {
 			let refresh = () => {
 				let i = ifaceList.indexOf(this);
 				if(i+1 === ifaceList.length) return;
-	
+
 				ifaceList.move(i, -1, 1);
 			};
 

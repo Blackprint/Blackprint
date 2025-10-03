@@ -49,7 +49,7 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 
 		if(event != null){
 			let target = $(event.target);
-			
+
 			// Shift + Left Click
 			if(event.shiftKey && event.button === 0){
 				let cable = target.hasClass('out') ? this.out : this.in.pop();
@@ -57,7 +57,7 @@ Blackprint.RoutePort = class RoutePort extends Blackprint.RoutePort {
 
 				// Default head index is "2" when creating new cable
 				cable.cableHeadClicked(event, true);
-	
+
 				return cable;
 			}
 

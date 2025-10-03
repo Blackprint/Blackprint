@@ -114,8 +114,8 @@ function createNodesMenu(list, sketch, ev, pos, opt){
 	deep(list, menu);
 
 	let cancelMenu = false;
-	Blackprint.emit('menu.create.node', { 
-		list, menu, sketch, position, coordinate, event: ev, options: opt, isSuggestion: opt.suggest ?? false, 
+	Blackprint.emit('menu.create.node', {
+		list, menu, sketch, position, coordinate, event: ev, options: opt, isSuggestion: opt.suggest ?? false,
 		preventDefault(){
 			cancelMenu = true;
 		}

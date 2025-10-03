@@ -458,7 +458,7 @@ class Cable extends Blackprint.Engine.Cable {
 	detachPort(port){
 		if(!port) port = this.target;
 		if(!port) return;
-		
+
 		super.disconnect();
 		let owner = this.input === port ? 'output' : 'input';
 

@@ -200,7 +200,7 @@ export class Interface<T extends Node<T> = any> extends EngineInterface<T> {
 	/**
 	 * ```txt
 	 * For internal library use only, may be changed in the future
-	 * 
+	 *
 	 * If you want to do something when user moved the node
 	 * Please listen to `node.move` event on Sketch instance or on this node
 	 * ```
@@ -211,7 +211,7 @@ export class Interface<T extends Node<T> = any> extends EngineInterface<T> {
 	/**
 	 * ```txt
 	 * For internal library use only, may be changed in the future
-	 * 
+	 *
 	 * If you want to do something when user open the node's menu
 	 * Please listen to `node.menu` event on Sketch instance or on this node
 	 * ```
@@ -222,7 +222,7 @@ export class Interface<T extends Node<T> = any> extends EngineInterface<T> {
 	/**
 	 * ```txt
 	 * For internal library use only, may be changed in the future
-	 * 
+	 *
 	 * If you want to do something when user clicked the node's header
 	 * Please listen to `node.click` event on Sketch instance instead
 	 * ```
@@ -233,7 +233,7 @@ export class Interface<T extends Node<T> = any> extends EngineInterface<T> {
 	/**
 	 * ```txt
 	 * For internal library use only, may be changed in the future
-	 * 
+	 *
 	 * If you want to do something when user hovering the node
 	 * Please listen to `node.hover` event on Sketch instance instead
 	 * ```
@@ -244,7 +244,7 @@ export class Interface<T extends Node<T> = any> extends EngineInterface<T> {
 	/**
 	 * ```txt
 	 * For internal library use only, may be changed in the future
-	 * 
+	 *
 	 * If you want to do something when user's pointer leaving the node
 	 * Please listen to `node.unhover` event on Sketch instance instead
 	 * ```
@@ -286,7 +286,7 @@ export class Interface<T extends Node<T> = any> extends EngineInterface<T> {
 /**
  * ```txt
  * [Experimental] [ToDo]
- * 
+ *
  * module @blackprint/remote-control is required
  * ```
  */

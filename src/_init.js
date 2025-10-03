@@ -167,7 +167,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 			if(options.pendingRender) this.pendingRender = true;
 
 			// Skeleton instance will only use No-operation node and interface
-			// It doesn't need external module and can be useful for displaying node connection only 
+			// It doesn't need external module and can be useful for displaying node connection only
 			if(options.isSkeletonInstance){
 				this.executionOrder = NOOP_ExecutionOrder;
 				this.isSkeletonInstance = true;
@@ -252,7 +252,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 				for (var a = 0; a < nodes.length; a++){
 					let temp = nodes[a];
 					temp.i += appendLength;
-	
+
 					let iface = this.createNode(namespace, {
 						x: temp.x,
 						y: temp.y,
@@ -353,7 +353,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 							for (var k = 0; k < port.length; k++) {
 								var target = port[k];
 								target.i += appendLength;
-				
+
 								var targetNode = inserted[target.i];
 
 								// Output can only meet input port
@@ -425,7 +425,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 
 			if(isCleanImport)
 				this.scope('nodes').list.refresh?.();
-			
+
 			await $.afterRepaint();
 
 			// Don't change `var` to `let` as it's used outside of this try catch block
@@ -500,7 +500,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 					if(linkPortA.isRoute || linkPortB.isRoute)
 						rectB = linkPortB._inElement[0].getBoundingClientRect();
 					else rectB = _getPortRect(input, target.name);
-	
+
 					var center = rectB.width / 2;
 					cable.head2 = [rectB.x + center, rectB.y + center];
 				}
@@ -523,7 +523,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 					for (let a=0; a < conf.length; a++) {
 						let { i: index, name } = conf[a];
 						let targetIface = inserted[index + appendLength];
-						
+
 						for (let z=0; z < cables.length; z++) {
 							let cable = cables[z];
 							if(cable.output.name !== name || cable.output.iface !== targetIface) continue;
@@ -760,7 +760,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 					let parentMap = new Map();
 					let input = connectedCable.input || {};
 					let _i = ifaces.indexOf(input.iface);
-	
+
 					// Check if not excluded for export
 					if(_i !== -1 && !exclude.includes(ifaces[_i].namespace)){
 						let temp = { i: _i };
@@ -780,7 +780,7 @@ Blackprint.Sketch = class Sketch extends Blackprint.Engine {
 		}
 
 		for (let i=0; i < zList.length; i++) {
-			if(zList[i] == null) 
+			if(zList[i] == null)
 				zList.splice(i--, 1);
 			else zList[i].z = i;
 		}
@@ -1299,7 +1299,7 @@ function deepBranch(cable, save, settings){
 
 	if(cable.overrideRot != null)
 		save.overRot = cable.overrideRot;
-	
+
 	if(cable.branch){
 		let branch = cable.branch;
 
@@ -1507,7 +1507,7 @@ function isPortTypeSimilar(old, now){
 
 	if((old.portFeature != null && now.portFeature == null) || now.portFeature != null && old.portFeature == null)
 		return false;
-	
+
 	if(old.portFeature !== now.portFeature || old.portFeature == null || now.portFeature == null)
 		return false;
 
@@ -1529,7 +1529,7 @@ function isPortTypeSimilar(old, now){
 	else if(feature === port.Union){
 		if(old.portType.length !== now.portType.length)
 			return false;
-		
+
 		let temp = old.portType;
 		let temp2 = new Set(now.portType);
 		for (let i=0; i < temp.length; i++) {

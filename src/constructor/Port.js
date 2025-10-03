@@ -138,7 +138,7 @@ class Port extends Blackprint.Engine.Port {
 					else el = list.getElement(cable.input);
 
 					let rect = this.findPortElement(el).getBoundingClientRect();
-	
+
 					let { offset, pos, scale } = this._scope('container');
 					cable.head2[0] = (rect.x + rect.width/2 - offset.x - pos.x) / scale;
 					cable.head2[1] = (rect.y + rect.height/2 - offset.y - pos.y) / scale;
@@ -153,7 +153,7 @@ class Port extends Blackprint.Engine.Port {
 					else el = list.getElement(cable.output);
 
 					let rect = this.findPortElement(el).getBoundingClientRect();
-	
+
 					let { offset, pos, scale } = this._scope('container');
 					cable.head1[0] = (rect.x + rect.width/2 - offset.x - pos.x) / scale;
 					cable.head1[1] = (rect.y + rect.height/2 - offset.y - pos.y) / scale;
@@ -388,14 +388,14 @@ class Port extends Blackprint.Engine.Port {
 			StructOf_split(port);
 			let docs = port.iface.docs?.output;
 			if(docs == null) return;
-	
+
 			let { struct, structList } = port;
 			for (let i=0; i < structList.length; i++) {
 				let key = structList[i];
 				struct[key].docs = docs[key];
 			}
 		}
-	
+
 		StructOf.split._overriden = true;
 	}
 };

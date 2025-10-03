@@ -432,14 +432,14 @@ Space.model('container', function(My, include){
 	My.scaleContainer = function(ev){
 		let isTrackpad = ev.deltaMode === 0 && /Mac|iPod|iPhone|iPad/.test(navigator?.platform || navigator?.userAgentData?.platform);
 		if (!isTrackpad) isTrackpad = Math.abs(ev.deltaY) < 5;
-		
+
 		if(!rightClick && ev.ctrlKey === false && ev.scale === void 0) {
 			if (isTrackpad)
 				moveContainer({ movementX: -ev.deltaX, movementY: -ev.deltaY});
 			return;
 		}
 		if(My.config.scale === false) return;
-		
+
 		disableShadow();
 		if(ev.constructor === Number) {
 			if(ev <= 0) return;
@@ -455,7 +455,7 @@ Space.model('container', function(My, include){
 			// From touchGesture
 			if(ev.scale !== void 0){
 				// console.log(ev);
-	
+
 				// Mouse scroll delta Y
 				var delta = ev.scale;
 				var scale = My.scale + delta;
