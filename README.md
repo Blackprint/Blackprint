@@ -83,7 +83,7 @@ This roadmap may changed in the future. Feel free to request features or report 
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Name</th>
+    <th rowspan="2" width="185px">Name</th>
     <th colspan="2">JavaScript</th>
     <th rowspan="2">PHP</th>
     <th rowspan="2" title="Please request on Discord if you want this updated">Golang</th>
@@ -93,7 +93,7 @@ This roadmap may changed in the future. Feel free to request features or report 
   </tr>
   <tr>
     <th>Browser</th>
-    <th>Deno/Node.js</th>
+    <th>Node.js</th>
   </tr>
 </thead>
 <tbody>
@@ -244,9 +244,9 @@ Potential plans for additional Blackprint Engine implementations:
 ---
 
 ## Architecture
-Blackprint engine serves as an execution layer for each engine implementation. To use it with Node.js, Deno, or other JavaScript runtimes, you can export your visual programs to JSON and use the [engine-js](https://github.com/Blackprint/engine-js#example).
+Blackprint engine serves as an execution layer for each nodes written in each language. To use it with Node.js, Deno, or other JavaScript runtimes, you can export your visual programs to JSON and use the [engine-js](https://github.com/Blackprint/engine-js#example).
 
-**Important**: Exporting to JSON is not a complete solution by itself. You'll need to write `registerNode` and `registerInterface` functions for your target engine. However, if someone has already created Blackprint modules (nodes and interfaces) for your target engine, you can easily plug and play those modules.
+**Important**: Only exporting to JSON is not a complete solution by itself if the target language doesn't have the required nodes. You'll need to write `registerNode` and `registerInterface` functions for the nodes in your target engine if it's not exist. However, if someone has already created Blackprint modules (nodes and interfaces) for your target engine, you can easily plug and play those modules.
 
 ## Contributing
 For getting started, please start from the [Contributing Guide](https://github.com/Blackprint/Blackprint/blob/master/.github/CONTRIBUTING.md) before creating issues or pull request.
