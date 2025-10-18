@@ -1347,7 +1347,7 @@ Blackprint.registerNode = function(namespace, func, _fromDecorator=false){
 		sf.Obj.set(Blackprint.nodes, namespace[0], {});
 
 	let isExist = getDeepProperty(Blackprint.nodes, namespace);
-	if(isExist){
+	if(isExist && !isExist._isSkeleton){
 		if(this._scopeURL && isExist._scopeURL !== this._scopeURL){
 			let _call = ()=> this.registerNode.apply(this, arguments);
 			onModuleConflict(namespace.join('/'), isExist._scopeURL, this._scopeURL, _call);
@@ -1381,7 +1381,7 @@ Blackprint.registerNode = function(namespace, func, _fromDecorator=false){
 	if(isClass(func)){
 		let isExist = getDeepProperty(Blackprint.nodes, namespace);
 
-		if(isExist !== void 0){
+		if(isExist && !isExist._isSkeleton){
 			hotRefreshNodePort(namespace_, 'output', isExist, func);
 			hotRefreshNodePort(namespace_, 'input', isExist, func);
 			hotRefreshNodeClass(isExist, func);
