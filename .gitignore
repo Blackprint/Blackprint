@@ -18,6 +18,8 @@ node_modules/
 # /nodes/
 workspace.code-workspace
 /private-editor/
+/engine-rust/
 dist/test.js
+/vscode-extension/
 /nodes/
 .DS_Store

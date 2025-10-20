@@ -27,3 +27,11 @@ templates
 jest.config.js
 remote-control
 private-editor
+code-generation
+vscode-extension
+template-ts
+template-js
+chrome-extension
+dist/code-generation.min.js
+dist/code-generation.min.js.map
+dist/code-generation.mjs
