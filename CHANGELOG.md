@@ -1,3 +1,26 @@
+# 0.10.0
+
+### Bug Fix
+- Fix cable flow animation
+- Fix route cable connection after being moved from other port
+- Fix cable detach for route port
+- Fix error when container offset is not defined
+- Fix skeleton check and error handler
+- Fix route cable connection inside of a function node
+- Fix node movement for different dpi
+- Skip copying fields that start with specific character
+- Prevent creating function input node more than once
+
+### Feature
+- Add tools for import skeleton
+- Add button port component and add startIndex on import event
+- Add support to extract Blackprint docs from `.sf` file
+- Add support to move container with Macbook's trackpad
+- Allow move connected route cable with Shift + Drag
+
+### Breaking Changes
+- Blackprint Engine v0.10 is required (for more information please see the changelog)
+
 # 0.9.1
 
 ### Bug Fix
@@ -241,7 +264,7 @@ There's also a deprecation for `engine-js` make sure to visit the [CHANGELOG.md]
 - Add feature to change cable orientation
 - Add JSDocs extractor for Blackprint documenter
 - Add `.registerDocs` for adding description to nodes and port
-- Add TypeScript definition file 
+- Add TypeScript definition file
 - Add route port feature
 - Add default event handler for unsupported dynamic port
 - Add node for using function port as variable node
@@ -298,7 +321,7 @@ There's also a deprecation for `engine-js` make sure to visit the [CHANGELOG.md]
 - Fix import for custom variable nodes
 - Fix for copying custom function node
 - Fix node suggestion for any type data
-- Small CSS fix for safari browser 
+- Small CSS fix for safari browser
 - Fix cable position when being connected to a port
 - Fix selection on disconnected cable
 - Fix incorrect node order
@@ -348,7 +371,7 @@ There's also a deprecation for `engine-js` make sure to visit the [CHANGELOG.md]
 
 ### Features
 - Add `node.click` event when a node header was clicked
-- Add `port.cable.test` event 
+- Add `port.cable.test` event
 - Add new shortcut for scaling container (right click + mouse wheel)
 - Add feature to hide unused port
 - Prepare feature for variable and function node
