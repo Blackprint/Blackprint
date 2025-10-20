@@ -10,6 +10,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 5 # Usually this will be finish under 5 minutes
     steps:
       - uses: actions/checkout@v2
         with:
